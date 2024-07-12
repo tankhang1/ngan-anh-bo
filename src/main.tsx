@@ -2,18 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./pages/App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Analytics from "./container/dashboards/analytics/analytics.tsx";
-import Courses from "./container/dashboards/courses/courses.tsx";
-import Crm from "./container/dashboards/crm/crm.tsx";
-import Crypto from "./container/dashboards/crypto/crypto.tsx";
+// import Analytics from "./container/dashboards/analytics/analytics.tsx";
+// import Courses from "./container/dashboards/courses/courses.tsx";
+// import Crm from "./container/dashboards/crm/crm.tsx";
+// import Crypto from "./container/dashboards/crypto/crypto.tsx";
 import Ecommerce from "./container/dashboards/ecommerce/ecommerce.tsx";
-import Hrm from "./container/dashboards/hrm/hrm.tsx";
-import Jobs from "./container/dashboards/jobs/jobs.tsx";
-import Nft from "./container/dashboards/nft/nft.tsx";
-import Personal from "./container/dashboards/personal/personal.tsx";
-import Projects from "./container/dashboards/projects/projects.tsx";
-import Sales from "./container/dashboards/sales/sales.tsx";
-import Stocks from "./container/dashboards/stocks/stocks.tsx";
+// import Hrm from "./container/dashboards/hrm/hrm.tsx";
+// import Jobs from "./container/dashboards/jobs/jobs.tsx";
+// import Nft from "./container/dashboards/nft/nft.tsx";
+// import Personal from "./container/dashboards/personal/personal.tsx";
+// import Projects from "./container/dashboards/projects/projects.tsx";
+// import Sales from "./container/dashboards/sales/sales.tsx";
+// import Stocks from "./container/dashboards/stocks/stocks.tsx";
 import Alerts from "./container/uielements/alerts/alerts.tsx";
 import Badge from "./container/uielements/badge/badge.tsx";
 import Breadcrumb from "./container/uielements/breadcrumb/breadcrumb.tsx";
@@ -160,6 +160,17 @@ import Mailchat from "./container/pages/emails/mailchat/mailchat.tsx";
 import Pagelayout from "./pages/pagelayout.tsx";
 import ScrollToTop from "./components/common/scrolltotop/scrolltotop.tsx";
 import "./index.scss";
+import Farmer from "./container/customer/farmer/farmer.tsx";
+import Agent from "./container/customer/agent/agent.tsx";
+import AgentCreateEdit from "./container/customer/agent/create-edit/agent-create-edit.tsx";
+import FarmerCreateEdit from "./container/customer/farmer/create-edit/farmer-create-edit.tsx";
+import ProductPage from "./container/product/index.tsx";
+import ProductCreateEdit from "./container/product/create-edit/product-create-edit.tsx";
+import PointProgram from "./container/program/point/point.tsx";
+import TopupProgram from "./container/program/topup/topup.tsx";
+import TopupCreateEdit from "./container/program/topup/create-edit/topup-create-edit.tsx";
+import PointCreateEdit from "./container/program/point/create-edit/point-create-edit.tsx";
+import ReportPage from "./container/report/report.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -179,15 +190,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             />
           </Route>
           <Route path={`${import.meta.env.BASE_URL}`} element={<App />}>
-            <Route
+            {/* <Route
               path={`${import.meta.env.BASE_URL}dashboards/crm`}
               element={<Crm />}
-            />
+            /> */}
             <Route
-              path={`${import.meta.env.BASE_URL}dashboards/ecommerce`}
+              path={`${import.meta.env.BASE_URL}dashboards`}
               element={<Ecommerce />}
             />
-            <Route
+            {/* <Route
               path={`${import.meta.env.BASE_URL}dashboards/crypto`}
               element={<Crypto />}
             />
@@ -214,8 +225,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route
               path={`${import.meta.env.BASE_URL}dashboards/hrm`}
               element={<Hrm />}
-            />
-            <Route
+            /> */}
+            {/* <Route
               path={`${import.meta.env.BASE_URL}dashboards/stocks`}
               element={<Stocks />}
             />
@@ -226,7 +237,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route
               path={`${import.meta.env.BASE_URL}dashboards/personal`}
               element={<Personal />}
-            />
+            /> */}
 
             <Route
               path={`${import.meta.env.BASE_URL}pages/blog/blogdetails`}
@@ -538,7 +549,54 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               path={`${import.meta.env.BASE_URL}forms/formeditors/quilleditor`}
               element={<Formeditors />}
             />
-
+            <Route
+              path={`${
+                import.meta.env.BASE_URL
+              }customer/farmer/ce/:isCreate/:id`}
+              element={<FarmerCreateEdit />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}customer/farmer`}
+              element={<Farmer />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}customer/agent`}
+              element={<Agent />}
+            />
+            <Route
+              path={`${
+                import.meta.env.BASE_URL
+              }customer/agent/ce/:isCreate/:id`}
+              element={<AgentCreateEdit />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}product`}
+              element={<ProductPage />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}product/ce/:isCreate/:id`}
+              element={<ProductCreateEdit />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}program/point`}
+              element={<PointProgram />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}program/point/ce/:isCreate/:id`}
+              element={<PointCreateEdit />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}program/topup`}
+              element={<TopupProgram />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}program/topup/ce/:isCreate/:id`}
+              element={<TopupCreateEdit />}
+            />
+            <Route
+              path={`${import.meta.env.BASE_URL}report`}
+              element={<ReportPage />}
+            />
             <Route
               path={`${import.meta.env.BASE_URL}advancedui/accordions-collapse`}
               element={<Accordioncollapse />}
