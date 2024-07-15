@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -22,6 +22,7 @@ import {
   useGetListFarmersByStatusQuery,
   useGetListFarmersQuery,
 } from "../../../redux/api/manage/manage.api";
+import { format } from "date-fns";
 
 const FAMER_FILTERS = [
   {
@@ -44,7 +45,7 @@ function Farmer() {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(true);
 
-  const { data: farmers } = useGetListFarmersByStatusQuery(
+  const { data: farmers, refetch } = useGetListFarmersByStatusQuery(
     {
       status: isActive ? 1 : 0,
     },
@@ -52,6 +53,15 @@ function Farmer() {
       refetchOnFocus: true,
     }
   );
+  const handleFocus = () => {
+    refetch();
+  };
+  useEffect(() => {
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [refetch]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -90,6 +100,7 @@ function Farmer() {
                     >
                       <i className="ti ti-dots-vertical"></i>
                     </Dropdown.Toggle>
+
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {FAMER_FILTERS.map((item, index) => (
                         <Dropdown.Item
@@ -102,6 +113,24 @@ function Farmer() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Đổi trạng thái</Tooltip>
+                    }
+                  >
+                    <button
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-info-light ms-2 w-auto"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Add Contact"
+                      onClick={() => setIsActive(!isActive)}
+                    >
+                      <i className="ti ti-exchange"></i>
+                    </button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
@@ -145,8 +174,14 @@ function Farmer() {
               },
               {
                 key: "time_verify",
-                label: "Địa chỉ",
-                render: (value) => <td>{value.time_verify}</td>,
+                label: "Thời gian xác thực",
+                render: (value) => (
+                  <td>
+                    {value?.time_verify
+                      ? format(new Date(value.time_verify), "dd/MM/yyyy")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "status",

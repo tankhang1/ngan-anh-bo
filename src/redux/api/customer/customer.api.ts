@@ -4,7 +4,7 @@ import {
   HTTPS_METHOD,
   LOCAL_KEY,
 } from "../../../constants";
-import { TAgentForm, TFarmerForm } from "../../../assets/types";
+import { BASE_RES, TAgentForm, TFarmerForm } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum CustomerEnum {
   CREATE_AGENT = "CREATE_AGENT",
@@ -35,7 +35,7 @@ export const customerApi = createApi({
     CustomerEnum.UPDATE_FARMER,
   ],
   endpoints: (builder) => ({
-    createAgent: builder.mutation<void, TAgentForm>({
+    createAgent: builder.mutation<void | BASE_RES, TAgentForm>({
       query: (body) => ({
         url: "/agent/create",
         method: HTTPS_METHOD.POST,
@@ -43,7 +43,7 @@ export const customerApi = createApi({
       }),
       invalidatesTags: [CustomerEnum.CREATE_AGENT],
     }),
-    updateAgent: builder.mutation<void, TAgentForm>({
+    updateAgent: builder.mutation<void | BASE_RES, TAgentForm>({
       query: (body) => ({
         url: "/agent/update",
         method: HTTPS_METHOD.POST,
@@ -51,7 +51,7 @@ export const customerApi = createApi({
       }),
       invalidatesTags: [CustomerEnum.UPDATE_AGENT],
     }),
-    updateFarmer: builder.mutation<void, TFarmerForm>({
+    updateFarmer: builder.mutation<void | BASE_RES, TFarmerForm>({
       query: (body) => ({
         url: "/farmer/update",
         method: HTTPS_METHOD.POST,

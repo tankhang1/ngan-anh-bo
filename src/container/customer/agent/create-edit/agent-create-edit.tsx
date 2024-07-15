@@ -18,7 +18,7 @@ import * as formik from "formik";
 import * as yup from "yup";
 import { TAgent, TAgentForm, TObjectiveEnum } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetListAgentsByStatusQuery,
   useGetListAgentsQuery,
@@ -34,15 +34,18 @@ function AgentCreateEdit() {
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
-  const [provinceId, setProvinceId] = useState("");
+  const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
+  const navigate = useNavigate();
   // const schema = yup.object().shape({
-  //   customer_code: yup.string().required().default(""),
-  //   customer_name: yup.string().required().default(""),
-  //   customer_province: yup.string().required().default(""),
+  //   customer_code: yup.string().required(),
+  //   customer_name: yup.string().required(),
+  //   customer_province: yup.string().required(),
   //   customer_type: yup.string().required("Trường bắt buộc"),
   //   info_primary: yup.number().required(),
   //   sign_board: yup.string().required(),
+  //   name: yup.string().required("Trường bắt buộc"),
+  //   province: yup.string().required("Trường bắt ")
   //   customer_address: yup.string().required(),
   //   customer_district: yup.string().required(),
   // });
@@ -81,7 +84,15 @@ function AgentCreateEdit() {
         .unwrap()
         .then((value) => {
           console.log("create agent success", value);
-          toast.showToast("Thêm đại lí thành công");
+          if (value?.status === -2) {
+            toast.showToast("Đại lí đã tồn tại");
+            return;
+          }
+          if (value?.status === 0) {
+            toast.showToast("Thêm đại lí thành công");
+            return;
+          }
+          toast.showToast("Thêm mới đại lí thất bại");
         })
         .catch((e) => {
           console.log("create agent fail", e.message);
@@ -98,10 +109,16 @@ function AgentCreateEdit() {
         })
           .unwrap()
           .then((value) => {
-            console.log(value);
+            if (value?.status === 0) {
+              toast.showToast("Chỉnh sửa thông tin lí thành công");
+              return;
+            }
+
+            toast.showToast("Chỉnh sửa thông tin lí thất bại");
           })
-          .catch((e) => {
-            toast.showToast(e.message);
+          .catch(() => {
+            toast.showToast("Hết hạn token. Vui lòng đăng nhập lại");
+            navigate("/");
           });
     }
   };
@@ -109,11 +126,11 @@ function AgentCreateEdit() {
     () => ({
       customer_code: agent?.customer_code ?? "",
       customer_name: agent?.customer_name ?? "",
-      customer_province: agent?.customer_province ?? undefined,
+      customer_province: agent?.customer_province ?? PROVINCES[0].value,
       customer_type: agent?.customer_type ?? (TObjectiveEnum.RETAILER as any),
       name: agent?.name ?? "",
-      province: agent?.province ?? "",
-      info_primary: agent?.info_primary ?? 0,
+      province: agent?.province ?? PROVINCES[0].value,
+      info_primary: agent?.info_primary ?? 1,
       phone: agent?.phone ?? "",
       sign_board: agent?.sign_board ?? "",
       type: agent?.type ?? 0,
@@ -143,7 +160,7 @@ function AgentCreateEdit() {
       <Formik
         initialValues={initialValue}
         onSubmit={handleSubmitAgent}
-        //validationSchema={schema.nullable()}
+        // validationSchema={schema.nullable()}
       >
         {({
           handleSubmit,
@@ -180,9 +197,7 @@ function AgentCreateEdit() {
                       <button
                         className="btn btn-purple-light"
                         type="submit"
-                        onClick={() => {
-                          setIsEdit(!isEdit);
-                        }}
+                        onClick={() => {}}
                       >
                         {!isEdit ? "Chỉnh sửa" : "Lưu"}
                       </button>

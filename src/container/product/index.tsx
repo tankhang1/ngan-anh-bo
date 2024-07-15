@@ -94,7 +94,7 @@ function ProductPage() {
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip className="tooltip">Thêm mới đại lí </Tooltip>
+                      <Tooltip className="tooltip">Thêm mới sản phẩm </Tooltip>
                     }
                   >
                     <Button
@@ -121,7 +121,7 @@ function ProductPage() {
           <AppTable
             isHeader={false}
             externalSearch={deferSearchValue}
-            title="Thông tin đại lý"
+            title="Thông tin sản phẩm"
             isLoading={isLoadingProduct}
             headers={[
               {
@@ -154,6 +154,7 @@ function ProductPage() {
                   </td>
                 ),
               },
+
               {
                 key: "name_display_label",
                 label: "Tên sản phẩm (thu gọn)",
@@ -164,7 +165,15 @@ function ProductPage() {
                 label: "Tên sản phẩm",
                 render: (value) => <td>{value.product_name_detail}</td>,
               },
-
+              {
+                key: "point",
+                label: "Số điểm",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.point}</span>
+                  </td>
+                ),
+              },
               {
                 key: "type",
                 label: "Loại",

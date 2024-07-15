@@ -8,24 +8,25 @@ import React, {
   useState,
 } from "react";
 import { Toast, ToastContainer } from "react-bootstrap";
+import ngan_anh_logo from "../../assets/images/brand-logos/ngan-anh-logo.png";
 type TAppToastRef = {
   showToast: (config: string) => void;
   closeToast: () => void;
 };
 export const ToastContext = createContext<TAppToastRef>({
-  showToast: (message: string) => {},
+  showToast: () => {},
   closeToast: () => {},
 });
 type TAppToast = {};
 
 const AppToast = memo(
-  forwardRef<TAppToastRef, TAppToast>((props, ref) => {
+  forwardRef<TAppToastRef, TAppToast>((_, ref) => {
     const [openToast, setOpenToast] = useState(false);
     const [config, setConfig] = useState("");
     const showToast = (message: string) => {
       startTransition(() => {
         setOpenToast(true);
-        setConfig(config);
+        setConfig(message);
       });
       const timeout = setTimeout(() => {
         startTransition(() => {
@@ -57,10 +58,10 @@ const AppToast = memo(
           <Toast.Header className="toast-header bg-primary text-fixed-white">
             <img
               className="bd-placeholder-img rounded me-2"
-              src={""}
+              src={ngan_anh_logo}
               alt="..."
             />
-            <strong className="me-auto">Velvet</strong>
+            <strong className="me-auto">Ngân anh</strong>
           </Toast.Header>
           <Toast.Body className="toast-body text-default bg-white rounded-bottom">
             {config}
@@ -73,7 +74,7 @@ const AppToast = memo(
 
 const ToastProvider = ({ children }: { children: any }) => {
   const toastRef = useRef<TAppToastRef>({
-    showToast: (config: string) => {},
+    showToast: () => {},
     closeToast: () => {},
   });
   const showToast = (config: string) => {

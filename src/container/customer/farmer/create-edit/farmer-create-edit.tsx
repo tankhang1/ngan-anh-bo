@@ -23,7 +23,7 @@ import {
   TObjectiveEnum,
 } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetListAgentsByStatusQuery,
   useGetListAgentsQuery,
@@ -41,7 +41,7 @@ function FarmerCreateEdit() {
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
-  const [provinceId, setProvinceId] = useState("");
+  const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
   // const schema = yup.object().shape({
   //   customer_code: yup.string().required().default(""),
@@ -53,7 +53,7 @@ function FarmerCreateEdit() {
   //   customer_address: yup.string().required(),
   //   customer_district: yup.string().required(),
   // });
-
+  const navigate = useNavigate();
   const { data: farmer } = useGetListFarmersByStatusQuery(
     {
       status: +(id?.split("_")[1] ?? 1),
@@ -90,20 +90,25 @@ function FarmerCreateEdit() {
       })
         .unwrap()
         .then((value) => {
-          console.log(value);
+          if (value?.status === 0) {
+            toast.showToast("Cập nhật thông tin nông dân thành công");
+            return;
+          }
+          toast.showToast("Cập nhật thông tin nông dân thất bại");
         })
-        .catch((e) => {
-          toast.showToast(e.message);
+        .catch(() => {
+          toast.showToast("Hết hạn token. Vui lòng đăng nhập lại");
+          navigate("/");
         });
   };
   const initialValue = useMemo(
     () => ({
       customer_code: farmer?.customer_code ?? "",
       customer_name: farmer?.customer_name ?? "",
-      customer_province: farmer?.customer_province ?? undefined,
+      customer_province: farmer?.customer_province ?? PROVINCES[0].value,
       customer_type: farmer?.customer_type ?? (TObjectiveEnum.RETAILER as any),
       name: farmer?.name ?? "",
-      province: farmer?.province ?? "",
+      province: farmer?.province ?? PROVINCES[0].value,
       info_primary: farmer?.info_primary ?? 0,
       phone: farmer?.phone ?? "",
       sign_board: farmer?.sign_board ?? "",
@@ -148,7 +153,9 @@ function FarmerCreateEdit() {
             <Card className="custom-card">
               <Card.Header className="justify-content-between">
                 <Card.Title>
-                  {!isEdit ? "Thông tin đại lí" : "Chỉnh sửa thông tin đại lí"}
+                  {!isEdit
+                    ? "Thông tin nông dân"
+                    : "Chỉnh sửa thông tin nông dân"}
                 </Card.Title>
                 <div>
                   <OverlayTrigger

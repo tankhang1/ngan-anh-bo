@@ -110,6 +110,7 @@ function ProductCreateEdit() {
       unit: product?.unit ?? "",
       mop: product?.mop ?? 0,
       device_code: product?.device_code ?? "",
+      point: product?.point ?? 1,
     }),
     [isCreate, id, productId]
   );
@@ -412,6 +413,23 @@ function ProductCreateEdit() {
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.category_name}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group controlId="point_validate">
+                          <Form.Label>Số điểm thưởng</Form.Label>
+                          <Form.Control
+                            required
+                            type="number"
+                            min={1}
+                            id="point_validate"
+                            placeholder="Số điểm thưởng"
+                            name="point"
+                            value={values.point}
+                            onChange={handleChange}
+                            isInvalid={touched.point && !!errors.point}
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.point}
                           </Form.Control.Feedback>
                         </Form.Group>
                       </Stack>

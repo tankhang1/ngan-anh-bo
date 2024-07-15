@@ -18,21 +18,11 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 //IMAGES
-import desktoplogo from "../../../assets/images/brand-logos/desktop-logo.png";
-import togglelogo from "../../../assets/images/brand-logos/toggle-logo.png";
-import desktopdark from "../../../assets/images/brand-logos/desktop-dark.png";
-import toggledark from "../../../assets/images/brand-logos/toggle-dark.png";
-import spainflag from "../../../assets/images/flags/spain_flag.jpg";
-import usflag from "../../../assets/images/flags/us_flag.jpg";
-import frenchflag from "../../../assets/images/flags/french_flag.jpg";
-import germanyflag from "../../../assets/images/flags/germany_flag.jpg";
-import russiaflag from "../../../assets/images/flags/russia_flag.jpg";
-import italyflag from "../../../assets/images/flags/italy_flag.jpg";
+
 import media34 from "../../../assets/images/media/media-34.jpg";
 import media35 from "../../../assets/images/media/media-35.jpg";
 import media36 from "../../../assets/images/media/media-36.jpg";
 import faces16 from "../../../assets/images/faces/16.jpg";
-import faces1 from "../../../assets/images/faces/1.jpg";
 import faces9 from "../../../assets/images/faces/9.jpg";
 import faces6 from "../../../assets/images/faces/6.jpg";
 import faces2 from "../../../assets/images/faces/2.jpg";
@@ -51,13 +41,9 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const [startDatei, setStartDatei] = useState(new Date());
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   const [show1, setShow1] = useState(false);
 
   const handleClose1 = () => setShow1(false);
-  const handleShow1 = () => setShow1(true);
 
   const [show3, setShow3] = useState(false);
 

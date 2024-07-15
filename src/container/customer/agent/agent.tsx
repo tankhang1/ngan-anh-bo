@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -14,6 +14,7 @@ import { TAgentDashboardTable } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { useGetListAgentsByStatusQuery } from "../../../redux/api/manage/manage.api";
+import { format } from "date-fns";
 
 const AGENT_FILTERS = [
   {
@@ -36,15 +37,27 @@ function Agent() {
   const [isActive, setIsActive] = useState(true);
   const navigate = useNavigate();
 
-  const { data: agents, isLoading: isLoadingAgent } =
-    useGetListAgentsByStatusQuery(
-      {
-        status: isActive === true ? 1 : 0,
-      },
-      {
-        refetchOnFocus: true,
-      }
-    );
+  const {
+    data: agents,
+    isLoading: isLoadingAgent,
+    refetch,
+  } = useGetListAgentsByStatusQuery(
+    {
+      status: isActive === true ? 1 : 0,
+    },
+    {
+      refetchOnFocus: false,
+    }
+  );
+  const handleFocus = () => {
+    refetch();
+  };
+  useEffect(() => {
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [refetch]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -177,7 +190,13 @@ function Agent() {
               {
                 key: "time_verify",
                 label: "Thời gian xác thực",
-                render: (value) => <td>{value.time_verify}</td>,
+                render: (value) => (
+                  <td>
+                    {value?.time_verify
+                      ? format(new Date(value.time_verify), "dd/MM/yyyy")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "status",

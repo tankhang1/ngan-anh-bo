@@ -76,6 +76,7 @@ export type TProduct = {
   ingredient: string;
   ingredient_id: string;
   certificate_of_origin: string;
+  point: number | null;
 };
 export type TProductForm = Omit<
   TProduct,
