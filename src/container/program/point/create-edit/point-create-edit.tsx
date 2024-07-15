@@ -1,4 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -7,18 +13,41 @@ import {
   OverlayTrigger,
   Row,
   Stack,
+  Toast,
   Tooltip,
 } from "react-bootstrap";
 import * as formik from "formik";
 import * as yup from "yup";
-import { TAgent, TAgentForm, TObjectiveEnum } from "../../../../assets/types";
-import { COUNTRIES, ProductTypeEnum, PROVINCES } from "../../../../constants";
+import {
+  TAgent,
+  TAgentForm,
+  TObjectiveEnum,
+  TPointCreateForm,
+  TProduct,
+} from "../../../../assets/types";
+import Select from "react-select";
+import {
+  COUNTRIES,
+  OBJECTIVES_SELECT,
+  ProductTypeEnum,
+  PROVINCES,
+} from "../../../../constants";
 import { useParams } from "react-router-dom";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import Editor from "../../../forms/formeditors/formeditordata";
+import { useGetListProductsQuery } from "../../../../redux/api/info/info.api";
+import {
+  useCreatePointProgramMutation,
+  useGetNewUUIDQuery,
+  useUpdatePointProgramMutation,
+} from "../../../../redux/api/other/other.api";
+import { useGetListAgencyC1Query } from "../../../../redux/api/manage/manage.api";
+import { useGetListProgramPointByTimeQuery } from "../../../../redux/api/program/program.api";
+import { format } from "date-fns";
+import { ToastContext } from "../../../../components/AppToast";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -27,22 +56,140 @@ registerPlugin(
 );
 
 function PointCreateEdit() {
+  const toast = useContext(ToastContext);
+
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
-  const [files1, setFiles1] = useState<any>([]);
 
+  const { data: products, isLoading: isLoadingProducts } =
+    useGetListProductsQuery(null);
+  const { data: newUUID } = useGetNewUUIDQuery(null, {
+    skip: isCreate !== "true",
+  });
+  const { data: listAgencyC1, isLoading: isLoadingAgency } =
+    useGetListAgencyC1Query();
+  const { data: pointProgram } = useGetListProgramPointByTimeQuery(null, {
+    selectFromResult: ({ data }) => ({
+      data: data?.find((item) => item.uuid === +(id ?? "")),
+    }),
+    skip: isCreate === "true" ? true : false,
+  });
   const { Formik } = formik;
-  // const schema = yup.object().shape({
-  //   customer_code: yup.string().required().default(""),
-  //   customer_name: yup.string().required().default(""),
-  //   customer_province: yup.string().required().default(""),
-  //   customer_type: yup.string().required("Trường bắt buộc"),
-  //   info_primary: yup.number().required(),
-  //   sign_board: yup.string().required(),
-  //   customer_address: yup.string().required(),
-  //   customer_district: yup.string().required(),
-  // });
-  console.log(typeof isCreate, id);
+  const schema = yup.object().shape({
+    customer_code: yup.string().required().default(""),
+    customer_name: yup.string().required().default(""),
+    customer_province: yup.string().required().default(""),
+    customer_type: yup.string().required("Trường bắt buộc"),
+    info_primary: yup.number().required(),
+    sign_board: yup.string().required(),
+    customer_address: yup.string().required(),
+    customer_district: yup.string().required(),
+  });
+
+  const mapProduct = useMemo(
+    () =>
+      products?.map((item) => ({
+        label: `${item.name_display}-${item.code}`,
+        value: item.code,
+      })),
+    [products]
+  );
+
+  const mapCodeProduct = useCallback(
+    (listProduct?: string) => {
+      if (!listProduct) return [];
+      if (listProduct === "all")
+        return [{ value: "all", label: "Chọn tất cả" }];
+      let checkListProduct =
+        listProduct[0] !== "," ? "," + listProduct : listProduct;
+      checkListProduct =
+        checkListProduct[checkListProduct.length - 1] !== ","
+          ? checkListProduct + "," + listProduct
+          : checkListProduct;
+      return products
+        ?.map((product1) => ({
+          value: product1.code,
+          label: `${product1.name_display}-${product1.code}`,
+        }))
+        .filter((product2) =>
+          checkListProduct.includes("," + product2.value + ",")
+        );
+    },
+    [products, pointProgram]
+  );
+
+  const mapProvince = useCallback(
+    (listProvince?: string) => {
+      if (!listProvince) return [];
+
+      let checkListProvince =
+        listProvince[0] !== "," ? "," + listProvince : listProvince;
+      checkListProvince =
+        checkListProvince[checkListProvince.length - 1] !== ","
+          ? checkListProvince + "," + listProvince
+          : checkListProvince;
+      return PROVINCES.filter((province) =>
+        checkListProvince.includes("," + province.value + ",")
+      );
+    },
+    [PROVINCES, pointProgram]
+  );
+  const mapAgent = useCallback(
+    (listAgent?: string) => {
+      if (!listAgent) return [];
+      if (listAgent === "all") return [{ value: "all", label: "Chọn tất cả" }];
+      let checkListAgent = listAgent[0] !== "," ? "," + listAgent : listAgent;
+      checkListAgent =
+        checkListAgent[checkListAgent.length - 1] !== ","
+          ? checkListAgent + "," + listAgent
+          : checkListAgent;
+      return listAgencyC1?.filter((agent) =>
+        checkListAgent.includes("," + agent.value + ",")
+      );
+    },
+    [listAgencyC1, pointProgram]
+  );
+  const mapObjective = useCallback(
+    (listObjective?: string) => {
+      if (!listObjective) return [];
+      let checkListObjective =
+        listObjective[0] !== "," ? "," + listObjective : listObjective;
+      checkListObjective =
+        checkListObjective[checkListObjective.length - 1] !== ","
+          ? checkListObjective + "," + listObjective
+          : checkListObjective;
+      return OBJECTIVES_SELECT?.filter((objective) =>
+        checkListObjective.includes("," + objective.value + ",")
+      );
+    },
+    [pointProgram]
+  );
+
+  const initialValue = useMemo(
+    () => ({
+      name: pointProgram?.name ?? "",
+      products: mapCodeProduct(pointProgram?.products),
+      agents: mapAgent(pointProgram?.agents),
+      point_coefficient: pointProgram?.point_coefficient ?? 1,
+      objectives: mapObjective(pointProgram?.objectives),
+      time_end: pointProgram?.time_end
+        ? format(new Date(pointProgram.time_end), "yyyy-MM-dd")
+        : ("" as any),
+      time_start: pointProgram?.time_start
+        ? format(new Date(pointProgram.time_start), "yyyy-MM-dd")
+        : ("" as any),
+      locations: mapProvince(pointProgram?.locations) ?? [],
+      status: pointProgram?.status ?? 0,
+      uuid:
+        isCreate === "true"
+          ? newUUID?.toString()
+          : pointProgram?.uuid.toString(),
+    }),
+    [newUUID, pointProgram, isCreate, products, listAgencyC1]
+  );
+  console.log("initialValue", initialValue);
+  const [updatePointProgram] = useUpdatePointProgramMutation();
+  const [createPointProgram] = useCreatePointProgramMutation();
 
   const result = (values: TAgentForm) => {
     console.log(values);
@@ -52,34 +199,148 @@ function PointCreateEdit() {
     setIsEdit(!isEdit);
   };
 
+  const handleCreatePointProgram = async (values: TPointCreateForm) => {
+    if (isCreate === "true") {
+      await createPointProgram({
+        ...values,
+        products:
+          typeof values.products !== "string"
+            ? values.products.length === 1 &&
+              values.products[0]?.value === "all"
+              ? "all"
+              : values.products.map((item) => item.value).join(",")
+            : "",
+        agents:
+          typeof values.agents !== "string"
+            ? values.agents.length === 1 && values.agents[0]?.value === "all"
+              ? "all"
+              : values.agents.map((item) => item.value).join(",")
+            : "",
+        objectives:
+          typeof values.objectives !== "string"
+            ? values.objectives.length === 1 &&
+              values.objectives[0]?.value === "all"
+              ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
+              : values.objectives.map((item) => item.value).join(",")
+            : "",
+        locations:
+          typeof values.locations !== "string"
+            ? values.locations.length === 1 &&
+              values.locations[0]?.value === "all"
+              ? PROVINCES?.map((item) => item.value).join(",")
+              : values.locations.map((item) => item.value).join(",")
+            : "",
+        point_coefficient: +(values?.point_coefficient ?? 0),
+        time_start:
+          values.time_start &&
+          format(new Date(values.time_start), "yyyy-MM-dd HH:mm"),
+        time_start_number:
+          values.time_start &&
+          +format(new Date(values.time_start), "yyyyMMddHHmm"),
+        time_end_number:
+          values.time_end && +format(new Date(values.time_end), "yyyyMMddHHmm"),
+
+        time_end:
+          values.time_end &&
+          format(new Date(values.time_end), "yyyy-MM-dd HH:mm"),
+        status: +values.status,
+      })
+        .unwrap()
+        .then((value) => {
+          if (value.status === 0) {
+            toast.showToast("Thêm mới chương trình thành công");
+          }
+          if (value.status === -4) toast.showToast("Ngày bắt đầu sau 1 ngày");
+        })
+        .catch(() => {
+          toast.showToast("Thêm mới thất bại");
+        });
+    } else {
+      setIsEdit(!isEdit);
+      if (isEdit === true) {
+        await updatePointProgram({
+          ...values,
+          products:
+            typeof values.products !== "string"
+              ? values.products.length === 1 &&
+                values.products[0]?.value === "all"
+                ? "all"
+                : values.products.map((item) => item.value).join(",")
+              : "",
+          agents:
+            typeof values.agents !== "string"
+              ? values.agents.length === 1 && values.agents[0]?.value === "all"
+                ? "all"
+                : values.agents.map((item) => item.value).join(",")
+              : "",
+          objectives:
+            typeof values.objectives !== "string"
+              ? values.objectives.length === 1 &&
+                values.objectives[0]?.value === "all"
+                ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
+                : values.objectives.map((item) => item.value).join(",")
+              : "",
+          locations:
+            typeof values.locations !== "string"
+              ? values.locations.length === 1 &&
+                values.locations[0]?.value === "all"
+                ? PROVINCES?.map((item) => item.value).join(",")
+                : values.locations.map((item) => item.value).join(",")
+              : "",
+          point_coefficient: +(values?.point_coefficient ?? 0),
+          time_start:
+            values.time_start &&
+            format(new Date(values.time_start), "yyyy-MM-dd HH:mm"),
+          time_start_number:
+            values.time_start &&
+            +format(new Date(values.time_start), "yyyyMMddHHmm"),
+          time_end_number:
+            values.time_end &&
+            +format(new Date(values.time_end), "yyyyMMddHHmm"),
+
+          time_end:
+            values.time_end &&
+            format(new Date(values.time_end), "yyyy-MM-dd HH:mm"),
+          status: +values.status,
+          uuid: pointProgram?.uuid,
+        })
+          .unwrap()
+          .then((value) => {
+            if (value.status === 0) {
+              toast.showToast("Cập nhật chương trình thành công");
+            }
+            if (value.status === -4) toast.showToast("Ngày bắt đầu sau 1 ngày");
+            else toast.showToast(value.message);
+          })
+          .catch(() => {
+            toast.showToast("Cập nhật  thất bại");
+          });
+      }
+    }
+  };
+
   return (
     <Fragment>
       <Formik
-        initialValues={{
-          name: "",
-          products: [],
-          agents: [],
-          point: 0,
-          objectives: [],
-          time_end: "",
-          time_start: "",
-          locations: [],
-          status: "0",
-          uuid: "",
-        }}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-        //validationSchema={schema.nullable()}
+        initialValues={initialValue}
+        onSubmit={handleCreatePointProgram}
+        //validationSchema={schema}
       >
-        {({ handleSubmit, handleChange, values, touched, errors }) => (
+        {({
+          handleSubmit,
+          handleChange,
+          setFieldValue,
+          values,
+          touched,
+          errors,
+        }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Card className="custom-card">
               <Card.Header className="justify-content-between">
                 <Card.Title>
                   {!isEdit
-                    ? "Thông tin sản phẩm"
-                    : "Chỉnh sửa thông tin sản phẩm"}
+                    ? "Thông tin chương trình tích điểm"
+                    : "Chỉnh sửa chương trình tích điểm"}
                 </Card.Title>
                 <div>
                   <OverlayTrigger
@@ -102,11 +363,9 @@ function PointCreateEdit() {
                       <button
                         className="btn btn-purple-light"
                         type="submit"
-                        onClick={() => {
-                          setIsEdit(!isEdit);
-                        }}
+                        onClick={() => {}}
                       >
-                        {isEdit ? "Chỉnh sửa" : "Lưu"}
+                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
                       </button>
                     )}
                   </OverlayTrigger>
@@ -122,7 +381,7 @@ function PointCreateEdit() {
                       id="uuid_validate"
                       placeholder="Mã chương trình"
                       name="uuid"
-                      value={values.uuid}
+                      value={values.uuid ?? newUUID}
                       onChange={handleChange}
                       isInvalid={touched.uuid && !!errors.uuid}
                       disabled
@@ -142,58 +401,39 @@ function PointCreateEdit() {
                       value={values.name}
                       onChange={handleChange}
                       isInvalid={touched.name && !!errors.name}
-                      disabled
+                      disabled={isCreate !== "true"}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.name}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group controlId="time_start_validate">
-                    <Form.Label>Tên chương trình</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      id="time_start_validate"
-                      placeholder="Ngày bắt đầu"
-                      name="time_start"
-                      value={values.time_start}
-                      onChange={handleChange}
-                      isInvalid={touched.time_start && !!errors.time_start}
-                      disabled
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.time_start}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+
                   <Row>
-                    <Form.Group
-                      controlId="time_start_validate"
-                      className="mb-2"
-                      as={Col}
-                      md={6}
-                    >
+                    <Form.Group as={Col} md={6} controlId="time_start_validate">
                       <Form.Label>Ngày bắt đầu</Form.Label>
                       <Form.Control
                         required
                         type="date"
                         id="time_start_validate"
-                        placeholder="Ngày đăng kí"
+                        placeholder="Ngày bắt đầu"
                         name="time_start"
                         value={values.time_start}
+                        lang="vi"
                         onChange={handleChange}
                         isInvalid={touched.time_start && !!errors.time_start}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.time_start}
+                        {errors.time_start?.toString()}
                       </Form.Control.Feedback>
                     </Form.Group>
+
                     <Form.Group
                       controlId="time_end_validate"
                       className="mb-2"
                       as={Col}
                       md={6}
                     >
-                      <Form.Label>Ngày bắt đầu</Form.Label>
+                      <Form.Label>Ngày kết thúc</Form.Label>
                       <Form.Control
                         required
                         type="date"
@@ -205,89 +445,125 @@ function PointCreateEdit() {
                         isInvalid={touched.time_end && !!errors.time_end}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.time_end}
+                        {errors.time_end?.toString()}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Row>
                   <Form.Group controlId="customer_province_validate">
                     <Form.Label>Chọn sản phẩm</Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="products"
+
+                    <Select
+                      isMulti
+                      name="colors"
+                      options={
+                        [
+                          { value: "all", label: "Chọn tất cả" },
+                          ...(mapProduct ?? []),
+                        ] as any
+                      }
+                      className="default basic-multi-select custom-multi mb-3"
+                      id="choices-multiple-default"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      defaultValue={[mapProduct?.[0] as any]}
+                      placeholder="Chọn sản phẩm"
+                      isSearchable
+                      isClearable
+                      isLoading={isLoadingProducts}
                       value={values.products}
-                      onChange={handleChange}
-                      isInvalid={touched.products && !!errors.products}
-                      required
-                    >
-                      {PROVINCES.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
+                      onChange={(value) => setFieldValue("products", value)}
+                    />
                     <Form.Control.Feedback type="invalid">
                       {errors.products}
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="locations_validate">
                     <Form.Label>Chọn tỉnh thành</Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="locations"
+
+                    <Select
+                      isMulti
+                      name="colors"
+                      options={
+                        [
+                          { value: "all", label: "Chọn tất cả" },
+                          ...PROVINCES,
+                        ] as any
+                      }
+                      className="default basic-multi-select custom-multi mb-3"
+                      id="choices-multiple-default"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      isSearchable
+                      isClearable
+                      placeholder="Chọn tỉnh thành"
+                      defaultValue={[PROVINCES[0] as any]}
                       value={values.locations}
-                      onChange={handleChange}
-                      isInvalid={touched.locations && !!errors.locations}
-                      required
-                    >
-                      {PROVINCES.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
+                      onChange={(value) => setFieldValue("locations", value)}
+                    />
                     <Form.Control.Feedback type="invalid">
                       {errors.locations}
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="objectives_validate">
                     <Form.Label>Chọn đối tượng tham gia</Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="objectives"
+                    <Select
+                      isMulti
+                      name="colors"
+                      options={
+                        [
+                          { value: "all", label: "Chọn tất cả" },
+                          ...(OBJECTIVES_SELECT || []),
+                        ] as any
+                      }
+                      className="default basic-multi-select custom-multi mb-3"
+                      id="choices-multiple-default"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      isSearchable
+                      placeholder="Chọn đối tượng tham gia"
+                      defaultValue={[OBJECTIVES_SELECT?.[0] as any]}
                       value={values.objectives}
-                      onChange={handleChange}
-                      isInvalid={touched.objectives && !!errors.objectives}
-                      required
-                    >
-                      <option>{TObjectiveEnum.FARMER}</option>
-                      <option>{TObjectiveEnum.RETAILER}</option>
-                    </Form.Select>
+                      isClearable
+                      onChange={(value) => setFieldValue("objectives", value)}
+                    />
                     <Form.Control.Feedback type="invalid">
                       {errors.objectives}
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="agents_validate">
                     <Form.Label>Chọn đại lí cấp 1</Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="agents"
+
+                    <Select
+                      isMulti
+                      name="colors"
+                      options={
+                        [
+                          { value: "all", label: "Chọn tất cả" },
+                          ...(listAgencyC1 || []),
+                        ] as any
+                      }
+                      className="default basic-multi-select custom-multi mb-3"
+                      id="choices-multiple-default"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      isSearchable
+                      placeholder="Chọn đại lí"
+                      defaultValue={[listAgencyC1?.[0] as any]}
                       value={values.agents}
-                      onChange={handleChange}
-                      isInvalid={touched.agents && !!errors.agents}
-                      required
-                    >
-                      <option>{TObjectiveEnum.FARMER}</option>
-                      <option>{TObjectiveEnum.RETAILER}</option>
-                    </Form.Select>
+                      isLoading={isLoadingAgency}
+                      isClearable
+                      onChange={(value) => setFieldValue("agents", value)}
+                    />
                     <Form.Control.Feedback type="invalid">
                       {errors.agents}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md={6} controlId="point_validate">
+                  {/* <Form.Group controlId="point_validate">
                     <Form.Label>Nhập số điểm</Form.Label>
                     <Form.Control
                       required
-                      type="text"
+                      type="number"
+                      min={0}
                       placeholder="Nhập số điểm"
                       name="point"
                       value={values.point}
@@ -297,19 +573,21 @@ function PointCreateEdit() {
                     <Form.Control.Feedback type="invalid">
                       {errors.point}
                     </Form.Control.Feedback>
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group controlId="status_validate">
                     <Form.Label>Trạng thái</Form.Label>
                     <Form.Select
                       className="form-select"
                       name="status"
-                      value={values.status}
                       onChange={handleChange}
+                      value={values.status}
                       isInvalid={touched.status && !!errors.status}
                       required
                     >
-                      <option>{TObjectiveEnum.FARMER}</option>
-                      <option>{TObjectiveEnum.RETAILER}</option>
+                      <option value={0} label="Chờ kích hoạt" />
+                      <option value={1} label="Đang chạy" />
+                      <option value={2} label="Hết thời hạn" />
+                      <option value={3} label="Tạm dừng" />
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.status}

@@ -11,9 +11,17 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TAgentDashboardTable } from "../../../assets/types";
+import {
+  TAgentDashboardTable,
+  TFarmer,
+  TGetListFarmersRes,
+} from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
+import {
+  useGetListFarmersByStatusQuery,
+  useGetListFarmersQuery,
+} from "../../../redux/api/manage/manage.api";
 
 const FAMER_FILTERS = [
   {
@@ -28,20 +36,22 @@ const FAMER_FILTERS = [
     key: "phone",
     label: "Số điện thoại",
   },
-  {
-    key: "province",
-    label: "Địa chỉ",
-  },
-  {
-    key: "time_verify",
-    label: "Địa chỉ",
-  },
 ];
 function Farmer() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(FAMER_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
+  const [isActive, setIsActive] = useState(true);
+
+  const { data: farmers } = useGetListFarmersByStatusQuery(
+    {
+      status: isActive ? 1 : 0,
+    },
+    {
+      refetchOnFocus: true,
+    }
+  );
   return (
     <Fragment>
       <Col xl={12}>
@@ -92,25 +102,6 @@ function Farmer() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">Thêm mới đại lí </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => navigate(`ce/${true}/-1`)}
-                    >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
                 </div>
               </div>
             </div>
@@ -122,12 +113,12 @@ function Farmer() {
           <AppTable
             isHeader={false}
             externalSearch={deferSearchValue}
-            title="Thông tin đại lý"
+            title="Thông tin nông dân"
             headers={[
               {
                 key: "id",
                 label: "ID",
-                render: (value: TAgentDashboardTable) => (
+                render: (value: TFarmer) => (
                   <td>
                     <AppId id={value.id} />
                   </td>
@@ -181,7 +172,13 @@ function Farmer() {
                   <td className="d-flex justify-content-center align-item-center">
                     <button
                       className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => navigate(`ce/${false}/${value.id}`)}
+                      onClick={() =>
+                        navigate(
+                          `ce/${false}/${value.customer_code}_${
+                            isActive ? 1 : 0
+                          }`
+                        )
+                      }
                     >
                       <i className="ti ti-edit"></i>
                     </button>
@@ -189,31 +186,15 @@ function Farmer() {
                 ),
               },
             ]}
-            data={Array.from({ length: 20 }).map(() => ({
-              id: Math.floor(Math.random() * 1000000),
-              name: "Đoàn Tấn Khang",
-              phone: "0356994432",
-              province: "69 NVL",
-              time_verify: "15/5/2023",
-              status: 1,
-            }))}
+            data={farmers || []}
             filters={[
               {
                 key: "status",
                 label: "Tất cả",
                 value: "ALL",
               },
-              {
-                key: "status",
-                label: "Đã xác thực",
-                value: 1,
-              },
-              {
-                key: "status",
-                label: "Chờ xác thực",
-                value: 0,
-              },
             ]}
+            searchByExternal={searchBy}
           />
         </Card>
       </Col>

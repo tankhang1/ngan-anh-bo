@@ -1,4 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -10,13 +16,32 @@ import {
 } from "react-bootstrap";
 import * as formik from "formik";
 import * as yup from "yup";
-import { TAgent, TAgentForm, TObjectiveEnum } from "../../../../assets/types";
+import {
+  TAgent,
+  TAgentForm,
+  TFarmerForm,
+  TObjectiveEnum,
+} from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useParams } from "react-router-dom";
+import {
+  useGetListAgentsByStatusQuery,
+  useGetListAgentsQuery,
+  useGetListFarmersByStatusQuery,
+} from "../../../../redux/api/manage/manage.api";
+import { useGetDistrictQuery } from "../../../../redux/api/media/media.api";
+import {
+  useCreateAgentMutation,
+  useUpdateAgentMutation,
+  useUpdateFarmerMutation,
+} from "../../../../redux/api/customer/customer.api";
+import { ToastContext } from "../../../../components/AppToast";
 
 function FarmerCreateEdit() {
   const { isCreate, id } = useParams();
+  const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
+  const [provinceId, setProvinceId] = useState("");
   const { Formik } = formik;
   // const schema = yup.object().shape({
   //   customer_code: yup.string().required().default(""),
@@ -28,8 +53,74 @@ function FarmerCreateEdit() {
   //   customer_address: yup.string().required(),
   //   customer_district: yup.string().required(),
   // });
-  console.log(typeof isCreate, id);
 
+  const { data: farmer } = useGetListFarmersByStatusQuery(
+    {
+      status: +(id?.split("_")[1] ?? 1),
+    },
+    {
+      selectFromResult: ({ data }) => ({
+        data: data?.find(
+          (farmer) => farmer.customer_code === id?.split("_")[0]
+        ),
+      }),
+    }
+  );
+  console.log(farmer, isCreate, isEdit, id);
+  const [updateFarmer] = useUpdateFarmerMutation();
+
+  const { data: districts } = useGetDistrictQuery(
+    {
+      p: provinceId as string,
+    },
+    {
+      skip: !provinceId ? true : false,
+    }
+  );
+
+  const handleSubmitAgent = async (values: TFarmerForm) => {
+    setIsEdit(!isEdit);
+    if (isEdit === true)
+      await updateFarmer({
+        ...farmer,
+        ...values,
+        info_primary: values.info_primary ? 1 : 0,
+        customer_province: provinceId,
+        status: +(values?.status ?? 1),
+      })
+        .unwrap()
+        .then((value) => {
+          console.log(value);
+        })
+        .catch((e) => {
+          toast.showToast(e.message);
+        });
+  };
+  const initialValue = useMemo(
+    () => ({
+      customer_code: farmer?.customer_code ?? "",
+      customer_name: farmer?.customer_name ?? "",
+      customer_province: farmer?.customer_province ?? undefined,
+      customer_type: farmer?.customer_type ?? (TObjectiveEnum.RETAILER as any),
+      name: farmer?.name ?? "",
+      province: farmer?.province ?? "",
+      info_primary: farmer?.info_primary ?? 0,
+      phone: farmer?.phone ?? "",
+      sign_board: farmer?.sign_board ?? "",
+      type: farmer?.type ?? 0,
+      verify: farmer?.verify ?? 0,
+      customer_address: farmer?.customer_province ?? "",
+      customer_district: farmer?.customer_district ?? "",
+      status: farmer?.status ?? 1,
+      time: farmer?.time ?? "",
+      finger_province: farmer?.finger_province ?? "",
+    }),
+    [farmer]
+  );
+
+  useEffect(() => {
+    if (farmer?.customer_province) setProvinceId(farmer.customer_province);
+  }, [farmer]);
   const result = (values: TAgentForm) => {
     console.log(values);
     if (isEdit) {
@@ -41,34 +132,23 @@ function FarmerCreateEdit() {
   return (
     <Fragment>
       <Formik
-        initialValues={{
-          customer_code: "",
-          sign_board: "",
-          customer_type: TObjectiveEnum.RETAILER,
-          customer_name: "",
-          customer_province: "",
-          customer_district: "",
-          customer_address: "",
-          info_primary: 0,
-          phone: "",
-          name: "",
-          province: "",
-          finger_province: "",
-          time: "",
-        }}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
+        initialValues={initialValue}
+        onSubmit={handleSubmitAgent}
         //validationSchema={schema.nullable()}
       >
-        {({ handleSubmit, handleChange, values, touched, errors }) => (
+        {({
+          handleSubmit,
+          handleChange,
+          setFieldValue,
+          values,
+          touched,
+          errors,
+        }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Card className="custom-card">
               <Card.Header className="justify-content-between">
                 <Card.Title>
-                  {!isEdit
-                    ? "Thông tin nông dân"
-                    : "Chỉnh sửa thông tin nông dân"}
+                  {!isEdit ? "Thông tin đại lí" : "Chỉnh sửa thông tin đại lí"}
                 </Card.Title>
                 <div>
                   <OverlayTrigger
@@ -91,58 +171,15 @@ function FarmerCreateEdit() {
                       <button
                         className="btn btn-purple-light"
                         type="submit"
-                        onClick={() => {
-                          setIsEdit(!isEdit);
-                        }}
+                        onClick={() => {}}
                       >
-                        {isEdit ? "Chỉnh sửa" : "Lưu"}
+                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
                       </button>
                     )}
                   </OverlayTrigger>
                 </div>
               </Card.Header>
               <Card.Body>
-                <Row className="mb-2">
-                  <Form.Group as={Col} md={6} controlId="sign_board_validate">
-                    <Form.Label>Nhập biển hiệu</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="Vui lòng nhập biển hiệu"
-                      name="sign_board"
-                      value={values.sign_board}
-                      onChange={handleChange}
-                      isInvalid={touched.sign_board && !!errors.sign_board}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.sign_board}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group
-                    as={Col}
-                    md={6}
-                    controlId="customer_type_validate"
-                  >
-                    <Form.Label>Chọn đối tượng tham gia</Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="customer_type"
-                      value={values.customer_type}
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.customer_type && !!errors.customer_type
-                      }
-                      required
-                    >
-                      <option>{TObjectiveEnum.FARMER}</option>
-                      <option>{TObjectiveEnum.RETAILER}</option>
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.customer_type}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Row>
-
                 <Row>
                   <Form.Group
                     as={Col}
@@ -172,34 +209,33 @@ function FarmerCreateEdit() {
                     className="mb-2"
                   >
                     <Form.Label>Tỉnh thành (đăng ký)</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      id="province_validate"
-                      placeholder="Tên (đăng ký)"
+
+                    <Form.Select
+                      className="form-select"
                       name="province"
                       value={values.province}
                       onChange={handleChange}
                       isInvalid={touched.province && !!errors.province}
-                    />
+                      required
+                    >
+                      {PROVINCES.map((item, index) => (
+                        <option value={item.value} key={index}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.province}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group
-                    controlId="time_validate"
-                    className="mb-2"
-                    as={Col}
-                    md={4}
-                  >
+                  <Form.Group className="mb-2" as={Col} md={4}>
                     <Form.Label>Ngày đăng kí</Form.Label>
                     <Form.Control
                       required
                       type="date"
-                      id="time_validate"
                       placeholder="Ngày đăng kí"
                       name="time"
-                      value={values.province}
+                      value={values.time}
                       onChange={handleChange}
                       isInvalid={touched.time && !!errors.time}
                     />
@@ -240,7 +276,10 @@ function FarmerCreateEdit() {
                       className="form-select"
                       name="customer_province"
                       value={values.customer_province}
-                      onChange={handleChange}
+                      onChange={(value) => {
+                        setFieldValue("customer_province", value.target.value);
+                        setProvinceId(value.target.value);
+                      }}
                       isInvalid={
                         touched.customer_province && !!errors.customer_province
                       }
@@ -272,7 +311,7 @@ function FarmerCreateEdit() {
                     }
                     required
                   >
-                    {PROVINCES.map((item, index) => (
+                    {districts?.map((item, index) => (
                       <option value={item.value} key={index}>
                         {item.label}
                       </option>
@@ -319,34 +358,41 @@ function FarmerCreateEdit() {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group
-                  controlId="finger_province_validate"
-                  className="mb-2"
-                >
-                  <Form.Label>Tỉnh thành (hệ thống đinh vị)</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    id="finger_province_validate"
-                    placeholder="Tên (đăng ký)"
-                    name="finger_province"
-                    value={values.province}
-                    onChange={handleChange}
-                    isInvalid={
-                      touched.finger_province && !!errors.finger_province
-                    }
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.finger_province}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                {isCreate === "false" && isEdit === false && (
+                  <Form.Group
+                    controlId="finger_province_validate"
+                    className="mb-2"
+                  >
+                    <Form.Label>Tỉnh thành (hệ thống đinh vị)</Form.Label>
+                    <Form.Control
+                      required
+                      type="text"
+                      id="finger_province_validate"
+                      placeholder="Tỉnh thành (hệ thống đinh vị)"
+                      name="finger_province"
+                      value={values.finger_province}
+                      onChange={handleChange}
+                      isInvalid={
+                        touched.finger_province && !!errors.finger_province
+                      }
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.finger_province}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                )}
 
                 <Form.Group controlId="info_primary_validate">
                   <Form.Label>Xác nhận tham gia chương trình</Form.Label>
                   <Form.Check
                     type="switch"
-                    value={values.info_primary}
-                    onChange={handleChange}
+                    checked={values.info_primary === 1 ? true : false}
+                    onChange={(value) =>
+                      setFieldValue(
+                        "info_primary",
+                        value.target.checked ? 1 : 0
+                      )
+                    }
                     required
                     name="info_primary"
                   />

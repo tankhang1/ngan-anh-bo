@@ -2,6 +2,8 @@ import { Fragment, SetStateAction, useState } from "react";
 import { Alert, Button, Card, Col, Form, Nav, Tab } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./firebaseapi";
+import { useSignInMutation } from "../redux/api/auth/auth.api";
+import { LOCAL_KEY } from "../constants";
 
 //IMAGES
 // import desktoplogo from "../assets/images/brand-logos/desktop-logo.png";
@@ -11,11 +13,13 @@ import { auth } from "./firebaseapi";
 // import NganAnhLogo from "../assets/images/brand-logos/ngan-anh-logo.png";
 
 const Home = () => {
+  const [signIn] = useSignInMutation();
+
   const [passwordshow1, setpasswordshow1] = useState(false);
   const [err, setError] = useState("");
   const [data, setData] = useState({
-    email: "adminreact@gmail.com",
-    password: "1234567890",
+    email: "",
+    password: "",
   });
   const { email, password } = data;
   const changeHandler = (e: { target: { name: any; value: any } }) => {
@@ -29,12 +33,15 @@ const Home = () => {
     navigate(path);
   };
 
-  const Login = (e: { preventDefault: () => void }) => {
+  const Login = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then((user: any) => {
-        console.log(user);
+    await signIn({
+      username: email,
+      password: password,
+    })
+      .unwrap()
+      .then((value) => {
+        localStorage.setItem(LOCAL_KEY.TOKEN, value.token);
         routeChange();
       })
       .catch((err: { message: SetStateAction<string> }) => {
@@ -173,7 +180,7 @@ const Home = () => {
                           <Button
                             variant="primary"
                             className="btn btn-lg"
-                            onClick={Login1}
+                            onClick={Login}
                           >
                             Đăng nhập
                           </Button>

@@ -13,7 +13,7 @@ import {
 import SimpleBar from "simplebar-react";
 import { MENUITEMS } from "../sidebar/sidemenu";
 import DatePicker from "react-datepicker";
-import store from "../../../redux/store";
+import store, { RootState } from "../../../redux/store";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
@@ -65,7 +65,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const handleShow3 = () => setShow3(true);
 
   function menuClose() {
-    const theme = store.getState();
+    const theme = store.getState().theme;
     if (window.innerWidth <= 992) {
       ThemeChanger({ ...theme, toggled: "close" });
     }
@@ -78,6 +78,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   }
   //Dark Model
   const ToggleDark = () => {
+    console.log(local_varaiable);
     ThemeChanger({
       ...local_varaiable,
       dataThemeMode: local_varaiable.dataThemeMode == "dark" ? "light" : "dark",
@@ -90,7 +91,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
             : "dark"
           : "dark",
     });
-    const theme = store.getState();
+    const theme = store.getState().theme;
 
     if (theme.dataThemeMode != "dark") {
       ThemeChanger({
@@ -129,7 +130,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
     setMenuitems((arr: any) => [...arr]);
   }
   const toggleSidebar = () => {
-    const theme = store.getState();
+    const theme = store.getState().theme;
     const sidemenuType = theme.dataNavLayout;
     if (window.innerWidth >= 992) {
       if (sidemenuType === "vertical") {
@@ -1190,15 +1191,11 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                 <div className="d-flex align-items-center">
                   <div className="d-sm-flex wd-100p">
                     <div className="avatar avatar-sm">
-                      <img
-                        alt="avatar"
-                        className="rounded-circle"
-                        src={faces1}
-                      />
+                      <img alt="avatar" src={ngananhlogo} />
                     </div>
                     <div className="ms-2 my-auto d-none d-xl-flex">
                       <h6 className=" font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
-                        Harry Jones
+                        Ngan Anh Admin
                       </h6>
                     </div>
                   </div>
@@ -1209,7 +1206,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                 className="dropdown-menu  border-0 main-header-dropdown  overflow-hidden header-profile-dropdown"
                 aria-labelledby="mainHeaderProfile"
               >
-                <Dropdown.Item as="li" className="border-0">
+                {/* <Dropdown.Item as="li" className="border-0">
                   <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                     <i className="fs-13 me-2 bx bx-user"></i>Profile
                   </Link>
@@ -1230,13 +1227,9 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                   <Link to={`${import.meta.env.BASE_URL}pages/faqs`}>
                     <i className="fs-13 me-2 bx bx-help-circle"></i>Help
                   </Link>
-                </Dropdown.Item>
+                </Dropdown.Item> */}
                 <Dropdown.Item as="li" className="border-0">
-                  <Link
-                    to={`${
-                      import.meta.env.BASE_URL
-                    }authentication/signin/signincover1`}
-                  >
+                  <Link to={`${import.meta.env.BASE_URL}`}>
                     <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
                   </Link>
                 </Dropdown.Item>
@@ -2113,6 +2106,6 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  local_varaiable: state,
+  local_varaiable: state.theme,
 });
 export default connect(mapStateToProps, { ThemeChanger })(Header);

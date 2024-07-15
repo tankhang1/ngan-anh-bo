@@ -20,11 +20,12 @@ type FilterOption<T> = {
 type TAppTable<T> = {
   data: T[];
   headers: THeader<T>[];
-  filters: FilterOption<T>[];
+  filters?: FilterOption<T>[];
   title: string;
   isHeader?: boolean;
   externalSearch?: string;
   searchByExternal?: string;
+  isLoading?: boolean;
 };
 const PAGE_SIZE = 10;
 const AppTable = <T extends DataItem>({
@@ -35,24 +36,26 @@ const AppTable = <T extends DataItem>({
   isHeader = true,
   externalSearch,
   searchByExternal,
+  isLoading = false,
 }: TAppTable<T>) => {
   const [page, setPage] = useState(1);
-  const [filterOption, setFilterOption] = useState(filters[0]);
+  const [filterOption, setFilterOption] = useState(filters?.[0]);
   const [searchBy, setSearchBy] = useState(headers[0]);
   const [searchValue, setSearchValue] = useState("");
   const deferSearchValue = useDeferredValue(searchValue);
   const filterData = useMemo(() => {
-    if (filterOption?.value !== "ALL")
+    if (!data) return [];
+    if (filterOption && filterOption?.value !== "ALL")
       return !isHeader
-        ? data.filter(
+        ? data?.filter(
             (item) =>
-              item[filterOption.key] === filterOption?.value &&
+              item[filterOption?.key] === filterOption?.value &&
               item[searchByExternal ?? "id"]
                 .toString()
                 .toLowerCase()
                 .includes(externalSearch?.toString()?.toLowerCase())
           )
-        : data.filter(
+        : data?.filter(
             (item) =>
               item[filterOption.key] === filterOption?.value &&
               item[searchBy.key]
@@ -61,13 +64,13 @@ const AppTable = <T extends DataItem>({
                 .includes(deferSearchValue.toLowerCase())
           );
     return !isHeader
-      ? data.filter((item) =>
+      ? data?.filter((item) =>
           item[searchByExternal ?? "id"]
             ?.toString()
             .toLowerCase()
             .includes(externalSearch?.toString().toLowerCase())
         )
-      : data.filter((item) =>
+      : data?.filter((item) =>
           item[searchBy.key]
             ?.toString()
             .toLowerCase()
@@ -82,6 +85,7 @@ const AppTable = <T extends DataItem>({
     externalSearch,
     isHeader,
   ]);
+
   const pagingData = useMemo(() => {
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE;
@@ -92,6 +96,20 @@ const AppTable = <T extends DataItem>({
     [deferSearchValue, filterOption, filterData.length]
   );
 
+  const listButtonPaging = useMemo(() => {
+    if (MAX_PAGE < 5)
+      return Array.from({ length: MAX_PAGE }).map((_, index) => {
+        return index + 1;
+      });
+    if (page > MAX_PAGE - 5 && page < MAX_PAGE)
+      return Array.from({ length: 5 }).map((_, index) => {
+        return index + MAX_PAGE - 5;
+      });
+    return Array.from({ length: 5 }).map((_, index) => {
+      if (index + page <= MAX_PAGE) return index + page;
+      return null;
+    });
+  }, [data.length, page]);
   useEffect(() => {
     if (page !== 1) setPage(1);
   }, [filterData.length]);
@@ -149,7 +167,7 @@ const AppTable = <T extends DataItem>({
                     <Dropdown.Item
                       key={index}
                       onClick={() => setFilterOption(filter)}
-                      active={filterOption.value === filter.value}
+                      active={filterOption?.value === filter.value}
                     >
                       {filter.label}
                     </Dropdown.Item>
@@ -161,29 +179,33 @@ const AppTable = <T extends DataItem>({
         </Card.Header>
       )}
       <Card.Body>
-        <div className="table-responsive">
-          <table className="table text-nowrap table-bordered table-striped">
-            <thead>
-              <tr>
-                {headers.map((item) => (
-                  <th scope="col" key={item.key}>
-                    {item.label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {pagingData.map((item, index) => (
-                <tr key={index}>
-                  {headers.map((header) => header?.render?.(item))}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="table-responsive">
+            <table className="table text-nowrap table-bordered table-striped">
+              <thead>
+                <tr>
+                  {headers.map((item) => (
+                    <th scope="col" key={item.key}>
+                      {item.label}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {pagingData.map((item, index) => (
+                  <tr key={index}>
+                    {headers.map((header) => header?.render?.(item))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </Card.Body>
       <Card.Footer>
-        <div className="d-flex align-items-center">
+        <div className="d-flex flex-sm-row gap-2 flex-column align-items-center">
           <div>
             Tổng cộng {filterData.length} items{" "}
             <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
@@ -194,25 +216,37 @@ const AppTable = <T extends DataItem>({
                 <Pagination.Item
                   disabled={page > 1 ? false : true}
                   href="#"
-                  onClick={() => setPage(page - 1)}
+                  onClick={() => {
+                    if (page > 1) {
+                      setPage(page - 1);
+                    }
+                  }}
                 >
                   Trước
                 </Pagination.Item>
 
-                {Array.from({ length: MAX_PAGE }).map((_, index) => (
-                  <Pagination.Item
-                    active={page === index + 1 ? true : false}
-                    href="#"
-                    onClick={() => setPage(index + 1)}
-                  >
-                    {index + 1}
-                  </Pagination.Item>
-                ))}
+                {listButtonPaging.map(
+                  (item) =>
+                    item !== null && (
+                      <Pagination.Item
+                        key={item}
+                        active={page === item}
+                        href="#"
+                        onClick={() => setPage(item)}
+                      >
+                        {item}
+                      </Pagination.Item>
+                    )
+                )}
                 <Pagination.Item
                   disabled={page < MAX_PAGE ? false : true}
                   className="text-primary"
                   href="#"
-                  onClick={() => setPage(page + 1)}
+                  onClick={() => {
+                    if (!listButtonPaging.includes(null) && page < MAX_PAGE) {
+                      setPage(page + 1);
+                    }
+                  }}
                 >
                   Sau
                 </Pagination.Item>

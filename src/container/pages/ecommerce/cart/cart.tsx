@@ -228,7 +228,7 @@ const Cart: FC<CartProps> = ({local_varaiable}:any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-	local_varaiable: state
+	local_varaiable: state.theme
 });
 
 export default connect(mapStateToProps, { ThemeChanger })(Cart);

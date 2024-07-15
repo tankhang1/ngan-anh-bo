@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -16,34 +16,39 @@ import { TAgentDashboardTable, TProgramPoint } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
+import {
+  useGetListProgramPointByTimeQuery,
+  useGetListProgramPointQuery,
+} from "../../../redux/api/program/program.api";
+import { format } from "date-fns";
 
-const AGENT_FILTERS = [
+const POINT_FILTERS = [
   {
     key: "id",
     label: "ID",
   },
   {
     key: "name",
-    label: "Tên",
+    label: "Tên chương trình",
   },
   {
-    key: "phone",
-    label: "Số điện thoại",
-  },
-  {
-    key: "province",
-    label: "Địa chỉ",
-  },
-  {
-    key: "time_verify",
-    label: "Địa chỉ",
+    key: "status",
+    label: "Trạng thái",
   },
 ];
 function PointProgram() {
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
+  const [searchBy, setSearchBy] = useState(POINT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
+
+  const { data: programPoints, refetch } = useGetListProgramPointByTimeQuery(
+    null,
+    {
+      refetchOnFocus: true,
+    }
+  );
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -83,7 +88,7 @@ function PointProgram() {
                       <i className="ti ti-dots-vertical"></i>
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {AGENT_FILTERS.map((item, index) => (
+                      {POINT_FILTERS.map((item, index) => (
                         <Dropdown.Item
                           active={item.key === searchBy}
                           key={index}
@@ -97,7 +102,9 @@ function PointProgram() {
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip className="tooltip">Thêm mới đại lí </Tooltip>
+                      <Tooltip className="tooltip">
+                        Thêm mới chương trình{" "}
+                      </Tooltip>
                     }
                   >
                     <Button
@@ -155,9 +162,9 @@ function PointProgram() {
                 render: (value) => <td>{value.time_end}</td>,
               },
               {
-                key: "point",
-                label: "Số điểm",
-                render: (value) => <td>{value.point}</td>,
+                key: "point_coefficient",
+                label: "Hệ số điểm",
+                render: (value) => <td>{value.point_coefficient}</td>,
               },
               {
                 key: "status",
@@ -168,7 +175,7 @@ function PointProgram() {
                   return (
                     <td>
                       <Badge bg={tmp?.color} className="rounded-pill">
-                        {tmp?.labe}
+                        {tmp?.label}
                       </Badge>
                     </td>
                   );
@@ -177,7 +184,21 @@ function PointProgram() {
               {
                 key: "products",
                 label: "Sản phẩm áp dụng",
-                render: (value) => <td>{value.name}</td>,
+                render: (value) => (
+                  <td>
+                    <span className="d-flex gap-1 flex-wrap">
+                      {value.products?.split(",").map((item, index) => (
+                        <Badge
+                          bg="outline-success"
+                          className="round-pill"
+                          key={index}
+                        >
+                          {item}
+                        </Badge>
+                      ))}
+                    </span>
+                  </td>
+                ),
               },
               {
                 key: "agents",
@@ -238,13 +259,17 @@ function PointProgram() {
               },
               {
                 key: "time_active",
-                label: "Thời gian kích hoạt",
-                render: (value) => <td>{value.time_active}</td>,
+                label: "Thời gian bắt đầu",
+                render: (value) => (
+                  <td>{format(new Date(value.time_start), "dd/MM/yyyy")}</td>
+                ),
               },
               {
-                key: "time_deactive",
-                label: "Thời gian tạm dừng",
-                render: (value) => <td>{value.time_deactive}</td>,
+                key: "time_end",
+                label: "Thời gian kết thúc",
+                render: (value) => (
+                  <td>{format(new Date(value.time_end), "dd/MM/yyyy")}</td>
+                ),
               },
 
               {
@@ -255,7 +280,7 @@ function PointProgram() {
                     <span className="d-flex justify-content-center align-item-center">
                       <button
                         className="btn btn-icon btn-sm btn-primary-ghost"
-                        onClick={() => navigate(`ce/${false}/${value.id}`)}
+                        onClick={() => navigate(`ce/${false}/${value.uuid}`)}
                       >
                         <i className="ti ti-edit"></i>
                       </button>
@@ -264,44 +289,15 @@ function PointProgram() {
                 ),
               },
             ]}
-            data={Array.from({ length: 20 }).map(() => ({
-              agents: "qwe,qwe,qưe,123,123,12,31,23,123,12,3,12",
-              id: Math.floor(Math.random() * 10000),
-              locations: "1312,ádad",
-              name: "!@#!@",
-              objectives: "!@#,12e12",
-              point: 123123,
-              products: "!@#,123123",
-              status: 1,
-              time_active: "123123",
-              time_active_number: 123123,
-              time_create: "123123",
-              time_create_number: 123123,
-              time_deactive: "1231231",
-              time_deactive_number: 123132,
-              time_end: "1231232",
-              time_end_number: 213123123,
-              time_start: "13123123",
-              time_start_number: 213123123,
-              uuid: 123123123,
-            }))}
+            data={programPoints || []}
             filters={[
               {
                 key: "status",
                 label: "Tất cả",
                 value: "ALL",
               },
-              {
-                key: "status",
-                label: "Đã xác thực",
-                value: 1,
-              },
-              {
-                key: "status",
-                label: "Chờ xác thực",
-                value: 0,
-              },
             ]}
+            searchByExternal={searchBy}
           />
         </Card>
       </Col>

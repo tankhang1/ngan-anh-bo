@@ -7,13 +7,13 @@ import {
   Form,
   InputGroup,
   OverlayTrigger,
-  Row,
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TAgentDashboardTable } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
+import { useGetListAgentsByStatusQuery } from "../../../redux/api/manage/manage.api";
 
 const AGENT_FILTERS = [
   {
@@ -22,26 +22,29 @@ const AGENT_FILTERS = [
   },
   {
     key: "name",
-    label: "Tên",
+    label: "Tên đại lí",
   },
   {
     key: "phone",
     label: "Số điện thoại",
-  },
-  {
-    key: "province",
-    label: "Địa chỉ",
-  },
-  {
-    key: "time_verify",
-    label: "Địa chỉ",
   },
 ];
 function Agent() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
+  const [isActive, setIsActive] = useState(true);
   const navigate = useNavigate();
+
+  const { data: agents, isLoading: isLoadingAgent } =
+    useGetListAgentsByStatusQuery(
+      {
+        status: isActive === true ? 1 : 0,
+      },
+      {
+        refetchOnFocus: true,
+      }
+    );
   return (
     <Fragment>
       <Col xl={12}>
@@ -95,6 +98,24 @@ function Agent() {
                   <OverlayTrigger
                     placement="top"
                     overlay={
+                      <Tooltip className="tooltip">Đổi trạng thái</Tooltip>
+                    }
+                  >
+                    <button
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-info-light ms-2 w-auto"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Add Contact"
+                      onClick={() => setIsActive(!isActive)}
+                    >
+                      <i className="ti ti-exchange"></i>
+                    </button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
                       <Tooltip className="tooltip">Thêm mới đại lí </Tooltip>
                     }
                   >
@@ -123,6 +144,7 @@ function Agent() {
             isHeader={false}
             externalSearch={deferSearchValue}
             title="Thông tin đại lý"
+            isLoading={isLoadingAgent}
             headers={[
               {
                 key: "id",
@@ -154,7 +176,7 @@ function Agent() {
               },
               {
                 key: "time_verify",
-                label: "Địa chỉ",
+                label: "Thời gian xác thực",
                 render: (value) => <td>{value.time_verify}</td>,
               },
               {
@@ -181,7 +203,13 @@ function Agent() {
                   <td className="d-flex justify-content-center align-item-center">
                     <button
                       className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => navigate(`ce/${false}/${value.id}`)}
+                      onClick={() =>
+                        navigate(
+                          `ce/${false}/${value.customer_code}_${
+                            isActive ? 1 : 0
+                          }`
+                        )
+                      }
                     >
                       <i className="ti ti-edit"></i>
                     </button>
@@ -189,31 +217,15 @@ function Agent() {
                 ),
               },
             ]}
-            data={Array.from({ length: 20 }).map(() => ({
-              id: Math.floor(Math.random() * 1000000),
-              name: "Đoàn Tấn Khang",
-              phone: "0356994432",
-              province: "69 NVL",
-              time_verify: "15/5/2023",
-              status: 1,
-            }))}
+            data={agents || []}
             filters={[
               {
                 key: "status",
                 label: "Tất cả",
                 value: "ALL",
               },
-              {
-                key: "status",
-                label: "Đã xác thực",
-                value: 1,
-              },
-              {
-                key: "status",
-                label: "Chờ xác thực",
-                value: 0,
-              },
             ]}
+            searchByExternal={searchBy}
           />
         </Card>
       </Col>

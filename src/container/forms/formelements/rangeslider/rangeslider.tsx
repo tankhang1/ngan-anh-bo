@@ -314,7 +314,7 @@ const Rangeslider: React.FC<RangesliderProps> = () => {
   };
 
 const mapStateToProps = (state: any) => ({
-  local_varaiable: state
+  local_varaiable: state.theme
 });
 
 export default connect(mapStateToProps, {})(Rangeslider);

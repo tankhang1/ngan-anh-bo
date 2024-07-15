@@ -8,38 +8,39 @@ import Pageheader from "../components/pageheader/pageheader";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/common/footer/footer";
 import Tabtotop from "../components/common/tab-to-tap/tabtotap";
+import { Toast, ToastContainer } from "react-bootstrap";
+import ToastProvider from "../components/AppToast";
 
 function App() {
+  const [lateLoad, setlateLoad] = useState(false);
+  useEffect(() => {
+    setlateLoad(true);
+  });
 
-	const [lateLoad, setlateLoad] = useState(false);
-	useEffect(() => {
-		setlateLoad(true);
-	  });
-	  
   return (
-		<Fragment>
-			<Provider store={store}>
-			<div style={{display: `${lateLoad ? 'block' : 'none'}`}}>
-				<Switcher />
-				<div className="page">
-					<Header />
-					<Sidebar />
-					<Pageheader />
-					<div className="main-content app-content">
-						<div className="container-fluid">
-              <Outlet/>
-						</div>
-					</div>
-					<Footer />
-				</div>
-				
-				<Tabtotop />
-				</div>
-			</Provider>
-		</Fragment>
-	);
+    <Fragment>
+      <Provider store={store}>
+        <ToastProvider>
+          <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
+            <Switcher />
+            <div className="page">
+              <Header />
+              <Sidebar />
+              <Pageheader />
+              <div className="main-content app-content">
+                <div className="container-fluid">
+                  <Outlet />
+                </div>
+              </div>
+              <Footer />
+            </div>
+
+            <Tabtotop />
+          </div>
+        </ToastProvider>
+      </Provider>
+    </Fragment>
+  );
 }
 
 export default App;
-
-

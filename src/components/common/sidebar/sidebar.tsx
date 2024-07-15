@@ -35,7 +35,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
   // const location = useLocation();
   const location = useLocation();
   function Onhover() {
-    const theme = store.getState();
+    const theme = store.getState().theme;
     if (
       (theme.toggled == "icon-overlay-close" ||
         theme.toggled == "detached-close") &&
@@ -45,7 +45,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
     }
   }
   function Outhover() {
-    const theme = store.getState();
+    const theme = store.getState().theme;
+
     if (
       (theme.toggled == "icon-overlay-close" ||
         theme.toggled == "detached-close") &&
@@ -56,7 +57,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
   }
 
   function menuClose() {
-    const theme = store.getState();
+    const theme = store.getState().theme;
+
     if (window.innerWidth <= 992) {
       ThemeChanger({ ...theme, toggled: "close" });
     }
@@ -80,11 +82,13 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const WindowPreSize = [window.innerWidth];
 
   function menuResizeFn() {
+    const theme = store.getState().theme;
+
     WindowPreSize.push(window.innerWidth);
     if (WindowPreSize.length > 2) {
       WindowPreSize.shift();
     }
-    const theme = store.getState();
+
     if (WindowPreSize.length > 1) {
       if (
         WindowPreSize[WindowPreSize.length - 1] < 992 &&
@@ -318,7 +322,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
   let hasParentLevel = 0;
 
   function setSubmenu(event: any, targetObject: any, MENUITEMS = menuitems) {
-    const theme = store.getState();
+    const theme = store.getState().theme;
+
     if (
       (window.screen.availWidth <= 992 || theme.dataNavStyle != "icon-hover") &&
       (window.screen.availWidth <= 992 || theme.dataNavStyle != "menu-hover")
@@ -367,7 +372,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
   }
   function setMenuAncestorsActive(targetObject: any) {
     const parent = getParentObject(menuitems, targetObject);
-    const theme = store.getState();
+
     if (parent) {
       if (hasParentLevel > 2) {
         hasParent = true;
@@ -377,6 +382,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
       hasParentLevel += 1;
       setMenuAncestorsActive(parent);
     } else if (!hasParent) {
+      const theme = store.getState().theme;
+
       if (theme.dataVerticalStyle == "doublemenu") {
         // console.log("closee")
         // html.setAttribute('data-toggled', 'double-menu-close');
@@ -450,7 +457,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
     targetObject: any,
     MENUITEMS = menuitems
   ) {
-    const theme = store.getState();
+    const theme = store.getState().theme;
+
     let element = event.target;
     if (
       (theme.dataNavStyle !== "icon-hover" &&
@@ -554,7 +562,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
   }
 
   function setAncestorsActive(MENUITEMS: any, targetObject: any) {
-    const theme = store.getState();
+    const theme = store.getState().theme;
+
     const parent = findParent(MENUITEMS, targetObject);
     if (parent) {
       parent.active = true;
@@ -791,7 +800,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  local_varaiable: state,
+  local_varaiable: state.theme,
 });
 
 export default connect(mapStateToProps, { ThemeChanger })(Sidebar);

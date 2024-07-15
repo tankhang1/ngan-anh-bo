@@ -3,30 +3,32 @@ export type TAgent = {
   id: number;
   customer_code: string; //hiện
   customer_type: string; // hiện
-  customer_name: string | null; // hiện
-  customer_province: string | null; // hiện
+  customer_name: string | undefined; // hiện
+  customer_province: string | undefined; // hiện
   phone: string; // hiện
   province: string; // hiện
   name: string; // hiện
   time: string; // hiện
   time_number: number; //
-  source_channel_used: string | null; // ẩn
-  source_campaign_code: string | null; // ẩn
-  finger_province: string | null; // hiện
+  source_channel_used: string | undefined; // ẩn
+  source_campaign_code: string | undefined; // ẩn
+  finger_province: string | undefined; // hiện
   code: string; // hiện
   code_item: number; // ko hiện
   code_hash: string; // ko hiện
   product_item: number;
   product_code: string;
-  sign_board: string | null;
+  sign_board: string | undefined;
   otp: string; // ko hiện
   type: number; //không hiện
   verify: number; // ko hiện trạng thái
   v_id: string; // ko hiện
   status: number; //  trạng thái xác thực đã verify ko chuyển được
   info_primary: number; // hiện toggle
-  object_primary: string | null; // ko hiện ( này là thằng chính nào)
-  time_verify: string | null; // nếu status verify thì hiện
+  object_primary: string | undefined; // ko hiện ( này là thằng chính nào)
+  time_verify: string | undefined; // nếu status verify thì hiện
+  customer_address: string | undefined;
+  customer_district: string | undefined;
 };
 
 export type TAgentDashboardTable = Pick<
@@ -62,13 +64,13 @@ export type TProduct = {
   pack_configuration: string;
   short_info: string;
   detail_url: string;
-  net_weight: number | null;
+  net_weight: number | undefined;
   unit: string;
   version: string;
   type: ProductTypeEnum | string;
-  sku_bin: number | null;
-  sku_box: number | null;
-  bin_pallet: number | null;
+  sku_bin: number | undefined;
+  sku_box: number | undefined;
+  bin_pallet: number | undefined;
   mop: number;
   device_code: string;
   ingredient: string;
@@ -85,26 +87,26 @@ export type TBin = {
   code: string;
   code_hash: string;
   seri: string;
-  bin_seri: string | null;
-  agent_code: string | null;
+  bin_seri: string | undefined;
+  agent_code: string | undefined;
   time_use: string;
   time_use_number: number;
-  time_export: string | null;
+  time_export: string | undefined;
   time_export_number: number;
   procedure_order_detail_item: number;
   product_code: string;
-  product_sub_code: string | null;
+  product_sub_code: string | undefined;
   batch_number: string;
   register_phone: string;
-  register_name: string | null;
-  register_province: string | null;
-  source_channel_used: string | null;
-  source_campaign_code: string | null;
+  register_name: string | undefined;
+  register_province: string | undefined;
+  source_channel_used: string | undefined;
+  source_campaign_code: string | undefined;
   status: number;
   manufacture_date: number;
   expiration_date: number;
   customer_code: string;
-  customer_name: string | null;
+  customer_name: string | undefined;
   type_use: number; // 0 : Qr Code, 1 : SMS
 };
 export type TProductDashboardTable = Pick<
@@ -136,30 +138,34 @@ export enum TObjectiveEnum {
 }
 
 export type TAgentForm = {
-  customer_type?: TObjectiveEnum;
-  customer_name?: string;
-  customer_province?: string;
-  phone?: string;
-  sign_board?: string; //bảng hiệu
-  type?: number; // 0: QrCode , 1: SMS, tạo thì -1
-  verify?: number;
-  info_primary: number | null; //số điện thoại tích điểm hay ko 0, 1
-  customer_address?: string;
-  customer_district?: string;
-  status?: number | string;
+  customer_type: TObjectiveEnum | string;
+  customer_name: string | undefined;
+  customer_province: string | undefined;
+  phone: string | undefined;
+  sign_board: string | undefined; //bảng hiệu
+  type: number | undefined; // 0: QrCode , 1: SMS, tạo thì -1
+  verify: number | undefined;
+  info_primary: number | undefined; //số điện thoại tích điểm hay ko 0, 1
+  customer_address: string | undefined;
+  customer_district: string | undefined;
+  status: number | undefined | string;
   customer_code?: string;
+  name?: string;
+  province?: string;
+  time: string;
+  finger_province?: string;
 };
 export type TFarmerForm = {
   customer_type: TObjectiveEnum;
-  customer_name: string | null;
-  customer_province: string | null;
-  phone: string | null;
-  type: number | null; // 0: QrCode , 1: SMS, tạo thì -1
-  verify: number | null;
-  info_primary: number | null; //số điện thoại tích điểm hay ko 0, 1
-  customer_address: string | null;
-  customer_district: string | null;
-  status: number | null | string;
+  customer_name: string | undefined;
+  customer_province: string | undefined;
+  phone: string | undefined;
+  type: number | undefined; // 0: QrCode , 1: SMS, tạo thì -1
+  verify: number | undefined;
+  info_primary: number | undefined; //số điện thoại tích điểm hay ko 0, 1
+  customer_address: string | undefined;
+  customer_district: string | undefined;
+  status: number | undefined | string;
 };
 export type TProgramPoint = {
   id: number;
@@ -176,7 +182,7 @@ export type TProgramPoint = {
   time_active: string;
   time_active_number: number;
   status: number;
-  point: number;
+  point_coefficient: number;
   products: string;
   agents: string;
   locations: string;
@@ -213,6 +219,7 @@ export type TTopupCreateForm = {
   time_end: string;
   time_start: string;
   locations: string | string[];
+  status: number;
   uuid?: number;
 };
 
@@ -220,7 +227,7 @@ export type TPointCreateForm = {
   name: string;
   products: string | string[];
   agents: string | string[];
-  point: number | string;
+  point_coefficient: number | string;
   objectives: string | string[];
   time_end: string;
   time_start: string;
@@ -229,4 +236,128 @@ export type TPointCreateForm = {
   status: number | string;
   time_start_number?: number | string;
   time_end_number?: number | string;
+};
+
+export type TDevice = {
+  id: number;
+  device_name: string;
+  device_ip: string;
+  device_port: number;
+  device_port_serial: string;
+  work_center_code: string;
+  device_code: string;
+};
+export type TIngredient = {
+  id: number;
+  code: string;
+  code_old: string;
+  description: string;
+  packing: string;
+  product_type: string;
+  formulation: string;
+  weight: number;
+  product_line: string;
+  product_line_name: string;
+  brand_code: string;
+  brand_name: string;
+  ingredient: string;
+  certificate_of_origin: string;
+};
+export type TProvince = {
+  id: string;
+  code: string;
+  name: string;
+  province_item: string;
+  province_name: string;
+  province_code: string;
+  zip_code: undefined;
+};
+export type BaseQuery = {
+  nu?: number;
+  sz?: number;
+  st?: number;
+  ed?: number;
+  status?: number;
+  gateway?: number;
+};
+export type TPackage = {
+  id: number;
+  code_item: number;
+  code: string;
+  code_hash: string;
+  seri: string;
+  bin_seri: string | undefined;
+  agent_code: string | undefined;
+  time_use: string;
+  time_use_number: number;
+  time_export: string | undefined;
+  time_export_number: number;
+  procedure_order_detail_item: number;
+  product_code: string;
+  product_sub_code: string | undefined;
+  batch_number: string;
+  register_phone: string;
+  register_name: string | undefined;
+  register_province: string | undefined;
+  source_channel_used: string | undefined;
+  source_campaign_code: string | undefined;
+  status: number;
+  manufacture_date: number;
+  expiration_date: number;
+  customer_code: string;
+  customer_name: string | undefined;
+  type_use: number;
+};
+
+export type TGetListAgentsRes = {
+  listValidateAgents: TAgent[];
+  listUnValidateAgents: TAgent[];
+};
+
+export type TAgencyC1 = {
+  id: number;
+  name: string;
+  code: string;
+  province: string;
+  address: string | undefined;
+  area: string;
+  sale: string;
+  note: string;
+};
+/* Farmer */
+export type TFarmer = TAgent;
+export type TGetListFarmersRes = {
+  listValidateFarmers: TFarmer[];
+  listUnValidateFarmers: TFarmer[];
+};
+
+/* Brandname */
+export type TBrandname = {
+  id: number;
+  phone: string;
+  content: string;
+  time: string;
+  time_number: number;
+  code: string;
+  response_body: string;
+  transactionid: string;
+};
+export type TGetListBrandnamesRes = TBrandname[];
+export type TReportDashboard = {
+  id: number;
+  day: number;
+  topup: number;
+  brandname: number;
+  agent: number;
+  agent_none: number;
+  farmer: number;
+  farmer_none: number;
+  qrcode: number;
+  sms: number;
+};
+
+export type BASE_RES = {
+  data: any;
+  status: number;
+  message: string;
 };

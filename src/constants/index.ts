@@ -1,6 +1,16 @@
+import { TObjectiveEnum } from "../assets/types";
+
 const BASE_URL = "http://116.118.95.67";
 const BASE_PORT = "https://fgkawrverpi1qyawfgb.yis.vn";
 const BASE_PORT_8180 = "https://byxzenverpi1qyrvyf.yis.vn";
+const HTTPS_METHOD = {
+  POST: "POST",
+  PUT: "PUT",
+  GET: "GET",
+};
+const LOCAL_KEY = {
+  TOKEN: "TOKEN",
+};
 const PROVINCES = [
   { label: "An Giang", value: "AGG" },
   { label: "Bà Rịa-Vũng Tàu", value: "BVT" },
@@ -419,10 +429,17 @@ const COUNTRIES = [
 
 const MAP_PROGRAM_STATUS = new Map([
   [0, { label: "Chờ kích hoạt", color: "warning" }],
-  [1, { labe: "Đang chạy", color: "success" }],
+  [1, { label: "Đang chạy", color: "success" }],
   [2, { label: "Hết thời hạn", color: "light" }],
   [3, { label: "Tạm dừng", color: "danger" }],
 ]);
+const OBJECTIVES_SELECT = [
+  {
+    label: "Đại lí",
+    value: TObjectiveEnum.RETAILER,
+  },
+  { label: "Nông dân", value: TObjectiveEnum.FARMER },
+];
 export {
   PROVINCES,
   BASE_PORT,
@@ -431,4 +448,7 @@ export {
   MAP_PRODUCT_TYPE,
   COUNTRIES,
   MAP_PROGRAM_STATUS,
+  HTTPS_METHOD,
+  LOCAL_KEY,
+  OBJECTIVES_SELECT,
 };

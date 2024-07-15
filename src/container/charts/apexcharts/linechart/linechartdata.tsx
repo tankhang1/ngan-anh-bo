@@ -15,7 +15,7 @@ interface spark3 {
   endingShape?: string;
   colors: string[];
   categories: string[];
-  title: string;
+  title?: string;
 }
 
 // Revenue Statistics
