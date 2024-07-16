@@ -111,6 +111,8 @@ function ProductCreateEdit() {
       mop: product?.mop ?? 0,
       device_code: product?.device_code ?? "",
       point: product?.point ?? 1,
+      c1_price_vnd: product?.c1_price_vnd ?? 0,
+      c2_price_vnd: product?.c2_price_vnd ?? 0,
     }),
     [isCreate, id, productId]
   );
@@ -415,27 +417,74 @@ function ProductCreateEdit() {
                             {errors.category_name}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="point_validate">
-                          <Form.Label>Số điểm thưởng</Form.Label>
-                          <Form.Control
-                            required
-                            type="number"
-                            min={1}
-                            id="point_validate"
-                            placeholder="Số điểm thưởng"
-                            name="point"
-                            value={values.point}
-                            onChange={handleChange}
-                            isInvalid={touched.point && !!errors.point}
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.point}
-                          </Form.Control.Feedback>
-                        </Form.Group>
                       </Stack>
                     </Col>
                   </Row>
-
+                  <Row>
+                    <Form.Group as={Col} md={4} controlId="point_validate">
+                      <Form.Label>Số điểm thưởng</Form.Label>
+                      <Form.Control
+                        required
+                        type="number"
+                        min={1}
+                        id="point_validate"
+                        placeholder="Số điểm thưởng"
+                        name="point"
+                        value={values.point}
+                        onChange={handleChange}
+                        isInvalid={touched.point && !!errors.point}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.point}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group
+                      as={Col}
+                      md={4}
+                      controlId="c1_price_vnd_validate"
+                    >
+                      <Form.Label>Số tiền 1</Form.Label>
+                      <Form.Control
+                        required
+                        type="number"
+                        min={0}
+                        id="c1_price_vnd_validate"
+                        placeholder="Số tiền 1"
+                        name="c1_price_vnd"
+                        value={values.c1_price_vnd}
+                        onChange={handleChange}
+                        isInvalid={
+                          touched.c1_price_vnd && !!errors.c1_price_vnd
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.c1_price_vnd}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group
+                      as={Col}
+                      md={4}
+                      controlId="c2_price_vnd_validate"
+                    >
+                      <Form.Label>Số tiền 2</Form.Label>
+                      <Form.Control
+                        required
+                        type="number"
+                        min={0}
+                        id="c1_price_vnd_validate"
+                        placeholder="Số tiền 2"
+                        name="c2_price_vnd"
+                        value={values.c2_price_vnd}
+                        onChange={handleChange}
+                        isInvalid={
+                          touched.c2_price_vnd && !!errors.c2_price_vnd
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.c2_price_vnd}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Row>
                   <Row>
                     <Form.Group as={Col} md={6} controlId="type_validate">
                       <Form.Label>Hình thức đóng gói</Form.Label>

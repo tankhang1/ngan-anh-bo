@@ -77,7 +77,10 @@ export type TProduct = {
   ingredient_id: string;
   certificate_of_origin: string;
   point: number | null;
+  c1_price_vnd: number;
+  c2_price_vnd: number;
 };
+
 export type TProductForm = Omit<
   TProduct,
   "id" | "uuid" | "code_box" | "name_display_root" | "version" | "name_display"

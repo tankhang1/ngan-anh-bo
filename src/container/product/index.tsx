@@ -17,6 +17,7 @@ import { TProduct } from "../../assets/types";
 
 import { BASE_URL, MAP_PRODUCT_TYPE } from "../../constants";
 import { useGetListProductsQuery } from "../../redux/api/info/info.api";
+import { fNumber } from "../../hooks";
 
 const PRODUCT_FILTERS = [
   {
@@ -183,6 +184,24 @@ function ProductPage() {
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.point}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "c1_price_vnd",
+                label: "Giá tiền 1",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.c1_price_vnd}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "c2_price_vnd",
+                label: "Giá tiền 2",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.c2_price_vnd}</span>
                   </td>
                 ),
               },

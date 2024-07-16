@@ -24,4 +24,9 @@ const exportMultipleSheet = <T>(
   });
   XLSX.writeFile(workBook, `${title ?? "NganAnh"}.xlsx`);
 };
-export { exportExcelFile, exportMultipleSheet };
+
+const fNumber = (value: number) => {
+  const newValue = new Intl.NumberFormat("vi").format(value);
+  return +newValue;
+};
+export { exportExcelFile, exportMultipleSheet, fNumber };
