@@ -249,8 +249,13 @@ function PointCreateEdit() {
         .then((value) => {
           if (value.status === 0) {
             toast.showToast("Thêm mới chương trình thành công");
+            return;
           }
-          if (value.status === -4) toast.showToast("Ngày bắt đầu sau 1 ngày");
+          if (value.status === -4) {
+            toast.showToast("Ngày bắt đầu sau 1 ngày");
+            return;
+          }
+          toast.showToast("Thêm mới chương trình bị lỗi");
         })
         .catch(() => {
           toast.showToast("Thêm mới thất bại");
@@ -308,9 +313,13 @@ function PointCreateEdit() {
           .then((value) => {
             if (value.status === 0) {
               toast.showToast("Cập nhật chương trình thành công");
+              return;
             }
-            if (value.status === -4) toast.showToast("Ngày bắt đầu sau 1 ngày");
-            else toast.showToast(value.message);
+            if (value.status === -4) {
+              toast.showToast("Ngày bắt đầu sau 1 ngày");
+              return;
+            }
+            toast.showToast(value.message);
           })
           .catch(() => {
             toast.showToast("Cập nhật  thất bại");

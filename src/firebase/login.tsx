@@ -60,6 +60,7 @@ const Home = () => {
       });
     }
   };
+  console.log("login screen");
   return (
     <Fragment>
       <div className="container">

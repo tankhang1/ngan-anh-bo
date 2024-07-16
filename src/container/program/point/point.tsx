@@ -42,13 +42,16 @@ function PointProgram() {
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
 
-  const { data: programPoints, refetch } = useGetListProgramPointByTimeQuery(
-    null,
-    {
-      refetchOnFocus: true,
-    }
-  );
-
+  const { data: programPoints, refetch } = useGetListProgramPointByTimeQuery();
+  const handleFocus = () => {
+    refetch();
+  };
+  useEffect(() => {
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [refetch]);
   return (
     <Fragment>
       <Col xl={12}>

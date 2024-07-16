@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./pages/App.tsx";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 // import Analytics from "./container/dashboards/analytics/analytics.tsx";
 // import Courses from "./container/dashboards/courses/courses.tsx";
 // import Crm from "./container/dashboards/crm/crm.tsx";
@@ -171,34 +171,37 @@ import TopupProgram from "./container/program/topup/topup.tsx";
 import TopupCreateEdit from "./container/program/topup/create-edit/topup-create-edit.tsx";
 import PointCreateEdit from "./container/program/point/create-edit/point-create-edit.tsx";
 import ReportPage from "./container/report/report.tsx";
+import { Provider } from "react-redux";
+import store from "./redux/store.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
-    <BrowserRouter>
-      <ScrollToTop />
-      <React.Suspense>
-        <Routes>
-          <Route path={`${import.meta.env.BASE_URL}`} element={<Auth />}>
-            <Route index element={<Login />} />
-            <Route
-              path={`${import.meta.env.BASE_URL}firebase/login`}
-              element={<Login />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}firebase/signup`}
-              element={<Signup />}
-            />
-          </Route>
-          <Route path={`${import.meta.env.BASE_URL}`} element={<App />}>
-            {/* <Route
+    <Provider store={store}>
+      <HashRouter>
+        <ScrollToTop />
+        <React.Suspense>
+          <Routes>
+            <Route path={`${import.meta.env.BASE_URL}`} element={<Auth />}>
+              <Route index element={<Login />} />
+              <Route
+                path={`${import.meta.env.BASE_URL}firebase/login`}
+                element={<Login />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}firebase/signup`}
+                element={<Signup />}
+              />
+            </Route>
+            <Route path={`${import.meta.env.BASE_URL}`} element={<App />}>
+              {/* <Route
               path={`${import.meta.env.BASE_URL}dashboards/crm`}
               element={<Crm />}
             /> */}
-            <Route
-              path={`${import.meta.env.BASE_URL}dashboards`}
-              element={<Ecommerce />}
-            />
-            {/* <Route
+              <Route
+                path={`${import.meta.env.BASE_URL}dashboards`}
+                element={<Ecommerce />}
+              />
+              {/* <Route
               path={`${import.meta.env.BASE_URL}dashboards/crypto`}
               element={<Crypto />}
             />
@@ -226,7 +229,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               path={`${import.meta.env.BASE_URL}dashboards/hrm`}
               element={<Hrm />}
             /> */}
-            {/* <Route
+              {/* <Route
               path={`${import.meta.env.BASE_URL}dashboards/stocks`}
               element={<Stocks />}
             />
@@ -239,687 +242,715 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               element={<Personal />}
             /> */}
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/blog/blogdetails`}
-              element={<Blogdetails />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/blog/createblog`}
-              element={<Createblog />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/blog/blogdetails`}
+                element={<Blogdetails />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/blog/createblog`}
+                element={<Createblog />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/chat`}
-              element={<Chat />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/contacts`}
-              element={<Contacts />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/chat`}
+                element={<Chat />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/contacts`}
+                element={<Contacts />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/addproducts`}
-              element={<Addproducts />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/cart`}
-              element={<Cart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/checkout`}
-              element={<Checkout />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/editproducts`}
-              element={<Editproducts />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/orderdetails`}
-              element={<Orderdetails />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/orders`}
-              element={<Orders />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/products`}
-              element={<Products />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/productdetails`}
-              element={<Productdetails />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/productslist`}
-              element={<Productlist />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/ecommerce/wishlist`}
-              element={<Wishlist />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/addproducts`}
+                element={<Addproducts />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/cart`}
+                element={<Cart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/checkout`}
+                element={<Checkout />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/editproducts`}
+                element={<Editproducts />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/orderdetails`}
+                element={<Orderdetails />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/orders`}
+                element={<Orders />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/products`}
+                element={<Products />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }pages/ecommerce/productdetails`}
+                element={<Productdetails />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/productslist`}
+                element={<Productlist />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/ecommerce/wishlist`}
+                element={<Wishlist />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/email/mailapp`}
-              element={<Mailapp />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/email/mailchat`}
-              element={<Mailchat />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/email/mailsettings`}
-              element={<Mailsettings />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/email/mailapp`}
+                element={<Mailapp />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/email/mailchat`}
+                element={<Mailchat />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/email/mailsettings`}
+                element={<Mailsettings />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/empty`}
-              element={<Empty />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/faqs`}
-              element={<Faqs />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/empty`}
+                element={<Empty />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/faqs`}
+                element={<Faqs />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/filemanager/filemanager`}
-              element={<Filemanager />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/filemanager/filedetails`}
-              element={<Filedetails />}
-            />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }pages/filemanager/filemanager`}
+                element={<Filemanager />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }pages/filemanager/filedetails`}
+                element={<Filedetails />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/invoice/createinvoice`}
-              element={<Createinvoice />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/invoice/invoicedetails`}
-              element={<Invoicedetails />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/invoice/invoicelist`}
-              element={<Invoicelist />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/invoice/createinvoice`}
+                element={<Createinvoice />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/invoice/invoicedetails`}
+                element={<Invoicedetails />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/invoice/invoicelist`}
+                element={<Invoicelist />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/notifications`}
-              element={<Notifications />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/pricing`}
-              element={<Pricing />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/profile`}
-              element={<Profile />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/reviews`}
-              element={<Reviews />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/team`}
-              element={<Team />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/terms-conditions`}
-              element={<Termsconditions />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/timeline/timeline1`}
-              element={<Timeline1 />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/timeline/timeline2`}
-              element={<Timeline2 />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/todolist`}
-              element={<Todolist />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/notifications`}
+                element={<Notifications />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/pricing`}
+                element={<Pricing />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/profile`}
+                element={<Profile />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/reviews`}
+                element={<Reviews />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/team`}
+                element={<Team />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/terms-conditions`}
+                element={<Termsconditions />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/timeline/timeline1`}
+                element={<Timeline1 />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/timeline/timeline2`}
+                element={<Timeline2 />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/todolist`}
+                element={<Todolist />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/alerts`}
-              element={<Alerts />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/badge`}
-              element={<Badge />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/breadcrumb`}
-              element={<Breadcrumb />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/buttons`}
-              element={<Buttons />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/buttongroup`}
-              element={<Buttongroup />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/cards`}
-              element={<Cards />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/dropdowns`}
-              element={<Dropdowns />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/images&figures`}
-              element={<Imagesandfigure />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/listgroup`}
-              element={<Listgroup />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/navs&tabs`}
-              element={<Navtabs />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/objectfit`}
-              element={<Objectfit />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/paginations`}
-              element={<Pagination />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/popovers`}
-              element={<Popovers />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/progress`}
-              element={<Progress />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/spinners`}
-              element={<Spinners />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/toasts`}
-              element={<Toasts />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/tooltips`}
-              element={<Tooltips />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}uielements/typography`}
-              element={<Typography />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/alerts`}
+                element={<Alerts />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/badge`}
+                element={<Badge />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/breadcrumb`}
+                element={<Breadcrumb />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/buttons`}
+                element={<Buttons />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/buttongroup`}
+                element={<Buttongroup />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/cards`}
+                element={<Cards />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/dropdowns`}
+                element={<Dropdowns />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/images&figures`}
+                element={<Imagesandfigure />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/listgroup`}
+                element={<Listgroup />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/navs&tabs`}
+                element={<Navtabs />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/objectfit`}
+                element={<Objectfit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/paginations`}
+                element={<Pagination />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/popovers`}
+                element={<Popovers />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/progress`}
+                element={<Progress />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/spinners`}
+                element={<Spinners />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/toasts`}
+                element={<Toasts />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/tooltips`}
+                element={<Tooltips />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}uielements/typography`}
+                element={<Typography />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/avatars`}
-              element={<Avatars />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/borders`}
-              element={<Borders />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/colors`}
-              element={<Colors />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/flex`}
-              element={<Flex />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/columns`}
-              element={<Columns />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/breakpoints`}
-              element={<Breakpoints />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/gutters`}
-              element={<Gutter />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/helpers`}
-              element={<Helper />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/position`}
-              element={<Position />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}utilities/additionalContent`}
-              element={<AdditionalContent />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/avatars`}
+                element={<Avatars />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/borders`}
+                element={<Borders />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/colors`}
+                element={<Colors />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/flex`}
+                element={<Flex />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/columns`}
+                element={<Columns />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/breakpoints`}
+                element={<Breakpoints />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/gutters`}
+                element={<Gutter />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/helpers`}
+                element={<Helper />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/position`}
+                element={<Position />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}utilities/additionalContent`}
+                element={<AdditionalContent />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formelements/inputs`}
-              element={<Inputs />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }forms/formelements/checks-radios`}
-              element={<Checksradio />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formelements/inputgroups`}
-              element={<Inputgroup />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formelements/formselect`}
-              element={<Formselect />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formelements/rangeslider`}
-              element={<Rangesliders />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formelements/inputmasks`}
-              element={<Inputmask />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formelements/fileuploads`}
-              element={<Fileuploads />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }forms/formelements/datetimepicker`}
-              element={<Datetimepicker />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/validation`}
-              element={<Validation />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/select2`}
-              element={<Select2 />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/floatinglabels`}
-              element={<Floatinglables />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formlayouts`}
-              element={<Formlayout />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}forms/formeditors/quilleditor`}
-              element={<Formeditors />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }customer/farmer/ce/:isCreate/:id`}
-              element={<FarmerCreateEdit />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}customer/farmer`}
-              element={<Farmer />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}customer/agent`}
-              element={<Agent />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }customer/agent/ce/:isCreate/:id`}
-              element={<AgentCreateEdit />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}product`}
-              element={<ProductPage />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}product/ce/:isCreate/:id`}
-              element={<ProductCreateEdit />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}program/point`}
-              element={<PointProgram />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}program/point/ce/:isCreate/:id`}
-              element={<PointCreateEdit />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}program/topup`}
-              element={<TopupProgram />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}program/topup/ce/:isCreate/:id`}
-              element={<TopupCreateEdit />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}report`}
-              element={<ReportPage />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/accordions-collapse`}
-              element={<Accordioncollapse />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/draggablecards`}
-              element={<Draggablecards />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/modals-closes`}
-              element={<Modalcloses />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/navbar`}
-              element={<Navbar />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/offcanvas`}
-              element={<Offcanvas />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/ratings`}
-              element={<Ratings />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/swiperjs`}
-              element={<Swiperjs />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/carousel`}
-              element={<Carousel />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}advancedui/placeholders`}
-              element={<Placeholders />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}forms/formelements/inputs`}
+                element={<Inputs />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formelements/checks-radios`}
+                element={<Checksradio />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formelements/inputgroups`}
+                element={<Inputgroup />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formelements/formselect`}
+                element={<Formselect />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formelements/rangeslider`}
+                element={<Rangesliders />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formelements/inputmasks`}
+                element={<Inputmask />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formelements/fileuploads`}
+                element={<Fileuploads />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formelements/datetimepicker`}
+                element={<Datetimepicker />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}forms/validation`}
+                element={<Validation />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}forms/select2`}
+                element={<Select2 />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}forms/floatinglabels`}
+                element={<Floatinglables />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}forms/formlayouts`}
+                element={<Formlayout />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }forms/formeditors/quilleditor`}
+                element={<Formeditors />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }customer/farmer/ce/:isCreate/:id`}
+                element={<FarmerCreateEdit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}customer/farmer`}
+                element={<Farmer />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}customer/agent`}
+                element={<Agent />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }customer/agent/ce/:isCreate/:id`}
+                element={<AgentCreateEdit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}product`}
+                element={<ProductPage />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}product/ce/:isCreate/:id`}
+                element={<ProductCreateEdit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}program/point`}
+                element={<PointProgram />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }program/point/ce/:isCreate/:id`}
+                element={<PointCreateEdit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}program/topup`}
+                element={<TopupProgram />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }program/topup/ce/:isCreate/:id`}
+                element={<TopupCreateEdit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report`}
+                element={<ReportPage />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }advancedui/accordions-collapse`}
+                element={<Accordioncollapse />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/draggablecards`}
+                element={<Draggablecards />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/modals-closes`}
+                element={<Modalcloses />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/navbar`}
+                element={<Navbar />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/offcanvas`}
+                element={<Offcanvas />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/ratings`}
+                element={<Ratings />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/swiperjs`}
+                element={<Swiperjs />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/carousel`}
+                element={<Carousel />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}advancedui/placeholders`}
+                element={<Placeholders />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}widgets/widgets`}
-              element={<Widgets />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}widgets/widgets`}
+                element={<Widgets />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}apps/fullcalendar`}
-              element={<Fullacalendar />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apps/gallery`}
-              element={<Gallery />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apps/sweetalerts`}
-              element={<Sweetalerts />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}apps/fullcalendar`}
+                element={<Fullacalendar />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apps/gallery`}
+                element={<Gallery />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apps/sweetalerts`}
+                element={<Sweetalerts />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}tables/tables`}
-              element={<Tables />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}tables/gridjs`}
-              element={<Gridjstables />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}tables/datatables`}
-              element={<Datatables />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}tables/tables`}
+                element={<Tables />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}tables/gridjs`}
+                element={<Gridjstables />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}tables/datatables`}
+                element={<Datatables />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/linecharts`}
-              element={<Linechart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/areacharts`}
-              element={<Areachart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/columncharts`}
-              element={<Columnchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/barcharts`}
-              element={<Barchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/mixedcharts`}
-              element={<Mixedchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/rangeareacharts`}
-              element={<Rangeareachart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/timelinecharts`}
-              element={<Timelinechart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/candlestickcharts`}
-              element={<Candlestickchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/boxplotcharts`}
-              element={<Boxplotchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/bubblecharts`}
-              element={<Bubblechart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/scattercharts`}
-              element={<Scatterchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/heatmapcharts`}
-              element={<Heatmapchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/treemapcharts`}
-              element={<Treemapchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/piecharts`}
-              element={<Piechart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/radialbarcharts`}
-              element={<Radialbarchart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/polarareacharts`}
-              element={<Polarareachart />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}apexcharts/radarcharts`}
-              element={<Radarchart />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/linecharts`}
+                element={<Linechart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/areacharts`}
+                element={<Areachart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/columncharts`}
+                element={<Columnchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/barcharts`}
+                element={<Barchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/mixedcharts`}
+                element={<Mixedchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/rangeareacharts`}
+                element={<Rangeareachart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/timelinecharts`}
+                element={<Timelinechart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/candlestickcharts`}
+                element={<Candlestickchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/boxplotcharts`}
+                element={<Boxplotchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/bubblecharts`}
+                element={<Bubblechart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/scattercharts`}
+                element={<Scatterchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/heatmapcharts`}
+                element={<Heatmapchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/treemapcharts`}
+                element={<Treemapchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/piecharts`}
+                element={<Piechart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/radialbarcharts`}
+                element={<Radialbarchart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/polarareacharts`}
+                element={<Polarareachart />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}apexcharts/radarcharts`}
+                element={<Radarchart />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}charts/chartjscharts`}
-              element={<Chartjs />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}charts/echartcharts`}
-              element={<Echarts />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}charts/chartjscharts`}
+                element={<Chartjs />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}charts/echartcharts`}
+                element={<Echarts />}
+              />
 
-            <Route
-              path={`${import.meta.env.BASE_URL}maps/leafletmaps`}
-              element={<Leafletmaps />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}maps/vectormaps`}
-              element={<Vectormaps />}
-            />
+              <Route
+                path={`${import.meta.env.BASE_URL}maps/leafletmaps`}
+                element={<Leafletmaps />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}maps/vectormaps`}
+                element={<Vectormaps />}
+              />
 
+              <Route
+                path={`${import.meta.env.BASE_URL}icons/icons`}
+                element={<Icons />}
+              />
+            </Route>
             <Route
-              path={`${import.meta.env.BASE_URL}icons/icons`}
-              element={<Icons />}
-            />
-          </Route>
-          <Route
-            path={`${import.meta.env.BASE_URL}`}
-            element={<Authenticationlayout />}
-          >
-            <Route
-              path={`${import.meta.env.BASE_URL}authentication/comingsoon`}
-              element={<Comingsoon />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/createpassword/createbasic`}
-              element={<Createbasic />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/createpassword/createcover1`}
-              element={<Createcover1 />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/createpassword/createcover2`}
-              element={<Createcover2 />}
-            />
+              path={`${import.meta.env.BASE_URL}`}
+              element={<Authenticationlayout />}
+            >
+              <Route
+                path={`${import.meta.env.BASE_URL}authentication/comingsoon`}
+                element={<Comingsoon />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/createpassword/createbasic`}
+                element={<Createbasic />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/createpassword/createcover1`}
+                element={<Createcover1 />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/createpassword/createcover2`}
+                element={<Createcover2 />}
+              />
 
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/lockscreen/lockscreenbasic`}
-              element={<Lockbasic />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/lockscreen/lockscreencover1`}
-              element={<Lockcover1 />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/lockscreen/lockscreencover2`}
-              element={<Lockcover2 />}
-            />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/lockscreen/lockscreenbasic`}
+                element={<Lockbasic />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/lockscreen/lockscreencover1`}
+                element={<Lockcover1 />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/lockscreen/lockscreencover2`}
+                element={<Lockcover2 />}
+              />
 
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/resetpassword/resetbasic`}
-              element={<Resetbasic />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/resetpassword/resetcover1`}
-              element={<Resetcover1 />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/resetpassword/resetcover2`}
-              element={<Resetcover2 />}
-            />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/resetpassword/resetbasic`}
+                element={<Resetbasic />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/resetpassword/resetcover1`}
+                element={<Resetcover1 />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/resetpassword/resetcover2`}
+                element={<Resetcover2 />}
+              />
 
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/signup/signupbasic`}
-              element={<Signupbasic />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/signup/signupcover1`}
-              element={<Signupcover1 />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/signup/signupcover2`}
-              element={<Signupcover2 />}
-            />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/signup/signupbasic`}
+                element={<Signupbasic />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/signup/signupcover1`}
+                element={<Signupcover1 />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/signup/signupcover2`}
+                element={<Signupcover2 />}
+              />
 
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/signin/signinbasic`}
-              element={<Signinbasic />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/signin/signincover1`}
-              element={<Signincover1 />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/signin/signincover2`}
-              element={<Signincover2 />}
-            />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/signin/signinbasic`}
+                element={<Signinbasic />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/signin/signincover1`}
+                element={<Signincover1 />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/signin/signincover2`}
+                element={<Signincover2 />}
+              />
 
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/twostepverification/twostepbasic`}
-              element={<Twostepbasic />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/twostepverification/twostepcover1`}
-              element={<Twostepcover1 />}
-            />
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/twostepverification/twostepcover2`}
-              element={<Twostepcover2 />}
-            />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/twostepverification/twostepbasic`}
+                element={<Twostepbasic />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/twostepverification/twostepcover1`}
+                element={<Twostepcover1 />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/twostepverification/twostepcover2`}
+                element={<Twostepcover2 />}
+              />
 
-            <Route
-              path={`${
-                import.meta.env.BASE_URL
-              }authentication/undermaintenance`}
-              element={<Undermaintanace />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}authentication/nointernet`}
-              element={<Nointernet />}
-            />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }authentication/undermaintenance`}
+                element={<Undermaintanace />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}authentication/nointernet`}
+                element={<Nointernet />}
+              />
 
+              <Route
+                path={`${import.meta.env.BASE_URL}errors/error401`}
+                element={<Error401 />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}errors/error404`}
+                element={<Error404 />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}errors/error500`}
+                element={<Error500 />}
+              />
+            </Route>
             <Route
-              path={`${import.meta.env.BASE_URL}errors/error401`}
-              element={<Error401 />}
-            />
+              path={`${import.meta.env.BASE_URL}`}
+              element={<Landinglayout />}
+            >
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/landing`}
+                element={<Landing />}
+              />
+            </Route>
             <Route
-              path={`${import.meta.env.BASE_URL}errors/error404`}
-              element={<Error404 />}
-            />
-            <Route
-              path={`${import.meta.env.BASE_URL}errors/error500`}
-              element={<Error500 />}
-            />
-          </Route>
-          <Route
-            path={`${import.meta.env.BASE_URL}`}
-            element={<Landinglayout />}
-          >
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/landing`}
-              element={<Landing />}
-            />
-          </Route>
-          <Route path={`${import.meta.env.BASE_URL}`} element={<Pagelayout />}>
-            <Route
-              path={`${import.meta.env.BASE_URL}pages/blog/blog`}
-              element={<Blog />}
-            />
-          </Route>
-        </Routes>
-      </React.Suspense>
-    </BrowserRouter>
+              path={`${import.meta.env.BASE_URL}`}
+              element={<Pagelayout />}
+            >
+              <Route
+                path={`${import.meta.env.BASE_URL}pages/blog/blog`}
+                element={<Blog />}
+              />
+            </Route>
+          </Routes>
+        </React.Suspense>
+      </HashRouter>
+    </Provider>
   </React.Fragment>
 );

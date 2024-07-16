@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -39,10 +39,16 @@ function TopupProgram() {
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
 
-  const { data: programTopups } = useGetListProgramTopupByTimeQuery(null, {
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-  });
+  const { data: programTopups, refetch } = useGetListProgramTopupByTimeQuery();
+  const handleFocus = () => {
+    refetch();
+  };
+  useEffect(() => {
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [refetch]);
   return (
     <Fragment>
       <Col xl={12}>

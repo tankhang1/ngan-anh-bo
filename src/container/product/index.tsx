@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -39,8 +39,20 @@ function ProductPage() {
 
   const navigate = useNavigate();
 
-  const { data: products, isLoading: isLoadingProduct } =
-    useGetListProductsQuery(null, { refetchOnFocus: true });
+  const {
+    data: products,
+    isLoading: isLoadingProduct,
+    refetch,
+  } = useGetListProductsQuery(null, { refetchOnFocus: true });
+  const handleFocus = () => {
+    refetch();
+  };
+  useEffect(() => {
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [refetch]);
   return (
     <Fragment>
       <Col xl={12}>

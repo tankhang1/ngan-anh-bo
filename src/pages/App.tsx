@@ -19,26 +19,26 @@ function App() {
 
   return (
     <Fragment>
-      <Provider store={store}>
-        <ToastProvider>
-          <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
-            <Switcher />
-            <div className="page">
-              <Header />
-              <Sidebar />
-              <Pageheader />
-              <div className="main-content app-content">
-                <div className="container-fluid">
-                  <Outlet />
-                </div>
+      {/* <Provider store={store}> */}
+      <ToastProvider>
+        <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
+          <Switcher />
+          <div className="page">
+            <Header />
+            <Sidebar />
+            <Pageheader />
+            <div className="main-content app-content">
+              <div className="container-fluid">
+                <Outlet />
               </div>
-              <Footer />
             </div>
-
-            <Tabtotop />
+            <Footer />
           </div>
-        </ToastProvider>
-      </Provider>
+
+          <Tabtotop />
+        </div>
+      </ToastProvider>
+      {/* </Provider> */}
     </Fragment>
   );
 }
