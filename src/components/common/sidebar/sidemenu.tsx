@@ -56,7 +56,7 @@ export const MENUITEMS = [
     icon: icon16,
     badgetxt: "",
     type: "sub",
-    active: false,
+    active: true,
     selected: false,
     dirchange: false,
     children: [
@@ -92,7 +92,7 @@ export const MENUITEMS = [
     icon: icon17,
     badgetxt: "",
     type: "sub",
-    active: false,
+    active: true,
     selected: false,
     dirchange: false,
     children: [
