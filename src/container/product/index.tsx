@@ -13,7 +13,7 @@ import AppTable from "../../components/common/table/table";
 import { useNavigate } from "react-router-dom";
 import { TProduct } from "../../assets/types";
 
-import { BASE_URL, MAP_PRODUCT_TYPE } from "../../constants";
+import { BASE_PORT, BASE_URL, MAP_PRODUCT_TYPE } from "../../constants";
 import { useGetListProductsQuery } from "../../redux/api/info/info.api";
 
 const PRODUCT_FILTERS = [
@@ -141,7 +141,7 @@ function ProductPage() {
                   <td>
                     <img
                       src={
-                        `${BASE_URL}/${value.code}.jpeg` ??
+                        `${BASE_PORT}/${value.code}.jpeg` ??
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
                       }
                       className="img object-fit-cover"

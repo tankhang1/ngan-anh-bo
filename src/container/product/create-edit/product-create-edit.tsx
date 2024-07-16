@@ -11,7 +11,12 @@ import {
 import * as formik from "formik";
 
 import { TAgentForm, TProductForm } from "../../../assets/types";
-import { BASE_URL, COUNTRIES, ProductTypeEnum } from "../../../constants";
+import {
+  BASE_PORT,
+  BASE_URL,
+  COUNTRIES,
+  ProductTypeEnum,
+} from "../../../constants";
 import { useParams } from "react-router-dom";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -252,7 +257,7 @@ function ProductCreateEdit() {
                         <Stack className="d-flex justify-content-center align-items-center">
                           <img
                             src={
-                              `${BASE_URL}/${values.code}.jpeg` ??
+                              `${BASE_PORT}/${values.code}.jpeg` ??
                               "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
                             }
                             className="img object-fit-cover"
