@@ -5,16 +5,7 @@ import { Link } from "react-router-dom";
 import Badge from "react-bootstrap/Badge";
 
 //IMAGES
-import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
-import { Basicline } from "../../charts/apexcharts/linechart/linechartdata";
-import AppTable from "../../../components/common/table/table";
-import {
-  TAgentDashboardTable,
-  TProductDashboardTable,
-  TTopup,
-  TTopupDashboardTable,
-} from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
+
 import OutstandingReport from "./components/OutstandingReport";
 import AgentReport from "./components/AgentReport";
 import FarmerReport from "./components/FarmerReport";

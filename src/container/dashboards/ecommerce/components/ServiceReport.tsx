@@ -142,7 +142,7 @@ function ServiceReport() {
     <Col xl={12}>
       <Card className="custom-card">
         <Card.Header className="justify-content-between">
-          <Card.Title>Dịch vu</Card.Title>
+          <Card.Title>Dịch vụ</Card.Title>
           <Dropdown>
             <Dropdown.Toggle
               variant=""

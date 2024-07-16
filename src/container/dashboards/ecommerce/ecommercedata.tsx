@@ -198,7 +198,7 @@ export const Salesdonut = ({ ...props }: spark3) => {
         ],
       },
     }),
-    []
+    [series, categories, colors]
   );
 
   return (

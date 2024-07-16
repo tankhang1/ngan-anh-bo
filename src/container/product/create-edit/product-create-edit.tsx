@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useContext, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -45,6 +45,7 @@ import {
 } from "../../../redux/api/product/product.api";
 import { useUploadFileMutation } from "../../../redux/api/media/media.api";
 import { FilePondFile } from "filepond";
+import { ToastContext } from "../../../components/AppToast";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -57,6 +58,7 @@ function ProductCreateEdit() {
   const [isEdit, setIsEdit] = useState(false);
   const [files1, setFiles1] = useState<FilePondFile[] | any>([]);
 
+  const toast = useContext(ToastContext);
   const { Formik } = formik;
   // const schema = yup.object().shape({
   //   customer_code: yup.string().required().default(""),
@@ -160,24 +162,29 @@ function ProductCreateEdit() {
           code: productId,
         })
           .unwrap()
-          .then(async () => {
-            if (files1.length > 0) {
-              const formData = new FormData();
-              formData.append("files", files1[0].file);
-              console.log(formData);
-              try {
-                await uploadImage({
-                  id: productId,
-                  body: formData,
-                })
-                  .unwrap()
-                  .then(() => console.log("success"));
-              } catch (error) {
-                console.error("Upload failed:", error);
+          .then(async (value) => {
+            if (value?.status === 0) {
+              toast.showToast("Thêm mới sản phẩm thành công");
+              if (files1.length > 0) {
+                const formData = new FormData();
+                formData.append("files", files1[0].file);
+                console.log(formData);
+                try {
+                  await uploadImage({
+                    id: productId,
+                    body: formData,
+                  })
+                    .unwrap()
+                    .then(() => console.log("success"));
+                } catch (error) {
+                  console.error("Upload failed:", error);
+                }
               }
-            }
+            } else toast.showToast("Thêm mới thất bại");
           })
-          .catch((e) => console.log(e));
+          .catch(() => {
+            toast.showToast("Hết hạn token");
+          });
     } else {
       setIsEdit(!isEdit);
       if (product && isEdit === true) {
@@ -194,27 +201,28 @@ function ProductCreateEdit() {
           type: +values.type,
         })
           .unwrap()
-          .then(async () => {
-            if (files1.length > 0 && product?.code) {
-              const formData = new FormData();
-              formData.append("files", files1[0].file);
-              try {
-                await uploadImage({
-                  id: product?.code,
-                  body: formData,
-                })
-                  .unwrap()
-                  .then(() => console.log("success"));
-              } catch (error) {
-                console.error("Upload failed:", error);
+          .then(async (value) => {
+            if (value?.status === 0) {
+              if (files1.length > 0 && product?.code) {
+                const formData = new FormData();
+                formData.append("files", files1[0].file);
+                try {
+                  await uploadImage({
+                    id: product?.code,
+                    body: formData,
+                  })
+                    .unwrap()
+                    .then(() => console.log("success"));
+                } catch (error) {
+                  console.error("Upload failed:", error);
+                }
               }
-            }
-            console.log("chỉnh sửa sản phẩm thành công");
-            //   toast.success("Chỉnh sửa sản phẩm thành công");
+              console.log("chỉnh sửa sản phẩm thành công");
+              toast.showToast("Chỉnh sửa sản phẩm thành công");
+            } else toast.showToast("Chỉnh sửa sản phẩm thất bại");
           })
-          .catch((e) => {
-            console.log(e);
-            //   toast.error("Chỉnh sửa sản phẩm thất bại");
+          .catch(() => {
+            toast.showToast("Chỉnh sửa sản phẩm thất bại");
           });
       }
     }

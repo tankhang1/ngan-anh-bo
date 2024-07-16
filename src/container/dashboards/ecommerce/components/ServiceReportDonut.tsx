@@ -111,11 +111,12 @@ function ServiceReportDonut() {
 
     [topups, bins, packets, brandnames]
   );
+  console.log(brandnames?.length);
   return (
     <Col xl={12}>
       <Card className="custom-card" style={{ height: 415 }}>
         <Card.Header className="justify-content-between">
-          <Card.Title>Dịch vu</Card.Title>
+          <Card.Title>Dịch vụ</Card.Title>
           <Dropdown>
             <Dropdown.Toggle
               variant=""
