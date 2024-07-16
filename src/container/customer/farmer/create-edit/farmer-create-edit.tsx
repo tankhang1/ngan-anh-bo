@@ -17,24 +17,15 @@ import {
 import * as formik from "formik";
 import * as yup from "yup";
 import {
-  TAgent,
   TAgentForm,
   TFarmerForm,
   TObjectiveEnum,
 } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useGetListAgentsByStatusQuery,
-  useGetListAgentsQuery,
-  useGetListFarmersByStatusQuery,
-} from "../../../../redux/api/manage/manage.api";
+import { useGetListFarmersByStatusQuery } from "../../../../redux/api/manage/manage.api";
 import { useGetDistrictQuery } from "../../../../redux/api/media/media.api";
-import {
-  useCreateAgentMutation,
-  useUpdateAgentMutation,
-  useUpdateFarmerMutation,
-} from "../../../../redux/api/customer/customer.api";
+import { useUpdateFarmerMutation } from "../../../../redux/api/customer/customer.api";
 import { ToastContext } from "../../../../components/AppToast";
 
 function FarmerCreateEdit() {
@@ -64,6 +55,7 @@ function FarmerCreateEdit() {
           (farmer) => farmer.customer_code === id?.split("_")[0]
         ),
       }),
+      skip: isCreate === "true",
     }
   );
   console.log(farmer, isCreate, isEdit, id);
@@ -101,43 +93,33 @@ function FarmerCreateEdit() {
           navigate("/");
         });
   };
-  const initialValue = useMemo(
-    () => ({
-      customer_code: farmer?.customer_code ?? "",
-      customer_name: farmer?.customer_name ?? "",
-      customer_province: farmer?.customer_province ?? PROVINCES[0].value,
-      customer_type: farmer?.customer_type ?? (TObjectiveEnum.RETAILER as any),
-      name: farmer?.name ?? "",
-      province: farmer?.province ?? PROVINCES[0].value,
-      info_primary: farmer?.info_primary ?? 0,
-      phone: farmer?.phone ?? "",
-      sign_board: farmer?.sign_board ?? "",
-      type: farmer?.type ?? 0,
-      verify: farmer?.verify ?? 0,
-      customer_address: farmer?.customer_province ?? "",
-      customer_district: farmer?.customer_district ?? "",
-      status: farmer?.status ?? 1,
-      time: farmer?.time ?? "",
-      finger_province: farmer?.finger_province ?? "",
-    }),
-    [farmer]
-  );
 
   useEffect(() => {
     if (farmer?.customer_province) setProvinceId(farmer.customer_province);
   }, [farmer]);
-  const result = (values: TAgentForm) => {
-    console.log(values);
-    if (isEdit) {
-      console.log(values);
-    }
-    setIsEdit(!isEdit);
-  };
 
   return (
     <Fragment>
       <Formik
-        initialValues={initialValue}
+        initialValues={{
+          customer_code: farmer?.customer_code ?? "",
+          customer_name: farmer?.customer_name ?? "",
+          customer_province: farmer?.customer_province ?? PROVINCES[0].value,
+          customer_type:
+            farmer?.customer_type ?? (TObjectiveEnum.RETAILER as any),
+          name: farmer?.name ?? "",
+          province: farmer?.province ?? PROVINCES[0].value,
+          info_primary: farmer?.info_primary ?? 0,
+          phone: farmer?.phone ?? "",
+          sign_board: farmer?.sign_board ?? "",
+          type: farmer?.type ?? 0,
+          verify: farmer?.verify ?? 0,
+          customer_address: farmer?.customer_province ?? "",
+          customer_district: farmer?.customer_district ?? "",
+          status: farmer?.status ?? 1,
+          time: farmer?.time ?? "",
+          finger_province: farmer?.finger_province ?? "",
+        }}
         onSubmit={handleSubmitAgent}
         //validationSchema={schema.nullable()}
       >

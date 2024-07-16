@@ -6,32 +6,18 @@ import React, {
   useState,
 } from "react";
 import {
-  Button,
   Card,
   Col,
-  Form,
   OverlayTrigger,
   Row,
   Stack,
-  Toast,
   Tooltip,
+  Form,
 } from "react-bootstrap";
-import * as formik from "formik";
-import * as yup from "yup";
-import {
-  TAgent,
-  TAgentForm,
-  TObjectiveEnum,
-  TPointCreateForm,
-  TProduct,
-} from "../../../../assets/types";
+import { Formik } from "formik";
+import { TAgentForm, TPointCreateForm } from "../../../../assets/types";
 import Select from "react-select";
-import {
-  COUNTRIES,
-  OBJECTIVES_SELECT,
-  ProductTypeEnum,
-  PROVINCES,
-} from "../../../../constants";
+import { OBJECTIVES_SELECT, PROVINCES } from "../../../../constants";
 import { useParams } from "react-router-dom";
 import { registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -59,10 +45,10 @@ function PointCreateEdit() {
 
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
-
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
+    refetchOnFocus: true,
     skip: isCreate !== "true",
   });
   const { data: listAgencyC1, isLoading: isLoadingAgency } =
@@ -71,19 +57,18 @@ function PointCreateEdit() {
     selectFromResult: ({ data }) => ({
       data: data?.find((item) => item.uuid === +(id ?? "")),
     }),
-    skip: isCreate === "true" ? true : false,
+    skip: isCreate === "true",
   });
-  const { Formik } = formik;
-  const schema = yup.object().shape({
-    customer_code: yup.string().required().default(""),
-    customer_name: yup.string().required().default(""),
-    customer_province: yup.string().required().default(""),
-    customer_type: yup.string().required("Trường bắt buộc"),
-    info_primary: yup.number().required(),
-    sign_board: yup.string().required(),
-    customer_address: yup.string().required(),
-    customer_district: yup.string().required(),
-  });
+  // const schema = yup.object().shape({
+  //   customer_code: yup.string().required().default(""),
+  //   customer_name: yup.string().required().default(""),
+  //   customer_province: yup.string().required().default(""),
+  //   customer_type: yup.string().required("Trường bắt buộc"),
+  //   info_primary: yup.number().required(),
+  //   sign_board: yup.string().required(),
+  //   customer_address: yup.string().required(),
+  //   customer_district: yup.string().required(),
+  // });
 
   const mapProduct = useMemo(
     () =>
@@ -164,39 +149,8 @@ function PointCreateEdit() {
     [pointProgram]
   );
 
-  const initialValue = useMemo(
-    () => ({
-      name: pointProgram?.name ?? "",
-      products: mapCodeProduct(pointProgram?.products),
-      agents: mapAgent(pointProgram?.agents),
-      point_coefficient: pointProgram?.point_coefficient ?? 1,
-      objectives: mapObjective(pointProgram?.objectives),
-      time_end: pointProgram?.time_end
-        ? format(new Date(pointProgram.time_end), "yyyy-MM-dd")
-        : ("" as any),
-      time_start: pointProgram?.time_start
-        ? format(new Date(pointProgram.time_start), "yyyy-MM-dd")
-        : ("" as any),
-      locations: mapProvince(pointProgram?.locations) ?? [],
-      status: pointProgram?.status ?? 0,
-      uuid:
-        isCreate === "true"
-          ? newUUID?.toString()
-          : pointProgram?.uuid.toString(),
-    }),
-    [newUUID, pointProgram, isCreate, products, listAgencyC1]
-  );
-  console.log("initialValue", initialValue);
   const [updatePointProgram] = useUpdatePointProgramMutation();
   const [createPointProgram] = useCreatePointProgramMutation();
-
-  const result = (values: TAgentForm) => {
-    console.log(values);
-    if (isEdit) {
-      console.log(values);
-    }
-    setIsEdit(!isEdit);
-  };
 
   const handleCreatePointProgram = async (values: TPointCreateForm) => {
     if (isCreate === "true") {
@@ -330,7 +284,26 @@ function PointCreateEdit() {
   return (
     <Fragment>
       <Formik
-        initialValues={initialValue}
+        initialValues={{
+          name: pointProgram?.name ?? "",
+          products: mapCodeProduct(pointProgram?.products) as any,
+          agents: mapAgent(pointProgram?.agents) as any,
+          point_coefficient: pointProgram?.point_coefficient ?? 1,
+          objectives: mapObjective(pointProgram?.objectives) as any,
+          time_end: pointProgram?.time_end
+            ? format(new Date(pointProgram.time_end), "yyyy-MM-dd")
+            : ("" as any),
+          time_start: pointProgram?.time_start
+            ? format(new Date(pointProgram.time_start), "yyyy-MM-dd")
+            : ("" as any),
+          locations: (mapProvince(pointProgram?.locations) ?? "") as any,
+          status: pointProgram?.status ?? 0,
+          uuid:
+            (isCreate === "true"
+              ? newUUID?.toString()
+              : pointProgram?.uuid.toString()) ?? ("" as any),
+        }}
+        enableReinitialize
         onSubmit={handleCreatePointProgram}
         //validationSchema={schema}
       >
@@ -389,14 +362,11 @@ function PointCreateEdit() {
                       id="uuid_validate"
                       placeholder="Mã chương trình"
                       name="uuid"
-                      value={values.uuid ?? newUUID}
+                      value={isCreate === "true" ? newUUID : values.uuid}
                       onChange={handleChange}
                       isInvalid={touched.uuid && !!errors.uuid}
                       disabled
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.uuid}
-                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="name_validate">
                     <Form.Label>Tên chương trình</Form.Label>
@@ -481,9 +451,6 @@ function PointCreateEdit() {
                       value={values.products}
                       onChange={(value) => setFieldValue("products", value)}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.products}
-                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="locations_validate">
                     <Form.Label>Chọn tỉnh thành</Form.Label>
@@ -508,9 +475,6 @@ function PointCreateEdit() {
                       value={values.locations}
                       onChange={(value) => setFieldValue("locations", value)}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.locations}
-                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="objectives_validate">
                     <Form.Label>Chọn đối tượng tham gia</Form.Label>
@@ -534,9 +498,6 @@ function PointCreateEdit() {
                       isClearable
                       onChange={(value) => setFieldValue("objectives", value)}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.objectives}
-                    </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="agents_validate">
                     <Form.Label>Chọn đại lí cấp 1</Form.Label>
@@ -562,9 +523,6 @@ function PointCreateEdit() {
                       isClearable
                       onChange={(value) => setFieldValue("agents", value)}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.agents}
-                    </Form.Control.Feedback>
                   </Form.Group>
                   {/* <Form.Group controlId="point_validate">
                     <Form.Label>Nhập số điểm</Form.Label>

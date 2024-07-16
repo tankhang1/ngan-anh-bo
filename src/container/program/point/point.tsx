@@ -8,18 +8,14 @@ import {
   Form,
   InputGroup,
   OverlayTrigger,
-  Row,
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TAgentDashboardTable, TProgramPoint } from "../../../assets/types";
+import { TProgramPoint } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
-import {
-  useGetListProgramPointByTimeQuery,
-  useGetListProgramPointQuery,
-} from "../../../redux/api/program/program.api";
+import { useGetListProgramPointByTimeQuery } from "../../../redux/api/program/program.api";
 import { format } from "date-fns";
 
 const POINT_FILTERS = [
@@ -205,7 +201,7 @@ function PointProgram() {
               },
               {
                 key: "agents",
-                label: "Đại lí áp dụng",
+                label: "Đại lý áp dụng",
                 render: (value) => (
                   <td>
                     <span className="d-flex gap-1 flex-wrap">

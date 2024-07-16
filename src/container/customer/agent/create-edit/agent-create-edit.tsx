@@ -58,6 +58,7 @@ function AgentCreateEdit() {
       selectFromResult: ({ data }) => ({
         data: data?.find((agent) => agent.customer_code === id?.split("_")[0]),
       }),
+      skip: isCreate === "true",
     }
   );
   console.log(agent, isCreate, isEdit, id);
@@ -85,14 +86,14 @@ function AgentCreateEdit() {
         .then((value) => {
           console.log("create agent success", value);
           if (value?.status === -2) {
-            toast.showToast("Đại lí đã tồn tại");
+            toast.showToast("Đại lý đã tồn tại");
             return;
           }
           if (value?.status === 0) {
-            toast.showToast("Thêm đại lí thành công");
+            toast.showToast("Thêm đại lý thành công");
             return;
           }
-          toast.showToast("Thêm mới đại lí thất bại");
+          toast.showToast("Thêm mới đại lý thất bại");
         })
         .catch((e) => {
           console.log("create agent fail", e.message);
@@ -147,18 +148,29 @@ function AgentCreateEdit() {
   useEffect(() => {
     if (agent?.customer_province) setProvinceId(agent.customer_province);
   }, [agent]);
-  const result = (values: TAgentForm) => {
-    console.log(values);
-    if (isEdit) {
-      console.log(values);
-    }
-    setIsEdit(!isEdit);
-  };
 
   return (
     <Fragment>
       <Formik
-        initialValues={initialValue}
+        initialValues={{
+          customer_code: agent?.customer_code ?? "",
+          customer_name: agent?.customer_name ?? "",
+          customer_province: agent?.customer_province ?? PROVINCES[0].value,
+          customer_type:
+            agent?.customer_type ?? (TObjectiveEnum.RETAILER as any),
+          name: agent?.name ?? "",
+          province: agent?.province ?? PROVINCES[0].value,
+          info_primary: agent?.info_primary ?? 1,
+          phone: agent?.phone ?? "",
+          sign_board: agent?.sign_board ?? "",
+          type: agent?.type ?? 0,
+          verify: agent?.verify ?? 0,
+          customer_address: agent?.customer_province ?? "",
+          customer_district: agent?.customer_district ?? "",
+          status: agent?.status ?? 1,
+          time: agent?.time ?? "",
+          finger_province: agent?.finger_province ?? "",
+        }}
         onSubmit={handleSubmitAgent}
         // validationSchema={schema.nullable()}
       >
@@ -174,7 +186,7 @@ function AgentCreateEdit() {
             <Card className="custom-card">
               <Card.Header className="justify-content-between">
                 <Card.Title>
-                  {!isEdit ? "Thông tin đại lí" : "Chỉnh sửa thông tin đại lí"}
+                  {!isEdit ? "Thông tin đại lý" : "Chỉnh sửa thông tin đại lý"}
                 </Card.Title>
                 <div>
                   <OverlayTrigger

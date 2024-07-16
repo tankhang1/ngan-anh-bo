@@ -1,8 +1,5 @@
-import React, { FC, Fragment, useState } from "react";
-import { Card, Col, Dropdown, Row } from "react-bootstrap";
-import { Salesdonut } from "../ecommerce/ecommercedata";
-import { Link } from "react-router-dom";
-import Badge from "react-bootstrap/Badge";
+import React, { FC, Fragment } from "react";
+import { Card, Col, Row } from "react-bootstrap";
 
 //IMAGES
 
@@ -19,8 +16,6 @@ import TableTopup from "./components/TableTopup";
 interface EcommerceProps {}
 
 const Ecommerce: FC<EcommerceProps> = () => {
-  const [_content, setContent] = useState("");
-
   return (
     <Fragment>
       <Row>

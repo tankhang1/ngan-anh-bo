@@ -8,15 +8,10 @@ import {
   Form,
   InputGroup,
   OverlayTrigger,
-  Row,
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import {
-  TAgentDashboardTable,
-  TProgramPoint,
-  TProgramTopup,
-} from "../../../assets/types";
+import { TProgramTopup } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
@@ -238,18 +233,21 @@ function TopupProgram() {
               {
                 key: "",
                 label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <span className="d-flex justify-content-center align-item-center">
-                      <button
-                        className="btn btn-icon btn-sm btn-primary-ghost"
-                        onClick={() => navigate(`ce/${false}/${value.uuid}`)}
-                      >
-                        <i className="ti ti-edit"></i>
-                      </button>
-                    </span>
-                  </td>
-                ),
+                render: (value) => {
+                  console.log(value);
+                  return (
+                    <td>
+                      <span className="d-flex justify-content-center align-item-center">
+                        <button
+                          className="btn btn-icon btn-sm btn-primary-ghost"
+                          onClick={() => navigate(`ce/${false}/${value.uuid}`)}
+                        >
+                          <i className="ti ti-edit"></i>
+                        </button>
+                      </span>
+                    </td>
+                  );
+                },
               },
             ]}
             data={programTopups || []}

@@ -435,7 +435,7 @@ const MAP_PROGRAM_STATUS = new Map([
 ]);
 const OBJECTIVES_SELECT = [
   {
-    label: "Đại lí",
+    label: "Đại lý",
     value: TObjectiveEnum.RETAILER,
   },
   { label: "Nông dân", value: TObjectiveEnum.FARMER },

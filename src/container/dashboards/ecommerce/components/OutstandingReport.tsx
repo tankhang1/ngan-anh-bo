@@ -242,7 +242,7 @@ function OutstandingReport() {
           </div>
         </div>
         <div className="flex-1">
-          <p className="mb-0 text-muted">Đại lí chờ xác thực</p>
+          <p className="mb-0 text-muted">Đại lý chờ xác thực</p>
           <div className="">
             <span className="text-xl fw-semibold">
               {mapReportCurrentDay.agent_none}

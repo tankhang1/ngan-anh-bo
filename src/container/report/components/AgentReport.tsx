@@ -126,11 +126,11 @@ function AgentReport() {
                   ) {
                     exportMultipleSheet([
                       {
-                        sheetName: "Đại lí chờ xác thực",
+                        sheetName: "Đại lý chờ xác thực",
                         data: agents?.listUnValidateAgents ?? [],
                       },
                       {
-                        sheetName: "Đại lí xác thực",
+                        sheetName: "Đại lý xác thực",
                         data: agents?.listValidateAgents ?? [],
                       },
                     ]);
@@ -154,11 +154,11 @@ function AgentReport() {
                 title="Số lượt đăng kí"
                 series={[
                   {
-                    name: "Đã lí đã xác thực",
+                    name: "Đã lý đã xác thực",
                     data: mapAgent.map((item) => item.agencyChecked),
                   },
                   {
-                    name: "Đại lí chờ xác thực",
+                    name: "Đại lý chờ xác thực",
                     data: mapAgent.map((item) => item.agencyUnchecked),
                   },
                 ]}

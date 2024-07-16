@@ -7,21 +7,13 @@ import {
   Form,
   InputGroup,
   OverlayTrigger,
-  Row,
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import {
-  TAgentDashboardTable,
-  TFarmer,
-  TGetListFarmersRes,
-} from "../../../assets/types";
+import { TFarmer } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
-import {
-  useGetListFarmersByStatusQuery,
-  useGetListFarmersQuery,
-} from "../../../redux/api/manage/manage.api";
+import { useGetListFarmersByStatusQuery } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 
 const FAMER_FILTERS = [

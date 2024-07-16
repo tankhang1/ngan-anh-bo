@@ -39,7 +39,7 @@ export const productApi = createApi({
         method: HTTPS_METHOD.GET,
         responseHandler: (response) => response.text(),
       }),
-      providesTags: (result) => [{ type: ProductEnum.PRODUCT_CODE, result }],
+      keepUnusedDataFor: 0,
     }),
     getListDevices: builder.query<{ label: string; value: string }[], void>({
       query: () => ({

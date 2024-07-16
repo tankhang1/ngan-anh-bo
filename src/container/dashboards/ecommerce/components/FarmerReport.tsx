@@ -134,11 +134,11 @@ function FarmerReport() {
             <Basicolumn
               series={[
                 {
-                  name: "Đã lí đã xác thực",
+                  name: "Đã lý đã xác thực",
                   data: mapFarmer.map((item) => item.farmerChecked),
                 },
                 {
-                  name: "Đại lí chờ xác thực",
+                  name: "Đại lý chờ xác thực",
                   data: mapFarmer.map((item) => item.farmerUnChecked),
                 },
               ]}

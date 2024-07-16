@@ -187,15 +187,15 @@ const AppTable = <T extends DataItem>({
               <thead>
                 <tr>
                   {headers.map((item) => (
-                    <th scope="col" key={item.key}>
+                    <th scope="col" key={Math.random()}>
                       {item.label}
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {pagingData.map((item, index) => (
-                  <tr key={index}>
+                {pagingData.map((item) => (
+                  <tr key={Math.random()}>
                     {headers.map((header) => header?.render?.(item))}
                   </tr>
                 ))}

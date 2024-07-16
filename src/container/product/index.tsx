@@ -5,10 +5,8 @@ import {
   Col,
   Dropdown,
   Form,
-  Image,
   InputGroup,
   OverlayTrigger,
-  Row,
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../components/common/table/table";
@@ -17,7 +15,6 @@ import { TProduct } from "../../assets/types";
 
 import { BASE_URL, MAP_PRODUCT_TYPE } from "../../constants";
 import { useGetListProductsQuery } from "../../redux/api/info/info.api";
-import { fNumber } from "../../hooks";
 
 const PRODUCT_FILTERS = [
   {
@@ -44,7 +41,7 @@ function ProductPage() {
     data: products,
     isLoading: isLoadingProduct,
     refetch,
-  } = useGetListProductsQuery(null, { refetchOnFocus: true });
+  } = useGetListProductsQuery(null);
   const handleFocus = () => {
     refetch();
   };
@@ -142,13 +139,16 @@ function ProductPage() {
                 label: "Hình ảnh",
                 render: (value) => (
                   <td>
-                    <Image
+                    <img
                       src={
                         `${BASE_URL}/${value.code}.jpeg` ??
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
                       }
-                      className="img"
-                      style={{ height: 70 }}
+                      className="img object-fit-cover"
+                      style={{
+                        height: 100,
+                        width: "auto",
+                      }}
                     />
                   </td>
                 ),

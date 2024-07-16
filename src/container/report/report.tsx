@@ -9,7 +9,7 @@ function ReportPage() {
   return (
     <Fragment>
       <Stack className="d-flex gap-1">
-        {/*Đại lí */}
+        {/*Đại lý */}
         <AgentReport />
         {/*Nông dân */}
         <FarmerReport />

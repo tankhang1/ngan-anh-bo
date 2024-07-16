@@ -1,36 +1,22 @@
 import React, { Fragment, useContext, useMemo, useState } from "react";
 import {
-  Button,
   Card,
   Col,
   Form,
-  Image,
   OverlayTrigger,
   Row,
   Stack,
   Tooltip,
 } from "react-bootstrap";
 import * as formik from "formik";
-import * as yup from "yup";
-import {
-  TAgent,
-  TAgentForm,
-  TObjectiveEnum,
-  TProduct,
-  TProductForm,
-} from "../../../assets/types";
-import {
-  BASE_URL,
-  COUNTRIES,
-  ProductTypeEnum,
-  PROVINCES,
-} from "../../../constants";
+
+import { TAgentForm, TProductForm } from "../../../assets/types";
+import { BASE_URL, COUNTRIES, ProductTypeEnum } from "../../../constants";
 import { useParams } from "react-router-dom";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import Editor1 from "../../forms/formeditors/formeditordata1";
 import Editor from "../../forms/formeditors/formeditordata";
 import {
   useGetListBinsIdQuery,
@@ -57,7 +43,6 @@ function ProductCreateEdit() {
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const [files1, setFiles1] = useState<FilePondFile[] | any>([]);
-
   const toast = useContext(ToastContext);
   const { Formik } = formik;
   // const schema = yup.object().shape({
@@ -75,77 +60,20 @@ function ProductCreateEdit() {
     selectFromResult: ({ data }) => ({
       data: data?.find((item) => item.code === id),
     }),
-    skip: isCreate === "true" ? true : false,
+    skip: isCreate === "true",
   });
   const { data: binIds } = useGetListBinsIdQuery();
   const { data: devices } = useGetListDevicesQuery();
   const { data: ingredients } = useGetListIngredientsQuery();
   const { data: productId } = useGetNewProductCodeQuery(null, {
-    skip: isCreate === "true" ? false : true,
     refetchOnFocus: true,
+    skip: isCreate !== "true",
   });
 
-  const initialValue = useMemo(
-    () => ({
-      bin_pallet: product?.bin_pallet ?? 0,
-      code: isCreate === "true" ? productId ?? "" : product?.code ?? "",
-      code_bin: product?.code_bin ?? "",
-      brand_code: product?.brand_code ?? "",
-      brand_name: product?.brand_name ?? "",
-      category_code: product?.category_code ?? "",
-      category_name: product?.category_name ?? "",
-      certificate_of_origin: product?.certificate_of_origin ?? "",
-      description: product?.description ?? "",
-      detail_url: product?.detail_url ?? "",
-      ingredient: `<p>${product?.ingredient ?? "123213"}</p>`,
-      ingredient_id: product?.ingredient_id ?? "",
-      name_display_label: product?.name_display_label ?? "",
-      net_weight: product?.net_weight ?? 0,
-      pack_configuration: product?.pack_configuration ?? "",
-      product_name_detail: product?.product_name_detail ?? "",
-      qr_mapping: product?.qr_mapping === 1 ? true : false,
-      qr_printing: product?.qr_printing === 1 ? true : false,
-      short_info: product?.short_info ?? "",
-      sku_bin: product?.sku_bin ?? 0,
-      sku_box: product?.sku_box ?? 0,
-      type: product?.type.toString() ?? 0,
-      unit: product?.unit ?? "",
-      mop: product?.mop ?? 0,
-      device_code: product?.device_code ?? "",
-      point: product?.point ?? 1,
-      c1_price_vnd: product?.c1_price_vnd ?? 0,
-      c2_price_vnd: product?.c2_price_vnd ?? 0,
-    }),
-    [isCreate, id, productId]
-  );
-  console.log(initialValue);
   const [updateProduct] = useUpdateProductMutation();
   const [uploadImage] = useUploadFileMutation();
   const [createProduct] = useCreateProductMutation();
 
-  const result = (values: TAgentForm) => {
-    console.log(values);
-    if (isEdit) {
-      console.log(values);
-    }
-    setIsEdit(!isEdit);
-  };
-  const handleUploadImage = async (image: FilePondFile) => {
-    const formData = new FormData();
-    formData.append("files", image.file);
-    console.log(formData);
-    try {
-      if (product?.code)
-        await uploadImage({
-          id: product?.code,
-          body: formData,
-        })
-          .unwrap()
-          .then(() => console.log("success"));
-    } catch (error) {
-      console.error("Upload failed:", error);
-    }
-  };
   const onHandleSubmit = async (values: TProductForm) => {
     if (isCreate === "true") {
       if (productId)
@@ -227,10 +155,44 @@ function ProductCreateEdit() {
       }
     }
   };
+
+  console.log(
+    isCreate === "true" ? productId ?? "" : product?.code ?? "",
+    productId
+  );
   return (
     <Fragment>
       <Formik
-        initialValues={initialValue}
+        initialValues={{
+          bin_pallet: product?.bin_pallet ?? 0,
+          code: isCreate === "true" ? productId ?? "" : product?.code ?? "",
+          code_bin: product?.code_bin ?? "",
+          brand_code: product?.brand_code ?? "",
+          brand_name: product?.brand_name ?? "",
+          category_code: product?.category_code ?? "",
+          category_name: product?.category_name ?? "",
+          certificate_of_origin: product?.certificate_of_origin ?? "",
+          description: product?.description ?? "",
+          detail_url: product?.detail_url ?? "",
+          ingredient: `<p>${product?.ingredient ?? ""}</p>`,
+          ingredient_id: product?.ingredient_id ?? "",
+          name_display_label: product?.name_display_label ?? "",
+          net_weight: product?.net_weight ?? 0,
+          pack_configuration: product?.pack_configuration ?? "",
+          product_name_detail: product?.product_name_detail ?? "",
+          qr_mapping: product?.qr_mapping === 1 ? true : false,
+          qr_printing: product?.qr_printing === 1 ? true : false,
+          short_info: product?.short_info ?? "",
+          sku_bin: product?.sku_bin ?? 0,
+          sku_box: product?.sku_box ?? 0,
+          type: product?.type.toString() ?? 0,
+          unit: product?.unit ?? "",
+          mop: product?.mop ?? 0,
+          device_code: product?.device_code ?? "",
+          point: product?.point ?? 1,
+          c1_price_vnd: product?.c1_price_vnd ?? 0,
+          c2_price_vnd: product?.c2_price_vnd ?? 0,
+        }}
         onSubmit={(values) => {
           console.log(values);
         }}
@@ -326,7 +288,9 @@ function ProductCreateEdit() {
                             id="code_validate"
                             placeholder="Mã sản phẩm"
                             name="name"
-                            value={values.code ?? productId}
+                            value={
+                              isCreate === "true" ? productId : values.code
+                            }
                             onChange={handleChange}
                             isInvalid={touched.code && !!errors.code}
                           />
@@ -351,6 +315,25 @@ function ProductCreateEdit() {
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.product_name_detail}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group controlId="name_display_label_validate">
+                          <Form.Label>Tên sản phẩm (thu gọn)</Form.Label>
+                          <Form.Control
+                            required
+                            type="text"
+                            id="name_display_label_validate"
+                            placeholder="Tên sản phẩm (thu gọn)"
+                            name="name_display_label"
+                            value={values.name_display_label}
+                            onChange={handleChange}
+                            isInvalid={
+                              touched.name_display_label &&
+                              !!errors.name_display_label
+                            }
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.name_display_label}
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="brand_code_validate">

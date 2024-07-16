@@ -66,7 +66,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Đại lí",
+        title: "Đại lý",
       },
       {
         path: `${import.meta.env.BASE_URL}customer/farmer`,

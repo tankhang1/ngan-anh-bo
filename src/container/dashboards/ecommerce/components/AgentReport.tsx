@@ -102,7 +102,7 @@ function AgentReport() {
     <Col xl={12}>
       <Card className="custom-card">
         <Card.Header className="justify-content-between">
-          <Card.Title>Đại lí</Card.Title>
+          <Card.Title>Đại lý</Card.Title>
           <Dropdown>
             <Dropdown.Toggle
               variant=""
@@ -144,11 +144,11 @@ function AgentReport() {
             <Basicolumn
               series={[
                 {
-                  name: "Đã lí đã xác thực",
+                  name: "Đã lý đã xác thực",
                   data: mapAgent.map((item) => item.agencyChecked),
                 },
                 {
-                  name: "Đại lí chờ xác thực",
+                  name: "Đại lý chờ xác thực",
                   data: mapAgent.map((item) => item.agencyUnchecked),
                 },
               ]}

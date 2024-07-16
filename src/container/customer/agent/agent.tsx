@@ -23,7 +23,7 @@ const AGENT_FILTERS = [
   },
   {
     key: "name",
-    label: "Tên đại lí",
+    label: "Tên đại lý",
   },
   {
     key: "phone",
@@ -129,7 +129,7 @@ function Agent() {
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip className="tooltip">Thêm mới đại lí </Tooltip>
+                      <Tooltip className="tooltip">Thêm mới đại lý </Tooltip>
                     }
                   >
                     <Button

@@ -49,13 +49,14 @@ function TopupCreateEdit() {
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
+    refetchOnFocus: true,
     skip: isCreate !== "true",
   });
   const { data: topupProgram } = useGetListProgramTopupByTimeQuery(null, {
     selectFromResult: ({ data }) => ({
       data: data?.find((item) => item.uuid === +(id ?? "")),
     }),
-    skip: isCreate === "true" ? true : false,
+    skip: isCreate === "true",
   });
   const { Formik } = formik;
   const schema = yup.object().shape({
@@ -117,26 +118,6 @@ function TopupCreateEdit() {
     [topupProgram]
   );
 
-  const initialValue = useMemo(
-    () => ({
-      name: topupProgram?.name ?? "",
-      products: mapCodeProduct(topupProgram?.products),
-      price: topupProgram?.price ?? 1,
-      objectives: mapObjective(topupProgram?.objectives),
-      time_end: topupProgram?.time_end
-        ? format(new Date(topupProgram.time_end), "yyyy-MM-dd")
-        : ("" as any),
-      time_start: topupProgram?.time_start
-        ? format(new Date(topupProgram.time_start), "yyyy-MM-dd")
-        : ("" as any),
-      status: topupProgram?.status ?? 0,
-      uuid:
-        isCreate === "true"
-          ? newUUID?.toString()
-          : topupProgram?.uuid.toString(),
-    }),
-    [newUUID, topupProgram, isCreate, products]
-  );
   const [updateTopupProgram] = useUpdateTopupProgramMutation();
   const [createTopupProgram] = useCreateTopupProgramMutation();
 
@@ -241,7 +222,23 @@ function TopupCreateEdit() {
   return (
     <Fragment>
       <Formik
-        initialValues={initialValue}
+        initialValues={{
+          name: topupProgram?.name ?? "",
+          products: mapCodeProduct(topupProgram?.products),
+          price: topupProgram?.price ?? 1,
+          objectives: mapObjective(topupProgram?.objectives),
+          time_end: topupProgram?.time_end
+            ? format(new Date(topupProgram.time_end), "yyyy-MM-dd")
+            : ("" as any),
+          time_start: topupProgram?.time_start
+            ? format(new Date(topupProgram.time_start), "yyyy-MM-dd")
+            : ("" as any),
+          status: topupProgram?.status ?? 0,
+          uuid:
+            isCreate === "true"
+              ? newUUID?.toString()
+              : topupProgram?.uuid.toString(),
+        }}
         onSubmit={handleCreatePointProgram}
         //validationSchema={schema}
       >
@@ -300,7 +297,7 @@ function TopupCreateEdit() {
                       id="uuid_validate"
                       placeholder="Mã chương trình"
                       name="uuid"
-                      value={values.uuid ?? newUUID}
+                      value={isCreate === "true" ? newUUID : values.uuid}
                       onChange={handleChange}
                       isInvalid={touched.uuid && !!errors.uuid}
                       disabled
