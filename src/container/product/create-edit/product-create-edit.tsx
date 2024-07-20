@@ -257,7 +257,7 @@ function ProductCreateEdit() {
                         <Stack className="d-flex justify-content-center align-items-center">
                           <img
                             src={
-                              `${BASE_PORT}/${values.code}.jpeg` ??
+                              `${BASE_PORT}/${values.code}.jpg` ??
                               "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
                             }
                             className="img object-fit-cover"
