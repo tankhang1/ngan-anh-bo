@@ -1,4 +1,10 @@
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -15,6 +21,7 @@ import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { useGetListAgentsByStatusQuery } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
+import { PROVINCES } from "../../../constants";
 
 const AGENT_FILTERS = [
   {
@@ -52,6 +59,12 @@ function Agent() {
   const handleFocus = () => {
     refetch();
   };
+  const getProvinceLabel = useCallback(
+    (provinceId: string) => {
+      return PROVINCES.find((item) => item.value === provinceId)?.label ?? "";
+    },
+    [PROVINCES]
+  );
   useEffect(() => {
     window.addEventListener("focus", handleFocus);
     return () => {
@@ -185,7 +198,18 @@ function Agent() {
               {
                 key: "province",
                 label: "Địa chỉ",
-                render: (value) => <td>{value.province}</td>,
+                render: (value) => (
+                  <td>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip>{getProvinceLabel(value.province)}</Tooltip>
+                      }
+                    >
+                      <p>{value.province}</p>
+                    </OverlayTrigger>
+                  </td>
+                ),
               },
               {
                 key: "time_verify",

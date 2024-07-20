@@ -26,7 +26,6 @@ const exportMultipleSheet = <T>(
 };
 
 const fNumber = (value: number) => {
-  const newValue = new Intl.NumberFormat("vi").format(value);
-  return +newValue;
+  return new Intl.NumberFormat().format(value);
 };
 export { exportExcelFile, exportMultipleSheet, fNumber };

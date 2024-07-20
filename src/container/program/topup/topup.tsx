@@ -219,14 +219,18 @@ function TopupProgram() {
                 key: "time_active",
                 label: "Thời gian bắt đầu",
                 render: (value) => (
-                  <td>{format(new Date(value.time_start), "dd/MM/yyyy")}</td>
+                  <td>
+                    {format(new Date(value.time_start ?? "0"), "dd/MM/yyyy")}
+                  </td>
                 ),
               },
               {
                 key: "time_end",
                 label: "Thời gian kết thúc",
                 render: (value) => (
-                  <td>{format(new Date(value.time_end), "dd/MM/yyyy")}</td>
+                  <td>
+                    {format(new Date(value.time_end ?? "0"), "dd/MM/yyyy")}
+                  </td>
                 ),
               },
 

@@ -15,7 +15,7 @@ import {
   Form,
 } from "react-bootstrap";
 import { Formik } from "formik";
-import { TAgentForm, TPointCreateForm } from "../../../../assets/types";
+import { TPointCreateForm } from "../../../../assets/types";
 import Select from "react-select";
 import { OBJECTIVES_SELECT, PROVINCES } from "../../../../constants";
 import { useParams } from "react-router-dom";

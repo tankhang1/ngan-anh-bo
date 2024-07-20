@@ -1,15 +1,8 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
-import {
-  TAgent,
-  TAgentDashboardTable,
-  TGetListAgentsRes,
-} from "../../../../assets/types";
+import { TAgent } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
-import {
-  useGetListAgentsQuery,
-  useGetListFarmersQuery,
-} from "../../../../redux/api/manage/manage.api";
+import { useGetListFarmersQuery } from "../../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 
 function TableFarmer() {
@@ -60,7 +53,7 @@ function TableFarmer() {
           key: "time_verify",
           label: "Thời gian xác thực",
           render: (value) => (
-            <td>{format(new Date(value?.time_verify ?? ""), "dd/MM/yyyy")}</td>
+            <td>{format(new Date(value?.time_verify ?? "0"), "dd/MM/yyyy")}</td>
           ),
         },
         {

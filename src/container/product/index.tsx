@@ -13,8 +13,9 @@ import AppTable from "../../components/common/table/table";
 import { useNavigate } from "react-router-dom";
 import { TProduct } from "../../assets/types";
 
-import { BASE_PORT, BASE_URL, MAP_PRODUCT_TYPE } from "../../constants";
+import { BASE_PORT, MAP_PRODUCT_TYPE } from "../../constants";
 import { useGetListProductsQuery } from "../../redux/api/info/info.api";
+import { fNumber } from "../../hooks";
 
 const PRODUCT_FILTERS = [
   {
@@ -183,7 +184,9 @@ function ProductPage() {
                 label: "Số điểm",
                 render: (value) => (
                   <td>
-                    <span className="fw-semibold">{value.point}</span>
+                    <span className="fw-semibold">
+                      {fNumber(value.point ?? 0)}
+                    </span>
                   </td>
                 ),
               },
@@ -192,7 +195,9 @@ function ProductPage() {
                 label: "Giá tiền 1",
                 render: (value) => (
                   <td>
-                    <span className="fw-semibold">{value.c1_price_vnd}</span>
+                    <span className="fw-semibold">
+                      {fNumber(value.c1_price_vnd)}
+                    </span>
                   </td>
                 ),
               },
@@ -201,7 +206,9 @@ function ProductPage() {
                 label: "Giá tiền 2",
                 render: (value) => (
                   <td>
-                    <span className="fw-semibold">{value.c2_price_vnd}</span>
+                    <span className="fw-semibold">
+                      {fNumber(value.c2_price_vnd)}
+                    </span>
                   </td>
                 ),
               },
@@ -218,7 +225,7 @@ function ProductPage() {
               {
                 key: "net_weight",
                 label: "Trọng lượng",
-                render: (value) => <td>{value.net_weight}</td>,
+                render: (value) => <td>{fNumber(value.net_weight ?? 0)}</td>,
               },
               {
                 key: "pack_configuration",

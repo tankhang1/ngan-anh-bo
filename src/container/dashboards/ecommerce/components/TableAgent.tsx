@@ -1,10 +1,6 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
-import {
-  TAgent,
-  TAgentDashboardTable,
-  TGetListAgentsRes,
-} from "../../../../assets/types";
+import { TAgent } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
 import { useGetListAgentsQuery } from "../../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
@@ -23,7 +19,7 @@ function TableAgent() {
 
   return (
     <AppTable
-      title="Thông tin nông dân"
+      title="Thông tin đại lý"
       headers={[
         {
           key: "id",
@@ -57,7 +53,7 @@ function TableAgent() {
           key: "time_verify",
           label: "Thời gian xác thực",
           render: (value) => (
-            <td>{format(new Date(value?.time_verify ?? ""), "dd/MM/yyyy")}</td>
+            <td>{format(new Date(value?.time_verify ?? "0"), "dd/MM/yyyy")}</td>
           ),
         },
         {

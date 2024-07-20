@@ -1,4 +1,10 @@
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -15,6 +21,7 @@ import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { useGetListFarmersByStatusQuery } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
+import { PROVINCES } from "../../../constants";
 
 const FAMER_FILTERS = [
   {
@@ -44,6 +51,12 @@ function Farmer() {
     {
       refetchOnFocus: true,
     }
+  );
+  const getProvinceLabel = useCallback(
+    (provinceId: string) => {
+      return PROVINCES.find((item) => item.value === provinceId)?.label ?? "";
+    },
+    [PROVINCES]
   );
   const handleFocus = () => {
     refetch();
@@ -162,7 +175,18 @@ function Farmer() {
               {
                 key: "province",
                 label: "Địa chỉ",
-                render: (value) => <td>{value.province}</td>,
+                render: (value) => (
+                  <td>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip>{getProvinceLabel(value.province)}</Tooltip>
+                      }
+                    >
+                      <p>{value.province}</p>
+                    </OverlayTrigger>
+                  </td>
+                ),
               },
               {
                 key: "time_verify",
