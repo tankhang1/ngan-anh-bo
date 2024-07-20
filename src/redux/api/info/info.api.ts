@@ -23,7 +23,7 @@ export const infoApi = createApi({
   endpoints: (builder) => ({
     getListProducts: builder.query<TProduct[], void | null>({
       query: () => ({
-        url: "/api/product/demo/all",
+        url: "/api/product/all",
         method: HTTPS_METHOD.GET,
       }),
       providesTags: (results) =>
