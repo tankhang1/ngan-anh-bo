@@ -30,7 +30,10 @@ import {
   useUpdatePointProgramMutation,
 } from "../../../../redux/api/other/other.api";
 import { useGetListAgencyC1Query } from "../../../../redux/api/manage/manage.api";
-import { useGetListProgramPointByTimeQuery } from "../../../../redux/api/program/program.api";
+import {
+  useGetListProgramPointByTimeQuery,
+  useGetListProgramPointStatusQuery,
+} from "../../../../redux/api/program/program.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 
@@ -53,12 +56,19 @@ function PointCreateEdit() {
   });
   const { data: listAgencyC1, isLoading: isLoadingAgency } =
     useGetListAgencyC1Query();
-  const { data: pointProgram } = useGetListProgramPointByTimeQuery(null, {
-    selectFromResult: ({ data }) => ({
-      data: data?.find((item) => item.uuid === +(id ?? "")),
-    }),
-    skip: isCreate === "true",
-  });
+  const { data: pointProgram } = useGetListProgramPointStatusQuery(
+    {
+      status: +(id?.split("_")[1] ?? 0),
+      nu: +(id?.split("_")[2] ?? 0),
+      sz: 10,
+    },
+    {
+      selectFromResult: ({ data }) => ({
+        data: data?.find((item) => item.uuid === +(id?.split("_")[0] ?? 0)),
+      }),
+      skip: isCreate === "true",
+    }
+  );
   // const schema = yup.object().shape({
   //   customer_code: yup.string().required().default(""),
   //   customer_name: yup.string().required().default(""),
@@ -73,7 +83,7 @@ function PointCreateEdit() {
   const mapProduct = useMemo(
     () =>
       products?.map((item) => ({
-        label: `${item.name_display}-${item.code}`,
+        label: `${item.description}-${item.code}`,
         value: item.code,
       })),
     [products]

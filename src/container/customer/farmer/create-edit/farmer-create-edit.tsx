@@ -1,26 +1,7 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  OverlayTrigger,
-  Row,
-  Tooltip,
-} from "react-bootstrap";
+import React, { Fragment, useContext, useEffect, useState } from "react";
+import { Card, Col, Form, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import * as formik from "formik";
-import * as yup from "yup";
-import {
-  TAgentForm,
-  TFarmerForm,
-  TObjectiveEnum,
-} from "../../../../assets/types";
+import { TFarmerForm, TObjectiveEnum } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetListFarmersByStatusQuery } from "../../../../redux/api/manage/manage.api";
@@ -48,6 +29,8 @@ function FarmerCreateEdit() {
   const { data: farmer } = useGetListFarmersByStatusQuery(
     {
       status: +(id?.split("_")[1] ?? 1),
+      sz: 10,
+      nu: +(id?.split("_")[2] ?? 0),
     },
     {
       selectFromResult: ({ data }) => ({
@@ -186,6 +169,7 @@ function FarmerCreateEdit() {
                       value={values.name}
                       onChange={handleChange}
                       isInvalid={touched.name && !!errors.name}
+                      disabled
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.name}
@@ -206,6 +190,7 @@ function FarmerCreateEdit() {
                       onChange={handleChange}
                       isInvalid={touched.province && !!errors.province}
                       required
+                      disabled
                     >
                       {PROVINCES.map((item, index) => (
                         <option value={item.value} key={index}>
@@ -221,12 +206,14 @@ function FarmerCreateEdit() {
                     <Form.Label>Ngày đăng kí</Form.Label>
                     <Form.Control
                       required
-                      type="date"
+                      type="text"
+                      id="time_validate"
                       placeholder="Ngày đăng kí"
                       name="time"
                       value={values.time}
                       onChange={handleChange}
-                      isInvalid={touched.time && !!errors.time}
+                      isInvalid={touched.name && !!errors.name}
+                      disabled
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.time}

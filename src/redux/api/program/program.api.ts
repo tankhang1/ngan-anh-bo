@@ -9,10 +9,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum ProgramEnum {
   COUNTER_PROGRAM_TOPUP = "COUNTER_PROGRAM_TOPUP",
   COUNTER_PROGRAM_POINT = "COUNTER_PROGRAM_POINT",
+  COUNTER_PROGRAM_POINT_STATUS = "COUNTER_PROGRAM_POINT_STATUS",
+  COUNTER_PROGRAM_TOPUP_STATUS = "COUNTER_PROGRAM_TOPUP_STATUS",
   PROGRAM_TOPUP = "PROGRAM_TOPUP",
   PROGRAM_POINT = "PROGRAM_POINT",
   LIST_PROGRAM_POINT = "LIST_PROGRAM_POINT",
+  LIST_PROGRAM_POINT_STATUS = "LIST_PROGRAM_POINT_STATUS",
   LIST_PROGRAM_TOPUP = "LIST_PROGRAM_TOPUP",
+  LIST_PROGRAM_TOPUP_STATUS = "LIST_PROGRAM_TOPUP_STATUS",
 }
 export const programApi = createApi({
   reducerPath: "programApi",
@@ -33,6 +37,10 @@ export const programApi = createApi({
     ProgramEnum.PROGRAM_POINT,
     ProgramEnum.LIST_PROGRAM_POINT,
     ProgramEnum.LIST_PROGRAM_TOPUP,
+    ProgramEnum.LIST_PROGRAM_POINT_STATUS,
+    ProgramEnum.LIST_PROGRAM_TOPUP_STATUS,
+    ProgramEnum.COUNTER_PROGRAM_POINT_STATUS,
+    ProgramEnum.COUNTER_PROGRAM_TOPUP_STATUS,
   ],
   endpoints: (builder) => ({
     getCounterProgramTopup: builder.query<number, BaseQuery>({
@@ -43,6 +51,14 @@ export const programApi = createApi({
       }),
       providesTags: [ProgramEnum.COUNTER_PROGRAM_TOPUP],
     }),
+    getCounterProgramTopupByStatus: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/topup/status/counter",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+      providesTags: [ProgramEnum.COUNTER_PROGRAM_TOPUP_STATUS],
+    }),
     getCounterProgramPoint: builder.query<number, BaseQuery>({
       query: (params) => ({
         url: "/point/counter",
@@ -50,6 +66,14 @@ export const programApi = createApi({
         params: params,
       }),
       providesTags: [ProgramEnum.COUNTER_PROGRAM_POINT],
+    }),
+    getCounterProgramPointByStatus: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/point/status/counter",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+      providesTags: [ProgramEnum.COUNTER_PROGRAM_POINT_STATUS],
     }),
     getListProgramTopup: builder.query<TProgramTopup[], BaseQuery>({
       query: (params) => ({
@@ -65,7 +89,7 @@ export const programApi = createApi({
             }))
           : [ProgramEnum.PROGRAM_TOPUP],
     }),
-    getListProgramPoint: builder.query<TProgramTopup[], BaseQuery>({
+    getListProgramPoint: builder.query<TProgramPoint[], BaseQuery>({
       query: (params) => ({
         url: "/point",
         method: HTTPS_METHOD.GET,
@@ -78,6 +102,20 @@ export const programApi = createApi({
               uuid,
             }))
           : [ProgramEnum.PROGRAM_POINT],
+    }),
+    getListProgramPointStatus: builder.query<TProgramPoint[], BaseQuery>({
+      query: (params) => ({
+        url: "/point/status",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+      providesTags: (response) =>
+        response
+          ? response.map(({ uuid }) => ({
+              type: ProgramEnum.LIST_PROGRAM_POINT_STATUS,
+              uuid,
+            }))
+          : [ProgramEnum.LIST_PROGRAM_POINT_STATUS],
     }),
     getListProgramPointByTime: builder.query<TProgramPoint[], void | null>({
       query: () => ({
@@ -105,6 +143,20 @@ export const programApi = createApi({
             }))
           : [ProgramEnum.LIST_PROGRAM_TOPUP],
     }),
+    getListProgramTopupStatus: builder.query<TProgramTopup[], BaseQuery>({
+      query: (params) => ({
+        url: "/topup/status",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (response) =>
+        response
+          ? response.map(({ uuid }) => ({
+              type: ProgramEnum.LIST_PROGRAM_TOPUP_STATUS,
+              uuid,
+            }))
+          : [ProgramEnum.LIST_PROGRAM_TOPUP_STATUS],
+    }),
   }),
 });
 
@@ -115,4 +167,8 @@ export const {
   useGetListProgramTopupQuery,
   useGetListProgramPointByTimeQuery,
   useGetListProgramTopupByTimeQuery,
+  useGetListProgramPointStatusQuery,
+  useGetListProgramTopupStatusQuery,
+  useGetCounterProgramPointByStatusQuery,
+  useGetCounterProgramTopupByStatusQuery,
 } = programApi;

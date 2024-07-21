@@ -28,6 +28,7 @@ function TopupReport() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const { data: points } = useGetListProgramPointQuery(
@@ -37,20 +38,21 @@ function TopupReport() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const mapProgram = useMemo(() => {
     const topup = lodash.groupBy(
       topups?.map((item) => ({
         ...item,
-        time: format(new Date(item.time), "DD/MM/YYYY"),
+        time: format(new Date(item?.time), "ddy/MM/yyyy"),
       })),
       "time"
     );
     const point = lodash.groupBy(
       points?.map((item) => ({
         ...item,
-        time: format(new Date(item.time_create), "DD/MM/YYYY"),
+        time: format(new Date(item?.time_create), "dd/MM/yyyy"),
       })),
       "time_create"
     );

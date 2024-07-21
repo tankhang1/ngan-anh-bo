@@ -15,7 +15,10 @@ import { TProgramTopup } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
-import { useGetListProgramTopupByTimeQuery } from "../../../redux/api/program/program.api";
+import {
+  useGetCounterProgramTopupByStatusQuery,
+  useGetListProgramTopupStatusQuery,
+} from "../../../redux/api/program/program.api";
 import { format } from "date-fns";
 
 const TOPUP_FILTERS = [
@@ -28,22 +31,61 @@ const TOPUP_FILTERS = [
     label: "Tên chương trình",
   },
 ];
+const STATUS_FILTERS = [
+  {
+    key: 0,
+    label: "Chờ kích hoạt",
+  },
+  {
+    key: 1,
+    label: "Đang chạy",
+  },
+  {
+    key: 2,
+    label: "Hết thời hạn",
+  },
+  {
+    key: 3,
+    label: "Tạm dừng",
+  },
+];
 function TopupProgram() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(TOPUP_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
-
-  const { data: programTopups, refetch } = useGetListProgramTopupByTimeQuery();
-  const handleFocus = () => {
-    refetch();
-  };
+  const [status, setStatus] = useState(0);
+  const [listTopups, setListTopups] = useState<TProgramTopup[]>([]);
+  const [page, setPage] = useState(1);
+  const { data: counterProgramTopup } = useGetCounterProgramTopupByStatusQuery(
+    {
+      status: status,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+  const { data: programTopups, isLoading: isLoadingTopup } =
+    useGetListProgramTopupStatusQuery(
+      {
+        status: status,
+        nu: page - 1,
+        sz: 10,
+      },
+      {
+        refetchOnMountOrArgChange: true,
+      }
+    );
   useEffect(() => {
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [refetch]);
+    if (
+      counterProgramTopup &&
+      programTopups &&
+      listTopups.length + programTopups.length <= counterProgramTopup
+    ) {
+      setListTopups([...listTopups, ...programTopups]);
+    }
+  }, [programTopups, counterProgramTopup]);
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -94,6 +136,32 @@ function TopupProgram() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
+                  <Dropdown className="ms-2">
+                    <Dropdown.Toggle
+                      variant=""
+                      aria-label="button"
+                      className="btn btn-icon btn-info-light btn-wave no-caret"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i className="ti ti-exchange"></i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
+                      {STATUS_FILTERS.map((item, index) => (
+                        <Dropdown.Item
+                          active={item.key === status}
+                          key={index}
+                          onClick={() => {
+                            setStatus(item.key);
+                            setListTopups([]);
+                          }}
+                        >
+                          {item.label}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
                   <OverlayTrigger
                     placement="top"
                     overlay={
@@ -127,6 +195,10 @@ function TopupProgram() {
             isHeader={false}
             externalSearch={deferSearchValue}
             title="Thông tin chương trình tích điểm"
+            isLoading={isLoadingTopup}
+            setExternalPage={setPage}
+            maxPage={counterProgramTopup}
+            isChange={status}
             headers={[
               {
                 key: "id",
@@ -166,7 +238,6 @@ function TopupProgram() {
                 label: "Trạng thái",
                 render: (value) => {
                   const tmp = MAP_PROGRAM_STATUS.get(value.status);
-                  console.log(tmp);
                   return (
                     <td>
                       <Badge bg={tmp?.color} className="rounded-pill">
@@ -179,21 +250,43 @@ function TopupProgram() {
               {
                 key: "products",
                 label: "Sản phẩm áp dụng",
-                render: (value) => (
-                  <td>
-                    <span className="d-flex gap-1 flex-wrap">
-                      {value.products?.split(",").map((item, index) => (
-                        <Badge
-                          bg="outline-success"
-                          className="round-pill"
-                          key={index}
-                        >
-                          {item}
-                        </Badge>
-                      ))}
-                    </span>
-                  </td>
-                ),
+                render: (value) => {
+                  const products = value.products?.split(",");
+                  return (
+                    <td>
+                      <span className="d-flex gap-1 flex-wrap">
+                        {products.length > 5
+                          ? products.map((item, index) => (
+                              <Badge
+                                bg="outline-success"
+                                className="round-pill"
+                                key={index}
+                              >
+                                {item}
+                              </Badge>
+                            ))
+                          : products.map((item, index) => (
+                              <Badge
+                                bg="outline-success"
+                                className="round-pill"
+                                key={index}
+                              >
+                                {item}
+                              </Badge>
+                            ))}
+                        {products.length > 5 && (
+                          <Badge
+                            bg="outline-success"
+                            className="round-pill"
+                            key={"..."}
+                          >
+                            ...
+                          </Badge>
+                        )}
+                      </span>
+                    </td>
+                  );
+                },
               },
 
               {
@@ -244,7 +337,12 @@ function TopupProgram() {
                       <span className="d-flex justify-content-center align-item-center">
                         <button
                           className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => navigate(`ce/${false}/${value.uuid}`)}
+                          onClick={() =>
+                            navigate(
+                              `ce/${false}/${value.uuid}_${status}_${page - 1}`
+                            )
+                          }
+                          disabled={value.status === 2}
                         >
                           <i className="ti ti-edit"></i>
                         </button>
@@ -254,7 +352,7 @@ function TopupProgram() {
                 },
               },
             ]}
-            data={programTopups || []}
+            data={listTopups || []}
             filters={[
               {
                 key: "status",

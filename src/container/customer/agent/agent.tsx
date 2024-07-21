@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useDeferredValue,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -16,11 +17,15 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TAgentDashboardTable } from "../../../assets/types";
+import { TAgent, TAgentDashboardTable } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
-import { useGetListAgentsByStatusQuery } from "../../../redux/api/manage/manage.api";
-import { format } from "date-fns";
+import {
+  useGetCounterAgentStatusQuery,
+  useGetListAgentsByStatusQuery,
+  useLazyGetListAgentsByStatusQuery,
+} from "../../../redux/api/manage/manage.api";
+import { format, max } from "date-fns";
 import { PROVINCES } from "../../../constants";
 
 const AGENT_FILTERS = [
@@ -42,35 +47,51 @@ function Agent() {
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const [isActive, setIsActive] = useState(true);
+  const [page, setPage] = useState(1);
+  const [listAgents, setListAgents] = useState<TAgent[]>([]);
   const navigate = useNavigate();
 
-  const {
-    data: agents,
-    isLoading: isLoadingAgent,
-    refetch,
-  } = useGetListAgentsByStatusQuery(
+  const { data: counterAgent } = useGetCounterAgentStatusQuery(
     {
       status: isActive === true ? 1 : 0,
     },
     {
-      refetchOnFocus: false,
+      refetchOnMountOrArgChange: true,
     }
   );
-  const handleFocus = () => {
-    refetch();
-  };
+  const { data: agents, isLoading: isLoadingAgent } =
+    useGetListAgentsByStatusQuery(
+      {
+        status: isActive === true ? 1 : 0,
+        nu: page - 1,
+        sz: 10,
+      },
+      {
+        refetchOnMountOrArgChange: true,
+      }
+    );
+
   const getProvinceLabel = useCallback(
     (provinceId: string) => {
       return PROVINCES.find((item) => item.value === provinceId)?.label ?? "";
     },
     [PROVINCES]
   );
+
+  const changeActive = () => {
+    setIsActive(!isActive);
+    setListAgents([]);
+  };
+
   useEffect(() => {
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [refetch]);
+    if (
+      counterAgent &&
+      agents &&
+      listAgents.length + agents.length <= counterAgent
+    ) {
+      setListAgents([...listAgents, ...agents]);
+    }
+  }, [agents, counterAgent]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -134,7 +155,7 @@ function Agent() {
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       data-bs-title="Add Contact"
-                      onClick={() => setIsActive(!isActive)}
+                      onClick={changeActive}
                     >
                       <i className="ti ti-exchange"></i>
                     </button>
@@ -171,11 +192,14 @@ function Agent() {
             externalSearch={deferSearchValue}
             title="Thông tin đại lý"
             isLoading={isLoadingAgent}
+            setExternalPage={setPage}
+            maxPage={counterAgent}
+            isChange={isActive}
             headers={[
               {
                 key: "id",
                 label: "ID",
-                render: (value: TAgentDashboardTable) => (
+                render: (value: TAgent) => (
                   <td>
                     <AppId id={value.id} />
                   </td>
@@ -250,7 +274,7 @@ function Agent() {
                         navigate(
                           `ce/${false}/${value.customer_code}_${
                             isActive ? 1 : 0
-                          }`
+                          }_${page - 1}`
                         )
                       }
                     >
@@ -260,7 +284,7 @@ function Agent() {
                 ),
               },
             ]}
-            data={agents || []}
+            data={listAgents || []}
             filters={[
               {
                 key: "status",

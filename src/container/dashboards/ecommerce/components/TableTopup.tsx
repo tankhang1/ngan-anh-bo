@@ -15,6 +15,7 @@ function TableTopup() {
       {
         skipPollingIfUnfocused: true,
         pollingInterval: 300000,
+        refetchOnMountOrArgChange: true,
       }
     );
   return (

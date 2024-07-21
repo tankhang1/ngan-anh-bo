@@ -19,7 +19,10 @@ import AppTable from "../../../components/common/table/table";
 import { TFarmer } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
-import { useGetListFarmersByStatusQuery } from "../../../redux/api/manage/manage.api";
+import {
+  useGetCounterFarmerStatusQuery,
+  useGetListFarmersByStatusQuery,
+} from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { PROVINCES } from "../../../constants";
 
@@ -43,30 +46,48 @@ function Farmer() {
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(true);
-
-  const { data: farmers, refetch } = useGetListFarmersByStatusQuery(
+  const [page, setPage] = useState(1);
+  const [listFarmers, setListFarmers] = useState<TFarmer[]>([]);
+  const { data: counterFarmer } = useGetCounterFarmerStatusQuery(
     {
       status: isActive ? 1 : 0,
     },
     {
-      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
     }
   );
+  const { data: farmers, isLoading: isLoadingFarmer } =
+    useGetListFarmersByStatusQuery(
+      {
+        status: isActive ? 1 : 0,
+        sz: 10,
+        nu: page - 1,
+      },
+      {
+        refetchOnMountOrArgChange: true,
+      }
+    );
   const getProvinceLabel = useCallback(
     (provinceId: string) => {
       return PROVINCES.find((item) => item.value === provinceId)?.label ?? "";
     },
     [PROVINCES]
   );
-  const handleFocus = () => {
-    refetch();
+
+  const changeActive = () => {
+    setIsActive(!isActive);
+    setListFarmers([]);
   };
+
   useEffect(() => {
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [refetch]);
+    if (
+      counterFarmer &&
+      farmers &&
+      listFarmers.length + farmers.length <= counterFarmer
+    ) {
+      setListFarmers([...listFarmers, ...farmers]);
+    }
+  }, [farmers, counterFarmer]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -131,7 +152,7 @@ function Farmer() {
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       data-bs-title="Add Contact"
-                      onClick={() => setIsActive(!isActive)}
+                      onClick={changeActive}
                     >
                       <i className="ti ti-exchange"></i>
                     </button>
@@ -148,6 +169,10 @@ function Farmer() {
             isHeader={false}
             externalSearch={deferSearchValue}
             title="Thông tin nông dân"
+            isLoading={isLoadingFarmer}
+            setExternalPage={setPage}
+            maxPage={counterFarmer}
+            isChange={isActive}
             headers={[
               {
                 key: "id",
@@ -227,7 +252,7 @@ function Farmer() {
                         navigate(
                           `ce/${false}/${value.customer_code}_${
                             isActive ? 1 : 0
-                          }`
+                          }_${page - 1}`
                         )
                       }
                     >
@@ -237,7 +262,7 @@ function Farmer() {
                 ),
               },
             ]}
-            data={farmers || []}
+            data={listFarmers || []}
             filters={[
               {
                 key: "status",

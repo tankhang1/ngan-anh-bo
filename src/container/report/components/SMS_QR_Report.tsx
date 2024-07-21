@@ -33,6 +33,7 @@ function SMS_QR_Report() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const { data: packets } = useGetPacketsQuery(
@@ -42,6 +43,7 @@ function SMS_QR_Report() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
 
@@ -49,14 +51,14 @@ function SMS_QR_Report() {
     const qrCode = lodash.groupBy(
       [...(bins?.qrCode ?? []), ...(packets?.qrCode ?? [])].map((item) => ({
         ...item,
-        time_use: format(new Date(item.time_use), "DD/MM/YYYY"),
+        time_use: format(new Date(item?.time_use), "dd/MM/yyyy"),
       })),
       "time_use"
     );
     const sms = lodash.groupBy(
       [...(bins?.sms ?? []), ...(packets?.sms ?? [])].map((item) => ({
         ...item,
-        time_use: format(new Date(item.time_use), "DD/MM/YYYY"),
+        time_use: format(new Date(item?.time_use), "dd/MM/yyyy"),
       })),
       "time_use"
     );
@@ -149,7 +151,7 @@ function SMS_QR_Report() {
                         data: [...bins.qrCode, ...packets.qrCode],
                       },
                     ],
-                    "Dữ liệu sản phẩm " + format(new Date(), "DD/MM/YYYY")
+                    "Dữ liệu sản phẩm " + format(new Date(), "dd/MM/yyyy")
                   );
               }
             }}

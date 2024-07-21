@@ -30,7 +30,10 @@ import {
   useGetNewUUIDQuery,
   useUpdateTopupProgramMutation,
 } from "../../../../redux/api/other/other.api";
-import { useGetListProgramTopupByTimeQuery } from "../../../../redux/api/program/program.api";
+import {
+  useGetListProgramPointStatusQuery,
+  useGetListProgramTopupByTimeQuery,
+} from "../../../../redux/api/program/program.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 
@@ -52,12 +55,19 @@ function TopupCreateEdit() {
     refetchOnFocus: true,
     skip: isCreate !== "true",
   });
-  const { data: topupProgram } = useGetListProgramTopupByTimeQuery(null, {
-    selectFromResult: ({ data }) => ({
-      data: data?.find((item) => item.uuid === +(id ?? "")),
-    }),
-    skip: isCreate === "true",
-  });
+  const { data: topupProgram } = useGetListProgramPointStatusQuery(
+    {
+      status: +(id?.split("_")[1] ?? 0),
+      nu: +(id?.split("_")[2] ?? 0),
+      sz: 10,
+    },
+    {
+      selectFromResult: ({ data }) => ({
+        data: data?.find((item) => item.uuid === +(id?.split("_")[0] ?? 0)),
+      }),
+      skip: isCreate === "true",
+    }
+  );
   const { Formik } = formik;
   const schema = yup.object().shape({
     customer_code: yup.string().required().default(""),

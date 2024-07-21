@@ -25,6 +25,7 @@ function FarmerReport() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
 
@@ -97,7 +98,6 @@ function FarmerReport() {
             <Dropdown.Toggle
               variant=""
               aria-label="anchor"
-              href="#"
               className="btn btn-outline-light btn-icons btn-sm text-muted no-caret"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -106,21 +106,18 @@ function FarmerReport() {
             </Dropdown.Toggle>
             <Dropdown.Menu role="menu">
               <Dropdown.Item
-                href="#"
                 active={dropdownOption === "today"}
                 onClick={() => handleDropdownMenu("today")}
               >
                 Hôm nay
               </Dropdown.Item>
               <Dropdown.Item
-                href="#"
                 active={dropdownOption === "week"}
                 onClick={() => handleDropdownMenu("week")}
               >
                 Tuần này
               </Dropdown.Item>
               <Dropdown.Item
-                href="#"
                 active={dropdownOption === "lastWeek"}
                 onClick={() => handleDropdownMenu("lastWeek")}
               >
@@ -134,11 +131,11 @@ function FarmerReport() {
             <Basicolumn
               series={[
                 {
-                  name: "Đã lý đã xác thực",
+                  name: "Nông dân đã xác thực",
                   data: mapFarmer.map((item) => item.farmerChecked),
                 },
                 {
-                  name: "Đại lý chờ xác thực",
+                  name: "Nông dân chờ xác thực",
                   data: mapFarmer.map((item) => item.farmerUnChecked),
                 },
               ]}

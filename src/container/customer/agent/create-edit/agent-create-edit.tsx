@@ -53,6 +53,8 @@ function AgentCreateEdit() {
   const { data: agent } = useGetListAgentsByStatusQuery(
     {
       status: +(id?.split("_")[1] ?? 1),
+      nu: +(id?.split("_")[2] ?? 0),
+      sz: 10,
     },
     {
       selectFromResult: ({ data }) => ({
@@ -61,7 +63,6 @@ function AgentCreateEdit() {
       skip: isCreate === "true",
     }
   );
-  console.log(agent, isCreate, isEdit, id);
   const [updateAgent] = useUpdateAgentMutation();
   const [createAgent] = useCreateAgentMutation();
 
@@ -75,6 +76,7 @@ function AgentCreateEdit() {
   );
 
   const handleSubmitAgent = async (values: TAgentForm) => {
+    console.log("submit ", values);
     if (isCreate === "true") {
       await createAgent({
         ...values,
@@ -123,27 +125,6 @@ function AgentCreateEdit() {
           });
     }
   };
-  const initialValue = useMemo(
-    () => ({
-      customer_code: agent?.customer_code ?? "",
-      customer_name: agent?.customer_name ?? "",
-      customer_province: agent?.customer_province ?? PROVINCES[0].value,
-      customer_type: agent?.customer_type ?? (TObjectiveEnum.RETAILER as any),
-      name: agent?.name ?? "",
-      province: agent?.province ?? PROVINCES[0].value,
-      info_primary: agent?.info_primary ?? 1,
-      phone: agent?.phone ?? "",
-      sign_board: agent?.sign_board ?? "",
-      type: agent?.type ?? 0,
-      verify: agent?.verify ?? 0,
-      customer_address: agent?.customer_province ?? "",
-      customer_district: agent?.customer_district ?? "",
-      status: agent?.status ?? 1,
-      time: agent?.time ?? "",
-      finger_province: agent?.finger_province ?? "",
-    }),
-    [agent]
-  );
 
   useEffect(() => {
     if (agent?.customer_province) setProvinceId(agent.customer_province);
@@ -244,7 +225,9 @@ function AgentCreateEdit() {
                       className="form-select"
                       name="customer_type"
                       value={values.customer_type}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setFieldValue("customer_type", e.target.value)
+                      }
                       isInvalid={
                         touched.customer_type && !!errors.customer_type
                       }
@@ -280,6 +263,7 @@ function AgentCreateEdit() {
                       value={values.name}
                       onChange={handleChange}
                       isInvalid={touched.name && !!errors.name}
+                      disabled
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.name}
@@ -297,9 +281,12 @@ function AgentCreateEdit() {
                       className="form-select"
                       name="province"
                       value={values.province}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setFieldValue("province", e.target.value)
+                      }
                       isInvalid={touched.province && !!errors.province}
                       required
+                      disabled
                     >
                       {PROVINCES.map((item, index) => (
                         <option value={item.value} key={index}>
@@ -315,12 +302,13 @@ function AgentCreateEdit() {
                     <Form.Label>Ngày đăng kí</Form.Label>
                     <Form.Control
                       required
-                      type="date"
+                      type="text"
                       placeholder="Ngày đăng kí"
                       name="time"
                       value={values.time}
                       onChange={handleChange}
                       isInvalid={touched.time && !!errors.time}
+                      disabled
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.time}
@@ -388,7 +376,9 @@ function AgentCreateEdit() {
                     className="form-select"
                     name="customer_district"
                     value={values.customer_district}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setFieldValue("customer_district", e.target.value)
+                    }
                     isInvalid={
                       touched.customer_district && !!errors.customer_district
                     }

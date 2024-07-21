@@ -31,6 +31,7 @@ function ServiceReportDonut() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const { data: topups } = useGetTopupsQuery(
@@ -40,6 +41,7 @@ function ServiceReportDonut() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
 
@@ -50,6 +52,7 @@ function ServiceReportDonut() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const { data: packets } = useGetPacketsQuery(
@@ -59,6 +62,7 @@ function ServiceReportDonut() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const handleDropdownMenu = (date: "today" | "week" | "lastWeek") => {
@@ -121,7 +125,6 @@ function ServiceReportDonut() {
             <Dropdown.Toggle
               variant=""
               aria-label="anchor"
-              href="#"
               className="btn btn-outline-light btn-icons btn-sm text-muted no-caret"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -130,21 +133,18 @@ function ServiceReportDonut() {
             </Dropdown.Toggle>
             <Dropdown.Menu role="menu">
               <Dropdown.Item
-                href="#"
                 active={dropdownOption === "today"}
                 onClick={() => handleDropdownMenu("today")}
               >
                 Hôm nay
               </Dropdown.Item>
               <Dropdown.Item
-                href="#"
                 active={dropdownOption === "week"}
                 onClick={() => handleDropdownMenu("week")}
               >
                 Tuần này
               </Dropdown.Item>
               <Dropdown.Item
-                href="#"
                 active={dropdownOption === "lastWeek"}
                 onClick={() => handleDropdownMenu("lastWeek")}
               >

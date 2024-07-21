@@ -38,20 +38,11 @@ function ProductPage() {
 
   const navigate = useNavigate();
 
-  const {
-    data: products,
-    isLoading: isLoadingProduct,
-    refetch,
-  } = useGetListProductsQuery(null);
-  const handleFocus = () => {
-    refetch();
-  };
-  useEffect(() => {
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [refetch]);
+  const { data: products, isLoading: isLoadingProduct } =
+    useGetListProductsQuery(null, {
+      refetchOnMountOrArgChange: true,
+    });
+
   return (
     <Fragment>
       <Col xl={12}>

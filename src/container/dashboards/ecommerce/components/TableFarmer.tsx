@@ -14,6 +14,7 @@ function TableFarmer() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
 
@@ -53,7 +54,11 @@ function TableFarmer() {
           key: "time_verify",
           label: "Thời gian xác thực",
           render: (value) => (
-            <td>{format(new Date(value?.time_verify ?? "0"), "dd/MM/yyyy")}</td>
+            <td>
+              {value?.time_verify
+                ? format(new Date(value.time_verify), "dd/MM/yyyy")
+                : ""}
+            </td>
           ),
         },
         {

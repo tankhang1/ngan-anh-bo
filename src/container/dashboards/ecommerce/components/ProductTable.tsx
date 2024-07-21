@@ -18,6 +18,7 @@ function ProductTable() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const { data: packets } = useGetPacketsQuery(

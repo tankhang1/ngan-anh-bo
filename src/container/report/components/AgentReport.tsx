@@ -31,6 +31,7 @@ function AgentReport() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   const mapAgent = useMemo(() => {
@@ -207,7 +208,9 @@ function AgentReport() {
                 label: "Thời gian xác thực",
                 render: (value) => (
                   <td>
-                    {format(new Date(value?.time_verify ?? ""), "dd/MM/yyyy")}
+                    {value?.time_verify
+                      ? format(new Date(value.time_verify), "dd/MM/yyyy")
+                      : ""}
                   </td>
                 ),
               },
@@ -232,7 +235,7 @@ function AgentReport() {
             data={
               ([
                 ...(agents?.listUnValidateAgents || []),
-                ...(agents?.listUnValidateAgents || []),
+                ...(agents?.listValidateAgents || []),
               ] || []) as any
             }
             filters={[

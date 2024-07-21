@@ -26,6 +26,9 @@ type TAppTable<T> = {
   externalSearch?: string;
   searchByExternal?: string;
   isLoading?: boolean;
+  maxPage?: number;
+  setExternalPage?: (page: number) => void;
+  isChange?: boolean | number;
 };
 const PAGE_SIZE = 10;
 const AppTable = <T extends DataItem>({
@@ -37,6 +40,9 @@ const AppTable = <T extends DataItem>({
   externalSearch,
   searchByExternal,
   isLoading = false,
+  maxPage,
+  setExternalPage,
+  isChange,
 }: TAppTable<T>) => {
   const [page, setPage] = useState(1);
   const [filterOption, setFilterOption] = useState(filters?.[0]);
@@ -92,8 +98,13 @@ const AppTable = <T extends DataItem>({
     return filterData.slice(from, to);
   }, [filterData, page]);
   const MAX_PAGE = useMemo(
-    () => Math.ceil((filterData.length ?? 0) / PAGE_SIZE),
-    [deferSearchValue, filterOption, filterData.length]
+    () =>
+      Math.ceil(
+        (searchValue?.length === 0
+          ? maxPage ?? filterData.length
+          : filterData.length ?? 0) / PAGE_SIZE
+      ),
+    [deferSearchValue, filterOption, filterData.length, maxPage]
   );
 
   const listButtonPaging = useMemo(() => {
@@ -111,9 +122,14 @@ const AppTable = <T extends DataItem>({
     });
   }, [data.length, page]);
   useEffect(() => {
-    if (page !== 1) setPage(1);
-  }, [filterData.length]);
+    if (page !== 1) {
+      setPage(1);
+    }
+  }, [isChange]);
 
+  useEffect(() => {
+    setExternalPage?.(page);
+  }, [page]);
   return (
     <Card className="custom-card ">
       {isHeader && (
@@ -179,20 +195,20 @@ const AppTable = <T extends DataItem>({
         </Card.Header>
       )}
       <Card.Body>
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="table-responsive">
-            <table className="table text-nowrap table-bordered table-striped">
-              <thead>
-                <tr>
-                  {headers.map((item) => (
-                    <th scope="col" key={Math.random()}>
-                      {item.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
+        <div className="table-responsive">
+          <table className="table text-nowrap table-bordered table-striped">
+            <thead>
+              <tr>
+                {headers.map((item) => (
+                  <th scope="col" key={Math.random()}>
+                    {item.label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            {isLoading ? (
+              <p className="text text-base text-black">Loading....</p>
+            ) : (
               <tbody>
                 {pagingData.map((item) => (
                   <tr key={Math.random()}>
@@ -200,9 +216,9 @@ const AppTable = <T extends DataItem>({
                   </tr>
                 ))}
               </tbody>
-            </table>
-          </div>
-        )}
+            )}
+          </table>
+        </div>
       </Card.Body>
       <Card.Footer>
         <div className="d-flex flex-sm-row gap-2 flex-column align-items-center">
@@ -231,7 +247,6 @@ const AppTable = <T extends DataItem>({
                       <Pagination.Item
                         key={item}
                         active={page === item}
-                        href="#"
                         onClick={() => setPage(item)}
                       >
                         {item}
@@ -241,7 +256,6 @@ const AppTable = <T extends DataItem>({
                 <Pagination.Item
                   disabled={page < MAX_PAGE ? false : true}
                   className="text-primary"
-                  href="#"
                   onClick={() => {
                     if (!listButtonPaging.includes(null) && page < MAX_PAGE) {
                       setPage(page + 1);

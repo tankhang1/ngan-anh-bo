@@ -293,7 +293,7 @@ function ProductCreateEdit() {
                             id="code_validate"
                             placeholder="Mã sản phẩm"
                             name="name"
-                            value={
+                            defaultValue={
                               isCreate === "true" ? productId : values.code
                             }
                             onChange={handleChange}
@@ -311,7 +311,7 @@ function ProductCreateEdit() {
                             id="product_name_detail_validate"
                             placeholder="Tên sản phẩm"
                             name="product_name_detail"
-                            value={values.product_name_detail}
+                            defaultValue={values.product_name_detail}
                             onChange={handleChange}
                             isInvalid={
                               touched.product_name_detail &&
@@ -330,7 +330,7 @@ function ProductCreateEdit() {
                             id="name_display_label_validate"
                             placeholder="Tên sản phẩm (thu gọn)"
                             name="name_display_label"
-                            value={values.name_display_label}
+                            defaultValue={values.name_display_label}
                             onChange={handleChange}
                             isInvalid={
                               touched.name_display_label &&
@@ -349,7 +349,7 @@ function ProductCreateEdit() {
                             id="brand_code_validate"
                             placeholder="Tên sản phẩm"
                             name="brand_code"
-                            value={values.brand_code}
+                            defaultValue={values.brand_code}
                             onChange={handleChange}
                             isInvalid={
                               touched.brand_code && !!errors.brand_code
@@ -367,7 +367,7 @@ function ProductCreateEdit() {
                             id="brand_name_validate"
                             placeholder="Tên thương hiệu"
                             name="brand_name"
-                            value={values.brand_name}
+                            defaultValue={values.brand_name}
                             onChange={handleChange}
                             isInvalid={
                               touched.brand_name && !!errors.brand_name
@@ -385,7 +385,7 @@ function ProductCreateEdit() {
                             id="category_code"
                             placeholder="Mã nhóm sản phẩm"
                             name="category_code"
-                            value={values.category_code}
+                            defaultValue={values.category_code}
                             onChange={handleChange}
                             isInvalid={
                               touched.category_code && !!errors.category_code
@@ -403,7 +403,7 @@ function ProductCreateEdit() {
                             id="category_name"
                             placeholder="Tên nhóm sản phẩm"
                             name="category_name"
-                            value={values.category_name}
+                            defaultValue={values.category_name}
                             onChange={handleChange}
                             isInvalid={
                               touched.category_name && !!errors.category_name
@@ -426,7 +426,7 @@ function ProductCreateEdit() {
                         id="point_validate"
                         placeholder="Số điểm thưởng"
                         name="point"
-                        value={values.point}
+                        defaultValue={values.point}
                         onChange={handleChange}
                         isInvalid={touched.point && !!errors.point}
                       />
@@ -447,7 +447,7 @@ function ProductCreateEdit() {
                         id="c1_price_vnd_validate"
                         placeholder="Số tiền 1"
                         name="c1_price_vnd"
-                        value={values.c1_price_vnd}
+                        defaultValue={values.c1_price_vnd}
                         onChange={handleChange}
                         isInvalid={
                           touched.c1_price_vnd && !!errors.c1_price_vnd
@@ -470,7 +470,7 @@ function ProductCreateEdit() {
                         id="c1_price_vnd_validate"
                         placeholder="Số tiền 2"
                         name="c2_price_vnd"
-                        value={values.c2_price_vnd}
+                        defaultValue={values.c2_price_vnd}
                         onChange={handleChange}
                         isInvalid={
                           touched.c2_price_vnd && !!errors.c2_price_vnd
@@ -488,7 +488,7 @@ function ProductCreateEdit() {
                         className="form-select"
                         id="type_validate"
                         name="type"
-                        value={values.type}
+                        defaultValue={values.type}
                         onChange={handleChange}
                         isInvalid={touched.type && !!errors.type}
                         required
@@ -530,7 +530,7 @@ function ProductCreateEdit() {
                         className="form-select"
                         id="code_bin_validate"
                         name="code_bin"
-                        value={values.code_bin}
+                        defaultValue={values.code_bin}
                         onChange={handleChange}
                         isInvalid={touched.code_bin && !!errors.code_bin}
                         required
@@ -558,7 +558,7 @@ function ProductCreateEdit() {
                         type="text"
                         id="pack_configuration_validate"
                         name="pack_configuration"
-                        value={values.pack_configuration}
+                        defaultValue={values.pack_configuration}
                         onChange={handleChange}
                         isInvalid={
                           touched.pack_configuration &&
@@ -577,7 +577,7 @@ function ProductCreateEdit() {
                         id="net_weight_validate"
                         name="net_weight"
                         min={0}
-                        value={values.net_weight}
+                        defaultValue={values.net_weight}
                         onChange={handleChange}
                         isInvalid={touched.net_weight && !!errors.net_weight}
                         required
@@ -592,7 +592,7 @@ function ProductCreateEdit() {
                         className="form-select"
                         id="unit_validate"
                         name="unit"
-                        value={values.unit}
+                        defaultValue={values.unit}
                         onChange={handleChange}
                         isInvalid={touched.unit && !!errors.unit}
                         required
@@ -618,7 +618,7 @@ function ProductCreateEdit() {
                       required
                       id="ingredient_id_validate"
                       name="ingredient_id"
-                      value={values.ingredient_id}
+                      defaultValue={values.ingredient_id}
                       onChange={handleChange}
                       isInvalid={
                         touched.ingredient_id && !!errors.ingredient_id
@@ -656,7 +656,7 @@ function ProductCreateEdit() {
                         as="textarea"
                         id="short_info_validate"
                         name="short_info"
-                        value={values.short_info}
+                        defaultValue={values.short_info}
                         onChange={handleChange}
                         isInvalid={touched.short_info && !!errors.short_info}
                         placeholder="Mô tả sản phẩm (thu gọn)"
@@ -677,7 +677,7 @@ function ProductCreateEdit() {
                         as="textarea"
                         id="description_validate"
                         name="description"
-                        value={values.description}
+                        defaultValue={values.description}
                         onChange={handleChange}
                         isInvalid={touched.description && !!errors.description}
                         placeholder="Mô tả sản phẩm (chi tiết)"
@@ -696,7 +696,7 @@ function ProductCreateEdit() {
                         type="link"
                         id="detail_url_validate"
                         name="detail_url"
-                        value={values.detail_url}
+                        defaultValue={values.detail_url}
                         onChange={handleChange}
                         isInvalid={touched.detail_url && !!errors.detail_url}
                         placeholder="Mô tả sản phẩm (chi tiết)"
@@ -715,7 +715,7 @@ function ProductCreateEdit() {
                         className="form-select"
                         id="certificate_of_origin_validate"
                         name="certificate_of_origin"
-                        value={values.certificate_of_origin}
+                        defaultValue={values.certificate_of_origin}
                         onChange={handleChange}
                         isInvalid={
                           touched.certificate_of_origin &&
@@ -752,7 +752,7 @@ function ProductCreateEdit() {
                         id="mop_validate"
                         name="mop"
                         min={0}
-                        value={values.mop}
+                        defaultValue={values.mop}
                         onChange={handleChange}
                         isInvalid={touched.mop && !!errors.mop}
                         placeholder="Số lượng sản xuất tối thiểu"
@@ -769,7 +769,7 @@ function ProductCreateEdit() {
                         id="sku_bin_validate"
                         name="sku_bin"
                         min={0}
-                        value={values.sku_bin}
+                        defaultValue={values.sku_bin}
                         onChange={handleChange}
                         isInvalid={touched.sku_bin && !!errors.sku_bin}
                         placeholder="Số sản phẩm / thùng"
@@ -786,7 +786,7 @@ function ProductCreateEdit() {
                         id="sku_box_validate"
                         name="sku_box"
                         min={0}
-                        value={values.sku_box}
+                        defaultValue={values.sku_box}
                         onChange={handleChange}
                         isInvalid={touched.sku_box && !!errors.sku_box}
                         placeholder="Số sản phẩm / hộp"
@@ -803,7 +803,7 @@ function ProductCreateEdit() {
                         id="bin_pallet_validate"
                         name="bin_pallet"
                         min={0}
-                        value={values.bin_pallet}
+                        defaultValue={values.bin_pallet}
                         onChange={handleChange}
                         isInvalid={touched.bin_pallet && !!errors.bin_pallet}
                         placeholder="Số sản phẩm / hộp"
@@ -819,7 +819,7 @@ function ProductCreateEdit() {
                       className="form-select"
                       id="device_code_validate"
                       name="device_code"
-                      value={values.device_code}
+                      defaultValue={values.device_code}
                       onChange={handleChange}
                       isInvalid={touched.device_code && !!errors.device_code}
                       required

@@ -15,7 +15,10 @@ import { TProgramPoint } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
-import { useGetListProgramPointByTimeQuery } from "../../../redux/api/program/program.api";
+import {
+  useGetCounterProgramPointQuery,
+  useGetListProgramPointStatusQuery,
+} from "../../../redux/api/program/program.api";
 import { format } from "date-fns";
 
 const POINT_FILTERS = [
@@ -32,22 +35,62 @@ const POINT_FILTERS = [
     label: "Trạng thái",
   },
 ];
+const STATUS_FILTERS = [
+  {
+    key: 0,
+    label: "Chờ kích hoạt",
+  },
+  {
+    key: 1,
+    label: "Đang chạy",
+  },
+  {
+    key: 2,
+    label: "Hết thời hạn",
+  },
+  {
+    key: 3,
+    label: "Tạm dừng",
+  },
+];
 function PointProgram() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(POINT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
+  const [status, setStatus] = useState(0);
   const navigate = useNavigate();
+  const [listPoints, setListPoints] = useState<TProgramPoint[]>([]);
+  const [page, setPage] = useState(1);
 
-  const { data: programPoints, refetch } = useGetListProgramPointByTimeQuery();
-  const handleFocus = () => {
-    refetch();
-  };
+  const { data: counterProgramPoint } = useGetCounterProgramPointQuery(
+    {
+      status: status,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+  const { data: programPoints, isLoading: isLoadingProgramPoint } =
+    useGetListProgramPointStatusQuery(
+      {
+        status: status,
+        nu: page - 1,
+        sz: 10,
+      },
+      {
+        refetchOnMountOrArgChange: true,
+      }
+    );
+
   useEffect(() => {
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [refetch]);
+    if (
+      counterProgramPoint &&
+      programPoints &&
+      listPoints.length + programPoints.length <= counterProgramPoint
+    ) {
+      setListPoints([...listPoints, ...programPoints]);
+    }
+  }, [programPoints, counterProgramPoint]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -98,6 +141,32 @@ function PointProgram() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
+                  <Dropdown className="ms-2">
+                    <Dropdown.Toggle
+                      variant=""
+                      aria-label="button"
+                      className="btn btn-icon btn-info-light btn-wave no-caret"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i className="ti ti-exchange"></i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
+                      {STATUS_FILTERS.map((item, index) => (
+                        <Dropdown.Item
+                          active={item.key === status}
+                          key={index}
+                          onClick={() => {
+                            setStatus(item.key);
+                            setListPoints([]);
+                          }}
+                        >
+                          {item.label}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
                   <OverlayTrigger
                     placement="top"
                     overlay={
@@ -131,6 +200,10 @@ function PointProgram() {
             isHeader={false}
             externalSearch={deferSearchValue}
             title="Thông tin chương trình tích điểm"
+            isLoading={isLoadingProgramPoint}
+            setExternalPage={setPage}
+            maxPage={counterProgramPoint}
+            isChange={status}
             headers={[
               {
                 key: "id",
@@ -183,21 +256,43 @@ function PointProgram() {
               {
                 key: "products",
                 label: "Sản phẩm áp dụng",
-                render: (value) => (
-                  <td>
-                    <span className="d-flex gap-1 flex-wrap">
-                      {value.products?.split(",").map((item, index) => (
-                        <Badge
-                          bg="outline-success"
-                          className="round-pill"
-                          key={index}
-                        >
-                          {item}
-                        </Badge>
-                      ))}
-                    </span>
-                  </td>
-                ),
+                render: (value) => {
+                  const products = value.products?.split(",");
+                  return (
+                    <td>
+                      <span className="d-flex gap-1 flex-wrap">
+                        {products.length > 5
+                          ? products.map((item, index) => (
+                              <Badge
+                                bg="outline-success"
+                                className="round-pill"
+                                key={index}
+                              >
+                                {item}
+                              </Badge>
+                            ))
+                          : products.map((item, index) => (
+                              <Badge
+                                bg="outline-success"
+                                className="round-pill"
+                                key={index}
+                              >
+                                {item}
+                              </Badge>
+                            ))}
+                        {products.length > 5 && (
+                          <Badge
+                            bg="outline-success"
+                            className="round-pill"
+                            key={"..."}
+                          >
+                            ...
+                          </Badge>
+                        )}
+                      </span>
+                    </td>
+                  );
+                },
               },
               {
                 key: "agents",
@@ -221,21 +316,46 @@ function PointProgram() {
               {
                 key: "locations",
                 label: "Khu vực áp dụng",
-                render: (value) => (
-                  <td>
-                    <span className="d-flex gap-1 flex-wrap">
-                      {value.locations?.split(",").map((item, index) => (
-                        <Badge
-                          bg="secondary-transparent"
-                          className="round-pill"
-                          key={index}
-                        >
-                          {item}
-                        </Badge>
-                      ))}
-                    </span>
-                  </td>
-                ),
+                render: (value) => {
+                  const locations = value.locations?.split(",");
+                  return (
+                    <td>
+                      <span className="d-flex gap-1 flex-wrap">
+                        {locations.length > 5
+                          ? value.locations
+                              ?.split(",")
+                              .slice(0, 5)
+                              .map((item, index) => (
+                                <Badge
+                                  bg="secondary-transparent"
+                                  className="round-pill"
+                                  key={index}
+                                >
+                                  {item}
+                                </Badge>
+                              ))
+                          : locations.map((item, index) => (
+                              <Badge
+                                bg="secondary-transparent"
+                                className="round-pill"
+                                key={index}
+                              >
+                                {item}
+                              </Badge>
+                            ))}
+                        {locations.length > 5 && (
+                          <Badge
+                            bg="secondary-transparent"
+                            className="round-pill"
+                            key={"..."}
+                          >
+                            ...
+                          </Badge>
+                        )}
+                      </span>
+                    </td>
+                  );
+                },
               },
               {
                 key: "objectives",
@@ -283,7 +403,12 @@ function PointProgram() {
                     <span className="d-flex justify-content-center align-item-center">
                       <button
                         className="btn btn-icon btn-sm btn-primary-ghost"
-                        onClick={() => navigate(`ce/${false}/${value.uuid}`)}
+                        onClick={() =>
+                          navigate(
+                            `ce/${false}/${value.uuid}_${status}_${page - 1}`
+                          )
+                        }
+                        disabled={value.status === 2}
                       >
                         <i className="ti ti-edit"></i>
                       </button>
@@ -292,7 +417,7 @@ function PointProgram() {
                 ),
               },
             ]}
-            data={programPoints || []}
+            data={listPoints || []}
             filters={[
               {
                 key: "status",

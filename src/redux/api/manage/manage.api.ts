@@ -364,6 +364,7 @@ export const manageApi = createApi({
 export const {
   useGetListAgentsQuery,
   useGetListAgentsByStatusQuery,
+  useLazyGetListAgentsByStatusQuery,
   useGetListFarmersQuery,
   useGetListBrandnamesQuery,
   useGetCounterBrandnameQuery,
