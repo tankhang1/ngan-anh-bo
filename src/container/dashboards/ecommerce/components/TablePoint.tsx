@@ -1,14 +1,14 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
-import { TTopupTableDashboard } from "../../../../assets/types";
+import { TPointTableDashboard } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
 import { format } from "date-fns";
+import { useGetReportProgramPointByTimeQuery } from "../../../../redux/api/report/report.api";
 import { fNumber } from "../../../../hooks";
-import { useGetReportProgramTopupByTimeQuery } from "../../../../redux/api/report/report.api";
 
-function TableTopup() {
-  const { data: topups, isLoading: isLoadingTopup } =
-    useGetReportProgramTopupByTimeQuery(
+function TablePoint() {
+  const { data: points, isLoading: isLoadingPoint } =
+    useGetReportProgramPointByTimeQuery(
       {
         st: +(format(new Date(), "yyyyMMdd") + "0000"),
         ed: +(format(new Date(), "yyyyMMdd") + "2399"),
@@ -22,12 +22,12 @@ function TableTopup() {
     );
   return (
     <AppTable
-      title="Topup"
+      title="Tích điểm"
       headers={[
         {
           key: "program_uuid",
           label: "Mã chương trình",
-          render: (value: TTopupTableDashboard) => (
+          render: (value: TPointTableDashboard) => (
             <td>
               <AppId id={value.program_uuid} />
             </td>
@@ -36,7 +36,7 @@ function TableTopup() {
         {
           key: "program_name",
           label: "Tên chương trình",
-          render: (value: TTopupTableDashboard) => (
+          render: (value: TPointTableDashboard) => (
             <td>
               <span className="fw-semibold"> {value.program_name}</span>
             </td>
@@ -61,15 +61,6 @@ function TableTopup() {
           ),
         },
         {
-          key: "phone",
-          label: "Số điện thoại",
-          render: (value) => (
-            <td>
-              <span className="fw-semibold">{value.phone}</span>
-            </td>
-          ),
-        },
-        {
           key: "code",
           label: "Mã code",
           render: (value) => <td>{value.code}</td>,
@@ -85,22 +76,26 @@ function TableTopup() {
           render: (value) => <td>{value.product_name}</td>,
         },
         {
-          key: "price",
-          label: "Số tiền",
-          render: (value) => <td>{fNumber(value.price ?? 0)}</td>,
+          key: "c1_price_vnd",
+          label: "Giá tiền 1",
+          render: (value) => <td>{fNumber(value.c1_price_vnd ?? 0)}</td>,
         },
-
         {
-          key: "time_topup",
-          label: "Thời gian",
-          render: (value) => <td>{value.time_topup}</td>,
+          key: "c2_price_vnd",
+          label: "Giá tiền 2",
+          render: (value) => <td>{fNumber(value.c2_price_vnd ?? 0)}</td>,
+        },
+        {
+          key: "time_earn",
+          label: "Thời gian tích điểm",
+          render: (value) => <td>{value.time_earn}</td>,
         },
       ]}
-      data={(topups || []) as any}
+      data={(points || []) as any}
       filters={[]}
-      isLoading={isLoadingTopup}
+      isLoading={isLoadingPoint}
     />
   );
 }
 
-export default TableTopup;
+export default TablePoint;

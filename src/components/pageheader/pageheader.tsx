@@ -3,7 +3,7 @@ import { Breadcrumb } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
 const MapLabel = new Map([
-  ["dashboards", "Thống kê"],
+  ["dashboards", "Thống kê theo ngày"],
   ["ecommerce", "Dashboard"],
   ["agent", "Đại lí"],
   ["farmer", "Nông dân"],
@@ -12,6 +12,8 @@ const MapLabel = new Map([
   ["point", "Chương trình tích điểm"],
   ["topup", "Chương trình topup"],
   ["report", "Báo cáo"],
+  ["iQr", "iQr"],
+  ["program", "Chương trình"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

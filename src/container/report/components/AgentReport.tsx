@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Card, Col, InputGroup, Row } from "react-bootstrap";
+import { Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Dashed } from "../../charts/apexcharts/linechart/linechartdata";
 import { format, isBefore } from "date-fns";
@@ -55,8 +55,8 @@ function AgentReport() {
     return data;
   }, [agents, listDays]);
   return (
-    <Row>
-      <Col xxl={8}>
+    <Stack>
+      <Col xxl={12}>
         <Card className="custom-card">
           <Card.Header>
             <Card.Title>Đại lý</Card.Title>
@@ -170,7 +170,7 @@ function AgentReport() {
           </Card.Body>
         </Card>
       </Col>
-      <Col xxl={4}>
+      <Col xxl={12}>
         <Card className="custom-card" style={{ height: 475 }}>
           <AppTable
             title="Thông tin nông dân"
@@ -248,7 +248,7 @@ function AgentReport() {
           />
         </Card>
       </Col>
-    </Row>
+    </Stack>
   );
 }
 

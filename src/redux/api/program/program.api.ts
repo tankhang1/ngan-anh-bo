@@ -4,7 +4,12 @@ import {
   HTTPS_METHOD,
   LOCAL_KEY,
 } from "../../../constants";
-import { BaseQuery, TProgramPoint, TProgramTopup } from "../../../assets/types";
+import {
+  BaseQuery,
+  TPointTableDashboard,
+  TProgramPoint,
+  TProgramTopup,
+} from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum ProgramEnum {
   COUNTER_PROGRAM_TOPUP = "COUNTER_PROGRAM_TOPUP",

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Card, Col, InputGroup, Row } from "react-bootstrap";
+import { Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
 import DatePicker from "react-datepicker";
 import * as Chartjscharts from "../../charts/chartjschart/chartjsdata";
@@ -168,8 +168,8 @@ function SMS_QR_Report() {
         </div>
       </Card.Header>
       <Card.Body>
-        <Row className="d-flex align-items-end">
-          <Col xxl={8}>
+        <Stack className="d-flex gap-2">
+          <Col xxl={12}>
             <Basicolumn
               series={[
                 {
@@ -185,7 +185,7 @@ function SMS_QR_Report() {
               colors={["#d12866", "#fe6601"]}
             />
           </Col>
-          <Col xxl={4}>
+          <Col xxl={12}>
             <Doughnut
               options={Chartjscharts.Option4}
               data={{
@@ -206,7 +206,7 @@ function SMS_QR_Report() {
               height={"300px"}
             />
           </Col>
-        </Row>
+        </Stack>
       </Card.Body>
     </Card>
   );

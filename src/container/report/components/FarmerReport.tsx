@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Card, Col, InputGroup, Row } from "react-bootstrap";
+import { Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Dashed } from "../../charts/apexcharts/linechart/linechartdata";
 import { format, isBefore } from "date-fns";
@@ -58,8 +58,8 @@ function FarmerReport() {
     return data;
   }, [farmers, listDays]);
   return (
-    <Row>
-      <Col xxl={8}>
+    <Stack>
+      <Col xxl={12}>
         <Card className="custom-card">
           <Card.Header>
             <Card.Title>Nông dân</Card.Title>
@@ -173,7 +173,7 @@ function FarmerReport() {
           </Card.Body>
         </Card>
       </Col>
-      <Col xxl={4}>
+      <Col xxl={12}>
         <Card className="custom-card" style={{ height: 475 }}>
           <AppTable
             title="Thông tin nông dân"
@@ -251,7 +251,7 @@ function FarmerReport() {
           />
         </Card>
       </Col>
-    </Row>
+    </Stack>
   );
 }
 

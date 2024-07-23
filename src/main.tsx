@@ -170,9 +170,13 @@ import PointProgram from "./container/program/point/point.tsx";
 import TopupProgram from "./container/program/topup/topup.tsx";
 import TopupCreateEdit from "./container/program/topup/create-edit/topup-create-edit.tsx";
 import PointCreateEdit from "./container/program/point/create-edit/point-create-edit.tsx";
-import ReportPage from "./container/report/report.tsx";
 import { Provider } from "react-redux";
 import store from "./redux/store.tsx";
+import AgentReport from "./container/report/AgentReport/index.tsx";
+import FarmerReport from "./container/report/FarmerReport/index.tsx";
+import IQrReport from "./container/report/iQrReport/index.tsx";
+import ProgramReport from "./container/report/ProgramReport/index.tsx";
+import TopupReport from "./container/report/TopupReport/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -618,9 +622,29 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 }program/topup/ce/:isCreate/:id`}
                 element={<TopupCreateEdit />}
               />
-              <Route
+              {/* <Route
                 path={`${import.meta.env.BASE_URL}report`}
                 element={<ReportPage />}
+              /> */}
+              <Route
+                path={`${import.meta.env.BASE_URL}report/agent`}
+                element={<AgentReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report/farmer`}
+                element={<FarmerReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report/iQr`}
+                element={<IQrReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report/program`}
+                element={<ProgramReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report/topup`}
+                element={<TopupReport />}
               />
               <Route
                 path={`${

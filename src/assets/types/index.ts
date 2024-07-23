@@ -242,6 +242,44 @@ export type TPointCreateForm = {
   time_end_number?: number | string;
 };
 
+export type TPointTableDashboard = {
+  id: number;
+  program_uuid: number;
+  program_name: string;
+  customer_code: string;
+  customer_name: string;
+  province: string;
+  phone: string;
+  point: number;
+  point_coefficient: number;
+  c1_price_vnd: number;
+  c2_price_vnd: number;
+  code: string;
+  code_hash: string;
+  product_code: string;
+  product_name: string;
+  time_earn: string;
+  time_earn_number: number;
+};
+export type TTopupTableDashboard = {
+  id: number;
+  program_uuid: number;
+  program_name: string;
+  code: string;
+  code_hash: string;
+  price: number;
+  product_code: string;
+  product_name: string;
+  customer_code: string;
+  customer_name: string;
+  phone: string;
+  province: string;
+  agent_code: string;
+  time_topup: string;
+  time_topup_number: number;
+  request_id: string;
+  response_body: string;
+};
 export type TDevice = {
   id: number;
   device_name: string;

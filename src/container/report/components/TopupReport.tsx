@@ -66,7 +66,7 @@ function TopupReport() {
   return (
     <Card className="custom-card">
       <Card.Header>
-        <Card.Title>Chương trình điểm</Card.Title>
+        <Card.Title>Chương trình topup</Card.Title>
         <div className="d-flex   align-items-center gap-2">
           <div className="form-group">
             <InputGroup className="">
@@ -158,8 +158,8 @@ function TopupReport() {
         <Basicolumn
           series={[
             {
-              name: "Chương trình điểm",
-              data: mapProgram.map((item) => item.point),
+              name: "Topup",
+              data: mapProgram.map((item) => item.topup),
             },
           ]}
           categories={listDays}

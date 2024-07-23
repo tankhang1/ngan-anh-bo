@@ -9,6 +9,7 @@ import { programApi } from "./api/program/program.api";
 import { manageApi } from "./api/manage/manage.api";
 import { otherApi } from "./api/other/other.api";
 import { customerApi } from "./api/customer/customer.api";
+import { reportApi } from "./api/report/report.api";
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     [otherApi.reducerPath]: otherApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
     [customerApi.reducerPath]: customerApi.reducer,
+    [reportApi.reducerPath]: reportApi.reducer,
   },
   // No need to explicitly pass middleware
   middleware: (getDefaultMiddleware) =>
@@ -32,7 +34,8 @@ const store = configureStore({
       .concat(programApi.middleware)
       .concat(manageApi.middleware)
       .concat(otherApi.middleware)
-      .concat(customerApi.middleware),
+      .concat(customerApi.middleware)
+      .concat(reportApi.middleware),
 });
 
 export default store;

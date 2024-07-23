@@ -2,14 +2,17 @@ import React, { useMemo, useState } from "react";
 import { Card, InputGroup } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
-import { useGetTopupsQuery } from "../../../redux/api/manage/manage.api";
+import {
+  useGetListBrandnamesQuery,
+  useGetTopupsQuery,
+} from "../../../redux/api/manage/manage.api";
 import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
 import { useGetListProgramPointQuery } from "../../../redux/api/program/program.api";
 import { exportMultipleSheet } from "../../../hooks";
-function TopupReport() {
+function BrandnameReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +(format(new Date(), "yyyyMMdd") + "0000"),
@@ -21,17 +24,7 @@ function TopupReport() {
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
 
-  const { data: topups } = useGetTopupsQuery(
-    {
-      ...rangDate,
-    },
-    {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  const { data: points } = useGetListProgramPointQuery(
+  const { data: brandnames } = useGetListBrandnamesQuery(
     {
       ...rangDate,
     },
@@ -42,31 +35,23 @@ function TopupReport() {
     }
   );
   const mapProgram = useMemo(() => {
-    const topup = lodash.groupBy(
-      topups?.map((item) => ({
+    const brandname = lodash.groupBy(
+      brandnames?.map((item) => ({
         ...item,
         time: format(new Date(item?.time), "ddy/MM/yyyy"),
       })),
       "time"
     );
-    const point = lodash.groupBy(
-      points?.map((item) => ({
-        ...item,
-        time: format(new Date(item?.time_create), "dd/MM/yyyy"),
-      })),
-      "time_create"
-    );
     const data = listDays.map((item) => ({
       date: item,
-      topup: topup?.[item]?.length ?? 0,
-      point: point?.[item]?.length ?? 0,
+      brandname: brandname?.[item]?.length ?? 0,
     }));
     return data;
-  }, [topups, points, listDays]);
+  }, [brandnames, listDays]);
   return (
     <Card className="custom-card">
       <Card.Header>
-        <Card.Title>Chương trình điểm</Card.Title>
+        <Card.Title>Brandname</Card.Title>
         <div className="d-flex   align-items-center gap-2">
           <div className="form-group">
             <InputGroup className="">
@@ -125,19 +110,11 @@ function TopupReport() {
           <button
             className={`btn btn-bd-primary ${isSmallScreen ? "btn-icon" : ""}`}
             onClick={() => {
-              if (
-                points &&
-                topups &&
-                (points.length > 0 || topups.length > 0)
-              ) {
+              if (brandnames && brandnames.length > 0) {
                 exportMultipleSheet([
                   {
-                    sheetName: "Chương trình điểm",
-                    data: points ?? [],
-                  },
-                  {
-                    sheetName: "Chương trình topup",
-                    data: (topups ?? []) as any,
+                    sheetName: "Brandname",
+                    data: brandnames ?? [],
                   },
                 ]);
               }
@@ -158,8 +135,8 @@ function TopupReport() {
         <Basicolumn
           series={[
             {
-              name: "Chương trình điểm",
-              data: mapProgram.map((item) => item.point),
+              name: "Topup",
+              data: mapProgram.map((item) => item.brandname),
             },
           ]}
           categories={listDays}
@@ -170,4 +147,4 @@ function TopupReport() {
   );
 }
 
-export default TopupReport;
+export default BrandnameReport;
