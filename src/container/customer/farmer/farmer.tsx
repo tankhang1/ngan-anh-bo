@@ -214,15 +214,14 @@ function Farmer() {
                 ),
               },
               {
+                key: "time",
+                label: "Thời gian đăng kí",
+                render: (value) => <td>{value.time}</td>,
+              },
+              {
                 key: "time_verify",
                 label: "Thời gian xác thực",
-                render: (value) => (
-                  <td>
-                    {value?.time_verify
-                      ? format(new Date(value.time_verify), "dd/MM/yyyy")
-                      : ""}
-                  </td>
-                ),
+                render: (value) => <td>{value.time_verify}</td>,
               },
               {
                 key: "status",

@@ -223,7 +223,7 @@ const AppTable = <T extends DataItem>({
       <Card.Footer>
         <div className="d-flex flex-sm-row gap-2 flex-column align-items-center">
           <div>
-            Tổng cộng {filterData.length} items{" "}
+            Tổng cộng {maxPage ?? filterData.length} items{" "}
             <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
           </div>
           <div className="ms-auto">
