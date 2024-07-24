@@ -179,8 +179,8 @@ import ProgramReport from "./container/report/ProgramReport/index.tsx";
 import TopupReport from "./container/report/TopupReport/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.Fragment>
-    <Provider store={store}>
+  <Provider store={store}>
+    <React.Fragment>
       <HashRouter>
         <ScrollToTop />
         <React.Suspense>
@@ -975,6 +975,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           </Routes>
         </React.Suspense>
       </HashRouter>
-    </Provider>
-  </React.Fragment>
+    </React.Fragment>
+  </Provider>
 );

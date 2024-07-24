@@ -159,7 +159,11 @@ function ProductPage() {
                   </td>
                 ),
               },
-
+              {
+                key: "name_display_root",
+                label: "Mã sản phẩm",
+                render: (value) => <td>{value.name_display_root}</td>,
+              },
               {
                 key: "name_display_label",
                 label: "Tên sản phẩm (thu gọn)",

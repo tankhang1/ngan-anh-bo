@@ -215,9 +215,13 @@ function Agent() {
                 ),
               },
               {
-                key: "phone",
-                label: "Số điện thoại",
-                render: (value) => <td>{value.phone}</td>,
+                key: "sign_board",
+                label: "Tên cửa hàng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.sign_board}</span>
+                  </td>
+                ),
               },
               {
                 key: "province",
@@ -234,6 +238,11 @@ function Agent() {
                     </OverlayTrigger>
                   </td>
                 ),
+              },
+              {
+                key: "phone",
+                label: "Số điện thoại",
+                render: (value) => <td>{value.phone}</td>,
               },
               {
                 key: "time_verify",
