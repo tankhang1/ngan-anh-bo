@@ -179,23 +179,13 @@ import ProgramReport from "./container/report/ProgramReport/index.tsx";
 import TopupReport from "./container/report/TopupReport/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <Provider store={store}>
-    <React.Fragment>
+  <React.Fragment>
+    <Provider store={store}>
       <HashRouter>
         <ScrollToTop />
         <React.Suspense>
           <Routes>
-            <Route path={`${import.meta.env.BASE_URL}`} element={<Auth />}>
-              <Route index element={<Login />} />
-              <Route
-                path={`${import.meta.env.BASE_URL}firebase/login`}
-                element={<Login />}
-              />
-              <Route
-                path={`${import.meta.env.BASE_URL}firebase/signup`}
-                element={<Signup />}
-              />
-            </Route>
+            <Route path={`${import.meta.env.BASE_URL}`} element={<Login />} />
             <Route path={`${import.meta.env.BASE_URL}`} element={<App />}>
               {/* <Route
               path={`${import.meta.env.BASE_URL}dashboards/crm`}
@@ -975,6 +965,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           </Routes>
         </React.Suspense>
       </HashRouter>
-    </React.Fragment>
-  </Provider>
+    </Provider>
+  </React.Fragment>
 );
