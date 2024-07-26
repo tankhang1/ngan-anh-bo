@@ -5,7 +5,7 @@ const icon2 = <i className="ti ti-box"></i>;
 const icon16 = <i className="bx bx-user"></i>;
 const icon17 = <i className="ti ti-settings-automation"></i>;
 const icon18 = <i className="ti ti-chart-infographic"></i>;
-
+const icon3 = <i className="ti ti-settings"></i>;
 export const MENUITEMS = [
   {
     menutitle: "MAIN",
@@ -49,10 +49,10 @@ export const MENUITEMS = [
     // ],
   },
   {
-    menutitle: "Quản lí",
+    menutitle: "Quản lý",
   },
   {
-    title: "Thông tin khách hàng",
+    title: "Khách hàng",
     icon: icon16,
     badgetxt: "",
     type: "sub",
@@ -79,6 +79,12 @@ export const MENUITEMS = [
     ],
   },
   {
+    title: "Nhân viên",
+    icon: icon16,
+    type: "link",
+    active: false,
+  },
+  {
     title: "Sản phẩm",
     type: "link",
     active: false,
@@ -88,7 +94,7 @@ export const MENUITEMS = [
     path: `${import.meta.env.BASE_URL}product`,
   },
   {
-    title: "Thông tin chương trình",
+    title: "Chương trình",
     icon: icon17,
     badgetxt: "",
     type: "sub",
@@ -132,7 +138,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Đại lí",
+        title: "Đại lý",
       },
       {
         path: `${import.meta.env.BASE_URL}report/farmer`,
@@ -165,6 +171,35 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "Chương trình topup",
+      },
+    ],
+  },
+  {
+    menutitle: "Cài đặt",
+  },
+  {
+    title: "Cài đặt",
+    type: "sub",
+    active: false,
+    selected: false,
+    dirchange: false,
+    icon: icon3,
+    children: [
+      {
+        path: `${import.meta.env.BASE_URL}report/topup`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Phân vùng",
+      },
+      {
+        path: `${import.meta.env.BASE_URL}report/topup`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Nhóm khách hàng",
       },
     ],
   },

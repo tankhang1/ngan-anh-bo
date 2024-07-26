@@ -179,6 +179,23 @@ function Agent() {
                       <i className="ri-add-line"></i>
                     </Button>
                   </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Add Contact"
+                      onClick={() => {}}
+                    >
+                      <i className="ti ti-database-export"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
@@ -207,10 +224,19 @@ function Agent() {
               },
               {
                 key: "name",
-                label: "Tên",
+                label: "Tên đăng kí",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "name",
+                label: "Họ và tên khách hàng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.customer_name}</span>
                   </td>
                 ),
               },
@@ -225,7 +251,7 @@ function Agent() {
               },
               {
                 key: "province",
-                label: "Địa chỉ",
+                label: "Tỉnh",
                 render: (value) => (
                   <td>
                     <OverlayTrigger
@@ -245,15 +271,19 @@ function Agent() {
                 render: (value) => <td>{value.phone}</td>,
               },
               {
+                key: "time",
+                label: "Thời gian đăng kí",
+                render: (value) => <td>{value.time}</td>,
+              },
+              {
                 key: "time_verify",
                 label: "Thời gian xác thực",
-                render: (value) => (
-                  <td>
-                    {value?.time_verify
-                      ? format(new Date(value.time_verify), "dd/MM/yyyy")
-                      : ""}
-                  </td>
-                ),
+                render: (value) => <td>{value.time_verify}</td>,
+              },
+              {
+                key: "source_channel_used",
+                label: "Nguồn đăng kí",
+                render: (value) => <td>{value.source_channel_used}</td>,
               },
               {
                 key: "status",

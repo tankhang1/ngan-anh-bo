@@ -37,6 +37,8 @@ import {
 import { useUploadFileMutation } from "../../../redux/api/media/media.api";
 import { FilePondFile } from "filepond";
 import { ToastContext } from "../../../components/AppToast";
+import { fNumber } from "../../../hooks";
+import { NumericFormat } from "react-number-format";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -257,13 +259,12 @@ function ProductCreateEdit() {
                         <Stack className="d-flex justify-content-center align-items-center">
                           <img
                             src={
-                              `${BASE_PORT}/${values.code}.jpg` ??
+                              `${BASE_PORT}/${values.code}.jpg` ||
                               "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
                             }
-                            className="img object-fit-cover"
+                            className="img object-fit-cover img-fluid"
                             style={{
-                              height: 500,
-                              width: "auto",
+                              maxHeight: 500,
                             }}
                           />
                         </Stack>
@@ -419,7 +420,7 @@ function ProductCreateEdit() {
                   <Row>
                     <Form.Group as={Col} md={4} controlId="point_validate">
                       <Form.Label>Số điểm thưởng</Form.Label>
-                      <Form.Control
+                      {/* <Form.Control
                         required
                         type="number"
                         min={1}
@@ -429,6 +430,16 @@ function ProductCreateEdit() {
                         defaultValue={values.point}
                         onChange={handleChange}
                         isInvalid={touched.point && !!errors.point}
+                      /> */}
+                      <NumericFormat
+                        thousandSeparator="."
+                        decimalSeparator=","
+                        customInput={Form.Control as any}
+                        defaultValue={values.point}
+                        name="point"
+                        onChange={handleChange}
+                        min={1}
+                        placeholder="Số điểm thưởng"
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.point}
@@ -439,19 +450,30 @@ function ProductCreateEdit() {
                       md={4}
                       controlId="c1_price_vnd_validate"
                     >
-                      <Form.Label>Số tiền 1</Form.Label>
-                      <Form.Control
+                      <Form.Label>Giá C1</Form.Label>
+                      {/* <Form.Control
                         required
                         type="number"
                         min={0}
                         id="c1_price_vnd_validate"
                         placeholder="Số tiền 1"
                         name="c1_price_vnd"
-                        defaultValue={values.c1_price_vnd}
+                        defaultValue={fNumber(values.c1_price_vnd)}
                         onChange={handleChange}
                         isInvalid={
                           touched.c1_price_vnd && !!errors.c1_price_vnd
                         }
+                      /> */}
+                      <NumericFormat
+                        thousandSeparator="."
+                        customInput={Form.Control as any}
+                        suffix=" VND"
+                        min={0}
+                        defaultValue={values.c1_price_vnd}
+                        name="c1_price_vnd"
+                        onChange={handleChange}
+                        placeholder="Số tiền 1"
+                        decimalSeparator=","
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.c1_price_vnd}
@@ -462,19 +484,32 @@ function ProductCreateEdit() {
                       md={4}
                       controlId="c2_price_vnd_validate"
                     >
-                      <Form.Label>Số tiền 2</Form.Label>
-                      <Form.Control
+                      <Form.Label>Giá C2</Form.Label>
+                      {/* <Form.Control
                         required
+                        as={NumericFormat}
                         type="number"
                         min={0}
                         id="c1_price_vnd_validate"
                         placeholder="Số tiền 2"
+                        thousandSeparator
                         name="c2_price_vnd"
                         defaultValue={values.c2_price_vnd}
                         onChange={handleChange}
                         isInvalid={
                           touched.c2_price_vnd && !!errors.c2_price_vnd
                         }
+                      /> */}
+                      <NumericFormat
+                        thousandSeparator="."
+                        customInput={Form.Control as any}
+                        suffix=" VND"
+                        min={0}
+                        defaultValue={values.c2_price_vnd}
+                        name="c2_price_vnd"
+                        onChange={handleChange}
+                        placeholder="Số tiền 2"
+                        decimalSeparator=","
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.c2_price_vnd}
@@ -571,13 +606,13 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={4} controlId="net_weight_validate">
-                      <Form.Label>Trọng luọng</Form.Label>
+                      <Form.Label>Trọng lượng</Form.Label>
                       <Form.Control
                         type="number"
                         id="net_weight_validate"
                         name="net_weight"
                         min={0}
-                        defaultValue={values.net_weight}
+                        defaultValue={fNumber(values.net_weight)}
                         onChange={handleChange}
                         isInvalid={touched.net_weight && !!errors.net_weight}
                         required
@@ -587,7 +622,7 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={4} controlId="unit_validate">
-                      <Form.Label>Hình thức đóng gói</Form.Label>
+                      <Form.Label>Đơn vị tính</Form.Label>
                       <Form.Select
                         className="form-select"
                         id="unit_validate"
@@ -634,20 +669,6 @@ function ProductCreateEdit() {
                       {errors.ingredient_id}
                     </Form.Control.Feedback>
                   </Form.Group>
-
-                  <Form.Group controlId="ingredient_validate">
-                    <Form.Label>Thành phần nguyên liệu</Form.Label>
-                    <Editor
-                      placeholder="Thành phần nguyên liệu"
-                      value={values.ingredient}
-                      handOnChange={(value) =>
-                        setFieldValue("ingredient", value)
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.ingredient}
-                    </Form.Control.Feedback>
-                  </Form.Group>
                   <Row>
                     <Form.Group as={Col} md={6} controlId="short_info_validate">
                       <Form.Label>Mô tả sản phẩm (thu gọn)</Form.Label>
@@ -688,6 +709,20 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Row>
+                  <Form.Group controlId="ingredient_validate">
+                    <Form.Label>Thành phần nguyên liệu</Form.Label>
+                    <Editor
+                      placeholder="Thành phần nguyên liệu"
+                      value={values.ingredient}
+                      handOnChange={(value) =>
+                        setFieldValue("ingredient", value)
+                      }
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.ingredient}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
                   <Row>
                     <Form.Group as={Col} md={6} controlId="detail_url_validate">
                       <Form.Label>Link sản phẩm</Form.Label>

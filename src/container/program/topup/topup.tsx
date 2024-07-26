@@ -20,6 +20,7 @@ import {
   useGetListProgramTopupStatusQuery,
 } from "../../../redux/api/program/program.api";
 import { format } from "date-fns";
+import { fNumber } from "../../../hooks";
 
 const TOPUP_FILTERS = [
   {
@@ -231,7 +232,7 @@ function TopupProgram() {
               {
                 key: "price",
                 label: "Số tiền",
-                render: (value) => <td>{value.price}</td>,
+                render: (value) => <td>{fNumber(value.price)}</td>,
               },
               {
                 key: "status",
@@ -308,24 +309,24 @@ function TopupProgram() {
                   </td>
                 ),
               },
-              {
-                key: "time_active",
-                label: "Thời gian bắt đầu",
-                render: (value) => (
-                  <td>
-                    {format(new Date(value.time_start ?? "0"), "dd/MM/yyyy")}
-                  </td>
-                ),
-              },
-              {
-                key: "time_end",
-                label: "Thời gian kết thúc",
-                render: (value) => (
-                  <td>
-                    {format(new Date(value.time_end ?? "0"), "dd/MM/yyyy")}
-                  </td>
-                ),
-              },
+              // {
+              //   key: "time_active",
+              //   label: "Thời gian bắt đầu",
+              //   render: (value) => (
+              //     <td>
+              //       {format(new Date(value.time_start ?? "0"), "dd/MM/yyyy")}
+              //     </td>
+              //   ),
+              // },
+              // {
+              //   key: "time_end",
+              //   label: "Thời gian kết thúc",
+              //   render: (value) => (
+              //     <td>
+              //       {format(new Date(value.time_end ?? "0"), "dd/MM/yyyy")}
+              //     </td>
+              //   ),
+              // },
 
               {
                 key: "",

@@ -157,6 +157,23 @@ function Farmer() {
                       <i className="ti ti-exchange"></i>
                     </button>
                   </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Add Contact"
+                      onClick={() => {}}
+                    >
+                      <i className="ti ti-database-export"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
@@ -185,7 +202,7 @@ function Farmer() {
               },
               {
                 key: "name",
-                label: "Tên",
+                label: "Tên đăng kí",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.name}</span>
@@ -193,13 +210,17 @@ function Farmer() {
                 ),
               },
               {
-                key: "phone",
-                label: "Số điện thoại",
-                render: (value) => <td>{value.phone}</td>,
+                key: "name",
+                label: "Họ và tên khách hàng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.customer_name}</span>
+                  </td>
+                ),
               },
               {
                 key: "province",
-                label: "Địa chỉ",
+                label: "Tỉnh",
                 render: (value) => (
                   <td>
                     <OverlayTrigger
@@ -212,6 +233,11 @@ function Farmer() {
                     </OverlayTrigger>
                   </td>
                 ),
+              },
+              {
+                key: "phone",
+                label: "Số điện thoại",
+                render: (value) => <td>{value.phone}</td>,
               },
               {
                 key: "time",

@@ -16,11 +16,14 @@ const Footer: FC<FooterProps> = () => {
             </Link>
             . Designed with{" "}
             <span className="bi bi-heart-fill text-danger"></span> by{" "}
-            <Link to="#">
+            <button
+              style={{ borderWidth: 0 }}
+              onClick={() => window.open("https://yis.vn/", "_blank")}
+            >
               <span className="fw-semibold text-primary text-decoration-underline">
-                Spruko
+                Yis Martech
               </span>
-            </Link>{" "}
+            </button>{" "}
             All rights reserved
           </span>
         </div>

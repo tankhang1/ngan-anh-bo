@@ -510,7 +510,7 @@ function PointCreateEdit() {
                     />
                   </Form.Group>
                   <Form.Group controlId="agents_validate">
-                    <Form.Label>Chọn đại lí cấp 1</Form.Label>
+                    <Form.Label>Chọn đại lý cấp 1</Form.Label>
 
                     <Select
                       isMulti

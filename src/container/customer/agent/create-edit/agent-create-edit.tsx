@@ -5,24 +5,12 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  OverlayTrigger,
-  Row,
-  Tooltip,
-} from "react-bootstrap";
+import { Card, Col, Form, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import * as formik from "formik";
-import * as yup from "yup";
-import { TAgent, TAgentForm, TObjectiveEnum } from "../../../../assets/types";
+import { TAgentForm, TObjectiveEnum } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useGetListAgentsByStatusQuery,
-  useGetListAgentsQuery,
-} from "../../../../redux/api/manage/manage.api";
+import { useGetListAgentsByStatusQuery } from "../../../../redux/api/manage/manage.api";
 import { useGetDistrictQuery } from "../../../../redux/api/media/media.api";
 import {
   useCreateAgentMutation,
@@ -77,53 +65,54 @@ function AgentCreateEdit() {
 
   const handleSubmitAgent = async (values: TAgentForm) => {
     console.log("submit ", values);
-    if (isCreate === "true") {
-      await createAgent({
-        ...values,
-        info_primary: values.info_primary ? 1 : 0,
-        customer_province: provinceId,
-        status: +(values?.status ?? 1),
-      })
-        .unwrap()
-        .then((value) => {
-          console.log("create agent success", value);
-          if (value?.status === -2) {
-            toast.showToast("Đại lý đã tồn tại");
-            return;
-          }
-          if (value?.status === 0) {
-            toast.showToast("Thêm đại lý thành công");
-            return;
-          }
-          toast.showToast("Thêm mới đại lý thất bại");
-        })
-        .catch((e) => {
-          console.log("create agent fail", e.message);
-        });
-    } else {
-      setIsEdit(!isEdit);
-      if (isEdit === true)
-        await updateAgent({
-          ...agent,
-          ...values,
-          info_primary: values.info_primary ? 1 : 0,
-          customer_province: provinceId,
-          status: +(values?.status ?? 1),
-        })
-          .unwrap()
-          .then((value) => {
-            if (value?.status === 0) {
-              toast.showToast("Chỉnh sửa thông tin lí thành công");
-              return;
-            }
+    // if (isCreate === "true") {
+    //   await createAgent({
+    //     ...values,
+    //     info_primary: values.info_primary ? 1 : 0,
+    //     customer_province: provinceId,
+    //     status: +(values?.status ?? 1),
+    //   })
+    //     .unwrap()
+    //     .then((value) => {
+    //       console.log("create agent success", value);
+    //       if (value?.status === -2) {
+    //         toast.showToast("Đại lý đã tồn tại");
+    //         return;
+    //       }
+    //       if (value?.status === 0) {
+    //         toast.showToast("Thêm đại lý thành công");
+    //         return;
+    //       }
+    //       toast.showToast("Thêm mới đại lý thất bại");
+    //     })
+    //     .catch((e) => {
+    //       console.log("create agent fail", e.message);
+    //     });
+    // } else {
+    //   setIsEdit(!isEdit);
+    //   if (isEdit === true)
+    //     await updateAgent({
+    //       ...agent,
+    //       ...values,
+    //       info_primary: values.info_primary ? 1 : 0,
+    //       customer_province: provinceId,
+    //       status: +(values?.status ?? 1),
+    //     })
+    //       .unwrap()
+    //       .then((value) => {
+    //         if (value?.status === 0) {
+    //           toast.showToast("Chỉnh sửa thông tin đại lý thành công");
+    //           return;
+    //         }
 
-            toast.showToast("Chỉnh sửa thông tin lí thất bại");
-          })
-          .catch(() => {
-            toast.showToast("Hết hạn token. Vui lòng đăng nhập lại");
-            navigate("/");
-          });
-    }
+    //         toast.showToast("Chỉnh sửa thông tin đại lý thất bại");
+    //       })
+    //       .catch(() => {
+    //         toast.showToast("Hết hạn token. Vui lòng đăng nhập lại");
+    //         navigate("/");
+    //       });
+    // }
+    console.log(values);
   };
 
   useEffect(() => {
@@ -151,6 +140,14 @@ function AgentCreateEdit() {
           status: agent?.status ?? 1,
           time: agent?.time ?? "",
           finger_province: agent?.finger_province ?? "",
+          gender: agent?.gender ?? 0,
+          birthday: agent?.birthday,
+          email: agent?.email ?? "",
+          citizen_number: agent?.citizen_number ?? 0,
+          citizen_day: agent?.citizen_day ?? "",
+          business_docu: agent?.business_docu ?? "",
+          tags: agent?.tags ?? "",
+          note: agent?.note ?? "",
         }}
         onSubmit={handleSubmitAgent}
         // validationSchema={schema.nullable()}
@@ -169,7 +166,16 @@ function AgentCreateEdit() {
                 <Card.Title>
                   {!isEdit ? "Thông tin đại lý" : "Chỉnh sửa thông tin đại lý"}
                 </Card.Title>
-                <div>
+                <div className="d-flex flex-row align-items-center gap-2">
+                  <button
+                    className="btn btn-danger-light"
+                    type="submit"
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  >
+                    Trở lại
+                  </button>
                   <OverlayTrigger
                     placement="top"
                     overlay={
@@ -318,7 +324,7 @@ function AgentCreateEdit() {
                 <Row className="mb-2">
                   <Form.Group
                     as={Col}
-                    md={6}
+                    md={4}
                     controlId="customer_name_validate"
                   >
                     <Form.Label>Nhập tên (xác thực)</Form.Label>
@@ -337,36 +343,138 @@ function AgentCreateEdit() {
                       {errors.customer_name}
                     </Form.Control.Feedback>
                   </Form.Group>
+                  <Form.Group as={Col} md={4} controlId="gender_validate">
+                    <Form.Label>Giới tính</Form.Label>
+                    <Form.Select
+                      className="form-select"
+                      name="gender"
+                      value={values.gender}
+                      onChange={(e) => setFieldValue("gender", e.target.value)}
+                      isInvalid={touched.gender && !!errors.gender}
+                      required
+                    >
+                      <option value={0}>Nữ</option>
+                      <option value={1}>Nam</option>
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group as={Col} md={4} controlId="birthday_validate">
+                    <Form.Label>Ngày sinh</Form.Label>
+                    <Form.Control
+                      required
+                      type="date"
+                      id="birthday_validate"
+                      placeholder="Ngày sinh"
+                      name="birthday"
+                      value={values.birthday}
+                      lang="vi"
+                      onChange={handleChange}
+                      isInvalid={touched.birthday && !!errors.birthday}
+                    />
+                  </Form.Group>
+                </Row>
+                <Form.Group controlId="phone_validate" className="mb-2">
+                  <Form.Label>Số điện thoại</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    id="phone_validate"
+                    placeholder="Nhập địa chỉ chi tiết"
+                    name="phone"
+                    value={values.phone}
+                    onChange={handleChange}
+                    isInvalid={touched.phone && !!errors.phone}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.phone}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="email_validate" className="mb-2">
+                  <Form.Label>Địa chỉ email</Form.Label>
+                  <Form.Control
+                    required
+                    type="email"
+                    placeholder="Nhập địa chỉ chi tiết"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    isInvalid={touched.email && !!errors.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Row>
                   <Form.Group
                     as={Col}
                     md={6}
-                    controlId="customer_province_validate"
+                    controlId="email_validate"
+                    className="mb-2"
                   >
-                    <Form.Label>Tỉnh thành (xác thực)</Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="customer_province"
-                      value={values.customer_province}
-                      onChange={(value) => {
-                        setFieldValue("customer_province", value.target.value);
-                        setProvinceId(value.target.value);
-                      }}
-                      isInvalid={
-                        touched.customer_province && !!errors.customer_province
-                      }
+                    <Form.Label>CCCD</Form.Label>
+                    <Form.Control
                       required
-                    >
-                      {PROVINCES.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
+                      type="text"
+                      placeholder="Nhập căn cước công dân"
+                      name="citizen_number"
+                      value={values.citizen_number}
+                      onChange={handleChange}
+                      isInvalid={
+                        touched.citizen_number && !!errors.citizen_number
+                      }
+                    />
                     <Form.Control.Feedback type="invalid">
-                      {errors.customer_province}
+                      {errors.citizen_number}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    md={6}
+                    controlId="citizen_day_validate"
+                    className="mb-2"
+                  >
+                    <Form.Label>Ngày cấp CCCD</Form.Label>
+                    <Form.Control
+                      required
+                      type="date"
+                      placeholder="Nhập ngày cấp CCCD"
+                      name="citizen_day"
+                      value={values.citizen_day}
+                      onChange={handleChange}
+                      isInvalid={touched.citizen_day && !!errors.citizen_day}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.citizen_day}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
+                <Form.Group
+                  controlId="customer_province_validate"
+                  className="mb-2"
+                >
+                  <Form.Label>Tỉnh thành (xác thực)</Form.Label>
+                  <Form.Select
+                    className="form-select"
+                    name="customer_province"
+                    value={values.customer_province}
+                    onChange={(value) => {
+                      setFieldValue("customer_province", value.target.value);
+                      setProvinceId(value.target.value);
+                    }}
+                    isInvalid={
+                      touched.customer_province && !!errors.customer_province
+                    }
+                    required
+                  >
+                    {PROVINCES.map((item, index) => (
+                      <option value={item.value} key={index}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.customer_province}
+                  </Form.Control.Feedback>
+                </Form.Group>
                 <Form.Group
                   controlId="customer_district_validate"
                   className="mb-2"
@@ -414,20 +522,34 @@ function AgentCreateEdit() {
                     {errors.customer_address}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="phone_validate" className="mb-2">
-                  <Form.Label>Số điện thoại</Form.Label>
+                <Form.Group controlId="tags_validate" className="mb-2">
+                  <Form.Label>Nhập cây trồng chính</Form.Label>
                   <Form.Control
                     required
                     type="text"
-                    id="phone_validate"
-                    placeholder="Nhập địa chỉ chi tiết"
-                    name="phone"
-                    value={values.phone}
+                    placeholder="Nhập cây trồng chính"
+                    name="tags"
+                    value={values.tags}
                     onChange={handleChange}
-                    isInvalid={touched.phone && !!errors.phone}
+                    isInvalid={touched.tags && !!errors.tags}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.phone}
+                    {errors.tags}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="note_validate" className="mb-2">
+                  <Form.Label>Nhập ghi chú</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Ghi chú"
+                    name="note"
+                    value={values.note}
+                    onChange={handleChange}
+                    isInvalid={touched.note && !!errors.note}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.note}
                   </Form.Control.Feedback>
                 </Form.Group>
 

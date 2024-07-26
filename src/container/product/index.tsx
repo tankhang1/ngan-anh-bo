@@ -1,4 +1,10 @@
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -15,25 +21,48 @@ import { TProduct } from "../../assets/types";
 
 import { BASE_PORT, MAP_PRODUCT_TYPE } from "../../constants";
 import { useGetListProductsQuery } from "../../redux/api/info/info.api";
-import { fNumber } from "../../hooks";
+import { exportExcelFile, fNumber } from "../../hooks";
 
 const PRODUCT_FILTERS = [
   {
-    key: "id",
-    label: "ID",
+    key: "name_display_root",
+    label: "Mã sản phẩm",
   },
   {
     key: "product_name_detail",
-    label: "Tên",
+    label: "Tên sản phẩm",
   },
   {
-    key: "type",
-    label: "Loại",
+    key: "category_name",
+    label: "Nhóm sản phẩm",
+  },
+];
+const PRODUCT_TYPE = [
+  {
+    key: 0,
+    label: "Gói",
+  },
+  {
+    key: 1,
+    label: "Túi",
+  },
+  {
+    key: 2,
+    label: "Chai",
+  },
+  {
+    key: 3,
+    label: "Hộp",
+  },
+  {
+    key: 4,
+    label: "Thùng",
   },
 ];
 function ProductPage() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(PRODUCT_FILTERS[0].key);
+  const [changeType, setChangeType] = useState<number>(0); // true: thùng, false: gói
   const deferSearchValue = useDeferredValue(search);
 
   const navigate = useNavigate();
@@ -43,6 +72,14 @@ function ProductPage() {
       refetchOnMountOrArgChange: true,
     });
 
+  const filterProducts = useMemo(
+    () => products?.filter((item) => item.type === changeType) ?? [],
+    [products, changeType]
+  );
+
+  const handleExportExcel = () => {
+    exportExcelFile(filterProducts, "Thông tin sản phẩm");
+  };
   return (
     <Fragment>
       <Col xl={12}>
@@ -96,6 +133,36 @@ function ProductPage() {
                   <OverlayTrigger
                     placement="top"
                     overlay={
+                      <Tooltip className="tooltip">Đổi loại sản phẩm</Tooltip>
+                    }
+                  >
+                    <Dropdown className="ms-2">
+                      <Dropdown.Toggle
+                        variant=""
+                        aria-label="button"
+                        className="btn btn-icon btn-info-light btn-wave no-caret"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <i className="ti ti-exchange"></i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu as="ul" className="dropdown-menu-start">
+                        {PRODUCT_TYPE.map((item, index) => (
+                          <Dropdown.Item
+                            active={item.key === changeType}
+                            key={index}
+                            onClick={() => setChangeType(item.key)}
+                          >
+                            {item.label}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
                       <Tooltip className="tooltip">Thêm mới sản phẩm </Tooltip>
                     }
                   >
@@ -112,6 +179,23 @@ function ProductPage() {
                       <i className="ri-add-line"></i>
                     </Button>
                   </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Add Contact"
+                      onClick={handleExportExcel}
+                    >
+                      <i className="ti ti-database-export"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
@@ -125,6 +209,7 @@ function ProductPage() {
             externalSearch={deferSearchValue}
             title="Thông tin sản phẩm"
             isLoading={isLoadingProduct}
+            isChange={changeType}
             headers={[
               {
                 key: "image_url",
@@ -133,7 +218,7 @@ function ProductPage() {
                   <td>
                     <img
                       src={
-                        `${BASE_PORT}/${value.code}.jpg` ??
+                        `${BASE_PORT}/${value.code}.jpg` ||
                         "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
                       }
                       className="img object-fit-cover"
@@ -152,7 +237,7 @@ function ProductPage() {
               },
               {
                 key: "category_name",
-                label: "Tên nhóm sản phẩm",
+                label: "Nhóm sản phẩm",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.category_name}</span>
@@ -242,7 +327,7 @@ function ProductPage() {
                 ),
               },
             ]}
-            data={products || []}
+            data={filterProducts || []}
             filters={[
               {
                 key: "id",

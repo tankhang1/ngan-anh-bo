@@ -29,6 +29,14 @@ export type TAgent = {
   time_verify: string | undefined; // nếu status verify thì hiện
   customer_address: string | undefined;
   customer_district: string | undefined;
+  gender: 0 | 1; // 0: nữ, 1: nam
+  email?: string;
+  birthday?: number; //yyyyMMdd
+  citizen_number: number; // CCCD
+  citizen_day: string; // Ngày cấp CCCD
+  business_docu: string; //  giấy phép kinh doanh
+  tags: string; // cây trồng chính
+  note: string; //Ghi chú
 };
 
 export type TAgentDashboardTable = Pick<

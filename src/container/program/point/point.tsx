@@ -235,7 +235,7 @@ function PointProgram() {
               },
               {
                 key: "point_coefficient",
-                label: "Hệ số điểm",
+                label: "Hệ số điểm CT",
                 render: (value) => <td>{value.point_coefficient}</td>,
               },
               {
@@ -315,7 +315,7 @@ function PointProgram() {
               },
               {
                 key: "locations",
-                label: "Khu vực áp dụng",
+                label: "Tỉnh áp dụng",
                 render: (value) => {
                   const locations = value.locations?.split(",");
                   return (
@@ -359,7 +359,7 @@ function PointProgram() {
               },
               {
                 key: "objectives",
-                label: "Đối tượng áp dụng",
+                label: "Đối tượng",
                 render: (value) => (
                   <td>
                     <span className="d-flex gap-1 flex-wrap">
@@ -376,24 +376,16 @@ function PointProgram() {
                   </td>
                 ),
               },
-              {
-                key: "time_active",
-                label: "Thời gian bắt đầu",
-                render: (value) => (
-                  <td>
-                    {format(new Date(value.time_start ?? "0"), "dd/MM/yyyy")}
-                  </td>
-                ),
-              },
-              {
-                key: "time_end",
-                label: "Thời gian kết thúc",
-                render: (value) => (
-                  <td>
-                    {format(new Date(value.time_end ?? "0"), "dd/MM/yyyy")}
-                  </td>
-                ),
-              },
+              // {
+              //   key: "time_active",
+              //   label: "Thời gian kích hoạt",
+              //   render: (value) => <td>{value.time_start}</td>,
+              // },
+              // {
+              //   key: "time_end",
+              //   label: "Thời gian kết thúc",
+              //   render: (value) => <td>{value.time_end}</td>,
+              // },
 
               {
                 key: "",

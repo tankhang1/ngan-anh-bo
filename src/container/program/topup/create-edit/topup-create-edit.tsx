@@ -36,6 +36,7 @@ import {
 } from "../../../../redux/api/program/program.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
+import { NumericFormat } from "react-number-format";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -433,7 +434,7 @@ function TopupCreateEdit() {
 
                   <Form.Group controlId="point_validate">
                     <Form.Label>Nhập số tiền thưởng</Form.Label>
-                    <Form.Control
+                    {/* <Form.Control
                       required
                       type="number"
                       min={0}
@@ -442,6 +443,16 @@ function TopupCreateEdit() {
                       value={values.price}
                       onChange={handleChange}
                       isInvalid={touched.price && !!errors.price}
+                    /> */}
+                    <NumericFormat
+                      customInput={Form.Control as any}
+                      defaultValue={values.price}
+                      name="price"
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      onChange={handleChange}
+                      min={1}
+                      placeholder="Nhập số tiền thưởng"
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.price}
