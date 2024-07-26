@@ -9,6 +9,7 @@ import png7 from "../assets/images/ecommerce/png/7.png";
 import png8 from "../assets/images/ecommerce/png/8.png";
 import png9 from "../assets/images/ecommerce/png/9.png";
 import png10 from "../assets/images/ecommerce/png/10.png";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   lang: "en",
@@ -190,27 +191,56 @@ const initialState = {
     },
   ],
 };
-export default function themeReducer(state = initialState, action: any) {
-  const { type, payload } = action;
-  switch (type) {
-    case "ThemeChanger":
-      return { ...state, ...payload };
+// export default function themeReducer(state = initialState, action: any) {
+//   const { type, payload } = action;
+//   switch (type) {
+//     case "ThemeChanger":
+//       return { ...state, ...payload };
 
-    case "ADD_TO_CART":
-      return {
-        ...state,
-        ecommercedata: Maindata.filter((item) => item.id === payload),
-      };
+//     case "ADD_TO_CART":
+//       return {
+//         ...state,
+//         ecommercedata: Maindata.filter((item) => item.id === payload),
+//       };
 
-    case "PRODUCT":
+//     case "PRODUCT":
+//       return {
+//         ...state,
+//         ecommercedata: state.ecommercedata.filter(
+//           (item) => item.id === payload
+//         ),
+//       };
+
+//     default:
+//       return state;
+//   }
+// }
+const themeReducer = createSlice({
+  name: "theme",
+  initialState: initialState,
+  reducers: {
+    ThemeChanger: (state, action) => {
+      return { ...state, ...action.payload };
+    },
+    AddToCart: (state, action) => {
       return {
         ...state,
         ecommercedata: state.ecommercedata.filter(
-          (item) => item.id === payload
+          (item) => item.id === action.payload
         ),
       };
+    },
+    ProductReduxData: (state, action) => {
+      return {
+        ...state,
+        ecommercedata: state.ecommercedata.filter(
+          (item) => item.id === action.payload
+        ),
+      };
+    },
+  },
+});
 
-    default:
-      return state;
-  }
-}
+export const { AddToCart, ProductReduxData, ThemeChanger } =
+  themeReducer.actions;
+export default themeReducer.reducer;
