@@ -190,30 +190,26 @@ const initialState = {
     },
   ],
 };
-export default function reducer(state = initialState, action: any) {
+export default function themeReducer(state = initialState, action: any) {
   const { type, payload } = action;
-  console.log(action);
   switch (type) {
     case "ThemeChanger":
-      console.log("reducer", type, payload);
-      state = payload;
-      console.log("state", state, payload);
-      return state;
-      break;
+      return { ...state, ...payload };
 
     case "ADD_TO_CART":
-      state.ecommercedata = Maindata.filter((idx: any) => {
-        return idx.id == payload;
-      });
-
-      return state;
+      return {
+        ...state,
+        ecommercedata: Maindata.filter((item) => item.id === payload),
+      };
 
     case "PRODUCT":
-      state.ecommercedata = state.ecommercedata.filter((idx) => {
-        return idx.id == payload;
-      });
-      return state;
-      break;
+      return {
+        ...state,
+        ecommercedata: state.ecommercedata.filter(
+          (item) => item.id === payload
+        ),
+      };
+
     default:
       return state;
   }
