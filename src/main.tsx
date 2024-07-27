@@ -160,10 +160,6 @@ import Mailchat from "./container/pages/emails/mailchat/mailchat.tsx";
 import Pagelayout from "./pages/pagelayout.tsx";
 import ScrollToTop from "./components/common/scrolltotop/scrolltotop.tsx";
 import "./index.scss";
-import Farmer from "./container/customer/farmer/farmer.tsx";
-import Agent from "./container/customer/agent/agent.tsx";
-import AgentCreateEdit from "./container/customer/agent/create-edit/agent-create-edit.tsx";
-import FarmerCreateEdit from "./container/customer/farmer/create-edit/farmer-create-edit.tsx";
 import ProductPage from "./container/product/index.tsx";
 import ProductCreateEdit from "./container/product/create-edit/product-create-edit.tsx";
 import PointProgram from "./container/program/point/point.tsx";
@@ -177,11 +173,17 @@ import FarmerReport from "./container/report/FarmerReport/index.tsx";
 import IQrReport from "./container/report/iQrReport/index.tsx";
 import ProgramReport from "./container/report/ProgramReport/index.tsx";
 import TopupReport from "./container/report/TopupReport/index.tsx";
+import SettingArea from "./container/settings/area/index.tsx";
+import SettingGroupCustomer from "./container/settings/group-customer/index.tsx";
+import CustomerValidationCreateEdit from "./container/customer/validate/create-edit/customer-validate-create-edit.tsx";
+import CustomerValidation from "./container/customer/validate/customer-validate.tsx";
+import CustomerUnValidation from "./container/customer/unvalidate/customer-unvalidate.tsx";
+import CustomerUnValidationCreateEdit from "./container/customer/unvalidate/create-edit/customer-unvalidate-create-edit.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
     <Provider store={store}>
-      <BrowserRouter>
+      <HashRouter>
         <ScrollToTop />
         <React.Suspense>
           <Routes>
@@ -564,25 +566,26 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 }forms/formeditors/quilleditor`}
                 element={<Formeditors />}
               />
+
               <Route
                 path={`${
                   import.meta.env.BASE_URL
-                }customer/farmer/ce/:isCreate/:id`}
-                element={<FarmerCreateEdit />}
+                }customer/validate/ce/:isCreate/:id`}
+                element={<CustomerValidationCreateEdit />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}customer/farmer`}
-                element={<Farmer />}
-              />
-              <Route
-                path={`${import.meta.env.BASE_URL}customer/agent`}
-                element={<Agent />}
+                path={`${import.meta.env.BASE_URL}customer/validate`}
+                element={<CustomerValidation />}
               />
               <Route
                 path={`${
                   import.meta.env.BASE_URL
-                }customer/agent/ce/:isCreate/:id`}
-                element={<AgentCreateEdit />}
+                }customer/unvalidate/ce/:isCreate/:id`}
+                element={<CustomerUnValidationCreateEdit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}customer/unvalidate`}
+                element={<CustomerUnValidation />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}product`}
@@ -635,6 +638,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}report/topup`}
                 element={<TopupReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}setting/area`}
+                element={<SettingArea />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}setting/group-customer`}
+                element={<SettingGroupCustomer />}
               />
               <Route
                 path={`${
@@ -964,7 +975,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </Route>
           </Routes>
         </React.Suspense>
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
   </React.Fragment>
 );

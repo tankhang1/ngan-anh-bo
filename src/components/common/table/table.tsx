@@ -28,7 +28,7 @@ type TAppTable<T> = {
   isLoading?: boolean;
   maxPage?: number;
   setExternalPage?: (page: number) => void;
-  isChange?: boolean | number;
+  isChange?: boolean | number | string;
 };
 const PAGE_SIZE = 10;
 const AppTable = <T extends DataItem>({

@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import * as XLSX from "xlsx";
 
 const exportExcelFile = <T>(data: T[], title?: string, sheetName?: string) => {
@@ -28,4 +29,12 @@ const exportMultipleSheet = <T>(
 const fNumber = (value: number) => {
   return new Intl.NumberFormat().format(value);
 };
-export { exportExcelFile, exportMultipleSheet, fNumber };
+
+const fDate = (date?: number | string) => {
+  const stringDate = date?.toString() || format(new Date(), "yyyyMMdd");
+  return `${stringDate.slice(0, 4)}-${stringDate.slice(
+    4,
+    6
+  )}-${stringDate.slice(6, 8)}`;
+};
+export { exportExcelFile, exportMultipleSheet, fNumber, fDate };

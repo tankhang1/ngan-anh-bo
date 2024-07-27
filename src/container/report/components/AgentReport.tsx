@@ -155,11 +155,11 @@ function AgentReport() {
                 title="Số lượt đăng kí"
                 series={[
                   {
-                    name: "Đã lý đã xác thực",
+                    name: "Đã xác thực",
                     data: mapAgent.map((item) => item.agencyChecked),
                   },
                   {
-                    name: "Đại lý chờ xác thực",
+                    name: "Chờ xác thực",
                     data: mapAgent.map((item) => item.agencyUnchecked),
                   },
                 ]}
@@ -173,7 +173,7 @@ function AgentReport() {
       <Col xxl={12}>
         <Card className="custom-card" style={{ height: 475 }}>
           <AppTable
-            title="Thông tin nông dân"
+            title="Thông tin đại lý"
             headers={[
               {
                 key: "id",
@@ -200,7 +200,7 @@ function AgentReport() {
               },
               {
                 key: "province",
-                label: "Địa chỉ",
+                label: "Tỉnh",
                 render: (value) => <td>{value.province}</td>,
               },
               {

@@ -1,28 +1,32 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Card, Col, Form, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import * as formik from "formik";
-import { TAgentForm, TObjectiveEnum } from "../../../../assets/types";
+import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetListAgentsByStatusQuery } from "../../../../redux/api/manage/manage.api";
-import { useGetDistrictQuery } from "../../../../redux/api/media/media.api";
 import {
-  useCreateAgentMutation,
-  useUpdateAgentMutation,
-} from "../../../../redux/api/customer/customer.api";
-import { ToastContext } from "../../../../components/AppToast";
+  useGetListCustomerQuery,
+  useGetListCustomerRegisterQuery,
+  useGetListGroupObjectiveQuery,
+} from "../../../../redux/api/manage/manage.api";
+import { useGetDistrictQuery } from "../../../../redux/api/media/media.api";
 
-function AgentCreateEdit() {
+import { ToastContext } from "../../../../components/AppToast";
+import { format } from "date-fns";
+import { fDate } from "../../../../hooks";
+import { NumericFormat } from "react-number-format";
+import {
+  useCreateUpdateCustomerMutation,
+  useGetNewUUIDQuery,
+  useVerifyCustomerMutation,
+} from "../../../../redux/api/other/other.api";
+
+function CustomerUnValidationCreateEdit() {
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
+  const [isValidate, setIsValidate] = useState(false);
   const { Formik } = formik;
   const navigate = useNavigate();
   // const schema = yup.object().shape({
@@ -37,23 +41,25 @@ function AgentCreateEdit() {
   //   customer_address: yup.string().required(),
   //   customer_district: yup.string().required(),
   // });
+  const { data: groupObjectives } = useGetListGroupObjectiveQuery();
 
-  const { data: agent } = useGetListAgentsByStatusQuery(
+  const { data: newUUID } = useGetNewUUIDQuery();
+  const { data: customer } = useGetListCustomerRegisterQuery(
     {
-      status: +(id?.split("_")[1] ?? 1),
+      t: id?.split("_")[1],
       nu: +(id?.split("_")[2] ?? 0),
       sz: 10,
     },
     {
       selectFromResult: ({ data }) => ({
-        data: data?.find((agent) => agent.customer_code === id?.split("_")[0]),
+        data: data?.find((customer) => customer.id == id?.split("_")[0]),
       }),
       skip: isCreate === "true",
     }
   );
-  const [updateAgent] = useUpdateAgentMutation();
-  const [createAgent] = useCreateAgentMutation();
 
+  const [createUpdateCustomer] = useCreateUpdateCustomerMutation();
+  const [verifyCustomer] = useVerifyCustomerMutation();
   const { data: districts } = useGetDistrictQuery(
     {
       p: provinceId as string,
@@ -62,92 +68,153 @@ function AgentCreateEdit() {
       skip: !provinceId ? true : false,
     }
   );
+  const onValidateCustomer = async (values: TCustomerRes) => {
+    await verifyCustomer({
+      ...values,
+      uuid: values?.uuid ? values.uuid : newUUID?.toString(),
+      info_primary: values.info_primary ? 1 : 0,
+      customer_province: provinceId,
+      status: 1,
+      gender: +(values?.gender ?? 1),
+      birthday: values?.birthday ? +format(values.birthday, "yyyyMMdd") : null,
+      area_size: values?.area_size ? +values.area_size : null,
+      citizen_number: values?.citizen_number
+        ? +values.citizen_number
+        : values.citizen_number,
+      citizen_day: values?.citizen_day
+        ? +format(values.citizen_day, "yyyyMMdd")
+        : values?.citizen_day,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("create agent success", value);
+        if (value?.status === -2) {
+          toast.showToast("Đại lý đã tồn tại");
+          return;
+        }
+        if (value?.status === 0) {
+          navigate(-1);
+          toast.showToast("Xác thực thành công");
+          return;
+        }
+        toast.showToast("Xác thực thất bại");
+      })
+      .catch((e) => {
+        console.log("create agent fail", e.message);
+      });
+  };
 
-  const handleSubmitAgent = async (values: TAgentForm) => {
-    console.log("submit ", values);
-    // if (isCreate === "true") {
-    //   await createAgent({
-    //     ...values,
-    //     info_primary: values.info_primary ? 1 : 0,
-    //     customer_province: provinceId,
-    //     status: +(values?.status ?? 1),
-    //   })
-    //     .unwrap()
-    //     .then((value) => {
-    //       console.log("create agent success", value);
-    //       if (value?.status === -2) {
-    //         toast.showToast("Đại lý đã tồn tại");
-    //         return;
-    //       }
-    //       if (value?.status === 0) {
-    //         toast.showToast("Thêm đại lý thành công");
-    //         return;
-    //       }
-    //       toast.showToast("Thêm mới đại lý thất bại");
-    //     })
-    //     .catch((e) => {
-    //       console.log("create agent fail", e.message);
-    //     });
-    // } else {
-    //   setIsEdit(!isEdit);
-    //   if (isEdit === true)
-    //     await updateAgent({
-    //       ...agent,
-    //       ...values,
-    //       info_primary: values.info_primary ? 1 : 0,
-    //       customer_province: provinceId,
-    //       status: +(values?.status ?? 1),
-    //     })
-    //       .unwrap()
-    //       .then((value) => {
-    //         if (value?.status === 0) {
-    //           toast.showToast("Chỉnh sửa thông tin đại lý thành công");
-    //           return;
-    //         }
-
-    //         toast.showToast("Chỉnh sửa thông tin đại lý thất bại");
-    //       })
-    //       .catch(() => {
-    //         toast.showToast("Hết hạn token. Vui lòng đăng nhập lại");
-    //         navigate("/");
-    //       });
-    // }
-    console.log(values);
+  const handleSubmitAgent = async (values: TCustomerRes) => {
+    if (isCreate === "true") {
+      await createUpdateCustomer({
+        ...values,
+        uuid: values?.uuid ? values.uuid : newUUID?.toString(),
+        info_primary: values.info_primary ? 1 : 0,
+        customer_province: provinceId,
+        status: 1,
+        gender: +(values?.gender ?? 1),
+        birthday: values?.birthday
+          ? +format(values.birthday, "yyyyMMdd")
+          : null,
+        area_size: values?.area_size ? +values.area_size : null,
+        citizen_number: values?.citizen_number
+          ? +values.citizen_number
+          : values.citizen_number,
+        citizen_day: values?.citizen_day
+          ? +format(values.citizen_day, "yyyyMMdd")
+          : values?.citizen_day,
+      })
+        .unwrap()
+        .then((value) => {
+          console.log("create agent success", value);
+          if (value?.status === -2) {
+            toast.showToast("Khách hàng đã tồn tại");
+            return;
+          }
+          if (value?.status === 0) {
+            toast.showToast("Thêm khách hàng thành công");
+            return;
+          }
+          toast.showToast("Thêm mới thất bại");
+        })
+        .catch((e) => {
+          console.log("create agent fail", e.message);
+        });
+    } else {
+      setIsEdit(!isEdit);
+      if (isEdit === true)
+        await createUpdateCustomer({
+          ...values,
+          uuid: values?.uuid ? values.uuid : newUUID?.toString(),
+          info_primary: 0,
+          customer_province: provinceId,
+          status: 0,
+          gender: +(values?.gender ?? 1),
+          birthday: values?.birthday
+            ? +format(values.birthday, "yyyyMMdd")
+            : null,
+          area_size: values?.area_size ? +values.area_size : null,
+          citizen_number: values?.citizen_number
+            ? +values.citizen_number
+            : values.citizen_number,
+          citizen_day: values?.citizen_day
+            ? +format(values.citizen_day, "yyyyMMdd")
+            : values?.citizen_day,
+        })
+          .unwrap()
+          .then((value) => {
+            console.log("create agent success", value);
+            if (value?.status === -2) {
+              toast.showToast("Đại lý đã tồn tại");
+              return;
+            }
+            if (value?.status === 0) {
+              toast.showToast("Thêm đại lý thành công");
+              return;
+            }
+            toast.showToast("Cập nhật thất bại");
+          })
+          .catch((e) => {
+            console.log("create agent fail", e.message);
+          });
+    }
   };
 
   useEffect(() => {
-    if (agent?.customer_province) setProvinceId(agent.customer_province);
-  }, [agent]);
+    if (customer?.customer_province) setProvinceId(customer.customer_province);
+  }, [customer]);
 
   return (
     <Fragment>
       <Formik
         initialValues={{
-          customer_code: agent?.customer_code ?? "",
-          customer_name: agent?.customer_name ?? "",
-          customer_province: agent?.customer_province ?? PROVINCES[0].value,
-          customer_type:
-            agent?.customer_type ?? (TObjectiveEnum.RETAILER as any),
-          name: agent?.name ?? "",
-          province: agent?.province ?? PROVINCES[0].value,
-          info_primary: agent?.info_primary ?? 1,
-          phone: agent?.phone ?? "",
-          sign_board: agent?.sign_board ?? "",
-          type: agent?.type ?? 0,
-          verify: agent?.verify ?? 0,
-          customer_address: agent?.customer_province ?? "",
-          customer_district: agent?.customer_district ?? "",
-          status: agent?.status ?? 1,
-          time: agent?.time ?? "",
-          finger_province: agent?.finger_province ?? "",
-          gender: agent?.gender ?? 0,
-          birthday: agent?.birthday,
-          email: agent?.email ?? "",
-          citizen_number: agent?.citizen_number ?? 0,
-          citizen_day: agent?.citizen_day ?? "",
-          business_docu: agent?.business_docu ?? "",
-          tags: agent?.tags ?? "",
-          note: agent?.note ?? "",
+          customer_code: customer?.customer_code ?? "",
+          customer_name: customer?.customer_name ?? "",
+          customer_province: customer?.customer_province ?? PROVINCES[0].value,
+          customer_type: customer?.customer_type ?? "",
+          name: customer?.name ?? "",
+          province: customer?.province ?? PROVINCES[0].value,
+          info_primary: customer?.info_primary ?? 1,
+          phone: customer?.phone ?? "",
+          sign_board: customer?.sign_board ?? "",
+          customer_address: customer?.customer_province ?? "",
+          customer_district: customer?.customer_district ?? "",
+          status: customer?.status ?? 1,
+          time: customer?.time ?? "",
+          gender: customer?.gender ?? 0,
+          birthday: customer?.birthday ? fDate(customer.birthday) : undefined,
+          email: customer?.email ?? "",
+          citizen_number: customer?.citizen_number,
+          citizen_day: customer?.citizen_day,
+          business_document: customer?.business_document ?? "",
+          tags: customer?.tags ?? "",
+          note: customer?.note ?? "",
+          area_size: customer?.area_size,
+          source_channel_used: customer?.source_channel_used,
+          avatar: customer?.avatar ?? "",
+          sale_code: customer?.sale_code ?? "", // mã nhân viên
+          export_code: customer?.export_code, // mã xuất kho
+          export_address: customer?.export_address,
         }}
         onSubmit={handleSubmitAgent}
         // validationSchema={schema.nullable()}
@@ -164,17 +231,27 @@ function AgentCreateEdit() {
             <Card className="custom-card">
               <Card.Header className="justify-content-between">
                 <Card.Title>
-                  {!isEdit ? "Thông tin đại lý" : "Chỉnh sửa thông tin đại lý"}
+                  {!isEdit
+                    ? "Thông tin khách hàng"
+                    : "Chỉnh sửa thông tin khách hàng"}
                 </Card.Title>
                 <div className="d-flex flex-row align-items-center gap-2">
                   <button
                     className="btn btn-danger-light"
-                    type="submit"
+                    type="button"
                     onClick={() => {
                       navigate(-1);
                     }}
                   >
                     Trở lại
+                  </button>
+                  <button
+                    className="btn btn-info-light"
+                    type="button"
+                    disabled={isCreate === "true"}
+                    onClick={() => onValidateCustomer(values)}
+                  >
+                    Kích hoạt
                   </button>
                   <OverlayTrigger
                     placement="top"
@@ -205,6 +282,53 @@ function AgentCreateEdit() {
                 </div>
               </Card.Header>
               <Card.Body>
+                <Form.Group controlId="sale_code_validate">
+                  <Form.Label>Nhập mã nhân viên</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Mã nhân viên"
+                    name="sale_code"
+                    value={values.sale_code}
+                    onChange={handleChange}
+                    isInvalid={touched.sale_code && !!errors.sale_code}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.sale_code}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="export_code_validate">
+                  <Form.Label>Nhập mã xuất kho</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Mã xuất kho"
+                    name="export_code"
+                    value={values.export_code}
+                    onChange={handleChange}
+                    isInvalid={touched.export_code && !!errors.export_code}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.export_code}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="export_address_validate">
+                  <Form.Label>Nhập địa chỉ xuất kho</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Địa chỉ xuất kho"
+                    name="export_address"
+                    value={values.export_address}
+                    onChange={handleChange}
+                    isInvalid={
+                      touched.export_address && !!errors.export_address
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.export_address}
+                  </Form.Control.Feedback>
+                </Form.Group>
                 <Row className="mb-2">
                   <Form.Group as={Col} md={6} controlId="sign_board_validate">
                     <Form.Label>Nhập biển hiệu</Form.Label>
@@ -239,12 +363,11 @@ function AgentCreateEdit() {
                       }
                       required
                     >
-                      <option value={TObjectiveEnum.FARMER}>
-                        {TObjectiveEnum.FARMER}
-                      </option>
-                      <option value={TObjectiveEnum.RETAILER}>
-                        {TObjectiveEnum.RETAILER}
-                      </option>
+                      {groupObjectives?.map((item) => (
+                        <option key={item.id} value={item.symbol}>
+                          {item.name}
+                        </option>
+                      ))}
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.customer_type as any}
@@ -403,6 +526,26 @@ function AgentCreateEdit() {
                     {errors.email}
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group
+                  controlId="business_document_validate"
+                  className="mb-2"
+                >
+                  <Form.Label>Giấy phép</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Giấy phép"
+                    name="business_document"
+                    value={values.business_document}
+                    onChange={handleChange}
+                    isInvalid={
+                      touched.business_document && !!errors.business_document
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.business_document}
+                  </Form.Control.Feedback>
+                </Form.Group>
                 <Row>
                   <Form.Group
                     as={Col}
@@ -522,21 +665,49 @@ function AgentCreateEdit() {
                     {errors.customer_address}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="tags_validate" className="mb-2">
-                  <Form.Label>Nhập cây trồng chính</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Nhập cây trồng chính"
-                    name="tags"
-                    value={values.tags}
-                    onChange={handleChange}
-                    isInvalid={touched.tags && !!errors.tags}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.tags}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                <Row>
+                  <Form.Group
+                    as={Col}
+                    md={6}
+                    controlId="tags_validate"
+                    className="mb-2"
+                  >
+                    <Form.Label>Nhập cây trồng chính</Form.Label>
+                    <Form.Control
+                      required
+                      type="text"
+                      placeholder="Nhập cây trồng chính"
+                      name="tags"
+                      value={values.tags}
+                      onChange={handleChange}
+                      isInvalid={touched.tags && !!errors.tags}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.tags}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    md={6}
+                    controlId="area_size_validate"
+                    className="mb-2"
+                  >
+                    <Form.Label>Nhập diện tích cây trồng chính</Form.Label>
+                    <NumericFormat
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      customInput={Form.Control as any}
+                      defaultValue={values.area_size}
+                      name="area_size"
+                      onChange={handleChange}
+                      min={1}
+                      placeholder="Diện tích cây trồng chính"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.area_size}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
                 <Form.Group controlId="note_validate" className="mb-2">
                   <Form.Label>Nhập ghi chú</Form.Label>
                   <Form.Control
@@ -552,31 +723,27 @@ function AgentCreateEdit() {
                     {errors.note}
                   </Form.Control.Feedback>
                 </Form.Group>
-
-                {isCreate === "false" && isEdit === false && (
-                  <Form.Group
-                    controlId="finger_province_validate"
-                    className="mb-2"
-                  >
-                    <Form.Label>Tỉnh thành (hệ thống đinh vị)</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      id="finger_province_validate"
-                      placeholder="Tỉnh thành (hệ thống đinh vị)"
-                      name="finger_province"
-                      value={values.finger_province}
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.finger_province && !!errors.finger_province
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.finger_province}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                )}
-
+                <Form.Group
+                  controlId="source_channel_used_validate"
+                  className="mb-2"
+                >
+                  <Form.Label>Nguồn tham gia</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Nguồn tham gia"
+                    name="source_channel_used"
+                    value={values.source_channel_used}
+                    onChange={handleChange}
+                    isInvalid={
+                      touched.source_channel_used &&
+                      !!errors.source_channel_used
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.source_channel_used}
+                  </Form.Control.Feedback>
+                </Form.Group>
                 <Form.Group controlId="info_primary_validate">
                   <Form.Label>Xác nhận tham gia chương trình</Form.Label>
                   <Form.Check
@@ -604,4 +771,4 @@ function AgentCreateEdit() {
   );
 }
 
-export default AgentCreateEdit;
+export default CustomerUnValidationCreateEdit;

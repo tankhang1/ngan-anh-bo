@@ -32,8 +32,8 @@ export const mediaApi = createApi({
       }),
       transformResponse: (responses: TProvince[]) => {
         return responses.map((item) => ({
-          label: item.name,
-          value: item.id,
+          label: item.district_name,
+          value: item.district_code,
         }));
       },
       providesTags: (results) =>

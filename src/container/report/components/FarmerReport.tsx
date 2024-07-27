@@ -158,11 +158,11 @@ function FarmerReport() {
                 title="Số lượt đăng kí"
                 series={[
                   {
-                    name: "Nông dân đã xác thực",
+                    name: "Đã xác thực",
                     data: mapAgent.map((item) => item.farmerChecked),
                   },
                   {
-                    name: "Nông dân chờ xác thực",
+                    name: "Chờ xác thực",
                     data: mapAgent.map((item) => item.farmerUnchecked),
                   },
                 ]}
@@ -203,7 +203,7 @@ function FarmerReport() {
               },
               {
                 key: "province",
-                label: "Địa chỉ",
+                label: "Tỉnh",
                 render: (value) => <td>{value.province}</td>,
               },
               {

@@ -14,6 +14,10 @@ const MapLabel = new Map([
   ["report", "Báo cáo"],
   ["iQr", "iQr"],
   ["program", "Chương trình"],
+  ["area", "Quản lý vùng"],
+  ["group-customer", "Quản lý nhóm khách hàng"],
+  ["validate", "Đã xác thực"],
+  ["unvalidate", "Chờ xác thực"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

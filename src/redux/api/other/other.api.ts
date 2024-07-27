@@ -7,6 +7,8 @@ import {
 
 import {
   BASE_RES,
+  TCustomerRes,
+  TGroupCustomer,
   TPointCreateForm,
   TTopupCreateForm,
 } from "../../../assets/types";
@@ -17,6 +19,8 @@ export enum OtherEnum {
   CREATE_TOPUP_PROGRAM = "CREATE_TOPUP_PROGRAM",
   UPDATE_POINT_PROGRAM = "UPDATE_POINT_PROGRAM",
   UPDATE_TOPUP_PROGRAM = "UPDATE_TOPUP_PROGRAM",
+  CUSTOMER = "CUSTOMER",
+  LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
 }
 
 export const otherApi = createApi({
@@ -36,6 +40,8 @@ export const otherApi = createApi({
     OtherEnum.CREATE_TOPUP_PROGRAM,
     OtherEnum.UPDATE_POINT_PROGRAM,
     OtherEnum.UPDATE_TOPUP_PROGRAM,
+    OtherEnum.CUSTOMER,
+    OtherEnum.LIST_GROUP_OBJECTIVE,
   ],
   endpoints: (builder) => ({
     getNewUUID: builder.query<number, void | null>({
@@ -77,6 +83,30 @@ export const otherApi = createApi({
       }),
       invalidatesTags: [OtherEnum.UPDATE_POINT_PROGRAM],
     }),
+    createUpdateCustomer: builder.mutation<BASE_RES, TCustomerRes>({
+      query: (body) => ({
+        url: `/customer/create`,
+        method: HTTPS_METHOD.POST,
+        body: body,
+      }),
+      invalidatesTags: [OtherEnum.CUSTOMER],
+    }),
+    verifyCustomer: builder.mutation<BASE_RES, TCustomerRes>({
+      query: (body) => ({
+        url: `/customer/verify`,
+        method: HTTPS_METHOD.POST,
+        body: body,
+      }),
+      invalidatesTags: [OtherEnum.CUSTOMER],
+    }),
+    createUpdateGroupObjective: builder.mutation<BASE_RES, TGroupCustomer>({
+      query: (body) => ({
+        url: "/customer/group/create",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [OtherEnum.LIST_GROUP_OBJECTIVE],
+    }),
   }),
 });
 export const {
@@ -85,4 +115,7 @@ export const {
   useCreateTopupProgramMutation,
   useUpdatePointProgramMutation,
   useUpdateTopupProgramMutation,
+  useCreateUpdateCustomerMutation,
+  useVerifyCustomerMutation,
+  useCreateUpdateGroupObjectiveMutation,
 } = otherApi;

@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useDeferredValue,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import {
@@ -17,16 +16,16 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TAgent, TAgentDashboardTable } from "../../../assets/types";
+import { TCustomerRes } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import {
-  useGetCounterAgentStatusQuery,
-  useGetListAgentsByStatusQuery,
-  useLazyGetListAgentsByStatusQuery,
+  useGetCounterCustomerQuery,
+  useGetListCustomerQuery,
+  useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
-import { format, max } from "date-fns";
 import { PROVINCES } from "../../../constants";
+import { format } from "date-fns";
 
 const AGENT_FILTERS = [
   {
@@ -42,56 +41,78 @@ const AGENT_FILTERS = [
     label: "Số điện thoại",
   },
 ];
-function Agent() {
+
+const CUSTOMER_TYPE = [
+  {
+    key: "RETAILER",
+    label: "Đại lý cấp 1",
+  },
+  {
+    key: "RETAILER2",
+    label: "Đại lý cấp 2",
+  },
+  {
+    key: "DISTRIBUTOR",
+    label: "Nhà phân phối",
+  },
+  {
+    key: "CTV",
+    label: "Cộng tác viên",
+  },
+  {
+    key: "FARMER",
+    label: "Nông dân",
+  },
+  {
+    key: "Other",
+    label: "Không hợp tác",
+  },
+];
+function CustomerValidation() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
-  const [isActive, setIsActive] = useState(true);
+  const [customerType, setCustomerType] = useState<string>("");
   const [page, setPage] = useState(1);
-  const [listAgents, setListAgents] = useState<TAgent[]>([]);
+  const [listCustomers, setListCustomers] = useState<TCustomerRes[]>([]);
   const navigate = useNavigate();
-
-  const { data: counterAgent } = useGetCounterAgentStatusQuery(
+  const { data: groupObjectives } = useGetListGroupObjectiveQuery();
+  const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
-      status: isActive === true ? 1 : 0,
+      t: customerType,
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: customerType ? false : true,
     }
   );
-  const { data: agents, isLoading: isLoadingAgent } =
-    useGetListAgentsByStatusQuery(
+  const { data: customers, isLoading: isLoadingCustomer } =
+    useGetListCustomerQuery(
       {
-        status: isActive === true ? 1 : 0,
         nu: page - 1,
         sz: 10,
+        t: customerType,
       },
       {
         refetchOnMountOrArgChange: true,
+        skip: customerType ? false : true,
       }
     );
 
-  const getProvinceLabel = useCallback(
-    (provinceId: string) => {
-      return PROVINCES.find((item) => item.value === provinceId)?.label ?? "";
-    },
-    [PROVINCES]
-  );
-
-  const changeActive = () => {
-    setIsActive(!isActive);
-    setListAgents([]);
+  const onChangeCustomerType = (type: string) => {
+    setCustomerType(type);
+    setListCustomers([]);
   };
 
   useEffect(() => {
     if (
-      counterAgent &&
-      agents &&
-      listAgents.length + agents.length <= counterAgent
+      counterCustomer &&
+      customers &&
+      listCustomers.length + customers.length <= counterCustomer
     ) {
-      setListAgents([...listAgents, ...agents]);
+      setListCustomers([...listCustomers, ...customers]);
     }
-  }, [agents, counterAgent]);
+  }, [customers, counterCustomer]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -142,24 +163,30 @@ function Agent() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">Đổi trạng thái</Tooltip>
-                    }
-                  >
-                    <button
+                  <Dropdown className="ms-2">
+                    <Dropdown.Toggle
+                      variant=""
                       aria-label="button"
+                      className="btn btn-icon btn-info-light btn-wave no-caret"
                       type="button"
-                      className="btn btn-info-light ms-2 w-auto"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={changeActive}
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                     >
                       <i className="ti ti-exchange"></i>
-                    </button>
-                  </OverlayTrigger>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
+                      {groupObjectives?.map((item, index) => (
+                        <Dropdown.Item
+                          active={item.symbol === customerType}
+                          key={index}
+                          onClick={() => onChangeCustomerType(item.symbol)}
+                        >
+                          {item.name}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+
                   <OverlayTrigger
                     placement="top"
                     overlay={
@@ -208,19 +235,24 @@ function Agent() {
             isHeader={false}
             externalSearch={deferSearchValue}
             title="Thông tin đại lý"
-            isLoading={isLoadingAgent}
+            isLoading={isLoadingCustomer}
             setExternalPage={setPage}
-            maxPage={counterAgent}
-            isChange={isActive}
+            maxPage={counterCustomer}
+            isChange={customerType}
             headers={[
               {
                 key: "id",
                 label: "ID",
-                render: (value: TAgent) => (
+                render: (value: TCustomerRes) => (
                   <td>
-                    <AppId id={value.id} />
+                    <AppId id={value.id ?? ""} />
                   </td>
                 ),
+              },
+              {
+                key: "customer_code",
+                label: "Mã khách hàng",
+                render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
               },
               {
                 key: "name",
@@ -252,18 +284,7 @@ function Agent() {
               {
                 key: "province",
                 label: "Tỉnh",
-                render: (value) => (
-                  <td>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={
-                        <Tooltip>{getProvinceLabel(value.province)}</Tooltip>
-                      }
-                    >
-                      <p>{value.province}</p>
-                    </OverlayTrigger>
-                  </td>
-                ),
+                render: (value) => <td>{value.customer_province_name}</td>,
               },
               {
                 key: "phone",
@@ -278,7 +299,13 @@ function Agent() {
               {
                 key: "time_verify",
                 label: "Thời gian xác thực",
-                render: (value) => <td>{value.time_verify}</td>,
+                render: (value) => (
+                  <td>
+                    {value?.time_verify
+                      ? format(new Date(value.time_verify), "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "source_channel_used",
@@ -311,9 +338,7 @@ function Agent() {
                       className="btn btn-icon btn-sm btn-primary-ghost"
                       onClick={() =>
                         navigate(
-                          `ce/${false}/${value.customer_code}_${
-                            isActive ? 1 : 0
-                          }_${page - 1}`
+                          `ce/${false}/${value.id}_${customerType}_${page - 1}`
                         )
                       }
                     >
@@ -323,7 +348,7 @@ function Agent() {
                 ),
               },
             ]}
-            data={listAgents || []}
+            data={listCustomers || []}
             filters={[
               {
                 key: "status",
@@ -339,4 +364,4 @@ function Agent() {
   );
 }
 
-export default Agent;
+export default CustomerValidation;

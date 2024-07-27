@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useDeferredValue,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -16,78 +17,102 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TFarmer } from "../../../assets/types";
+import { TCustomerRes } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import {
-  useGetCounterFarmerStatusQuery,
-  useGetListFarmersByStatusQuery,
+  useGetCounterCustomerQuery,
+  useGetCounterCustomerRegisterQuery,
+  useGetListCustomerQuery,
+  useGetListCustomerRegisterQuery,
+  useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
-import { format } from "date-fns";
 import { PROVINCES } from "../../../constants";
 
-const FAMER_FILTERS = [
+const AGENT_FILTERS = [
   {
     key: "id",
     label: "ID",
   },
   {
     key: "name",
-    label: "Tên",
+    label: "Tên đại lý",
   },
   {
     key: "phone",
     label: "Số điện thoại",
   },
 ];
-function Farmer() {
+
+const CUSTOMER_TYPE = [
+  {
+    key: "RETAILER",
+    label: "Đại lý cấp 1",
+  },
+  {
+    key: "RETAILER2",
+    label: "Đại lý cấp 2",
+  },
+  {
+    key: "DISTRIBUTOR",
+    label: "Nhà phân phối",
+  },
+  {
+    key: "CTV",
+    label: "Cộng tác viên",
+  },
+  {
+    key: "FARMER",
+    label: "Nông dân",
+  },
+  {
+    key: "Other",
+    label: "Không hợp tác",
+  },
+];
+function CustomerUnValidation() {
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(FAMER_FILTERS[0].key);
+  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
-  const navigate = useNavigate();
-  const [isActive, setIsActive] = useState(true);
+  const [customerType, setCustomerType] = useState(CUSTOMER_TYPE[0].key);
   const [page, setPage] = useState(1);
-  const [listFarmers, setListFarmers] = useState<TFarmer[]>([]);
-  const { data: counterFarmer } = useGetCounterFarmerStatusQuery(
+  const [listCustomers, setListCustomers] = useState<TCustomerRes[]>([]);
+  const navigate = useNavigate();
+
+  const { data: groupObjectives } = useGetListGroupObjectiveQuery();
+  const { data: counterCustomer } = useGetCounterCustomerRegisterQuery(
     {
-      status: isActive ? 1 : 0,
+      t: customerType,
     },
     {
       refetchOnMountOrArgChange: true,
     }
   );
-  const { data: farmers, isLoading: isLoadingFarmer } =
-    useGetListFarmersByStatusQuery(
+  const { data: customers, isLoading: isLoadingCustomer } =
+    useGetListCustomerRegisterQuery(
       {
-        status: isActive ? 1 : 0,
-        sz: 10,
         nu: page - 1,
+        sz: 10,
+        t: customerType,
       },
       {
         refetchOnMountOrArgChange: true,
       }
     );
-  const getProvinceLabel = useCallback(
-    (provinceId: string) => {
-      return PROVINCES.find((item) => item.value === provinceId)?.label ?? "";
-    },
-    [PROVINCES]
-  );
-
-  const changeActive = () => {
-    setIsActive(!isActive);
-    setListFarmers([]);
+  const onChangeCustomerType = (type: string) => {
+    setCustomerType(type);
+    setListCustomers([]);
   };
 
   useEffect(() => {
     if (
-      counterFarmer &&
-      farmers &&
-      listFarmers.length + farmers.length <= counterFarmer
+      counterCustomer &&
+      customers &&
+      listCustomers.length + customers.length <= counterCustomer
     ) {
-      setListFarmers([...listFarmers, ...farmers]);
+      setListCustomers([...listCustomers, ...customers]);
     }
-  }, [farmers, counterFarmer]);
+  }, [customers, counterCustomer]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -126,9 +151,8 @@ function Farmer() {
                     >
                       <i className="ti ti-dots-vertical"></i>
                     </Dropdown.Toggle>
-
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {FAMER_FILTERS.map((item, index) => (
+                      {AGENT_FILTERS.map((item, index) => (
                         <Dropdown.Item
                           active={item.key === searchBy}
                           key={index}
@@ -139,23 +163,48 @@ function Farmer() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
+                  <Dropdown className="ms-2">
+                    <Dropdown.Toggle
+                      variant=""
+                      aria-label="button"
+                      className="btn btn-icon btn-info-light btn-wave no-caret"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i className="ti ti-exchange"></i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
+                      {groupObjectives?.map((item, index) => (
+                        <Dropdown.Item
+                          active={item.symbol === customerType}
+                          key={index}
+                          onClick={() => onChangeCustomerType(item.symbol)}
+                        >
+                          {item.name}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip className="tooltip">Đổi trạng thái</Tooltip>
+                      <Tooltip className="tooltip">Thêm mới đại lý </Tooltip>
                     }
                   >
-                    <button
+                    <Button
+                      variant=""
                       aria-label="button"
                       type="button"
-                      className="btn btn-info-light ms-2 w-auto"
+                      className="btn btn-icon btn-secondary-light ms-2"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       data-bs-title="Add Contact"
-                      onClick={changeActive}
+                      onClick={() => navigate(`ce/${true}/-1`)}
                     >
-                      <i className="ti ti-exchange"></i>
-                    </button>
+                      <i className="ri-add-line"></i>
+                    </Button>
                   </OverlayTrigger>
                   <OverlayTrigger
                     placement="top"
@@ -185,20 +234,25 @@ function Farmer() {
           <AppTable
             isHeader={false}
             externalSearch={deferSearchValue}
-            title="Thông tin nông dân"
-            isLoading={isLoadingFarmer}
+            title="Thông tin đại lý"
+            isLoading={isLoadingCustomer}
             setExternalPage={setPage}
-            maxPage={counterFarmer}
-            isChange={isActive}
+            maxPage={counterCustomer}
+            isChange={customerType}
             headers={[
               {
                 key: "id",
                 label: "ID",
-                render: (value: TFarmer) => (
+                render: (value: TCustomerRes) => (
                   <td>
-                    <AppId id={value.id} />
+                    <AppId id={value.id ?? ""} />
                   </td>
                 ),
+              },
+              {
+                key: "customer_code",
+                label: "Mã khách hàng",
+                render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
               },
               {
                 key: "name",
@@ -219,20 +273,18 @@ function Farmer() {
                 ),
               },
               {
-                key: "province",
-                label: "Tỉnh",
+                key: "sign_board",
+                label: "Tên cửa hàng",
                 render: (value) => (
                   <td>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={
-                        <Tooltip>{getProvinceLabel(value.province)}</Tooltip>
-                      }
-                    >
-                      <p>{value.province}</p>
-                    </OverlayTrigger>
+                    <span className="fw-semibold">{value.sign_board}</span>
                   </td>
                 ),
+              },
+              {
+                key: "province",
+                label: "Tỉnh",
+                render: (value) => <td>{value.customer_province_name}</td>,
               },
               {
                 key: "phone",
@@ -248,6 +300,11 @@ function Farmer() {
                 key: "time_verify",
                 label: "Thời gian xác thực",
                 render: (value) => <td>{value.time_verify}</td>,
+              },
+              {
+                key: "source_channel_used",
+                label: "Nguồn đăng kí",
+                render: (value) => <td>{value.source_channel_used}</td>,
               },
               {
                 key: "status",
@@ -275,9 +332,7 @@ function Farmer() {
                       className="btn btn-icon btn-sm btn-primary-ghost"
                       onClick={() =>
                         navigate(
-                          `ce/${false}/${value.customer_code}_${
-                            isActive ? 1 : 0
-                          }_${page - 1}`
+                          `ce/${false}/${value.id}_${customerType}_${page - 1}`
                         )
                       }
                     >
@@ -287,7 +342,7 @@ function Farmer() {
                 ),
               },
             ]}
-            data={listFarmers || []}
+            data={listCustomers || []}
             filters={[
               {
                 key: "status",
@@ -303,4 +358,4 @@ function Farmer() {
   );
 }
 
-export default Farmer;
+export default CustomerUnValidation;

@@ -1,48 +1,76 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Card, Col, Form, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import * as formik from "formik";
-import { TFarmerForm, TObjectiveEnum } from "../../../../assets/types";
+import {
+  TAgentForm,
+  TCustomerRes,
+  TObjectiveEnum,
+} from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetListFarmersByStatusQuery } from "../../../../redux/api/manage/manage.api";
+import {
+  useGetListAgentsByStatusQuery,
+  useGetListCustomerQuery,
+  useGetListGroupObjectiveQuery,
+} from "../../../../redux/api/manage/manage.api";
 import { useGetDistrictQuery } from "../../../../redux/api/media/media.api";
-import { useUpdateFarmerMutation } from "../../../../redux/api/customer/customer.api";
+import {
+  useCreateAgentMutation,
+  useUpdateAgentMutation,
+} from "../../../../redux/api/customer/customer.api";
 import { ToastContext } from "../../../../components/AppToast";
+import { format } from "date-fns";
+import { fDate } from "../../../../hooks";
+import { NumericFormat } from "react-number-format";
+import {
+  useCreateUpdateCustomerMutation,
+  useGetNewUUIDQuery,
+} from "../../../../redux/api/other/other.api";
 
-function FarmerCreateEdit() {
+function CustomerValidationCreateEdit() {
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
+  const navigate = useNavigate();
   // const schema = yup.object().shape({
-  //   customer_code: yup.string().required().default(""),
-  //   customer_name: yup.string().required().default(""),
-  //   customer_province: yup.string().required().default(""),
+  //   customer_code: yup.string().required(),
+  //   customer_name: yup.string().required(),
+  //   customer_province: yup.string().required(),
   //   customer_type: yup.string().required("Trường bắt buộc"),
   //   info_primary: yup.number().required(),
   //   sign_board: yup.string().required(),
+  //   name: yup.string().required("Trường bắt buộc"),
+  //   province: yup.string().required("Trường bắt ")
   //   customer_address: yup.string().required(),
   //   customer_district: yup.string().required(),
   // });
-  const navigate = useNavigate();
-  const { data: farmer } = useGetListFarmersByStatusQuery(
+  const { data: groupObjectives } = useGetListGroupObjectiveQuery();
+  const { data: newUUID } = useGetNewUUIDQuery();
+
+  const { data: customer } = useGetListCustomerQuery(
     {
-      status: +(id?.split("_")[1] ?? 1),
-      sz: 10,
+      t: id?.split("_")[1],
       nu: +(id?.split("_")[2] ?? 0),
+      sz: 10,
     },
     {
       selectFromResult: ({ data }) => ({
-        data: data?.find(
-          (farmer) => farmer.customer_code === id?.split("_")[0]
-        ),
+        data: data?.find((customer) => customer.id == id?.split("_")[0]),
       }),
       skip: isCreate === "true",
     }
   );
-  console.log(farmer, isCreate, isEdit, id);
-  const [updateFarmer] = useUpdateFarmerMutation();
+  //   const [updateAgent] = useUpdateAgentMutation();
+  //   const [createAgent] = useCreateAgentMutation();
+  const [createUpdateCustomer] = useCreateUpdateCustomerMutation();
 
   const { data: districts } = useGetDistrictQuery(
     {
@@ -52,66 +80,122 @@ function FarmerCreateEdit() {
       skip: !provinceId ? true : false,
     }
   );
+  console.log(districts);
 
-  const handleSubmitAgent = async (values: TFarmerForm) => {
-    setIsEdit(!isEdit);
-    if (isEdit === true)
-      await updateFarmer({
-        ...farmer,
+  const handleSubmitAgent = async (values: TCustomerRes) => {
+    if (isCreate === "true") {
+      await createUpdateCustomer({
         ...values,
+        uuid: values?.uuid ? values.uuid : newUUID?.toString(),
         info_primary: values.info_primary ? 1 : 0,
         customer_province: provinceId,
-        status: +(values?.status ?? 1),
+        status: 1,
+        gender: +(values?.gender ?? 1),
+        birthday: values?.birthday
+          ? +format(values.birthday, "yyyyMMdd")
+          : null,
+        area_size: values?.area_size ? +values.area_size : null,
+        citizen_number: values?.citizen_number
+          ? +values.citizen_number
+          : values.citizen_number,
+        citizen_day: values?.citizen_day
+          ? +format(values.citizen_day, "yyyyMMdd")
+          : values?.citizen_day,
       })
         .unwrap()
         .then((value) => {
-          if (value?.status === 0) {
-            toast.showToast("Cập nhật thông tin nông dân thành công");
+          console.log("create agent success", value);
+          if (value?.status === -2) {
+            toast.showToast("Khách hàng đã tồn tại");
             return;
           }
-          toast.showToast("Cập nhật thông tin nông dân thất bại");
+          if (value?.status === 0) {
+            toast.showToast("Thêm khách hàng thành công");
+            return;
+          }
+          toast.showToast("Thêm mới thất bại");
         })
-        .catch(() => {
-          toast.showToast("Hết hạn token. Vui lòng đăng nhập lại");
-          navigate("/");
+        .catch((e) => {
+          console.log("create agent fail", e.message);
         });
+    } else {
+      setIsEdit(!isEdit);
+      if (isEdit === true)
+        await createUpdateCustomer({
+          ...values,
+          uuid: values?.uuid ? values.uuid : newUUID?.toString(),
+          info_primary: values.info_primary ? 1 : 0,
+          customer_province: provinceId,
+          status: 1,
+          gender: +(values?.gender ?? 1),
+          birthday: values?.birthday
+            ? +format(values.birthday, "yyyyMMdd")
+            : null,
+          area_size: values?.area_size ? +values.area_size : null,
+          citizen_number: values?.citizen_number
+            ? +values.citizen_number
+            : values.citizen_number,
+          citizen_day: values?.citizen_day
+            ? +format(values.citizen_day, "yyyyMMdd")
+            : values?.citizen_day,
+        })
+          .unwrap()
+          .then((value) => {
+            console.log("create agent success", value);
+            if (value?.status === -2) {
+              toast.showToast("Đại lý đã tồn tại");
+              return;
+            }
+            if (value?.status === 0) {
+              toast.showToast("Thêm đại lý thành công");
+              return;
+            }
+            toast.showToast("Cập nhật thất bại");
+          })
+          .catch((e) => {
+            console.log("create agent fail", e.message);
+          });
+    }
   };
 
   useEffect(() => {
-    if (farmer?.customer_province) setProvinceId(farmer.customer_province);
-  }, [farmer]);
+    if (customer?.customer_province) setProvinceId(customer.customer_province);
+  }, [customer]);
 
   return (
     <Fragment>
       <Formik
         initialValues={{
-          customer_code: farmer?.customer_code ?? "",
-          customer_name: farmer?.customer_name ?? "",
-          customer_province: farmer?.customer_province ?? PROVINCES[0].value,
-          customer_type:
-            farmer?.customer_type ?? (TObjectiveEnum.RETAILER as any),
-          name: farmer?.name ?? "",
-          province: farmer?.province ?? PROVINCES[0].value,
-          info_primary: farmer?.info_primary ?? 0,
-          phone: farmer?.phone ?? "",
-          sign_board: farmer?.sign_board ?? "",
-          type: farmer?.type ?? 0,
-          verify: farmer?.verify ?? 0,
-          customer_address: farmer?.customer_province ?? "",
-          customer_district: farmer?.customer_district ?? "",
-          status: farmer?.status ?? 1,
-          time: farmer?.time ?? "",
-          finger_province: farmer?.finger_province ?? "",
-          gender: farmer?.gender ?? 0,
-          birthday: farmer?.birthday,
-          email: farmer?.email ?? "",
-          citizen_number: farmer?.citizen_number ?? 0,
-          citizen_day: farmer?.citizen_day ?? "",
-          tags: farmer?.tags ?? "",
-          note: farmer?.note ?? "",
+          customer_code: customer?.customer_code ?? "",
+          customer_name: customer?.customer_name ?? "",
+          customer_province: customer?.customer_province ?? "",
+          customer_type: customer?.customer_type ?? "",
+          name: customer?.name ?? "",
+          province: customer?.province ?? "",
+          info_primary: customer?.info_primary ?? 1,
+          phone: customer?.phone ?? "",
+          sign_board: customer?.sign_board ?? "",
+          customer_address: customer?.customer_province ?? "",
+          customer_district: customer?.customer_district ?? "",
+          status: customer?.status ?? 1,
+          time: customer?.time ?? "",
+          gender: customer?.gender ?? 0,
+          birthday: customer?.birthday ? fDate(customer.birthday) : undefined,
+          email: customer?.email ?? "",
+          citizen_number: customer?.citizen_number,
+          citizen_day: customer?.citizen_day,
+          business_document: customer?.business_document ?? "",
+          tags: customer?.tags ?? "",
+          note: customer?.note ?? "",
+          area_size: customer?.area_size,
+          source_channel_used: customer?.source_channel_used,
+          avatar: customer?.avatar ?? "",
+          sale_code: customer?.sale_code ?? "", // mã nhân viên
+          export_code: customer?.export_code, // mã xuất kho
+          export_address: customer?.export_address,
         }}
         onSubmit={handleSubmitAgent}
-        //validationSchema={schema.nullable()}
+        // validationSchema={schema.nullable()}
       >
         {({
           handleSubmit,
@@ -126,13 +210,13 @@ function FarmerCreateEdit() {
               <Card.Header className="justify-content-between">
                 <Card.Title>
                   {!isEdit
-                    ? "Thông tin nông dân"
-                    : "Chỉnh sửa thông tin nông dân"}
+                    ? "Thông tin khách hàng"
+                    : "Chỉnh sửa thông tin khách hàng"}
                 </Card.Title>
                 <div className="d-flex flex-row align-items-center gap-2">
                   <button
                     className="btn btn-danger-light"
-                    type="submit"
+                    type={"button"}
                     onClick={() => {
                       navigate(-1);
                     }}
@@ -168,6 +252,99 @@ function FarmerCreateEdit() {
                 </div>
               </Card.Header>
               <Card.Body>
+                <Form.Group controlId="sale_code_validate">
+                  <Form.Label>Nhập mã nhân viên</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Mã nhân viên"
+                    name="sale_code"
+                    value={values.sale_code}
+                    onChange={handleChange}
+                    isInvalid={touched.sale_code && !!errors.sale_code}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.sale_code}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="export_code_validate">
+                  <Form.Label>Nhập mã xuất kho</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Mã xuất kho"
+                    name="export_code"
+                    value={values.export_code}
+                    onChange={handleChange}
+                    isInvalid={touched.export_code && !!errors.export_code}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.export_code}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="export_address_validate">
+                  <Form.Label>Nhập địa chỉ xuất kho</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Địa chỉ xuất kho"
+                    name="export_address"
+                    value={values.export_address}
+                    onChange={handleChange}
+                    isInvalid={
+                      touched.export_address && !!errors.export_address
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.export_address}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Row className="mb-2">
+                  <Form.Group as={Col} md={6} controlId="sign_board_validate">
+                    <Form.Label>Nhập biển hiệu</Form.Label>
+                    <Form.Control
+                      required
+                      type="text"
+                      placeholder="Vui lòng nhập biển hiệu"
+                      name="sign_board"
+                      value={values.sign_board}
+                      onChange={handleChange}
+                      isInvalid={touched.sign_board && !!errors.sign_board}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.sign_board}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    md={6}
+                    controlId="customer_type_validate"
+                  >
+                    <Form.Label>Chọn đối tượng tham gia</Form.Label>
+                    <Form.Select
+                      className="form-select"
+                      name="customer_type"
+                      value={values.customer_type}
+                      onChange={(e) =>
+                        setFieldValue("customer_type", e.target.value)
+                      }
+                      isInvalid={
+                        touched.customer_type && !!errors.customer_type
+                      }
+                      required
+                    >
+                      {groupObjectives?.map((item) => (
+                        <option key={item.id} value={item.symbol}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.customer_type as any}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+
                 <Row>
                   <Form.Group
                     as={Col}
@@ -203,7 +380,9 @@ function FarmerCreateEdit() {
                       className="form-select"
                       name="province"
                       value={values.province}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setFieldValue("province", e.target.value)
+                      }
                       isInvalid={touched.province && !!errors.province}
                       required
                       disabled
@@ -223,12 +402,11 @@ function FarmerCreateEdit() {
                     <Form.Control
                       required
                       type="text"
-                      id="time_validate"
                       placeholder="Ngày đăng kí"
                       name="time"
                       value={values.time}
                       onChange={handleChange}
-                      isInvalid={touched.name && !!errors.name}
+                      isInvalid={touched.time && !!errors.time}
                       disabled
                     />
                     <Form.Control.Feedback type="invalid">
@@ -318,6 +496,26 @@ function FarmerCreateEdit() {
                     {errors.email}
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group
+                  controlId="business_document_validate"
+                  className="mb-2"
+                >
+                  <Form.Label>Giấy phép</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Giấy phép"
+                    name="business_document"
+                    value={values.business_document}
+                    onChange={handleChange}
+                    isInvalid={
+                      touched.business_document && !!errors.business_document
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.business_document}
+                  </Form.Control.Feedback>
+                </Form.Group>
                 <Row>
                   <Form.Group
                     as={Col}
@@ -362,7 +560,10 @@ function FarmerCreateEdit() {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
-                <Form.Group controlId="customer_province_validate">
+                <Form.Group
+                  controlId="customer_province_validate"
+                  className="mb-2"
+                >
                   <Form.Label>Tỉnh thành (xác thực)</Form.Label>
                   <Form.Select
                     className="form-select"
@@ -396,7 +597,9 @@ function FarmerCreateEdit() {
                     className="form-select"
                     name="customer_district"
                     value={values.customer_district}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setFieldValue("customer_district", e.target.value)
+                    }
                     isInvalid={
                       touched.customer_district && !!errors.customer_district
                     }
@@ -432,22 +635,49 @@ function FarmerCreateEdit() {
                     {errors.customer_address}
                   </Form.Control.Feedback>
                 </Form.Group>
-
-                <Form.Group controlId="tags_validate" className="mb-2">
-                  <Form.Label>Nhập cây trồng chính</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Nhập cây trồng chính"
-                    name="tags"
-                    value={values.tags}
-                    onChange={handleChange}
-                    isInvalid={touched.tags && !!errors.tags}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.tags}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                <Row>
+                  <Form.Group
+                    as={Col}
+                    md={6}
+                    controlId="tags_validate"
+                    className="mb-2"
+                  >
+                    <Form.Label>Nhập cây trồng chính</Form.Label>
+                    <Form.Control
+                      required
+                      type="text"
+                      placeholder="Nhập cây trồng chính"
+                      name="tags"
+                      value={values.tags}
+                      onChange={handleChange}
+                      isInvalid={touched.tags && !!errors.tags}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.tags}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    md={6}
+                    controlId="area_size_validate"
+                    className="mb-2"
+                  >
+                    <Form.Label>Nhập diện tích cây trồng chính</Form.Label>
+                    <NumericFormat
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      customInput={Form.Control as any}
+                      defaultValue={values.area_size}
+                      name="area_size"
+                      onChange={handleChange}
+                      min={1}
+                      placeholder="Diện tích cây trồng chính"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.area_size}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
                 <Form.Group controlId="note_validate" className="mb-2">
                   <Form.Label>Nhập ghi chú</Form.Label>
                   <Form.Control
@@ -463,31 +693,27 @@ function FarmerCreateEdit() {
                     {errors.note}
                   </Form.Control.Feedback>
                 </Form.Group>
-
-                {isCreate === "false" && isEdit === false && (
-                  <Form.Group
-                    controlId="finger_province_validate"
-                    className="mb-2"
-                  >
-                    <Form.Label>Tỉnh thành (hệ thống đinh vị)</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      id="finger_province_validate"
-                      placeholder="Tỉnh thành (hệ thống đinh vị)"
-                      name="finger_province"
-                      value={values.finger_province}
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.finger_province && !!errors.finger_province
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.finger_province}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                )}
-
+                <Form.Group
+                  controlId="source_channel_used_validate"
+                  className="mb-2"
+                >
+                  <Form.Label>Nguồn tham gia</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Nguồn tham gia"
+                    name="source_channel_used"
+                    value={values.source_channel_used}
+                    onChange={handleChange}
+                    isInvalid={
+                      touched.source_channel_used &&
+                      !!errors.source_channel_used
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.source_channel_used}
+                  </Form.Control.Feedback>
+                </Form.Group>
                 <Form.Group controlId="info_primary_validate">
                   <Form.Label>Xác nhận tham gia chương trình</Form.Label>
                   <Form.Check
@@ -515,4 +741,4 @@ function FarmerCreateEdit() {
   );
 }
 
-export default FarmerCreateEdit;
+export default CustomerValidationCreateEdit;

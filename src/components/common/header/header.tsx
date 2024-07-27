@@ -560,7 +560,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                   <i className="bx bx-menu header-link-icon"></i>
                 </span>
               </Link>
-              <div className="main-header-center  d-none d-lg-block  header-link">
+              {/* <div className="main-header-center  d-none d-lg-block  header-link">
                 <input
                   type="text"
                   className="form-control form-control-lg"
@@ -700,7 +700,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div
               className="header-element header-search d-lg-none d-block"

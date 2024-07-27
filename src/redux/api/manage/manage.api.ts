@@ -14,6 +14,9 @@ import {
   TReportDashboard,
   TBin,
   BaseQuery,
+  TCustomerRes,
+  TGroupCustomer,
+  BASE_RES,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum ManageEnum {
@@ -39,6 +42,11 @@ export enum ManageEnum {
   LIST_AGENCY_C1 = "LIST_AGENCY_C1",
   REPORT_DASHBOARD_DAY = "REPORT_DASHBOARD_DAY",
   REPORT_DASHBOARD_DAY_BY_DAY = "REPORT_DASHBOARD_DAY_BY_DAY",
+  CUSTOMER_REGISTER = "CUSTOMER_REGISTER",
+  CUSTOMER = "CUSTOMER",
+  COUNTER_CUSTOMER_REGISTER = "COUNTER_CUSTOMER_REGISTER",
+  COUNTER_CUSTOMER = "COUNTER_CUSTOMER",
+  LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
 }
 export const manageApi = createApi({
   reducerPath: "manageApi",
@@ -68,6 +76,11 @@ export const manageApi = createApi({
     ManageEnum.LIST_AGENCY_C1,
     ManageEnum.REPORT_DASHBOARD_DAY,
     ManageEnum.REPORT_DASHBOARD_DAY_BY_DAY,
+    ManageEnum.CUSTOMER_REGISTER,
+    ManageEnum.COUNTER_CUSTOMER_REGISTER,
+    ManageEnum.CUSTOMER,
+    ManageEnum.COUNTER_CUSTOMER,
+    ManageEnum.LIST_GROUP_OBJECTIVE,
   ],
   endpoints: (builder) => ({
     getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
@@ -359,6 +372,64 @@ export const manageApi = createApi({
 
       providesTags: [ManageEnum.REPORT_DASHBOARD_DAY_BY_DAY],
     }),
+    getCounterCustomerRegister: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/customer/register/counter",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: [ManageEnum.COUNTER_CUSTOMER_REGISTER],
+    }),
+    getListCustomerRegister: builder.query<TCustomerRes[], BaseQuery>({
+      query: (params) => ({
+        url: "/api/customer/register/list",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ id }) => ({
+              type: ManageEnum.CUSTOMER_REGISTER,
+              id,
+            }))
+          : [ManageEnum.CUSTOMER_REGISTER],
+    }),
+    getCounterCustomer: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/customer/counter",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: [ManageEnum.COUNTER_CUSTOMER],
+    }),
+    getListCustomer: builder.query<TCustomerRes[], BaseQuery>({
+      query: (params) => ({
+        url: "/api/customer/list",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ id }) => ({
+              type: ManageEnum.CUSTOMER,
+              id,
+            }))
+          : [ManageEnum.CUSTOMER],
+    }),
+    getListGroupObjective: builder.query<TGroupCustomer[], void | null>({
+      query: () => ({
+        url: "/api/customer/group/list",
+        method: HTTPS_METHOD.GET,
+      }),
+
+      providesTags: (results) =>
+        results
+          ? results.map(({ id }) => ({
+              type: ManageEnum.LIST_GROUP_OBJECTIVE,
+              id,
+            }))
+          : [ManageEnum.LIST_GROUP_OBJECTIVE],
+    }),
   }),
 });
 export const {
@@ -385,4 +456,9 @@ export const {
   useGetReportDashboardByDayQuery,
   useGetCounterDayByDayQuery,
   useGetListFarmersByStatusQuery,
+  useGetCounterCustomerRegisterQuery,
+  useGetListCustomerRegisterQuery,
+  useGetCounterCustomerQuery,
+  useGetListCustomerQuery,
+  useGetListGroupObjectiveQuery,
 } = manageApi;

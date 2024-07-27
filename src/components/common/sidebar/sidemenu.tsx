@@ -112,20 +112,20 @@ export const MENUITEMS = [
     dirchange: false,
     children: [
       {
-        path: `${import.meta.env.BASE_URL}customer/agent`,
+        path: `${import.meta.env.BASE_URL}customer/validate`,
         type: "link",
         active: false,
         selected: false,
         dirchange: false,
-        title: "Đại lý",
+        title: "Đã xác thực",
       },
       {
-        path: `${import.meta.env.BASE_URL}customer/farmer`,
+        path: `${import.meta.env.BASE_URL}customer/unvalidate`,
         type: "link",
         active: false,
         selected: false,
         dirchange: false,
-        title: "Nông dân",
+        title: "Chờ xác thực",
       },
     ],
   },
@@ -237,7 +237,7 @@ export const MENUITEMS = [
     icon: icon3,
     children: [
       {
-        path: `${import.meta.env.BASE_URL}report/topup`,
+        path: `${import.meta.env.BASE_URL}setting/area`,
         type: "link",
         active: false,
         selected: false,
@@ -245,7 +245,7 @@ export const MENUITEMS = [
         title: "Phân vùng",
       },
       {
-        path: `${import.meta.env.BASE_URL}report/topup`,
+        path: `${import.meta.env.BASE_URL}setting/group-customer`,
         type: "link",
         active: false,
         selected: false,

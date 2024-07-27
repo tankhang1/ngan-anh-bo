@@ -26,7 +26,8 @@ export type TAgent = {
   status: number; //  trạng thái xác thực đã verify ko chuyển được
   info_primary: number; // hiện toggle
   object_primary: string | undefined; // ko hiện ( này là thằng chính nào)
-  time_verify: string | undefined; // nếu status verify thì hiện
+  time_verify: string | undefined; // nếu status verify thì hiện thời gian xác nhận đối tượng là nông dân / đại lý /...
+  time_confirm: string | undefined; // xác nhận được tham gia chương trình tích lũy với số điện thoại
   customer_address: string | undefined;
   customer_district: string | undefined;
   gender: 0 | 1; // 0: nữ, 1: nam
@@ -84,7 +85,7 @@ export type TProduct = {
   ingredient: string;
   ingredient_id: string;
   certificate_of_origin: string;
-  point: number | null;
+  point: number;
   c1_price_vnd: number;
   c2_price_vnd: number;
 };
@@ -315,8 +316,8 @@ export type TIngredient = {
 };
 export type TProvince = {
   id: string;
-  code: string;
-  name: string;
+  district_code: string;
+  district_name: string;
   province_item: string;
   province_name: string;
   province_code: string;
@@ -329,6 +330,9 @@ export type BaseQuery = {
   ed?: number;
   status?: number;
   gateway?: number;
+  p?: string; //phone
+  t?: string; //Loaij khach hang (chờ xác thực)
+  k?: string; //loại khách hàng (đã xác thực)
 };
 export type TPackage = {
   id: number;
@@ -410,4 +414,60 @@ export type BASE_RES = {
   data: any;
   status: number;
   message: string;
+};
+
+export type TCustomerRes = {
+  id?: number;
+  uuid?: string | null; // Lấy API
+  customer_code?: string; // ko cần
+  customer_type?: string; // select
+  customer_name?: string;
+  customer_province?: string; // select
+  customer_province_name?: string; // ko cần
+  customer_area?: string; // ko cần
+  customer_district?: string; // select
+  customer_district_name?: string; // ko cần
+  customer_address?: string;
+  phone?: string;
+  province?: string; // select
+  province_name?: string; // ko cần
+  name?: string;
+  time?: string; // ko cần
+  time_number?: number; // ko cần
+  source_channel_used?: string;
+  source_campaign_code?: string; // ko cần
+  code_hash?: string; // ko cần
+  code?: string; // ko cần
+  code_item?: number; // ko cần
+  product_item?: number; // ko cần
+  product_code?: string; // ko cần
+  product_name?: string; // ko cần
+  otp?: string; // ko cần
+  sign_board?: string;
+  status?: number;
+  info_primary?: number;
+  object_primary?: string; // ko cần
+  time_verify?: string; // ko cần
+  time_confirm?: string; // ko cần
+  email?: string;
+  gender?: number; // select
+  birthday?: number | string | null;
+  citizen_number?: number;
+  citizen_day?: number | string;
+  passport_number?: string;
+  business_document?: string;
+  tags: string;
+  note?: string;
+  avatar?: string;
+  sale_code?: string; // select
+  sale_name?: string; // ko cần
+  export_code?: string;
+  export_address?: string;
+  area_size?: number | null; // diện tích đất canh tác
+};
+export type TGroupCustomer = {
+  id?: number;
+  symbol: string;
+  name: string;
+  prefix: string;
 };
