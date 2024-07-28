@@ -13,6 +13,7 @@ import TableAgent from "./components/TableAgent";
 import TableFarmer from "./components/TableFarmer";
 import TableTopup from "./components/TableTopup";
 import TablePoint from "./components/TablePoint";
+import TableBrandname from "./components/TableBrandname";
 
 interface EcommerceProps {}
 
@@ -53,6 +54,7 @@ const Ecommerce: FC<EcommerceProps> = () => {
       {/* Topup */}
       <Col xl={12}>
         <TableTopup />
+        <TableBrandname />
       </Col>
       <Col xl={12}>
         <TablePoint />
