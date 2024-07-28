@@ -81,8 +81,8 @@ function TableAgent() {
       ]}
       data={
         ([
-          ...(agents?.listUnValidateAgents || []),
-          ...(agents?.listUnValidateAgents || []),
+          ...(agents?.listUnValidateAgents ?? []),
+          ...(agents?.listValidateAgents ?? []),
         ] || []) as any
       }
       isLoading={isLoadingAgent}

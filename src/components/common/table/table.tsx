@@ -49,6 +49,7 @@ const AppTable = <T extends DataItem>({
   const [searchBy, setSearchBy] = useState(headers[0]);
   const [searchValue, setSearchValue] = useState("");
   const deferSearchValue = useDeferredValue(searchValue);
+  console.log("data", data);
   const filterData = useMemo(() => {
     if (!data) return [];
     if (filterOption && filterOption?.value !== "ALL")
@@ -200,7 +201,7 @@ const AppTable = <T extends DataItem>({
             <thead>
               <tr>
                 {headers.map((item) => (
-                  <th scope="col" key={Math.random()}>
+                  <th scope="col" key={Math.random()} className="text-center">
                     {item.label}
                   </th>
                 ))}
@@ -211,7 +212,7 @@ const AppTable = <T extends DataItem>({
             ) : (
               <tbody>
                 {pagingData.map((item) => (
-                  <tr key={Math.random()}>
+                  <tr key={Math.random()} className="text-center">
                     {headers.map((header) => header?.render?.(item))}
                   </tr>
                 ))}

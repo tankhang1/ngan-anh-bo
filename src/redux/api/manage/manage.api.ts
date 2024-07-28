@@ -17,6 +17,8 @@ import {
   TCustomerRes,
   TGroupCustomer,
   BASE_RES,
+  TEmployee,
+  TReportDashboardMap,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum ManageEnum {
@@ -47,6 +49,7 @@ export enum ManageEnum {
   COUNTER_CUSTOMER_REGISTER = "COUNTER_CUSTOMER_REGISTER",
   COUNTER_CUSTOMER = "COUNTER_CUSTOMER",
   LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
+  EMPLOYEE = "EMPLOYEE",
 }
 export const manageApi = createApi({
   reducerPath: "manageApi",
@@ -81,6 +84,7 @@ export const manageApi = createApi({
     ManageEnum.CUSTOMER,
     ManageEnum.COUNTER_CUSTOMER,
     ManageEnum.LIST_GROUP_OBJECTIVE,
+    ManageEnum.EMPLOYEE,
   ],
   endpoints: (builder) => ({
     getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
@@ -351,13 +355,27 @@ export const manageApi = createApi({
             }))
           : [ManageEnum.LIST_AGENCY_C1],
     }),
-    getReportDashboardByDay: builder.query<TReportDashboard, { day: number }>({
+    getReportDashboardByDay: builder.query<
+      TReportDashboardMap,
+      { day: number }
+    >({
       query: (params) => ({
         url: "/api/report/dashboard/day",
         method: HTTPS_METHOD.GET,
         params,
       }),
-
+      transformResponse: (result: TReportDashboard) => ({
+        id: result.id,
+        day: result.day,
+        topup: result.topup,
+        brandname: result.brandname,
+        agent: result.retailer1 + result.retailer2,
+        agent_none: result.retailer2_none,
+        farmer: result.farmer,
+        farmer_none: result.farmer_none,
+        qrcode: result.qrcode,
+        sms: result.sms,
+      }),
       providesTags: [ManageEnum.REPORT_DASHBOARD_DAY],
     }),
     getCounterDayByDay: builder.query<
@@ -430,6 +448,19 @@ export const manageApi = createApi({
             }))
           : [ManageEnum.LIST_GROUP_OBJECTIVE],
     }),
+    getListEmployee: builder.query<TEmployee[], void | null>({
+      query: () => ({
+        url: "/api/staff/list",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ uuid }) => ({
+              type: ManageEnum.EMPLOYEE,
+              uuid,
+            }))
+          : [ManageEnum.EMPLOYEE],
+    }),
   }),
 });
 export const {
@@ -461,4 +492,5 @@ export const {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
   useGetListGroupObjectiveQuery,
+  useGetListEmployeeQuery,
 } = manageApi;

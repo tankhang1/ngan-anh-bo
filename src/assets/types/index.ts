@@ -402,6 +402,19 @@ export type TReportDashboard = {
   day: number;
   topup: number;
   brandname: number;
+  retailer1: number;
+  retailer2: number;
+  retailer2_none: number;
+  farmer: number;
+  farmer_none: number;
+  qrcode: number;
+  sms: number;
+};
+export type TReportDashboardMap = {
+  id: number;
+  day: number;
+  topup: number;
+  brandname: number;
   agent: number;
   agent_none: number;
   farmer: number;
@@ -470,4 +483,23 @@ export type TGroupCustomer = {
   symbol: string;
   name: string;
   prefix: string;
+};
+
+export type TEmployee = {
+  id?: number;
+  code?: string;
+  uuid: string;
+  name?: string | null;
+  province?: string | null;
+  province_name?: string | null;
+  area?: string | null;
+  phone?: string;
+  email?: string | null;
+  gender?: number;
+  birthday?: number | string;
+  citizen_number?: string | null | number;
+  citizen_day?: number | string;
+  passport_number?: string | null;
+  note?: string | null;
+  avatar?: string | null;
 };

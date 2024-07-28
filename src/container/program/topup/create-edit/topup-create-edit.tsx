@@ -250,6 +250,7 @@ function TopupCreateEdit() {
               ? newUUID?.toString()
               : topupProgram?.uuid.toString(),
         }}
+        enableReinitialize
         onSubmit={handleCreatePointProgram}
         //validationSchema={schema}
       >

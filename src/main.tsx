@@ -179,6 +179,8 @@ import CustomerValidationCreateEdit from "./container/customer/validate/create-e
 import CustomerValidation from "./container/customer/validate/customer-validate.tsx";
 import CustomerUnValidation from "./container/customer/unvalidate/customer-unvalidate.tsx";
 import CustomerUnValidationCreateEdit from "./container/customer/unvalidate/create-edit/customer-unvalidate-create-edit.tsx";
+import Employee from "./container/employee/employee.tsx";
+import EmployeeCreateEdit from "./container/employee/create-edit/employee-create-edit.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -586,6 +588,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}customer/unvalidate`}
                 element={<CustomerUnValidation />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}employee`}
+                element={<Employee />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}employee/ce/:isCreate/:id`}
+                element={<EmployeeCreateEdit />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}product`}

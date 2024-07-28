@@ -8,6 +8,7 @@ import {
 import {
   BASE_RES,
   TCustomerRes,
+  TEmployee,
   TGroupCustomer,
   TPointCreateForm,
   TTopupCreateForm,
@@ -21,6 +22,7 @@ export enum OtherEnum {
   UPDATE_TOPUP_PROGRAM = "UPDATE_TOPUP_PROGRAM",
   CUSTOMER = "CUSTOMER",
   LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
+  EMPLOYEE = "EMPLOYEE",
 }
 
 export const otherApi = createApi({
@@ -42,6 +44,7 @@ export const otherApi = createApi({
     OtherEnum.UPDATE_TOPUP_PROGRAM,
     OtherEnum.CUSTOMER,
     OtherEnum.LIST_GROUP_OBJECTIVE,
+    OtherEnum.EMPLOYEE,
   ],
   endpoints: (builder) => ({
     getNewUUID: builder.query<number, void | null>({
@@ -107,6 +110,22 @@ export const otherApi = createApi({
       }),
       invalidatesTags: [OtherEnum.LIST_GROUP_OBJECTIVE],
     }),
+    createEmployee: builder.mutation<BASE_RES, TEmployee>({
+      query: (body) => ({
+        url: "/staff/create",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [OtherEnum.EMPLOYEE],
+    }),
+    updateEmployee: builder.mutation<BASE_RES, TEmployee>({
+      query: (body) => ({
+        url: "/staff/update",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [OtherEnum.EMPLOYEE],
+    }),
   }),
 });
 export const {
@@ -118,4 +137,6 @@ export const {
   useCreateUpdateCustomerMutation,
   useVerifyCustomerMutation,
   useCreateUpdateGroupObjectiveMutation,
+  useCreateEmployeeMutation,
+  useUpdateEmployeeMutation,
 } = otherApi;

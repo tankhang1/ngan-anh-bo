@@ -99,6 +99,7 @@ function AgentReport() {
     }));
     return data;
   }, [agents]);
+
   return (
     <Col xl={12}>
       <Card className="custom-card">

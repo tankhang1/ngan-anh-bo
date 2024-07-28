@@ -18,6 +18,7 @@ const MapLabel = new Map([
   ["group-customer", "Quản lý nhóm khách hàng"],
   ["validate", "Đã xác thực"],
   ["unvalidate", "Chờ xác thực"],
+  ["employee", "Nhân viên"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

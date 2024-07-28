@@ -200,6 +200,7 @@ function ProductCreateEdit() {
           c1_price_vnd: product?.c1_price_vnd ?? 0,
           c2_price_vnd: product?.c2_price_vnd ?? 0,
         }}
+        enableReinitialize
         onSubmit={(values) => {
           console.log(values);
         }}

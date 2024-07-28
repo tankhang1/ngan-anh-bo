@@ -6,6 +6,9 @@ const icon16 = <i className="bx bx-user"></i>;
 const icon17 = <i className="ti ti-settings-automation"></i>;
 const icon18 = <i className="ti ti-chart-infographic"></i>;
 const icon3 = <i className="ti ti-settings"></i>;
+const icon4 = <i className="bi bi-people"></i>;
+const icon5 = <i className="bx bx-user-voice"></i>;
+
 export const MENUITEMS = [
   {
     menutitle: "MAIN",
@@ -53,7 +56,7 @@ export const MENUITEMS = [
   },
   {
     title: "Tổng đài viên",
-    icon: icon16,
+    icon: icon5,
     badgetxt: "",
     type: "sub",
     active: true,
@@ -104,7 +107,7 @@ export const MENUITEMS = [
   },
   {
     title: "Khách hàng",
-    icon: icon16,
+    icon: icon4,
     badgetxt: "",
     type: "sub",
     active: true,
@@ -133,6 +136,7 @@ export const MENUITEMS = [
     title: "Nhân viên",
     icon: icon16,
     type: "link",
+    path: `${import.meta.env.BASE_URL}employee`,
     active: false,
   },
   {

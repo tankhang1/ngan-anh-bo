@@ -17,7 +17,7 @@ function OutstandingReport() {
   const { data: reportPreviousDay } = useGetReportDashboardByDayQuery({
     day: +format(subDays(new Date(), 1), "yyyyMMdd"),
   });
-
+  console.log("report", reportCurrentDay, reportPreviousDay);
   const mapReportCurrentDay = useMemo(
     () =>
       reportCurrentDay || {
