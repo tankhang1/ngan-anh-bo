@@ -1,17 +1,24 @@
 import { BASE_PORT, BASE_URL, HTTPS_METHOD } from "../../../constants";
-import { TProvince } from "../../../assets/types";
+import { TArea, TProvince } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export enum MediaEnum {
   UPLOAD_IMAGE = "UPLAD_IMAGE",
-  PRODVINCE = "PROVINCE",
+  UPLOAD_STAFF_IMAGE = "UPLOAD_STAFF_IMAGE",
+  PROVINCE = "PROVINCE",
+  DISTRICT = "DISTRICT",
 }
 export const mediaApi = createApi({
   reducerPath: "mediaApi",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_PORT,
   }),
-  tagTypes: [MediaEnum.UPLOAD_IMAGE, MediaEnum.PRODVINCE],
+  tagTypes: [
+    MediaEnum.UPLOAD_IMAGE,
+    MediaEnum.PROVINCE,
+    MediaEnum.DISTRICT,
+    MediaEnum.UPLOAD_STAFF_IMAGE,
+  ],
   endpoints: (builder) => ({
     uploadFile: builder.mutation<string, { id: string; body: FormData }>({
       query: ({ id, body }) => ({
@@ -20,6 +27,14 @@ export const mediaApi = createApi({
         body: body,
       }),
       invalidatesTags: [MediaEnum.UPLOAD_IMAGE],
+    }),
+    uploadStaffFile: builder.mutation<string, { id: string; body: FormData }>({
+      query: ({ id, body }) => ({
+        url: `/upload-files/staff/${id}`,
+        method: HTTPS_METHOD.POST,
+        body: body,
+      }),
+      invalidatesTags: [MediaEnum.UPLOAD_STAFF_IMAGE],
     }),
     getDistrict: builder.query<
       { label: string; value: string }[],
@@ -38,10 +53,28 @@ export const mediaApi = createApi({
       },
       providesTags: (results) =>
         results
-          ? results.map(({ value }) => ({ type: MediaEnum.PRODVINCE, value }))
-          : [MediaEnum.PRODVINCE],
+          ? results.map(({ value }) => ({ type: MediaEnum.DISTRICT, value }))
+          : [MediaEnum.DISTRICT],
+    }),
+    getListProvince: builder.query<TArea[], void | null>({
+      query: () => ({
+        url: "/api/address/province",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ id }) => ({
+              type: MediaEnum.PROVINCE,
+              id,
+            }))
+          : [MediaEnum.PROVINCE],
     }),
   }),
 });
 
-export const { useUploadFileMutation, useGetDistrictQuery } = mediaApi;
+export const {
+  useUploadFileMutation,
+  useUploadStaffFileMutation,
+  useGetDistrictQuery,
+  useGetListProvinceQuery,
+} = mediaApi;

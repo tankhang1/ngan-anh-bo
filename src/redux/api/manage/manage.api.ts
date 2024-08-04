@@ -2,11 +2,9 @@ import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
 
 import {
   TTopup,
-  TProduct,
   TPackage,
   TAgencyC1,
   TAgent,
-  TAgentForm,
   TFarmer,
   TGetListAgentsRes,
   TGetListBrandnamesRes,
@@ -16,9 +14,10 @@ import {
   BaseQuery,
   TCustomerRes,
   TGroupCustomer,
-  BASE_RES,
   TEmployee,
   TReportDashboardMap,
+  TEmployeeRole,
+  TEmployeeDepartment,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum ManageEnum {
@@ -50,6 +49,8 @@ export enum ManageEnum {
   COUNTER_CUSTOMER = "COUNTER_CUSTOMER",
   LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
   EMPLOYEE = "EMPLOYEE",
+  EMPLOYEE_ROLE = "EMPLOYEE_ROLE",
+  EMPLOYEE_DEPARTMENT = "EMPLOYEE_DEPARTMENT",
 }
 export const manageApi = createApi({
   reducerPath: "manageApi",
@@ -85,6 +86,8 @@ export const manageApi = createApi({
     ManageEnum.COUNTER_CUSTOMER,
     ManageEnum.LIST_GROUP_OBJECTIVE,
     ManageEnum.EMPLOYEE,
+    ManageEnum.EMPLOYEE_ROLE,
+    ManageEnum.EMPLOYEE_DEPARTMENT,
   ],
   endpoints: (builder) => ({
     getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
@@ -453,13 +456,36 @@ export const manageApi = createApi({
         url: "/api/staff/list",
         method: HTTPS_METHOD.GET,
       }),
+      providesTags: [ManageEnum.EMPLOYEE],
+    }),
+    getListEmployeeRole: builder.query<TEmployeeRole[], void | null>({
+      query: () => ({
+        url: "/api/staff/role/list",
+        method: HTTPS_METHOD.GET,
+      }),
       providesTags: (results) =>
         results
-          ? results.map(({ uuid }) => ({
-              type: ManageEnum.EMPLOYEE,
-              uuid,
+          ? results.map(({ id }) => ({
+              type: ManageEnum.EMPLOYEE_ROLE,
+              id,
             }))
-          : [ManageEnum.EMPLOYEE],
+          : [ManageEnum.EMPLOYEE_ROLE],
+    }),
+    getListEmployeeDepartment: builder.query<
+      TEmployeeDepartment[],
+      void | null
+    >({
+      query: () => ({
+        url: "/api/staff/department/list",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ id }) => ({
+              type: ManageEnum.EMPLOYEE_ROLE,
+              id,
+            }))
+          : [ManageEnum.EMPLOYEE_ROLE],
     }),
   }),
 });
@@ -493,4 +519,6 @@ export const {
   useGetListCustomerQuery,
   useGetListGroupObjectiveQuery,
   useGetListEmployeeQuery,
+  useGetListEmployeeRoleQuery,
+  useGetListEmployeeDepartmentQuery,
 } = manageApi;

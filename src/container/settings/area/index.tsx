@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -15,6 +15,8 @@ import lodash from "lodash";
 import { Input, ListItem, useMediaQuery } from "@mui/material";
 import { PROVINCES } from "../../../constants";
 import Select from "react-select";
+import { TArea } from "../../../assets/types";
+import { useGetListProvinceQuery } from "../../../redux/api/media/media.api";
 
 const DATA = [
   { id: 1, code: "AGG", name: "An Giang", area: "Nam Sông Hậu 2" },
@@ -32,16 +34,11 @@ const DATA = [
   { id: 13, code: "CTO", name: "Cần Thơ", area: "Nam Sông Hậu 1" },
   { id: 14, code: "CBG", name: "Cao Bằng", area: "Miền Bắc & Trung" },
 ];
-type TArea = {
-  id: number;
-  name: string;
-  code: string;
-  area: string;
-  isAdded?: boolean;
-};
+
 function SettingArea() {
+  const { data: provinces } = useGetListProvinceQuery();
   const isLgScreen = useMediaQuery("(min-width:1200px)");
-  const [data, setData] = useState<TArea[]>(DATA);
+  const [data, setData] = useState<TArea[]>(provinces || []);
   const [search, setSearch] = useState("");
   const [newProvince, setNewProvince] = useState<{
     label: string;
@@ -82,6 +79,9 @@ function SettingArea() {
     setNewArea("");
   };
 
+  useEffect(() => {
+    if (provinces) setData(provinces);
+  }, [provinces]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -245,7 +245,7 @@ function SettingArea() {
                                   </Form.Select>
 
                                   <Row>
-                                    <Button
+                                    {/* <Button
                                       variant=""
                                       aria-label="button"
                                       type="button"
@@ -265,8 +265,8 @@ function SettingArea() {
                                       }}
                                     >
                                       <i className="ti ti-device-floppy"></i>
-                                    </Button>
-                                    <Button
+                                    </Button> */}
+                                    {/* <Button
                                       variant=""
                                       aria-label="button"
                                       type="button"
@@ -282,7 +282,7 @@ function SettingArea() {
                                       }}
                                     >
                                       <i className="ti ti-x"></i>
-                                    </Button>
+                                    </Button> */}
                                   </Row>
                                 </ListItem>
                               );

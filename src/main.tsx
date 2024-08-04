@@ -181,6 +181,8 @@ import CustomerUnValidation from "./container/customer/unvalidate/customer-unval
 import CustomerUnValidationCreateEdit from "./container/customer/unvalidate/create-edit/customer-unvalidate-create-edit.tsx";
 import Employee from "./container/employee/employee.tsx";
 import EmployeeCreateEdit from "./container/employee/create-edit/employee-create-edit.tsx";
+import EmployeeRole from "./container/employee/role/employee-role.tsx";
+import EmployeeDepartment from "./container/employee/department/employee-department.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -590,12 +592,20 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<CustomerUnValidation />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}employee`}
-                element={<Employee />}
+                path={`${import.meta.env.BASE_URL}employee/role`}
+                element={<EmployeeRole />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}employee/department`}
+                element={<EmployeeDepartment />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}employee/ce/:isCreate/:id`}
                 element={<EmployeeCreateEdit />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}employee`}
+                element={<Employee />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}product`}

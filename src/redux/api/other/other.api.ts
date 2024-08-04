@@ -9,6 +9,8 @@ import {
   BASE_RES,
   TCustomerRes,
   TEmployee,
+  TEmployeeDepartment,
+  TEmployeeRole,
   TGroupCustomer,
   TPointCreateForm,
   TTopupCreateForm,
@@ -23,6 +25,8 @@ export enum OtherEnum {
   CUSTOMER = "CUSTOMER",
   LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
   EMPLOYEE = "EMPLOYEE",
+  EMPLOYEE_ROLE = "EMPLOYEE_ROLE",
+  EMPLOYEE_DEPARTMENT = "EMPLOYEE_DEPARTMENT",
 }
 
 export const otherApi = createApi({
@@ -45,6 +49,8 @@ export const otherApi = createApi({
     OtherEnum.CUSTOMER,
     OtherEnum.LIST_GROUP_OBJECTIVE,
     OtherEnum.EMPLOYEE,
+    OtherEnum.EMPLOYEE_ROLE,
+    OtherEnum.EMPLOYEE_DEPARTMENT,
   ],
   endpoints: (builder) => ({
     getNewUUID: builder.query<number, void | null>({
@@ -126,6 +132,38 @@ export const otherApi = createApi({
       }),
       invalidatesTags: [OtherEnum.EMPLOYEE],
     }),
+    createEmployeeRole: builder.mutation<BASE_RES, TEmployeeRole>({
+      query: (body) => ({
+        url: "/staff/role/create",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [OtherEnum.EMPLOYEE_ROLE],
+    }),
+    createEmployeeDepartment: builder.mutation<BASE_RES, TEmployeeDepartment>({
+      query: (body) => ({
+        url: "/staff/department/create",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [OtherEnum.EMPLOYEE_DEPARTMENT],
+    }),
+    updateEmployeeRole: builder.mutation<BASE_RES, TEmployeeRole>({
+      query: (body) => ({
+        url: "/staff/role/update",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [OtherEnum.EMPLOYEE_ROLE],
+    }),
+    updateEmployeeDepartment: builder.mutation<BASE_RES, TEmployeeDepartment>({
+      query: (body) => ({
+        url: "/staff/department/update",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [OtherEnum.EMPLOYEE_DEPARTMENT],
+    }),
   }),
 });
 export const {
@@ -139,4 +177,8 @@ export const {
   useCreateUpdateGroupObjectiveMutation,
   useCreateEmployeeMutation,
   useUpdateEmployeeMutation,
+  useCreateEmployeeDepartmentMutation,
+  useCreateEmployeeRoleMutation,
+  useUpdateEmployeeDepartmentMutation,
+  useUpdateEmployeeRoleMutation,
 } = otherApi;

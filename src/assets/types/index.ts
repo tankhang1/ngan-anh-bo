@@ -490,7 +490,7 @@ export type TEmployee = {
   code?: string;
   uuid: string;
   name?: string | null;
-  province?: string | null;
+  province?: string | null | { label?: string; value?: string };
   province_name?: string | null;
   area?: string | null;
   phone?: string;
@@ -502,4 +502,32 @@ export type TEmployee = {
   passport_number?: string | null;
   note?: string | null;
   avatar?: string | null;
+  staff_role?: number;
+  staff_role_name?: string;
+  staff_department_code?: string;
+  staff_department_name?: string;
+  areas?: string | string[] | { label: string; value: string }[];
+  provinces?: string | string[] | { label: string; value: string }[];
+  export_address?: string;
+  export_code?: string;
+};
+
+export type TEmployeeRole = {
+  id?: number;
+  name: string;
+  note: string;
+};
+
+export type TEmployeeDepartment = {
+  id?: number;
+  code: string;
+  name: string;
+  note: string;
+};
+export type TArea = {
+  id: number;
+  name: string;
+  code: string;
+  area: string;
+  isAdded?: boolean;
 };
