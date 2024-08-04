@@ -126,7 +126,7 @@ const AppTable = <T extends DataItem>({
     if (page !== 1) {
       setPage(1);
     }
-  }, [isChange]);
+  }, [isChange, searchBy, searchByExternal]);
 
   useEffect(() => {
     setExternalPage?.(page);

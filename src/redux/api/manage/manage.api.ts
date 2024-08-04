@@ -369,7 +369,7 @@ export const manageApi = createApi({
         day: result.day,
         topup: result.topup,
         brandname: result.brandname,
-        agent: result.retailer1 + result.retailer2,
+        agent: result.retailer2,
         agent_none: result.retailer2_none,
         farmer: result.farmer,
         farmer_none: result.farmer_none,

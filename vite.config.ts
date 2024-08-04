@@ -5,5 +5,6 @@ export default defineConfig({
   plugins: [react()],
   build: {
     target: "es2015", // This ensures compatibility with older browsers
+    chunkSizeWarningLimit: 30000,
   },
 });
