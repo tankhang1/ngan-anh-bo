@@ -185,7 +185,7 @@ import EmployeeCreateEdit from "./container/employee/create-edit/employee-create
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
     <Provider store={store}>
-      <HashRouter>
+      <BrowserRouter>
         <ScrollToTop />
         <React.Suspense>
           <Routes>
@@ -985,7 +985,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </Route>
           </Routes>
         </React.Suspense>
-      </HashRouter>
+      </BrowserRouter>
     </Provider>
   </React.Fragment>
 );
