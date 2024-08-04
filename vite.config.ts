@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/ngan-anh-deploy/",
   build: {
     target: "es2015", // This ensures compatibility with older browsers
   },
