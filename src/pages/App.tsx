@@ -18,8 +18,8 @@ function App() {
 
   return (
     <Fragment>
-      <Provider store={store}>
-        <ToastProvider>
+      <ToastProvider>
+        <Provider store={store}>
           <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
             <Switcher />
             <div className="page">
@@ -36,8 +36,8 @@ function App() {
 
             <Tabtotop />
           </div>
-        </ToastProvider>
-      </Provider>
+        </Provider>
+      </ToastProvider>
     </Fragment>
   );
 }

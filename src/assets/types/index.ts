@@ -486,7 +486,7 @@ export type TGroupCustomer = {
 };
 
 export type TEmployee = {
-  id?: number;
+  id?: string;
   code?: string;
   uuid: string;
   name?: string | null;

@@ -115,7 +115,7 @@ const AppTable = <T extends DataItem>({
       });
     if (page > MAX_PAGE - 5 && page < MAX_PAGE)
       return Array.from({ length: 5 }).map((_, index) => {
-        return index + MAX_PAGE - 5;
+        return index + MAX_PAGE - 4;
       });
     return Array.from({ length: 5 }).map((_, index) => {
       if (index + page <= MAX_PAGE) return index + page;

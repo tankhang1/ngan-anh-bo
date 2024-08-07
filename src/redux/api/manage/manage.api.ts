@@ -456,7 +456,13 @@ export const manageApi = createApi({
         url: "/api/staff/list",
         method: HTTPS_METHOD.GET,
       }),
-      providesTags: [ManageEnum.EMPLOYEE],
+      providesTags: (results) =>
+        results
+          ? results.map(({ uuid }) => ({
+              type: ManageEnum.EMPLOYEE,
+              uuid,
+            }))
+          : [ManageEnum.EMPLOYEE],
     }),
     getListEmployeeRole: builder.query<TEmployeeRole[], void | null>({
       query: () => ({

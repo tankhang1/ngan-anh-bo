@@ -103,7 +103,6 @@ function CustomerUnValidation() {
     setCustomerType(type);
     setListCustomers([]);
   };
-
   useEffect(() => {
     if (
       counterCustomer &&

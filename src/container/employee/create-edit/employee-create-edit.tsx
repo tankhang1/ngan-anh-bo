@@ -67,9 +67,9 @@ function EmployeeCreateEdit() {
     skip: isCreate !== "true",
   });
   const { data: employees } = useGetListEmployeeQuery(null, {
-    // selectFromResult: ({ data }) => ({
-    //   data: data?.find((employee) => employee.uuid == id),
-    // }),
+    selectFromResult: ({ data }) => ({
+      data: data?.find((employee) => employee.uuid == id),
+    }),
     skip: isCreate === "true" || !id,
   });
   console.log(employees);
