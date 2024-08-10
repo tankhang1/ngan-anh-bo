@@ -25,13 +25,17 @@ import { useNavigate } from "react-router-dom";
 
 import {
   useDeleteAccountMutation,
+  useGetAccountRoleListQuery,
   useGetAllAccountQuery,
   useSignUpAccountMutation,
 } from "../../redux/api/account/account.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../components/AppToast";
 import { Formik } from "formik";
-import { useGetListEmployeeQuery } from "../../redux/api/manage/manage.api";
+import {
+  useGetListEmployeeQuery,
+  useGetListEmployeeRoleQuery,
+} from "../../redux/api/manage/manage.api";
 import Select from "react-select";
 
 const ACCOUNT_FILTERS = [
@@ -65,6 +69,7 @@ function Accounts() {
   const [deleteAccount] = useDeleteAccountMutation();
   const [signUp] = useSignUpAccountMutation();
   const { data: employees } = useGetListEmployeeQuery();
+  const { data: roles } = useGetAccountRoleListQuery();
 
   const onDeleteAccount = async () => {
     if (username !== null) {
@@ -88,10 +93,18 @@ function Accounts() {
 
   const onSignUpAccount = async (values: TAccount) => {
     setOpenAddNewAccount(false);
-    await signUp(values)
+    await signUp({
+      username: values.username,
+      password: values.password,
+      staff_code: values.staff_code,
+      roles: (values.roles as { label: string; value: string }[]).map(
+        (item) => item.value
+      ),
+    })
       .unwrap()
       .then((value) => {
         if (value.status === 0) {
+          refetchAccount();
           toast.showToast("Đăng ký tài khoản thành công");
         } else toast.showToast("Đăng ký tài khoản thất bại");
       })
@@ -247,7 +260,9 @@ function Accounts() {
                 label: "Vai trò",
                 render: (value) => (
                   <td>
-                    <span className="fw-semibold">{value.role_list}</span>
+                    <span className="fw-semibold">
+                      {value.role_list as any}
+                    </span>
                   </td>
                 ),
               },
@@ -333,6 +348,7 @@ function Accounts() {
               username: "",
               password: "",
               staff_code: employees?.[0].code,
+              roles: "",
             }}
             onSubmit={onSignUpAccount}
           >
@@ -394,6 +410,31 @@ function Accounts() {
                         ))}
                       </Form.Select>
 
+                      <Form.Control.Feedback type="invalid">
+                        {errors.staff_code}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="roles_validate">
+                      <Form.Label>Vai trò</Form.Label>
+                      <Select
+                        //@ts-ignore
+                        options={roles?.map((item) => ({
+                          label: item.name,
+                          value: item.code,
+                        }))}
+                        className="default basic-multi-select custom-multi mb-3"
+                        id="choices-multiple-default"
+                        menuPlacement="auto"
+                        classNamePrefix="Select2"
+                        isSearchable
+                        isClearable
+                        isMulti
+                        placeholder="Chọn vai trò"
+                        value={values.roles}
+                        onChange={(value) => {
+                          setFieldValue("roles", value);
+                        }}
+                      />
                       <Form.Control.Feedback type="invalid">
                         {errors.staff_code}
                       </Form.Control.Feedback>

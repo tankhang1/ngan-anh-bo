@@ -545,5 +545,12 @@ export type TAccount = {
   tfa?: string;
   created?: string;
   modified?: string;
-  role_list?: string[];
+  role_list?: string[] | { label: string; value: string }[] | string;
+  roles?: string[] | { label: string; value: string }[] | string;
+};
+
+export type TAccountRole = {
+  id: number;
+  name: string;
+  code: string;
 };

@@ -1,8 +1,9 @@
-import { BASE_RES, TAccount } from "../../../assets/types";
+import { BASE_RES, TAccount, TAccountRole } from "../../../assets/types";
 import { BASE_PORT_8180, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum AccountEnum {
   ACCOUNTS = "ACCOUNTS",
+  ACCOUNT_ROLE = "ACCOUNT_ROLE",
 }
 export const accountApi = createApi({
   reducerPath: "accountApi",
@@ -16,7 +17,7 @@ export const accountApi = createApi({
       return;
     },
   }),
-  tagTypes: [AccountEnum.ACCOUNTS],
+  tagTypes: [AccountEnum.ACCOUNTS, AccountEnum.ACCOUNT_ROLE],
   endpoints: (builder) => ({
     getAllAccount: builder.query<TAccount[], void>({
       query: () => ({
@@ -42,6 +43,15 @@ export const accountApi = createApi({
       }),
       invalidatesTags: [AccountEnum.ACCOUNTS],
     }),
+    getAccountRoleList: builder.query<TAccountRole[], void>({
+      query: () => ({
+        url: `/roles`,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ id }) => ({ type: AccountEnum.ACCOUNT_ROLE, id }))
+          : [AccountEnum.ACCOUNT_ROLE],
+    }),
   }),
 });
 
@@ -49,4 +59,5 @@ export const {
   useGetAllAccountQuery,
   useSignUpAccountMutation,
   useDeleteAccountMutation,
+  useGetAccountRoleListQuery,
 } = accountApi;
