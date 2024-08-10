@@ -183,6 +183,7 @@ import Employee from "./container/employee/employee.tsx";
 import EmployeeCreateEdit from "./container/employee/create-edit/employee-create-edit.tsx";
 import EmployeeRole from "./container/employee/role/employee-role.tsx";
 import EmployeeDepartment from "./container/employee/department/employee-department.tsx";
+import Accounts from "./container/accounts/accounts.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -606,6 +607,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}employee`}
                 element={<Employee />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}accounts`}
+                element={<Accounts />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}product`}

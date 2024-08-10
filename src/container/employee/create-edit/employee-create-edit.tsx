@@ -691,7 +691,7 @@ function EmployeeCreateEdit() {
                             isSearchable
                             isClearable
                             placeholder="Chọn vùng"
-                            defaultValue={values.areas as any}
+                            value={values.areas as any}
                             //@ts-ignore
                             onChange={(
                               value: { label: string; value: string }[]

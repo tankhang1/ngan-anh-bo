@@ -10,6 +10,8 @@ import { manageApi } from "./api/manage/manage.api";
 import { otherApi } from "./api/other/other.api";
 import { customerApi } from "./api/customer/customer.api";
 import { reportApi } from "./api/report/report.api";
+import { accountApi } from "./api/account/account.api";
+import { rtkQueryErrorLogger } from "./middlewares/errorMiddleware";
 
 const store = configureStore({
   reducer: {
@@ -23,10 +25,12 @@ const store = configureStore({
     [programApi.reducerPath]: programApi.reducer,
     [customerApi.reducerPath]: customerApi.reducer,
     [reportApi.reducerPath]: reportApi.reducer,
+    [accountApi.reducerPath]: accountApi.reducer,
   },
   // No need to explicitly pass middleware
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
+      // .concat(rtkQueryErrorLogger)
       .concat(authApi.middleware)
       .concat(infoApi.middleware)
       .concat(productApi.middleware)
@@ -35,7 +39,8 @@ const store = configureStore({
       .concat(manageApi.middleware)
       .concat(otherApi.middleware)
       .concat(customerApi.middleware)
-      .concat(reportApi.middleware),
+      .concat(reportApi.middleware)
+      .concat(accountApi.middleware),
 });
 
 export default store;

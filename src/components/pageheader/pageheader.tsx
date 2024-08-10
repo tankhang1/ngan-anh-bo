@@ -21,6 +21,7 @@ const MapLabel = new Map([
   ["employee", "Quản lý nhân viên"],
   ["role", "Quản lý vai trò"],
   ["department", "Quản lý bộ phận"],
+  ["accounts", "Quản lý tài khoản"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

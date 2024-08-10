@@ -531,3 +531,19 @@ export type TArea = {
   area: string;
   isAdded?: boolean;
 };
+
+export type TAccount = {
+  id?: number;
+  name?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  phone?: string;
+  staff_code?: string;
+  otp?: number;
+  enabled?: number;
+  tfa?: string;
+  created?: string;
+  modified?: string;
+  role_list?: string[];
+};

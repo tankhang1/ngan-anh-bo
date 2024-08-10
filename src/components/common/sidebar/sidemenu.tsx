@@ -8,6 +8,7 @@ const icon18 = <i className="ti ti-chart-infographic"></i>;
 const icon3 = <i className="ti ti-settings"></i>;
 const icon4 = <i className="bi bi-people"></i>;
 const icon5 = <i className="bx bx-user-voice"></i>;
+const icon6 = <i className="bx bx-user-circle"></i>;
 
 export const MENUITEMS = [
   {
@@ -53,6 +54,15 @@ export const MENUITEMS = [
   },
   {
     menutitle: "Quản lý",
+  },
+  {
+    path: `${import.meta.env.BASE_URL}accounts`,
+    title: "Tài khoản",
+    icon: icon6,
+    // badgetxt: badge1,
+    type: "link",
+    active: false,
+    selected: false,
   },
   {
     title: "Tổng đài viên",
