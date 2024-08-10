@@ -585,7 +585,7 @@ function EmployeeCreateEdit() {
                             isSearchable
                             isClearable
                             placeholder="Chọn phòng ban"
-                            defaultValue={
+                            value={
                               {
                                 value: `${values.staff_department_code}-${values.staff_department_name}`,
                                 label: values.staff_department_name,
@@ -647,7 +647,7 @@ function EmployeeCreateEdit() {
                             isSearchable
                             isClearable
                             placeholder="Chọn vai trò"
-                            defaultValue={
+                            value={
                               {
                                 value: `${values.staff_role}-${values.staff_role_name}`,
                                 label: values.staff_role_name,
