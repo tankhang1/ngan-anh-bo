@@ -196,6 +196,7 @@ function CustomerUnValidationCreateEdit() {
     <Fragment>
       <Formik
         initialValues={{
+          uuid: customer?.uuid,
           customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
           customer_province: customer?.customer_province ?? PROVINCES[0].value,
@@ -225,7 +226,6 @@ function CustomerUnValidationCreateEdit() {
           export_address: customer?.export_address,
         }}
         enableReinitialize
-        onSubmit={handleSubmitAgent}
         // validationSchema={schema.nullable()}
       >
         {({
@@ -255,6 +255,21 @@ function CustomerUnValidationCreateEdit() {
                       placement="top"
                       overlay={
                         <Tooltip className="tooltip">
+                          Xác thực người dùng
+                        </Tooltip>
+                      }
+                    >
+                      <button
+                        className="btn btn-teal-light"
+                        onClick={() => onValidateCustomer(values)}
+                      >
+                        Xác thực
+                      </button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip className="tooltip">
                           {!isEdit ? "Chỉnh sửa" : "Lưu"}
                         </Tooltip>
                       }
@@ -263,7 +278,9 @@ function CustomerUnValidationCreateEdit() {
                         <button
                           className="btn  btn-purple-light ms-2"
                           type="submit"
-                          onClick={() => {}}
+                          onClick={() => {
+                            handleSubmitAgent(values);
+                          }}
                         >
                           Thêm mới
                         </button>
@@ -271,7 +288,9 @@ function CustomerUnValidationCreateEdit() {
                         <button
                           className="btn btn-purple-light"
                           type="submit"
-                          onClick={() => {}}
+                          onClick={() => {
+                            handleSubmitAgent(values);
+                          }}
                         >
                           {!isEdit ? "Chỉnh sửa" : "Lưu"}
                         </button>

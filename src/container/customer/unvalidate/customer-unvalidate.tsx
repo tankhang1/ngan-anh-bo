@@ -28,6 +28,7 @@ import {
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { PROVINCES } from "../../../constants";
+import { label } from "yet-another-react-lightbox";
 
 const AGENT_FILTERS = [
   {
@@ -46,28 +47,8 @@ const AGENT_FILTERS = [
 
 const CUSTOMER_TYPE = [
   {
-    key: "RETAILER",
-    label: "Đại lý cấp 1",
-  },
-  {
-    key: "RETAILER2",
-    label: "Đại lý cấp 2",
-  },
-  {
-    key: "DISTRIBUTOR",
-    label: "Nhà phân phối",
-  },
-  {
-    key: "CTV",
-    label: "Cộng tác viên",
-  },
-  {
-    key: "FARMER",
-    label: "Nông dân",
-  },
-  {
-    key: "Other",
-    label: "Không hợp tác",
+    key: "ANONYMOUS",
+    label: "Chưa định danh",
   },
 ];
 function CustomerUnValidation() {
@@ -79,7 +60,7 @@ function CustomerUnValidation() {
   const [listCustomers, setListCustomers] = useState<TCustomerRes[]>([]);
   const navigate = useNavigate();
 
-  const { data: groupObjectives } = useGetListGroupObjectiveQuery();
+  // const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: counterCustomer } = useGetCounterCustomerRegisterQuery(
     {
       t: customerType,
@@ -174,13 +155,13 @@ function CustomerUnValidation() {
                       <i className="ti ti-exchange"></i>
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {groupObjectives?.map((item, index) => (
+                      {CUSTOMER_TYPE?.map((item, index) => (
                         <Dropdown.Item
-                          active={item.symbol === customerType}
+                          active={item.key === customerType}
                           key={index}
-                          onClick={() => onChangeCustomerType(item.symbol)}
+                          onClick={() => onChangeCustomerType(item.key)}
                         >
-                          {item.name}
+                          {item.label}
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
