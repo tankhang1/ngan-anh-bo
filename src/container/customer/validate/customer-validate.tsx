@@ -100,8 +100,10 @@ function CustomerValidation() {
     );
 
   const onChangeCustomerType = (type: string) => {
-    setCustomerType(type);
-    setListCustomers([]);
+    if (type !== customerType) {
+      setCustomerType(type);
+      setListCustomers([]);
+    }
   };
 
   useEffect(() => {
