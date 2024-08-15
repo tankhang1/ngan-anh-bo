@@ -233,6 +233,7 @@ function CustomerUnValidationCreateEdit() {
           export_code: customer?.export_code, // mã xuất kho
           export_address: customer?.export_address,
         }}
+        onSubmit={() => {}}
         enableReinitialize
 
         // validationSchema={schema.nullable()}

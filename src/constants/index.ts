@@ -452,3 +452,59 @@ export {
   LOCAL_KEY,
   OBJECTIVES_SELECT,
 };
+
+const AccountPermission = new Map([
+  [
+    "ROLE_ADMIN",
+    {
+      viewAll: true,
+    },
+  ],
+  [
+    "ROLE_AGENT",
+    {
+      viewDataCustomer: true, // Thông tin dữ liệu khách hàng theo vùng
+      viewCustomerLevel1: true, // Thông tin khách hàng cấp 1
+      viewFarmer: true, // Thông tin nông dân theo vùng
+      viewOrder: true, // Xem đơn hàng
+      createOrder: true, // Tạo đơn hàng
+      exportOrder: true, // Xuất hàng cấp 1
+    },
+  ],
+
+  [
+    "ROLE_BUSINESS",
+    {
+      viewDataCustomer: true, // Thông tin dữ liệu khách hàng theo vùng
+      viewCustomerLevel1: true, // Thông tin khách hàng cấp 1
+      viewFarmer: true, // Thông tin nông dân
+      viewSaleLevel1: true, // Sản lượng bán / Cấp 1 theo vùng
+      viewSaleLevel2: true, //Sản lượng bán / Cấp 2 theo vùng
+    },
+  ],
+  [
+    "ROLE_FINANCE",
+    {
+      viewSales: true, // Sản lượng bán cấp 1 theo vùng
+    },
+  ],
+  [
+    "ROLE_WAREHOUSE",
+    {
+      viewInventory: true, // Thông tin lượng hàng thành phẩm
+      manageRawMaterials: true, // Thông tin tồn kho/Thành phẩm nguyên liệu
+      manageFinishedProducts: true, //Nhận đơn hàng yêu cầu từ CSKH xuất hàng cho cấp 1
+      handleCustomerOrders: true, //Kiểm kê kho hàng thành phẩm
+      barcodeCheck: true, // Bar code thùng/batch/pallet
+      systemAdjustment: true, // Hiệu chỉnh số liệu tồn kho hệ thống vs kho thành phẩm
+    },
+  ],
+  [
+    "ROLE_ENGINEER",
+    {
+      viewProgram: true, // Xem chương trình
+      viewDataCustomer: true, // Xem thông tin khách hàng
+      viewFarmer: true, // Xem thông tin nông dân
+    },
+  ],
+]);
