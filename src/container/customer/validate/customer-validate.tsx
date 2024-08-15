@@ -69,14 +69,26 @@ const CUSTOMER_TYPE = [
   },
 ];
 function CustomerValidation() {
+  const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
+    refetchOnMountOrArgChange: false,
+  });
+
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
-  const [customerType, setCustomerType] = useState<string>("");
+  const [customerType, setCustomerType] = useState<string>(
+    groupObjectives?.[0].symbol || ""
+  );
   const [page, setPage] = useState(1);
   const [listCustomers, setListCustomers] = useState<TCustomerRes[]>([]);
   const navigate = useNavigate();
-  const { data: groupObjectives } = useGetListGroupObjectiveQuery();
+
+  const onChangeCustomerType = (type: string) => {
+    if (type !== customerType) {
+      setCustomerType(type);
+      setListCustomers([]);
+    }
+  };
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       t: customerType,
@@ -98,14 +110,6 @@ function CustomerValidation() {
         skip: customerType ? false : true,
       }
     );
-
-  const onChangeCustomerType = (type: string) => {
-    if (type !== customerType) {
-      setCustomerType(type);
-      setListCustomers([]);
-    }
-  };
-
   useEffect(() => {
     if (
       counterCustomer &&
@@ -320,7 +324,7 @@ function CustomerValidation() {
                 render: (value) => (
                   <td>
                     {value.status === 1 ? (
-                      <span className="bg-secondary bg-opacity-100 text-white badge ">
+                      <span className="bg-success bg-opacity-100 text-white badge ">
                         Đã xác thực
                       </span>
                     ) : (

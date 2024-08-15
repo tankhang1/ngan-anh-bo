@@ -15,9 +15,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetListCustomerQuery,
   useGetListCustomerRegisterQuery,
+  useGetListEmployeeQuery,
   useGetListGroupObjectiveQuery,
 } from "../../../../redux/api/manage/manage.api";
-import { useGetDistrictQuery } from "../../../../redux/api/media/media.api";
+import {
+  useGetDistrictQuery,
+  useGetListProvinceQuery,
+} from "../../../../redux/api/media/media.api";
 
 import { ToastContext } from "../../../../components/AppToast";
 import { format } from "date-fns";
@@ -50,7 +54,8 @@ function CustomerUnValidationCreateEdit() {
   //   customer_district: yup.string().required(),
   // });
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
-
+  const { data: employees } = useGetListEmployeeQuery();
+  const { data: provinces } = useGetListProvinceQuery();
   const { data: newUUID } = useGetNewUUIDQuery();
   const { data: customer } = useGetListCustomerRegisterQuery(
     {
@@ -196,18 +201,21 @@ function CustomerUnValidationCreateEdit() {
     <Fragment>
       <Formik
         initialValues={{
-          uuid: customer?.uuid,
           customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
-          customer_province: customer?.customer_province ?? PROVINCES[0].value,
-          customer_type: customer?.customer_type ?? "",
+          customer_province:
+            customer?.customer_province ?? provinces?.[0]?.code,
+          customer_type:
+            customer?.customer_type ?? groupObjectives?.[0]?.symbol,
           name: customer?.name ?? "",
-          province: customer?.province ?? PROVINCES[0].value,
+          province: customer?.province ?? "",
           info_primary: customer?.info_primary ?? 1,
           phone: customer?.phone ?? "",
           sign_board: customer?.sign_board ?? "",
-          customer_address: customer?.customer_province ?? "",
-          customer_district: customer?.customer_district ?? "",
+          customer_address: customer?.customer_address ?? "",
+          customer_district:
+            customer?.customer_district ?? districts?.[0]?.value,
+          province_name: customer?.province_name ?? "",
           status: customer?.status ?? 1,
           time: customer?.time ?? "",
           gender: customer?.gender ?? 0,
@@ -218,14 +226,15 @@ function CustomerUnValidationCreateEdit() {
           business_document: customer?.business_document ?? "",
           tags: customer?.tags ?? "",
           note: customer?.note ?? "",
-          area_size: customer?.area_size,
-          source_channel_used: customer?.source_channel_used,
+          area_size: customer?.area_size ?? 0,
+          source_channel_used: customer?.source_channel_used ?? "",
           avatar: customer?.avatar ?? "",
-          sale_code: customer?.sale_code ?? "", // mã nhân viên
+          sale_code: customer?.sale_code ?? employees?.[0]?.code, // mã nhân viên
           export_code: customer?.export_code, // mã xuất kho
           export_address: customer?.export_address,
         }}
         enableReinitialize
+
         // validationSchema={schema.nullable()}
       >
         {({
@@ -308,106 +317,23 @@ function CustomerUnValidationCreateEdit() {
                           ? "Thông tin khách hàng"
                           : "Chỉnh sửa thông tin khách hàng"}
                       </Card.Title>
-                      {/* <div className="d-flex flex-row align-items-center gap-2">
-                  <button
-                    className="btn btn-danger-light"
-                    type={"button"}
-                    onClick={() => {
-                      navigate(-1);
-                    }}
-                  >
-                    Trở lại
-                  </button>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </Tooltip>
-                    }
-                  >
-                    {isCreate === "true" ? (
-                      <button
-                        className="btn  btn-purple-light ms-2"
-                        type="submit"
-                        onClick={() => {}}
-                      >
-                        Thêm mới
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-purple-light"
-                        type="submit"
-                        onClick={() => {}}
-                      >
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </button>
-                    )}
-                  </OverlayTrigger>
-                </div> */}
                     </Card.Header>
                     <Card.Body>
-                      {/* <Form.Group controlId="sale_code_validate">
-                  <Form.Label>Nhập mã nhân viên</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Mã nhân viên"
-                    name="sale_code"
-                    value={values.sale_code}
-                    onChange={handleChange}
-                    isInvalid={touched.sale_code && !!errors.sale_code}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.sale_code}
-                  </Form.Control.Feedback>
-                </Form.Group> */}
-                      {/* <Form.Group controlId="export_code_validate">
-                  <Form.Label>Nhập mã xuất kho</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Mã xuất kho"
-                    name="export_code"
-                    value={values.export_code}
-                    onChange={handleChange}
-                    isInvalid={touched.export_code && !!errors.export_code}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.export_code}
-                  </Form.Control.Feedback>
-                </Form.Group> */}
-                      {/* <Form.Group controlId="export_address_validate">
-                  <Form.Label>Nhập địa chỉ xuất kho</Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Địa chỉ xuất kho"
-                    name="export_address"
-                    value={values.export_address}
-                    onChange={handleChange}
-                    isInvalid={
-                      touched.export_address && !!errors.export_address
-                    }
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.export_address}
-                  </Form.Control.Feedback>
-                </Form.Group> */}
-                      <Form.Group controlId="sale_code_validate">
+                      <Form.Group controlId="customer_code_validate">
                         <Form.Label>Mã khách hàng</Form.Label>
                         <Form.Control
                           required
                           type="text"
                           placeholder="Mã khách hàng"
-                          name="sale_code"
-                          value={values.sale_code}
+                          name="customer_code"
+                          value={values.customer_code}
                           onChange={handleChange}
-                          isInvalid={touched.sale_code && !!errors.sale_code}
-                          disabled
+                          isInvalid={
+                            touched.customer_code && !!errors.customer_code
+                          }
                         />
                         <Form.Control.Feedback type="invalid">
-                          {errors.sale_code}
+                          {errors.customer_code}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Row className="mb-2">
@@ -497,7 +423,7 @@ function CustomerUnValidationCreateEdit() {
                           required
                           type="text"
                           id="phone_validate"
-                          placeholder="Nhập địa chỉ chi tiết"
+                          placeholder="Nhập số điện thoại"
                           name="phone"
                           value={values.phone}
                           onChange={handleChange}
@@ -590,9 +516,9 @@ function CustomerUnValidationCreateEdit() {
                           }
                           required
                         >
-                          {PROVINCES.map((item, index) => (
-                            <option value={item.value} key={index}>
-                              {item.label}
+                          {provinces?.map((item, index) => (
+                            <option value={item.code} key={index}>
+                              {item.name}
                             </option>
                           ))}
                         </Form.Select>
@@ -600,10 +526,7 @@ function CustomerUnValidationCreateEdit() {
                           {errors.customer_province}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group
-                        controlId="customer_district_validate"
-                        className="mb-2"
-                      >
+                      <Form.Group className="mb-2">
                         <Form.Label>Chọn quận huyện</Form.Label>
                         <Form.Select
                           className="form-select"
@@ -628,10 +551,7 @@ function CustomerUnValidationCreateEdit() {
                           {errors.customer_district}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group
-                        controlId="customer_address_validate"
-                        className="mb-2"
-                      >
+                      <Form.Group className="mb-2">
                         <Form.Label>Nhập địa chỉ chi tiết</Form.Label>
                         <Form.Control
                           required
@@ -650,96 +570,25 @@ function CustomerUnValidationCreateEdit() {
                         </Form.Control.Feedback>
                       </Form.Group>
 
-                      <Form.Group controlId="customer_type_validate">
+                      <Form.Group>
                         <Form.Label>Nhân viên phụ trách</Form.Label>
                         <Form.Select
                           className="form-select"
-                          name="customer_type"
-                          value={values.customer_type}
+                          name="sale_code"
+                          value={values.sale_code}
                           onChange={(e) =>
-                            setFieldValue("customer_type", e.target.value)
+                            setFieldValue("sale_code", e.target.value)
                           }
-                          isInvalid={
-                            touched.customer_type && !!errors.customer_type
-                          }
+                          isInvalid={touched.sale_code && !!errors.sale_code}
                           required
                         >
-                          {groupObjectives?.map((item) => (
-                            <option key={item.id} value={item.symbol}>
+                          {employees?.map((item) => (
+                            <option key={item.id} value={item.code}>
                               {item.name}
                             </option>
                           ))}
                         </Form.Select>
                       </Form.Group>
-                      {/* <Row>
-                  <Form.Group
-                    as={Col}
-                    md={4}
-                    controlId="name_validate"
-                    className="mb-2"
-                  >
-                    <Form.Label>Tên (đăng ký)</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      id="name_validate"
-                      placeholder="Tên (đăng ký)"
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
-                      isInvalid={touched.name && !!errors.name}
-                      disabled
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.name}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group
-                    as={Col}
-                    md={4}
-                    controlId="province_validate"
-                    className="mb-2"
-                  >
-                    <Form.Label>Tỉnh thành (đăng ký)</Form.Label>
-
-                    <Form.Select
-                      className="form-select"
-                      name="province"
-                      value={values.province}
-                      onChange={(e) =>
-                        setFieldValue("province", e.target.value)
-                      }
-                      isInvalid={touched.province && !!errors.province}
-                      required
-                      disabled
-                    >
-                      {PROVINCES.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.province}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group className="mb-2" as={Col} md={4}>
-                    <Form.Label>Ngày đăng kí</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="Ngày đăng kí"
-                      name="time"
-                      value={values.time}
-                      onChange={handleChange}
-                      isInvalid={touched.time && !!errors.time}
-                      disabled
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.time}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Row> */}
 
                       <Form.Group
                         controlId="business_document_validate"
@@ -846,40 +695,37 @@ function CustomerUnValidationCreateEdit() {
                         <Form.Group
                           as={Col}
                           md={6}
-                          controlId="sign_board_validate"
+                          controlId="citizen_number_validate"
                         >
                           <Form.Label>Số CCKD</Form.Label>
                           <Form.Control
                             required
                             type="text"
                             placeholder="Số CCKD"
-                            name="sign_board"
-                            value={values.sign_board}
+                            name="citizen_number"
+                            value={values.citizen_number}
                             onChange={handleChange}
                             isInvalid={
-                              touched.sign_board && !!errors.sign_board
+                              touched.citizen_number && !!errors.citizen_number
                             }
                           />
                           <Form.Control.Feedback type="invalid">
-                            {errors.sign_board}
+                            {errors.citizen_number}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group
-                          as={Col}
-                          md={6}
-                          controlId="birthday_validate"
-                        >
-                          <Form.Label>Ngày sinh</Form.Label>
+                        <Form.Group as={Col} md={6}>
+                          <Form.Label>Ngày cấp</Form.Label>
                           <Form.Control
                             required
                             type="date"
-                            id="birthday_validate"
-                            placeholder="Ngày sinh"
-                            name="birthday"
-                            value={values.birthday}
+                            placeholder="Ngày cấp"
+                            name="citizen_day"
+                            value={values.citizen_day}
                             lang="vi"
                             onChange={handleChange}
-                            isInvalid={touched.birthday && !!errors.birthday}
+                            isInvalid={
+                              touched.citizen_day && !!errors.citizen_day
+                            }
                           />
                         </Form.Group>
                       </Row>
@@ -916,36 +762,36 @@ function CustomerUnValidationCreateEdit() {
                     </Card.Header>
                     <Card.Body>
                       <Stack>
-                        <Form.Group controlId="sale_code_validate">
+                        <Form.Group controlId="name_validate">
                           <Form.Label>Tên đăng ký</Form.Label>
                           <Form.Control
                             required
                             type="text"
                             placeholder="Tên đăng ký"
-                            name="sale_code"
-                            value={values.sale_code}
+                            name="name"
+                            value={values.name}
                             onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
+                            isInvalid={touched.name && !!errors.name}
                             disabled
                           />
                           <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
+                            {errors.name}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="sale_code_validate">
+                        <Form.Group controlId="phone_validate">
                           <Form.Label>Số điện thoại</Form.Label>
                           <Form.Control
                             required
                             type="text"
                             placeholder="Số điện thoại"
-                            name="sale_code"
-                            value={values.sale_code}
+                            name="phone"
+                            value={values.phone}
                             onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
+                            isInvalid={touched.phone && !!errors.phone}
                             disabled
                           />
                           <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
+                            {errors.phone}
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="sale_code_validate">
@@ -954,17 +800,19 @@ function CustomerUnValidationCreateEdit() {
                             required
                             type="text"
                             placeholder="Tỉnh đăng ký"
-                            name="sale_code"
-                            value={values.sale_code}
+                            name="province_name"
+                            value={values.province_name}
                             onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
+                            isInvalid={
+                              touched.province_name && !!errors.province_name
+                            }
                             disabled
                           />
                           <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
+                            {errors.province_name}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="sale_code_validate">
+                        {/* <Form.Group controlId="sale_code_validate">
                           <Form.Label>Huyện đăng ký</Form.Label>
                           <Form.Control
                             required
@@ -979,7 +827,7 @@ function CustomerUnValidationCreateEdit() {
                           <Form.Control.Feedback type="invalid">
                             {errors.sale_code}
                           </Form.Control.Feedback>
-                        </Form.Group>
+                        </Form.Group> */}
                         <Form.Group
                           controlId="source_channel_used_validate"
                           className="mb-2"
@@ -1010,23 +858,25 @@ function CustomerUnValidationCreateEdit() {
                     </Card.Header>
                     <Card.Body>
                       <Stack>
-                        <Form.Group controlId="sale_code_validate">
+                        <Form.Group controlId="export_code_validate">
                           <Form.Label>Mã số KH-XK</Form.Label>
                           <Form.Control
                             required
                             type="text"
                             placeholder="Mã số KH-XK"
-                            name="sale_code"
-                            value={values.sale_code}
+                            name="export_code"
+                            value={values.export_code}
                             onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
+                            isInvalid={
+                              touched.export_code && !!errors.export_code
+                            }
                             disabled
                           />
                           <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
+                            {errors.export_code}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="sale_code_validate">
+                        <Form.Group controlId="export_address_validate">
                           <Form.Label>
                             Ghi chú thông tin địa chỉ giao hàng
                           </Form.Label>
@@ -1034,30 +884,16 @@ function CustomerUnValidationCreateEdit() {
                             required
                             type="text"
                             placeholder="Ghi chú thông tin địa chỉ giao hàng"
-                            name="sale_code"
-                            value={values.sale_code}
+                            name="export_address"
+                            value={values.export_address}
                             onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
+                            isInvalid={
+                              touched.export_address && !!errors.export_address
+                            }
                             disabled
                           />
                           <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group controlId="sale_code_validate">
-                          <Form.Label>Ghi chú khác</Form.Label>
-                          <Form.Control
-                            required
-                            type="text"
-                            placeholder="Ghi chú khác"
-                            name="sale_code"
-                            value={values.sale_code}
-                            onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
-                            disabled
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
+                            {errors.export_address}
                           </Form.Control.Feedback>
                         </Form.Group>
                       </Stack>
