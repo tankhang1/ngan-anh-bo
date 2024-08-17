@@ -2,6 +2,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { BaseQueryFn, FetchArgs } from "@reduxjs/toolkit/query";
 import baseQuery from "./baseQuery";
 import { resetAccountInfo, resetToken } from "../slices/authSlice";
+import { HTTPS_METHOD } from "../../constants";
 
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
@@ -10,10 +11,13 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
+  if (result.error && result.error.status === 403) {
     // Token expired or unauthorized, attempt to refresh the token
     const refreshResult = await baseQuery(
-      "/admin/refresh-token",
+      {
+        url: "/refresh-token",
+        method: HTTPS_METHOD.POST,
+      },
       api,
       extraOptions
     );
