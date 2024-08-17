@@ -6,6 +6,7 @@ import {
 } from "../../../constants";
 import { BASE_RES, TAgentForm, TFarmerForm } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum CustomerEnum {
   CREATE_AGENT = "CREATE_AGENT",
   CREATE_FARMER = "CREATE_FARMER",
@@ -16,16 +17,17 @@ export enum CustomerEnum {
 }
 export const customerApi = createApi({
   reducerPath: "customerApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_PORT_8180}/customer`,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return;
-    },
-  }),
+  // baseQuery: fetchBaseQuery({
+  //   baseUrl: `${BASE_PORT_8180}/customer`,
+  //   prepareHeaders: (headers) => {
+  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
+  //     if (token) {
+  //       headers.set("Authorization", `Bearer ${token}`);
+  //     }
+  //     return;
+  //   },
+  // }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: [
     CustomerEnum.CONFIRM_AGENT,
     CustomerEnum.CONFIRM_FARMER,
@@ -37,7 +39,7 @@ export const customerApi = createApi({
   endpoints: (builder) => ({
     createAgent: builder.mutation<void | BASE_RES, TAgentForm>({
       query: (body) => ({
-        url: "/agent/create",
+        url: "/customer/agent/create",
         method: HTTPS_METHOD.POST,
         body: body,
       }),
@@ -45,7 +47,7 @@ export const customerApi = createApi({
     }),
     updateAgent: builder.mutation<void | BASE_RES, TAgentForm>({
       query: (body) => ({
-        url: "/agent/update",
+        url: "/customer/agent/update",
         method: HTTPS_METHOD.POST,
         body: body,
       }),
@@ -53,7 +55,7 @@ export const customerApi = createApi({
     }),
     updateFarmer: builder.mutation<void | BASE_RES, TFarmerForm>({
       query: (body) => ({
-        url: "/farmer/update",
+        url: "/customer/farmer/update",
         method: HTTPS_METHOD.POST,
         body: body,
       }),
@@ -61,7 +63,7 @@ export const customerApi = createApi({
     }),
     createFarmer: builder.mutation<void, TFarmerForm>({
       query: (body) => ({
-        url: "/farmer/create",
+        url: "/customer/farmer/create",
         method: HTTPS_METHOD.POST,
         body: body,
       }),

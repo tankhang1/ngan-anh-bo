@@ -156,8 +156,13 @@ const authSlice = createSlice({
       state = initialValue;
       return state;
     },
+    resetToken: (state, action: PayloadAction<{ token: string }>) => {
+      state.token = action.payload.token;
+      return state;
+    },
   },
 });
 
-export const { updateAccountInfo, resetAccountInfo } = authSlice.actions;
+export const { updateAccountInfo, resetAccountInfo, resetToken } =
+  authSlice.actions;
 export default authSlice.reducer;

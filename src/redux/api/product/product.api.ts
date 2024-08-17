@@ -6,6 +6,7 @@ import {
   TIngredient,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum ProductEnum {
   PRODUCT_CODE = "PRODUCT_CODE",
   DEVICES = "DEVICES",
@@ -15,16 +16,17 @@ export enum ProductEnum {
 }
 export const productApi = createApi({
   reducerPath: "productApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_PORT_8180}/product`,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  // baseQuery: fetchBaseQuery({
+  //   baseUrl: `${BASE_PORT_8180}/product`,
+  //   prepareHeaders: (headers) => {
+  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
+  //     if (token) {
+  //       headers.set("Authorization", `Bearer ${token}`);
+  //     }
+  //     return headers;
+  //   },
+  // }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: [
     ProductEnum.DEVICES,
     ProductEnum.PRODUCT_CODE,
@@ -35,7 +37,7 @@ export const productApi = createApi({
   endpoints: (builder) => ({
     getNewProductCode: builder.query<string, void | null>({
       query: () => ({
-        url: "/code-new",
+        url: "/product/code-new",
         method: HTTPS_METHOD.GET,
         responseHandler: (response) => response.text(),
       }),
@@ -43,7 +45,7 @@ export const productApi = createApi({
     }),
     getListDevices: builder.query<{ label: string; value: string }[], void>({
       query: () => ({
-        url: "/devices",
+        url: "/product/devices",
         method: HTTPS_METHOD.GET,
       }),
       transformResponse: (response: TDevice[]) => {
@@ -62,7 +64,7 @@ export const productApi = createApi({
     }),
     getListIngredients: builder.query<string[], void>({
       query: () => ({
-        url: "/ingredients",
+        url: "/product/ingredients",
         method: HTTPS_METHOD.GET,
       }),
       transformResponse: (response: TIngredient[]) => {
@@ -78,7 +80,7 @@ export const productApi = createApi({
     }),
     createProduct: builder.mutation<any, TProductForm>({
       query: (body) => ({
-        url: "/create",
+        url: "/product/create",
         method: HTTPS_METHOD.POST,
         body: body,
       }),
@@ -86,7 +88,7 @@ export const productApi = createApi({
     }),
     updateProduct: builder.mutation<any, TProduct>({
       query: (body) => ({
-        url: "/update",
+        url: "/product/update",
         method: HTTPS_METHOD.POST,
         body: body,
       }),

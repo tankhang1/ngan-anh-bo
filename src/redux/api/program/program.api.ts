@@ -11,6 +11,7 @@ import {
   TProgramTopup,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum ProgramEnum {
   COUNTER_PROGRAM_TOPUP = "COUNTER_PROGRAM_TOPUP",
   COUNTER_PROGRAM_POINT = "COUNTER_PROGRAM_POINT",
@@ -25,16 +26,17 @@ export enum ProgramEnum {
 }
 export const programApi = createApi({
   reducerPath: "programApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BASE_PORT_8180}/program`,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return;
-    },
-  }),
+  // baseQuery: fetchBaseQuery({
+  //   baseUrl: `${BASE_PORT_8180}/program`,
+  //   prepareHeaders: (headers) => {
+  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
+  //     if (token) {
+  //       headers.set("Authorization", `Bearer ${token}`);
+  //     }
+  //     return;
+  //   },
+  // }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: [
     ProgramEnum.COUNTER_PROGRAM_TOPUP,
     ProgramEnum.COUNTER_PROGRAM_POINT,
@@ -50,7 +52,7 @@ export const programApi = createApi({
   endpoints: (builder) => ({
     getCounterProgramTopup: builder.query<number, BaseQuery>({
       query: (params) => ({
-        url: "/topup/counter",
+        url: "/program/topup/counter",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -58,7 +60,7 @@ export const programApi = createApi({
     }),
     getCounterProgramTopupByStatus: builder.query<number, BaseQuery>({
       query: (params) => ({
-        url: "/topup/status/counter",
+        url: "/program/topup/status/counter",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -66,7 +68,7 @@ export const programApi = createApi({
     }),
     getCounterProgramPoint: builder.query<number, BaseQuery>({
       query: (params) => ({
-        url: "/point/counter",
+        url: "/program/point/counter",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -74,7 +76,7 @@ export const programApi = createApi({
     }),
     getCounterProgramPointByStatus: builder.query<number, BaseQuery>({
       query: (params) => ({
-        url: "/point/status/counter",
+        url: "/program/point/status/counter",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -82,7 +84,7 @@ export const programApi = createApi({
     }),
     getListProgramTopup: builder.query<TProgramTopup[], BaseQuery>({
       query: (params) => ({
-        url: "/topup",
+        url: "/program/topup",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -96,7 +98,7 @@ export const programApi = createApi({
     }),
     getListProgramPoint: builder.query<TProgramPoint[], BaseQuery>({
       query: (params) => ({
-        url: "/point",
+        url: "/program/point",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -110,7 +112,7 @@ export const programApi = createApi({
     }),
     getListProgramPointStatus: builder.query<TProgramPoint[], BaseQuery>({
       query: (params) => ({
-        url: "/point/status",
+        url: "/program/point/status",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -124,7 +126,7 @@ export const programApi = createApi({
     }),
     getListProgramPointByTime: builder.query<TProgramPoint[], void | null>({
       query: () => ({
-        url: "/point",
+        url: "/program/point",
         method: HTTPS_METHOD.GET,
       }),
       providesTags: (response) =>
@@ -137,7 +139,7 @@ export const programApi = createApi({
     }),
     getListProgramTopupByTime: builder.query<TProgramTopup[], void | null>({
       query: () => ({
-        url: "/topup",
+        url: "/program/topup",
         method: HTTPS_METHOD.GET,
       }),
       providesTags: (response) =>
@@ -150,7 +152,7 @@ export const programApi = createApi({
     }),
     getListProgramTopupStatus: builder.query<TProgramTopup[], BaseQuery>({
       query: (params) => ({
-        url: "/topup/status",
+        url: "/program/topup/status",
         method: HTTPS_METHOD.GET,
         params,
       }),
