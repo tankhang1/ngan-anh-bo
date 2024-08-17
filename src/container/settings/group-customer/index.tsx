@@ -33,11 +33,12 @@ import { Formik } from "formik";
 import { useGetListGroupObjectiveQuery } from "../../../redux/api/manage/manage.api";
 import { useCreateUpdateGroupObjectiveMutation } from "../../../redux/api/other/other.api";
 import { ToastContext } from "../../../components/AppToast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 function SettingGroupCustomer() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
-  const navigate = useNavigate();
-
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("symbol");
   const deferSearchValue = useDeferredValue(search);
@@ -94,29 +95,27 @@ function SettingGroupCustomer() {
                     </Button>
                   </InputGroup>
 
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">
-                        Thêm mới chương trình{" "}
-                      </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() =>
-                        setOpenAddPopup({ name: "", prefix: "", symbol: "" })
-                      }
+                  {permission.createSettingGroupCustomer && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() =>
+                          setOpenAddPopup({ name: "", prefix: "", symbol: "" })
+                        }
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -149,7 +148,7 @@ function SettingGroupCustomer() {
                 key: "prefix",
                 label: "Tên tiền tố",
                 render: (value: TGroupCustomer) => (
-                  <td>{value.prefix.toUpperCase()}</td>
+                  <td>{value.prefix?.toUpperCase()}</td>
                 ),
               },
               {
@@ -158,27 +157,29 @@ function SettingGroupCustomer() {
                 render: (value: TGroupCustomer) => <td>{value.name}</td>,
               },
 
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => {
-                  console.log(value);
-                  return (
-                    <td>
-                      <span className="d-flex justify-content-center align-item-center">
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => {
-                            setOpenAddPopup(value);
-                          }}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </span>
-                    </td>
-                  );
-                },
-              },
+              permission.editSettingGroupCustomer
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => {
+                      console.log(value);
+                      return (
+                        <td>
+                          <span className="d-flex justify-content-center align-item-center">
+                            <button
+                              className="btn btn-icon btn-sm btn-primary-ghost"
+                              onClick={() => {
+                                setOpenAddPopup(value);
+                              }}
+                            >
+                              <i className="ti ti-edit"></i>
+                            </button>
+                          </span>
+                        </td>
+                      );
+                    },
+                  }
+                : undefined,
             ]}
             data={groups || []}
             searchByExternal={searchBy}

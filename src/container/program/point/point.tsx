@@ -20,6 +20,8 @@ import {
   useGetListProgramPointStatusQuery,
 } from "../../../redux/api/program/program.api";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const POINT_FILTERS = [
   {
@@ -54,6 +56,7 @@ const STATUS_FILTERS = [
   },
 ];
 function PointProgram() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(POINT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
@@ -167,27 +170,25 @@ function PointProgram() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">
-                        Thêm mới chương trình{" "}
-                      </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => navigate(`ce/${true}/-1`)}
+                  {permission.createProgramPoint && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => navigate(`ce/${true}/-1`)}
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -376,38 +377,32 @@ function PointProgram() {
                   </td>
                 ),
               },
-              // {
-              //   key: "time_active",
-              //   label: "Thời gian kích hoạt",
-              //   render: (value) => <td>{value.time_start}</td>,
-              // },
-              // {
-              //   key: "time_end",
-              //   label: "Thời gian kết thúc",
-              //   render: (value) => <td>{value.time_end}</td>,
-              // },
 
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <span className="d-flex justify-content-center align-item-center">
-                      <button
-                        className="btn btn-icon btn-sm btn-primary-ghost"
-                        onClick={() =>
-                          navigate(
-                            `ce/${false}/${value.uuid}_${status}_${page - 1}`
-                          )
-                        }
-                        disabled={value.status === 2}
-                      >
-                        <i className="ti ti-edit"></i>
-                      </button>
-                    </span>
-                  </td>
-                ),
-              },
+              permission.editProgramPoint
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => (
+                      <td>
+                        <span className="d-flex justify-content-center align-item-center">
+                          <button
+                            className="btn btn-icon btn-sm btn-primary-ghost"
+                            onClick={() =>
+                              navigate(
+                                `ce/${false}/${value.uuid}_${status}_${
+                                  page - 1
+                                }`
+                              )
+                            }
+                            disabled={value.status === 2}
+                          >
+                            <i className="ti ti-edit"></i>
+                          </button>
+                        </span>
+                      </td>
+                    ),
+                  }
+                : undefined,
             ]}
             data={listPoints || []}
             filters={[

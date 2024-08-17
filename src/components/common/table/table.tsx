@@ -19,7 +19,7 @@ type FilterOption<T> = {
 
 type TAppTable<T> = {
   data: T[];
-  headers: THeader<T>[];
+  headers: (THeader<T> | undefined)[];
   filters?: FilterOption<T>[];
   title: string;
   isHeader?: boolean;
@@ -65,7 +65,7 @@ const AppTable = <T extends DataItem>({
         : data?.filter(
             (item) =>
               item[filterOption.key] === filterOption?.value &&
-              item[searchBy.key]
+              item[searchBy?.key || "id"]
                 .toString()
                 .toLowerCase()
                 .includes(deferSearchValue.toLowerCase())
@@ -78,7 +78,7 @@ const AppTable = <T extends DataItem>({
             .includes(externalSearch?.toString().toLowerCase())
         )
       : data?.filter((item) =>
-          item[searchBy.key]
+          item[searchBy?.key || "id"]
             ?.toString()
             .toLowerCase()
             .includes(deferSearchValue.toLowerCase())
@@ -157,15 +157,18 @@ const AppTable = <T extends DataItem>({
                 <i className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
               </Dropdown.Toggle>
               <Dropdown.Menu role="menu">
-                {headers.map((item, index) => (
-                  <Dropdown.Item
-                    key={index}
-                    onClick={() => setSearchBy(item)}
-                    active={item.key === searchBy.key}
-                  >
-                    {item.label}
-                  </Dropdown.Item>
-                ))}
+                {headers.map(
+                  (item, index) =>
+                    item !== undefined && (
+                      <Dropdown.Item
+                        key={index}
+                        onClick={() => setSearchBy(item)}
+                        active={item.key === searchBy?.key}
+                      >
+                        {item.label}
+                      </Dropdown.Item>
+                    )
+                )}
               </Dropdown.Menu>
             </Dropdown>
             {filters && (
@@ -200,11 +203,18 @@ const AppTable = <T extends DataItem>({
           <table className="table text-nowrap table-bordered table-striped">
             <thead>
               <tr>
-                {headers.map((item) => (
-                  <th scope="col" key={Math.random()} className="text-center">
-                    {item.label}
-                  </th>
-                ))}
+                {headers.map(
+                  (item) =>
+                    item !== undefined && (
+                      <th
+                        scope="col"
+                        key={Math.random()}
+                        className="text-center"
+                      >
+                        {item.label}
+                      </th>
+                    )
+                )}
               </tr>
             </thead>
             {isLoading ? (
@@ -213,7 +223,9 @@ const AppTable = <T extends DataItem>({
               <tbody>
                 {pagingData.map((item) => (
                   <tr key={Math.random()} className="text-center">
-                    {headers.map((header) => header?.render?.(item))}
+                    {headers.map(
+                      (header) => item !== undefined && header?.render?.(item)
+                    )}
                   </tr>
                 ))}
               </tbody>

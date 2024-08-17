@@ -37,6 +37,8 @@ import {
   useGetListEmployeeRoleQuery,
 } from "../../redux/api/manage/manage.api";
 import Select from "react-select";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const ACCOUNT_FILTERS = [
   {
@@ -54,6 +56,7 @@ const ACCOUNT_FILTERS = [
 ];
 
 function Accounts() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(ACCOUNT_FILTERS[0].key);
@@ -163,42 +166,48 @@ function Accounts() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">Thêm mới tài khoản</Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => setOpenAddNewAccount(true)}
+                  {permission.createAccount && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip className="tooltip">
+                          Thêm mới tài khoản
+                        </Tooltip>
+                      }
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-success-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => {}}
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => setOpenAddNewAccount(true)}
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
+                  {permission.exportAccount && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
                     >
-                      <i className="ti ti-database-export"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-success-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => {}}
+                      >
+                        <i className="ti ti-database-export"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -292,22 +301,24 @@ function Accounts() {
                   </td>
                 ),
               },
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td className="d-flex justify-content-center align-item-center">
-                    <button
-                      className="btn btn-icon btn-sm btn-danger-ghost"
-                      onClick={() => {
-                        setUsername(value.username || null);
-                      }}
-                    >
-                      <i className="ti ti-trash"></i>
-                    </button>
-                  </td>
-                ),
-              },
+              permission.deleteAccount
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => (
+                      <td className="d-flex justify-content-center align-item-center">
+                        <button
+                          className="btn btn-icon btn-sm btn-danger-ghost"
+                          onClick={() => {
+                            setUsername(value.username || null);
+                          }}
+                        >
+                          <i className="ti ti-trash"></i>
+                        </button>
+                      </td>
+                    ),
+                  }
+                : undefined,
             ]}
             data={accounts || []}
             searchByExternal={searchBy}

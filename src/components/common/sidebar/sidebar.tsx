@@ -1,20 +1,24 @@
-import { FC, Fragment, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { FC, Fragment, useContext, useEffect, useState } from "react";
+import { connect, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ThemeChanger } from "../../../redux/action";
-import store from "../../../redux/store";
+import store, { RootState } from "../../../redux/store";
 // import logo1 from "../../../assets/images/brand-logos/desktop-logo.png";
 // import logo2 from "../../../assets/images/brand-logos/toggle-logo.png";
 // import logo3 from "../../../assets/images/brand-logos/desktop-dark.png";
 // import logo4 from "../../../assets/images/brand-logos/toggle-dark.png";
 import NganAnhLogo from "../../../assets/images/brand-logos/ngan-anh-logo.png";
 import SimpleBar from "simplebar-react";
-import { MENUITEMS } from "./sidemenu";
+import { MENU_KEY, MENUITEMS } from "./sidemenu";
 import Menuloop from "./menuloop";
+import { ToastContext } from "../../AppToast";
 
 interface SidebarProps {}
 
 const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
+  const { permission } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const toast = useContext(ToastContext);
   const [menuitems, setMenuitems] = useState<any>(MENUITEMS);
 
   function closeMenuFn() {
@@ -80,6 +84,104 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
     menuClose();
   }, []);
   const WindowPreSize = [window.innerWidth];
+
+  function isPermitAccess(key?: string) {
+    if (key) {
+      switch (key) {
+        case MENU_KEY.DASHBOARD:
+          return permission.viewDashboard;
+        case MENU_KEY.ACCOUNTS:
+          return permission.viewAccounts;
+        case MENU_KEY.CUSTOMERS:
+          return permission.viewCustomer;
+        case MENU_KEY.EMPLOYEES:
+          return permission.viewEmployee;
+        case MENU_KEY.ROLES:
+          return permission.viewRoles;
+        case MENU_KEY.DEPARTMENTS:
+          return permission.viewDepartment;
+        case MENU_KEY.PRODUCTS:
+          return permission.viewProducts;
+        case MENU_KEY.PROGRRAM_POINT:
+          return permission.viewProgramPoint;
+        case MENU_KEY.PROGRAM_TOPUP:
+          return permission.viewProgramTopup;
+        case MENU_KEY.REPORT_AGENT:
+          return permission.reportAgent;
+        case MENU_KEY.REPORT_FARMER:
+          return permission.reportFarmer;
+        case MENU_KEY.REPORT_IQR:
+          return permission.reportIQR;
+        case MENU_KEY.REPORT_PROGRAM_POINT:
+          return permission.reportProgramPoint;
+        case MENU_KEY.REPORT_PROGRAM_TOPUP:
+          return permission.reportProgramTopup;
+        case MENU_KEY.SETTING_AREA:
+          return permission.settingArea;
+        case MENU_KEY.SETTING_GROUP_CUSTOMER:
+          return permission.settingGroupCustomer;
+        case MENU_KEY.MANAGE_PERSONEL:
+          return (
+            permission.viewEmployee &&
+            permission.viewRoles &&
+            permission.viewDepartment
+          );
+        case MENU_KEY.MANAGE_PROGRAM:
+          return permission.viewProgramPoint && permission.viewProgramTopup;
+        case MENU_KEY.MANAGE_REPORT:
+          return (
+            permission.reportAgent &&
+            permission.reportFarmer &&
+            permission.reportIQR &&
+            permission.reportProgramPoint &&
+            permission.reportProgramTopup
+          );
+        case MENU_KEY.MANAGE_SETTING:
+          return permission.settingArea && permission.settingGroupCustomer;
+        case MENU_KEY.MANAGE_OPERATOR:
+          return permission.viewOperator;
+        case MENU_KEY.MAIN_TITLE:
+          return permission.viewDashboard;
+        case MENU_KEY.MANAGE_TITLE:
+          if (
+            permission.viewAccounts ||
+            permission.viewOperator ||
+            permission.viewCustomer ||
+            permission.viewEmployee ||
+            permission.viewRoles ||
+            permission.viewDepartment ||
+            permission.viewProducts ||
+            permission.viewProgramPoint ||
+            permission.viewProgramTopup
+          )
+            return true;
+          return false;
+        case MENU_KEY.REPORT_TITLE:
+          if (
+            permission.reportAgent ||
+            permission.reportFarmer ||
+            permission.reportIQR ||
+            permission.reportProgramPoint ||
+            permission.reportProgramTopup
+          )
+            return true;
+          return false;
+        case MENU_KEY.SETTING_TITLE:
+          if (permission.settingArea || permission.settingGroupCustomer)
+            return true;
+          return false;
+        default:
+          return true;
+      }
+    }
+    return true;
+  }
+
+  const navItem = (path: string, key?: string) => {
+    if (isPermitAccess(key)) {
+      navigate(path);
+    } else toast.showToast("Bạn không được quyền truy cập tính năng này");
+  };
 
   function menuResizeFn() {
     const theme = store.getState().theme;
@@ -651,8 +753,13 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         onMouseLeave={() => Outhover()}
       >
         <div className="main-sidebar-header">
-          <Link
-            to={`${import.meta.env.BASE_URL}dashboards`}
+          <div
+            onClick={() =>
+              navItem(
+                `${import.meta.env.BASE_URL}dashboards`,
+                MENU_KEY.DASHBOARD
+              )
+            }
             className="header-logo"
           >
             <img
@@ -679,7 +786,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
               className="toggle-dark"
               style={{ height: 50 }}
             />
-          </Link>
+          </div>
         </div>
         <SimpleBar
           className="main-sidebar"
@@ -716,19 +823,22 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       levelone?.active ? "open" : ""
                     } ${levelone?.selected ? "active" : ""}`}
                   >
-                    {levelone.menutitle ? (
+                    {levelone.menutitle && isPermitAccess(levelone?.key) ? (
                       <span className="category-name">
                         {levelone.menutitle}
                       </span>
                     ) : (
                       ""
                     )}
-                    {levelone.type === "link" ? (
-                      <Link
-                        to={levelone.path + "/"}
+                    {levelone.type === "link" &&
+                    isPermitAccess(levelone?.key) ? (
+                      <div
+                        onClick={() =>
+                          navItem(levelone.path + "/", levelone?.key)
+                        }
                         className={`side-menu__item ${
                           levelone.selected ? "active" : ""
-                        }`}
+                        } `}
                       >
                         <span className="side-menu__icon">{levelone.icon}</span>
                         <span className="side-menu__label">
@@ -741,7 +851,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
                             ""
                           )}
                         </span>
-                      </Link>
+                      </div>
                     ) : (
                       ""
                     )}
@@ -762,11 +872,13 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     ) : (
                       ""
                     )}
-                    {levelone.type === "sub" ? (
+                    {levelone.type === "sub" &&
+                    isPermitAccess(levelone?.key) ? (
                       <Menuloop
                         MENUITEMS={levelone}
                         level={level + 1}
                         toggleSidemenu={toggleSidemenu}
+                        navItem={navItem}
                       />
                     ) : (
                       ""

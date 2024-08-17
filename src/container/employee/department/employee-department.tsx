@@ -20,6 +20,8 @@ import {
   useUpdateEmployeeDepartmentMutation,
 } from "../../../redux/api/other/other.api";
 import { ToastContext } from "../../../components/AppToast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -29,6 +31,7 @@ const EMPLOYEE_ROLE_FILTERS = [
 ];
 
 function EmployeeDepartment() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(EMPLOYEE_ROLE_FILTERS[0].key);
   const [modalInfo, setModalInfo] = useState<TEmployeeDepartment | null>(null);
@@ -153,29 +156,29 @@ function EmployeeDepartment() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">Thêm mới đại lý </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => {
-                        setModalInfo(null);
-                        setOpenCEModal(true);
-                        setIsCreate(true);
-                      }}
+                  {permission.createDepartment && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => {
+                          setModalInfo(null);
+                          setOpenCEModal(true);
+                          setIsCreate(true);
+                        }}
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -223,24 +226,26 @@ function EmployeeDepartment() {
                 label: "Chú thích",
                 render: (value) => <td>{value.note}</td>,
               },
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => {
-                        setOpenCEModal(true);
-                        setModalInfo(value);
-                        setIsCreate(false);
-                      }}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
+              permission.editDepartment
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => (
+                      <td>
+                        <button
+                          className="btn btn-icon btn-sm btn-primary-ghost"
+                          onClick={() => {
+                            setOpenCEModal(true);
+                            setModalInfo(value);
+                            setIsCreate(false);
+                          }}
+                        >
+                          <i className="ti ti-edit"></i>
+                        </button>
+                      </td>
+                    ),
+                  }
+                : undefined,
             ]}
             data={departments || []}
             filters={[

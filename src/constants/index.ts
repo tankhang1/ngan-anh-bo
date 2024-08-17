@@ -440,18 +440,6 @@ const OBJECTIVES_SELECT = [
   },
   { label: "Nông dân", value: TObjectiveEnum.FARMER },
 ];
-export {
-  PROVINCES,
-  BASE_PORT,
-  BASE_PORT_8180,
-  BASE_URL,
-  MAP_PRODUCT_TYPE,
-  COUNTRIES,
-  MAP_PROGRAM_STATUS,
-  HTTPS_METHOD,
-  LOCAL_KEY,
-  OBJECTIVES_SELECT,
-};
 
 const AccountPermission = new Map([
   [
@@ -508,3 +496,16 @@ const AccountPermission = new Map([
     },
   ],
 ]);
+export {
+  PROVINCES,
+  BASE_PORT,
+  BASE_PORT_8180,
+  BASE_URL,
+  MAP_PRODUCT_TYPE,
+  COUNTRIES,
+  MAP_PROGRAM_STATUS,
+  HTTPS_METHOD,
+  LOCAL_KEY,
+  OBJECTIVES_SELECT,
+  AccountPermission,
+};

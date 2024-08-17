@@ -1,11 +1,4 @@
-import React, {
-  Fragment,
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -28,7 +21,8 @@ import {
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { PROVINCES } from "../../../constants";
-import { label } from "yet-another-react-lightbox";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const AGENT_FILTERS = [
   {
@@ -52,6 +46,7 @@ const CUSTOMER_TYPE = [
   },
 ];
 function CustomerUnValidation() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
@@ -169,42 +164,44 @@ function CustomerUnValidation() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">Thêm mới đại lý </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => navigate(`ce/${true}/-1`)}
+                  {permission.createCustomer && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-success-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => {}}
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => navigate(`ce/${true}/-1`)}
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
+                  {permission.exportCustomer && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
                     >
-                      <i className="ti ti-database-export"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-success-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => {}}
+                      >
+                        <i className="ti ti-database-export"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -305,24 +302,28 @@ function CustomerUnValidation() {
                   </td>
                 ),
               },
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td className="d-flex justify-content-center align-item-center">
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() =>
-                        navigate(
-                          `ce/${false}/${value.id}_${customerType}_${page - 1}`
-                        )
-                      }
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
+              permission.editCustomer
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => (
+                      <td className="d-flex justify-content-center align-item-center">
+                        <button
+                          className="btn btn-icon btn-sm btn-primary-ghost"
+                          onClick={() =>
+                            navigate(
+                              `ce/${false}/${value.id}_${customerType}_${
+                                page - 1
+                              }`
+                            )
+                          }
+                        >
+                          <i className="ti ti-edit"></i>
+                        </button>
+                      </td>
+                    ),
+                  }
+                : undefined,
             ]}
             data={listCustomers || []}
             filters={[

@@ -11,11 +11,12 @@ import { otherApi } from "./api/other/other.api";
 import { customerApi } from "./api/customer/customer.api";
 import { reportApi } from "./api/report/report.api";
 import { accountApi } from "./api/account/account.api";
-import { rtkQueryErrorLogger } from "./middlewares/errorMiddleware";
+import AuthReducer from "./slices/authSlice";
 
 const store = configureStore({
   reducer: {
     theme: reducer,
+    auth: AuthReducer,
     [authApi.reducerPath]: authApi.reducer,
     [infoApi.reducerPath]: infoApi.reducer,
     [productApi.reducerPath]: productApi.reducer,

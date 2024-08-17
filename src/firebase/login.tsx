@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./firebaseapi";
 import { useSignInMutation } from "../redux/api/auth/auth.api";
 import { LOCAL_KEY } from "../constants";
+import { useDispatch } from "react-redux";
+import { updateAccountInfo } from "../redux/slices/authSlice";
 
 //IMAGES
 // import desktoplogo from "../assets/images/brand-logos/desktop-logo.png";
@@ -14,7 +16,7 @@ import { LOCAL_KEY } from "../constants";
 
 const Home = () => {
   const [signIn] = useSignInMutation();
-
+  const dispatch = useDispatch();
   const [passwordshow1, setpasswordshow1] = useState(false);
   const [err, setError] = useState("");
   const [data, setData] = useState({
@@ -42,6 +44,12 @@ const Home = () => {
       .unwrap()
       .then((value) => {
         localStorage.setItem(LOCAL_KEY.TOKEN, value.token);
+        dispatch(
+          updateAccountInfo({
+            token: value.token,
+            roles: value.roles,
+          })
+        );
         routeChange();
       })
       .catch((err: { message: SetStateAction<string> }) => {
@@ -49,17 +57,7 @@ const Home = () => {
         setError(err.message);
       });
   };
-  const Login1 = () => {
-    if (data.email == "adminreact@gmail.com" && data.password == "1234567890") {
-      routeChange();
-    } else {
-      setError("Tài khoản hoặc mật khẩu không đúng");
-      setData({
-        email: "adminreact@gmail.com",
-        password: "1234567890",
-      });
-    }
-  };
+
   return (
     <Fragment>
       <div className="container">

@@ -22,6 +22,8 @@ import { TProduct } from "../../assets/types";
 import { BASE_PORT, MAP_PRODUCT_TYPE } from "../../constants";
 import { useGetListProductsQuery } from "../../redux/api/info/info.api";
 import { exportExcelFile, fNumber } from "../../hooks";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const PRODUCT_FILTERS = [
   {
@@ -60,6 +62,7 @@ const PRODUCT_TYPE = [
   },
 ];
 function ProductPage() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(PRODUCT_FILTERS[0].key);
   const [changeType, setChangeType] = useState<number>(0); // true: thùng, false: gói
@@ -160,42 +163,44 @@ function ProductPage() {
                       </Dropdown.Menu>
                     </Dropdown>
                   </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">Thêm mới sản phẩm </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => navigate(`ce/${true}/-1`)}
+                  {permission.createProduct && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-success-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={handleExportExcel}
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => navigate(`ce/${true}/-1`)}
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
+                  {permission.exportProduct && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
                     >
-                      <i className="ti ti-database-export"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-success-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={handleExportExcel}
+                      >
+                        <i className="ti ti-database-export"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -312,20 +317,22 @@ function ProductPage() {
                 label: "Quy cách đóng gói",
                 render: (value) => <td>{value.pack_configuration}</td>,
               },
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => navigate(`ce/${false}/${value.code}`)}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
+              permission.editProduct
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => (
+                      <td>
+                        <button
+                          className="btn btn-icon btn-sm btn-primary-ghost"
+                          onClick={() => navigate(`ce/${false}/${value.code}`)}
+                        >
+                          <i className="ti ti-edit"></i>
+                        </button>
+                      </td>
+                    ),
+                  }
+                : undefined,
             ]}
             data={filterProducts || []}
             filters={[

@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from "react";
+import React, { Fragment, useDeferredValue, useState } from "react";
 import {
   Button,
   Card,
@@ -16,18 +10,14 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../components/common/table/table";
-import { TCustomerRes, TEmployee } from "../../assets/types";
+import { TEmployee } from "../../assets/types";
 import AppId from "../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
-import {
-  useGetCounterCustomerQuery,
-  useGetListCustomerQuery,
-  useGetListEmployeeQuery,
-  useGetListGroupObjectiveQuery,
-} from "../../redux/api/manage/manage.api";
-import { PROVINCES } from "../../constants";
+import { useGetListEmployeeQuery } from "../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { exportExcelFile, fDate } from "../../hooks";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const EMPLOYEE_FILTERS = [
   {
@@ -40,33 +30,8 @@ const EMPLOYEE_FILTERS = [
   },
 ];
 
-const CUSTOMER_TYPE = [
-  {
-    key: "RETAILER",
-    label: "Đại lý cấp 1",
-  },
-  {
-    key: "RETAILER2",
-    label: "Đại lý cấp 2",
-  },
-  {
-    key: "DISTRIBUTOR",
-    label: "Nhà phân phối",
-  },
-  {
-    key: "CTV",
-    label: "Cộng tác viên",
-  },
-  {
-    key: "FARMER",
-    label: "Nông dân",
-  },
-  {
-    key: "Other",
-    label: "Không hợp tác",
-  },
-];
 function Employee() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(EMPLOYEE_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
@@ -128,42 +93,44 @@ function Employee() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">Thêm mới đại lý </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => navigate(`ce/${true}/-1`)}
+                  {permission.createEmployee && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-success-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={handleExportExcel}
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => navigate(`ce/${true}/-1`)}
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
+                  {permission.exportEmployee && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
                     >
-                      <i className="ti ti-database-export"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-success-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={handleExportExcel}
+                      >
+                        <i className="ti ti-database-export"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -275,20 +242,22 @@ function Employee() {
                 render: (value) => <td>{value.note}</td>,
               },
 
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => navigate(`ce/${false}/${value.uuid}`)}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
+              permission.editEmployee
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => (
+                      <td>
+                        <button
+                          className="btn btn-icon btn-sm btn-primary-ghost"
+                          onClick={() => navigate(`ce/${false}/${value.uuid}`)}
+                        >
+                          <i className="ti ti-edit"></i>
+                        </button>
+                      </td>
+                    ),
+                  }
+                : undefined,
             ]}
             data={employees || []}
             filters={[

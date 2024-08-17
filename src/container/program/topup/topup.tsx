@@ -21,6 +21,8 @@ import {
 } from "../../../redux/api/program/program.api";
 import { format } from "date-fns";
 import { fNumber } from "../../../hooks";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const TOPUP_FILTERS = [
   {
@@ -51,6 +53,7 @@ const STATUS_FILTERS = [
   },
 ];
 function TopupProgram() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(TOPUP_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
@@ -163,27 +166,25 @@ function TopupProgram() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">
-                        Thêm mới chương trình{" "}
-                      </Tooltip>
-                    }
-                  >
-                    <Button
-                      variant=""
-                      aria-label="button"
-                      type="button"
-                      className="btn btn-icon btn-secondary-light ms-2"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Add Contact"
-                      onClick={() => navigate(`ce/${true}/-1`)}
+                  {permission.createProgramTopup && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <i className="ri-add-line"></i>
-                    </Button>
-                  </OverlayTrigger>
+                      <Button
+                        variant=""
+                        aria-label="button"
+                        type="button"
+                        className="btn btn-icon btn-secondary-light ms-2"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="top"
+                        data-bs-title="Add Contact"
+                        onClick={() => navigate(`ce/${true}/-1`)}
+                      >
+                        <i className="ri-add-line"></i>
+                      </Button>
+                    </OverlayTrigger>
+                  )}
                 </div>
               </div>
             </div>
@@ -309,49 +310,35 @@ function TopupProgram() {
                   </td>
                 ),
               },
-              // {
-              //   key: "time_active",
-              //   label: "Thời gian bắt đầu",
-              //   render: (value) => (
-              //     <td>
-              //       {format(new Date(value.time_start ?? "0"), "dd/MM/yyyy")}
-              //     </td>
-              //   ),
-              // },
-              // {
-              //   key: "time_end",
-              //   label: "Thời gian kết thúc",
-              //   render: (value) => (
-              //     <td>
-              //       {format(new Date(value.time_end ?? "0"), "dd/MM/yyyy")}
-              //     </td>
-              //   ),
-              // },
 
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => {
-                  console.log(value);
-                  return (
-                    <td>
-                      <span className="d-flex justify-content-center align-item-center">
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() =>
-                            navigate(
-                              `ce/${false}/${value.uuid}_${status}_${page - 1}`
-                            )
-                          }
-                          disabled={value.status === 2}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </span>
-                    </td>
-                  );
-                },
-              },
+              permission.editProgramTopup
+                ? {
+                    key: "",
+                    label: "Chức năng",
+                    render: (value) => {
+                      console.log(value);
+                      return (
+                        <td>
+                          <span className="d-flex justify-content-center align-item-center">
+                            <button
+                              className="btn btn-icon btn-sm btn-primary-ghost"
+                              onClick={() =>
+                                navigate(
+                                  `ce/${false}/${value.uuid}_${status}_${
+                                    page - 1
+                                  }`
+                                )
+                              }
+                              disabled={value.status === 2}
+                            >
+                              <i className="ti ti-edit"></i>
+                            </button>
+                          </span>
+                        </td>
+                      );
+                    },
+                  }
+                : undefined,
             ]}
             data={listTopups || []}
             filters={[
