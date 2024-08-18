@@ -375,7 +375,9 @@ function Accounts() {
                 <Modal.Body>
                   <Stack className="d-flex gap-1">
                     <Form.Group controlId="username_validate">
-                      <Form.Label>Tên đăng nhập</Form.Label>
+                      <Form.Label className="text-black">
+                        Tên đăng nhập
+                      </Form.Label>
                       <Form.Control
                         required
                         type="text"
@@ -390,7 +392,7 @@ function Accounts() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId="password_validate">
-                      <Form.Label>Mật khẩu</Form.Label>
+                      <Form.Label className="text-black">Mật khẩu</Form.Label>
                       <Form.Control
                         required
                         type="text"
@@ -405,7 +407,9 @@ function Accounts() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId="staff_code_validate">
-                      <Form.Label>Tên nhân viên</Form.Label>
+                      <Form.Label className="text-black">
+                        Tên nhân viên
+                      </Form.Label>
                       <Form.Select
                         className="form-select"
                         name="staff_code"
@@ -426,7 +430,7 @@ function Accounts() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId="roles_validate">
-                      <Form.Label>Vai trò</Form.Label>
+                      <Form.Label className="text-black">Vai trò</Form.Label>
                       <Select
                         //@ts-ignore
                         options={roles?.map((item) => ({

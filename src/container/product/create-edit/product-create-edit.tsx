@@ -271,7 +271,10 @@ function ProductCreateEdit() {
                         </Stack>
                       ) : (
                         <Form.Group controlId="image_validate">
-                          <Form.Label> Hình ảnh sản phẩm</Form.Label>
+                          <Form.Label className="text-black">
+                            {" "}
+                            Hình ảnh sản phẩm
+                          </Form.Label>
                           <FilePond
                             files={files1}
                             onupdatefiles={setFiles1}
@@ -288,7 +291,9 @@ function ProductCreateEdit() {
                     <Col xl={6}>
                       <Stack className="d-flex gap-2">
                         <Form.Group controlId="code_validate">
-                          <Form.Label>Mã sản phẩm</Form.Label>
+                          <Form.Label className="text-black">
+                            Mã sản phẩm
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -306,7 +311,9 @@ function ProductCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="product_name_detail_validate">
-                          <Form.Label>Tên sản phẩm</Form.Label>
+                          <Form.Label className="text-black">
+                            Tên sản phẩm
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -325,7 +332,9 @@ function ProductCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="name_display_label_validate">
-                          <Form.Label>Tên sản phẩm (thu gọn)</Form.Label>
+                          <Form.Label className="text-black">
+                            Tên sản phẩm (thu gọn)
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -344,7 +353,9 @@ function ProductCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="brand_code_validate">
-                          <Form.Label>Mã thương hiệu</Form.Label>
+                          <Form.Label className="text-black">
+                            Mã thương hiệu
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -362,7 +373,9 @@ function ProductCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="brand_name_validate">
-                          <Form.Label>Tên thương hiệu</Form.Label>
+                          <Form.Label className="text-black">
+                            Tên thương hiệu
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -380,7 +393,9 @@ function ProductCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="category_code_validate">
-                          <Form.Label>Mã nhóm sản phẩm</Form.Label>
+                          <Form.Label className="text-black">
+                            Mã nhóm sản phẩm
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -398,7 +413,9 @@ function ProductCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="category_name_validate">
-                          <Form.Label>Tên nhóm sản phẩm</Form.Label>
+                          <Form.Label className="text-black">
+                            Tên nhóm sản phẩm
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -420,7 +437,9 @@ function ProductCreateEdit() {
                   </Row>
                   <Row>
                     <Form.Group as={Col} md={4} controlId="point_validate">
-                      <Form.Label>Số điểm thưởng</Form.Label>
+                      <Form.Label className="text-black">
+                        Số điểm thưởng
+                      </Form.Label>
                       {/* <Form.Control
                         required
                         type="number"
@@ -451,7 +470,7 @@ function ProductCreateEdit() {
                       md={4}
                       controlId="c1_price_vnd_validate"
                     >
-                      <Form.Label>Giá C1</Form.Label>
+                      <Form.Label className="text-black">Giá C1</Form.Label>
                       {/* <Form.Control
                         required
                         type="number"
@@ -485,7 +504,7 @@ function ProductCreateEdit() {
                       md={4}
                       controlId="c2_price_vnd_validate"
                     >
-                      <Form.Label>Giá C2</Form.Label>
+                      <Form.Label className="text-black">Giá C2</Form.Label>
                       {/* <Form.Control
                         required
                         as={NumericFormat}
@@ -519,7 +538,9 @@ function ProductCreateEdit() {
                   </Row>
                   <Row>
                     <Form.Group as={Col} md={6} controlId="type_validate">
-                      <Form.Label>Hình thức đóng gói</Form.Label>
+                      <Form.Label className="text-black">
+                        Hình thức đóng gói
+                      </Form.Label>
                       <Form.Select
                         className="form-select"
                         id="type_validate"
@@ -561,7 +582,7 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={6} controlId="code_bin_validate">
-                      <Form.Label>Mã thùng</Form.Label>
+                      <Form.Label className="text-black">Mã thùng</Form.Label>
                       <Form.Select
                         className="form-select"
                         id="code_bin_validate"
@@ -588,7 +609,9 @@ function ProductCreateEdit() {
                       md={4}
                       controlId="pack_configuration_validate"
                     >
-                      <Form.Label>Quy cách đóng gói</Form.Label>
+                      <Form.Label className="text-black">
+                        Quy cách đóng gói
+                      </Form.Label>
                       <Form.Control
                         required
                         type="text"
@@ -607,7 +630,9 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={4} controlId="net_weight_validate">
-                      <Form.Label>Trọng lượng</Form.Label>
+                      <Form.Label className="text-black">
+                        Trọng lượng
+                      </Form.Label>
                       <Form.Control
                         type="number"
                         id="net_weight_validate"
@@ -623,7 +648,9 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={4} controlId="unit_validate">
-                      <Form.Label>Đơn vị tính</Form.Label>
+                      <Form.Label className="text-black">
+                        Đơn vị tính
+                      </Form.Label>
                       <Form.Select
                         className="form-select"
                         id="unit_validate"
@@ -648,7 +675,9 @@ function ProductCreateEdit() {
                     </Form.Group>
                   </Row>
                   <Form.Group controlId="ingredient_id_validate">
-                    <Form.Label>Mã nguyên liệu</Form.Label>
+                    <Form.Label className="text-black">
+                      Mã nguyên liệu
+                    </Form.Label>
                     <Form.Select
                       className="form-select"
                       required
@@ -672,7 +701,9 @@ function ProductCreateEdit() {
                   </Form.Group>
                   <Row>
                     <Form.Group as={Col} md={6} controlId="short_info_validate">
-                      <Form.Label>Mô tả sản phẩm (thu gọn)</Form.Label>
+                      <Form.Label className="text-black">
+                        Mô tả sản phẩm (thu gọn)
+                      </Form.Label>
                       <Form.Control
                         required
                         as="textarea"
@@ -693,7 +724,9 @@ function ProductCreateEdit() {
                       md={6}
                       controlId="description_validate"
                     >
-                      <Form.Label>Mô tả sản phẩm (chi tiết)</Form.Label>
+                      <Form.Label className="text-black">
+                        Mô tả sản phẩm (chi tiết)
+                      </Form.Label>
                       <Form.Control
                         required
                         as="textarea"
@@ -711,7 +744,9 @@ function ProductCreateEdit() {
                     </Form.Group>
                   </Row>
                   <Form.Group controlId="ingredient_validate">
-                    <Form.Label>Thành phần nguyên liệu</Form.Label>
+                    <Form.Label className="text-black">
+                      Thành phần nguyên liệu
+                    </Form.Label>
                     <Editor
                       placeholder="Thành phần nguyên liệu"
                       value={values.ingredient}
@@ -726,7 +761,9 @@ function ProductCreateEdit() {
 
                   <Row>
                     <Form.Group as={Col} md={6} controlId="detail_url_validate">
-                      <Form.Label>Link sản phẩm</Form.Label>
+                      <Form.Label className="text-black">
+                        Link sản phẩm
+                      </Form.Label>
                       <Form.Control
                         required
                         type="link"
@@ -746,7 +783,7 @@ function ProductCreateEdit() {
                       md={6}
                       controlId="certificate_of_origin_validate"
                     >
-                      <Form.Label>Xuất xứ</Form.Label>
+                      <Form.Label className="text-black">Xuất xứ</Form.Label>
                       <Form.Select
                         className="form-select"
                         id="certificate_of_origin_validate"
@@ -775,13 +812,15 @@ function ProductCreateEdit() {
                     md={4}
                     controlId="certificate_of_origin_validate"
                   >
-                    <Form.Label>Sản xuất</Form.Label>
+                    <Form.Label className="text-black">Sản xuất</Form.Label>
                     <Form.Check label="Đóng gói" />
                     <Form.Check defaultChecked label="In trên bao bì" />
                   </Form.Group>
                   <Row>
                     <Form.Group as={Col} md={3} controlId="mop_validate">
-                      <Form.Label>Số lượng sản xuất tối thiểu</Form.Label>
+                      <Form.Label className="text-black">
+                        Số lượng sản xuất tối thiểu
+                      </Form.Label>
                       <Form.Control
                         required
                         type="number"
@@ -798,7 +837,9 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={3} controlId="sku_bin_validate">
-                      <Form.Label>Số sản phẩm / thùng</Form.Label>
+                      <Form.Label className="text-black">
+                        Số sản phẩm / thùng
+                      </Form.Label>
                       <Form.Control
                         required
                         type="number"
@@ -815,7 +856,9 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={3} controlId="sku_box_validate">
-                      <Form.Label>Số sản phẩm / hộp</Form.Label>
+                      <Form.Label className="text-black">
+                        Số sản phẩm / hộp
+                      </Form.Label>
                       <Form.Control
                         required
                         type="number"
@@ -832,7 +875,9 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={3} controlId="bin_pallet_validate">
-                      <Form.Label>Số thùng / lô</Form.Label>
+                      <Form.Label className="text-black">
+                        Số thùng / lô
+                      </Form.Label>
                       <Form.Control
                         required
                         type="number"
@@ -850,7 +895,9 @@ function ProductCreateEdit() {
                     </Form.Group>
                   </Row>
                   <Form.Group controlId="device_code_validate">
-                    <Form.Label>Thiết bị in bao bì</Form.Label>
+                    <Form.Label className="text-black">
+                      Thiết bị in bao bì
+                    </Form.Label>
                     <Form.Select
                       className="form-select"
                       id="device_code_validate"

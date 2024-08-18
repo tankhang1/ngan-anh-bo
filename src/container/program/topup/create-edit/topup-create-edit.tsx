@@ -302,7 +302,9 @@ function TopupCreateEdit() {
               <Card.Body>
                 <Stack className="d-flex gap-1">
                   <Form.Group controlId="uuid_validate">
-                    <Form.Label>Mã chương trình</Form.Label>
+                    <Form.Label className="text-black">
+                      Mã chương trình
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -319,7 +321,9 @@ function TopupCreateEdit() {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="name_validate">
-                    <Form.Label>Tên chương trình</Form.Label>
+                    <Form.Label className="text-black">
+                      Tên chương trình
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -338,7 +342,9 @@ function TopupCreateEdit() {
 
                   <Row>
                     <Form.Group as={Col} md={6} controlId="time_start_validate">
-                      <Form.Label>Ngày bắt đầu</Form.Label>
+                      <Form.Label className="text-black">
+                        Ngày bắt đầu
+                      </Form.Label>
                       <Form.Control
                         required
                         type="date"
@@ -361,7 +367,9 @@ function TopupCreateEdit() {
                       as={Col}
                       md={6}
                     >
-                      <Form.Label>Ngày kết thúc</Form.Label>
+                      <Form.Label className="text-black">
+                        Ngày kết thúc
+                      </Form.Label>
                       <Form.Control
                         required
                         type="date"
@@ -378,7 +386,9 @@ function TopupCreateEdit() {
                     </Form.Group>
                   </Row>
                   <Form.Group controlId="customer_province_validate">
-                    <Form.Label>Chọn sản phẩm</Form.Label>
+                    <Form.Label className="text-black">
+                      Chọn sản phẩm
+                    </Form.Label>
 
                     <Select
                       isMulti
@@ -407,7 +417,9 @@ function TopupCreateEdit() {
                   </Form.Group>
 
                   <Form.Group controlId="objectives_validate">
-                    <Form.Label>Chọn đối tượng tham gia</Form.Label>
+                    <Form.Label className="text-black">
+                      Chọn đối tượng tham gia
+                    </Form.Label>
                     <Select
                       isMulti
                       name="colors"
@@ -434,7 +446,9 @@ function TopupCreateEdit() {
                   </Form.Group>
 
                   <Form.Group controlId="point_validate">
-                    <Form.Label>Nhập số tiền thưởng</Form.Label>
+                    <Form.Label className="text-black">
+                      Nhập số tiền thưởng
+                    </Form.Label>
                     {/* <Form.Control
                       required
                       type="number"
@@ -460,7 +474,7 @@ function TopupCreateEdit() {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="status_validate">
-                    <Form.Label>Trạng thái</Form.Label>
+                    <Form.Label className="text-black">Trạng thái</Form.Label>
                     <Form.Select
                       className="form-select"
                       name="status"

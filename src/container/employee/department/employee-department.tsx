@@ -288,7 +288,7 @@ function EmployeeDepartment() {
               <Modal.Body>
                 {modalInfo?.id && (
                   <Form.Group controlId="id_validate">
-                    <Form.Label>Mã vai trò</Form.Label>
+                    <Form.Label className="text-black">Mã vai trò</Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -305,7 +305,7 @@ function EmployeeDepartment() {
                   </Form.Group>
                 )}
                 <Form.Group controlId="name_validate">
-                  <Form.Label>Mã phòng ban</Form.Label>
+                  <Form.Label className="text-black">Mã phòng ban</Form.Label>
                   <Form.Control
                     required
                     type="text"
@@ -321,7 +321,7 @@ function EmployeeDepartment() {
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="name_validate">
-                  <Form.Label>Tên phòng ban</Form.Label>
+                  <Form.Label className="text-black">Tên phòng ban</Form.Label>
                   <Form.Control
                     required
                     type="text"
@@ -337,7 +337,7 @@ function EmployeeDepartment() {
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="note_validate">
-                  <Form.Label>Chú thích</Form.Label>
+                  <Form.Label className="text-black">Chú thích</Form.Label>
                   <Form.Control
                     required
                     type="text"

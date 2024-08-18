@@ -264,7 +264,9 @@ function CustomerValidationCreateEdit() {
                     </Card.Header>
                     <Card.Body>
                       <Form.Group controlId="customer_code_validate">
-                        <Form.Label>Mã khách hàng</Form.Label>
+                        <Form.Label className="text-black">
+                          Mã khách hàng
+                        </Form.Label>
                         <Form.Control
                           required
                           type="text"
@@ -287,7 +289,9 @@ function CustomerValidationCreateEdit() {
                           md={4}
                           controlId="customer_name_validate"
                         >
-                          <Form.Label>Họ và tên</Form.Label>
+                          <Form.Label className="text-black">
+                            Họ và tên
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -304,7 +308,9 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col} md={4} controlId="gender_validate">
-                          <Form.Label>Giới tính</Form.Label>
+                          <Form.Label className="text-black">
+                            Giới tính
+                          </Form.Label>
                           <Form.Select
                             className="form-select"
                             name="gender"
@@ -324,7 +330,9 @@ function CustomerValidationCreateEdit() {
                           md={4}
                           controlId="birthday_validate"
                         >
-                          <Form.Label>Ngày sinh</Form.Label>
+                          <Form.Label className="text-black">
+                            Ngày sinh
+                          </Form.Label>
                           <Form.Control
                             required
                             type="date"
@@ -339,7 +347,9 @@ function CustomerValidationCreateEdit() {
                         </Form.Group>
                       </Row>
                       <Form.Group controlId="customer_type_validate">
-                        <Form.Label>Chọn đối tượng tham gia</Form.Label>
+                        <Form.Label className="text-black">
+                          Chọn đối tượng tham gia
+                        </Form.Label>
                         <Form.Select
                           className="form-select"
                           name="customer_type"
@@ -363,7 +373,9 @@ function CustomerValidationCreateEdit() {
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group controlId="phone_validate" className="mb-2">
-                        <Form.Label>Số điện thoại</Form.Label>
+                        <Form.Label className="text-black">
+                          Số điện thoại
+                        </Form.Label>
                         <Form.Control
                           required
                           type="text"
@@ -379,7 +391,9 @@ function CustomerValidationCreateEdit() {
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group controlId="email_validate" className="mb-2">
-                        <Form.Label>Địa chỉ email</Form.Label>
+                        <Form.Label className="text-black">
+                          Địa chỉ email
+                        </Form.Label>
                         <Form.Control
                           required
                           type="email"
@@ -400,7 +414,7 @@ function CustomerValidationCreateEdit() {
                           controlId="email_validate"
                           className="mb-2"
                         >
-                          <Form.Label>CCCD</Form.Label>
+                          <Form.Label className="text-black">CCCD</Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -422,7 +436,9 @@ function CustomerValidationCreateEdit() {
                           controlId="citizen_day_validate"
                           className="mb-2"
                         >
-                          <Form.Label>Ngày cấp CCCD</Form.Label>
+                          <Form.Label className="text-black">
+                            Ngày cấp CCCD
+                          </Form.Label>
                           <Form.Control
                             required
                             type="date"
@@ -443,7 +459,9 @@ function CustomerValidationCreateEdit() {
                         controlId="customer_province_validate"
                         className="mb-2"
                       >
-                        <Form.Label>Tỉnh thành</Form.Label>
+                        <Form.Label className="text-black">
+                          Tỉnh thành
+                        </Form.Label>
                         <Form.Select
                           className="form-select"
                           name="customer_province"
@@ -475,7 +493,9 @@ function CustomerValidationCreateEdit() {
                         controlId="customer_district_validate"
                         className="mb-2"
                       >
-                        <Form.Label>Chọn quận huyện</Form.Label>
+                        <Form.Label className="text-black">
+                          Chọn quận huyện
+                        </Form.Label>
                         <Form.Select
                           className="form-select"
                           name="customer_district"
@@ -503,7 +523,9 @@ function CustomerValidationCreateEdit() {
                         controlId="customer_address_validate"
                         className="mb-2"
                       >
-                        <Form.Label>Nhập địa chỉ chi tiết</Form.Label>
+                        <Form.Label className="text-black">
+                          Nhập địa chỉ chi tiết
+                        </Form.Label>
                         <Form.Control
                           required
                           type="text"
@@ -522,7 +544,9 @@ function CustomerValidationCreateEdit() {
                       </Form.Group>
 
                       <Form.Group controlId="sale_code_validate">
-                        <Form.Label>Nhân viên phụ trách</Form.Label>
+                        <Form.Label className="text-black">
+                          Nhân viên phụ trách
+                        </Form.Label>
                         <Form.Select
                           className="form-select"
                           name="sale_code"
@@ -545,7 +569,9 @@ function CustomerValidationCreateEdit() {
                         controlId="business_document_validate"
                         className="mb-2"
                       >
-                        <Form.Label>Giấy phép</Form.Label>
+                        <Form.Label className="text-black">
+                          Giấy phép
+                        </Form.Label>
                         <Form.Control
                           required
                           type="text"
@@ -570,7 +596,9 @@ function CustomerValidationCreateEdit() {
                           controlId="tags_validate"
                           className="mb-2"
                         >
-                          <Form.Label>Nhập cây trồng chính</Form.Label>
+                          <Form.Label className="text-black">
+                            Nhập cây trồng chính
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -590,7 +618,7 @@ function CustomerValidationCreateEdit() {
                           controlId="area_size_validate"
                           className="mb-2"
                         >
-                          <Form.Label>
+                          <Form.Label className="text-black">
                             Nhập diện tích cây trồng chính
                           </Form.Label>
                           <NumericFormat
@@ -609,7 +637,9 @@ function CustomerValidationCreateEdit() {
                         </Form.Group>
                       </Row>
                       <Form.Group controlId="note_validate" className="mb-2">
-                        <Form.Label>Nhập ghi chú</Form.Label>
+                        <Form.Label className="text-black">
+                          Nhập ghi chú
+                        </Form.Label>
                         <Form.Control
                           required
                           type="text"
@@ -625,7 +655,7 @@ function CustomerValidationCreateEdit() {
                       </Form.Group>
 
                       <Form.Group controlId="sign_board_validate">
-                        <Form.Label>
+                        <Form.Label className="text-black">
                           Nhập biển hiệu / Tên doanh nghiệp
                         </Form.Label>
                         <Form.Control
@@ -648,7 +678,9 @@ function CustomerValidationCreateEdit() {
                           md={6}
                           controlId="citizen_number_validate"
                         >
-                          <Form.Label>Số CCKD</Form.Label>
+                          <Form.Label className="text-black">
+                            Số CCKD
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -665,7 +697,9 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col} md={6}>
-                          <Form.Label>Ngày cấp</Form.Label>
+                          <Form.Label className="text-black">
+                            Ngày cấp
+                          </Form.Label>
                           <Form.Control
                             required
                             type="date"
@@ -686,7 +720,9 @@ function CustomerValidationCreateEdit() {
                         md={6}
                         controlId="info_primary_validate"
                       >
-                        <Form.Label>Có tham gia tích điểm không</Form.Label>
+                        <Form.Label className="text-black">
+                          Có tham gia tích điểm không
+                        </Form.Label>
                         <Form.Check
                           type="switch"
                           checked={values.info_primary === 1 ? true : false}
@@ -714,7 +750,9 @@ function CustomerValidationCreateEdit() {
                     <Card.Body>
                       <Stack>
                         <Form.Group controlId="name_validate">
-                          <Form.Label>Tên đăng ký</Form.Label>
+                          <Form.Label className="text-black">
+                            Tên đăng ký
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -730,7 +768,9 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="phone_validate">
-                          <Form.Label>Số điện thoại</Form.Label>
+                          <Form.Label className="text-black">
+                            Số điện thoại
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -746,7 +786,9 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="sale_code_validate">
-                          <Form.Label>Tỉnh đăng ký</Form.Label>
+                          <Form.Label className="text-black">
+                            Tỉnh đăng ký
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -764,7 +806,7 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         {/* <Form.Group controlId="sale_code_validate">
-                          <Form.Label>Huyện đăng ký</Form.Label>
+                          <Form.Label className='text-black'>Huyện đăng ký</Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -783,7 +825,9 @@ function CustomerValidationCreateEdit() {
                           controlId="source_channel_used_validate"
                           className="mb-2"
                         >
-                          <Form.Label>Nguồn tham gia</Form.Label>
+                          <Form.Label className="text-black">
+                            Nguồn tham gia
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -810,7 +854,9 @@ function CustomerValidationCreateEdit() {
                     <Card.Body>
                       <Stack>
                         <Form.Group controlId="export_code_validate">
-                          <Form.Label>Mã số KH-XK</Form.Label>
+                          <Form.Label className="text-black">
+                            Mã số KH-XK
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -828,7 +874,7 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="export_address_validate">
-                          <Form.Label>
+                          <Form.Label className="text-black">
                             Ghi chú thông tin địa chỉ giao hàng
                           </Form.Label>
                           <Form.Control

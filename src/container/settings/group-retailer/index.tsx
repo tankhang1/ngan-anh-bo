@@ -169,7 +169,9 @@ function SettingGroupRetailer() {
               <Modal.Body>
                 <Stack className="d-flex gap-1">
                   <Form.Group>
-                    <Form.Label>Mã nhóm đại lý</Form.Label>
+                    <Form.Label className="text-black">
+                      Mã nhóm đại lý
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -184,7 +186,9 @@ function SettingGroupRetailer() {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Tên nhóm đại lý</Form.Label>
+                    <Form.Label className="text-black">
+                      Tên nhóm đại lý
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -199,7 +203,7 @@ function SettingGroupRetailer() {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>Ghi chú</Form.Label>
+                    <Form.Label className="text-black">Ghi chú</Form.Label>
                     <Form.Control
                       required
                       type="text"

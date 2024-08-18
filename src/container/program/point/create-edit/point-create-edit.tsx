@@ -365,7 +365,9 @@ function PointCreateEdit() {
               <Card.Body>
                 <Stack className="d-flex gap-1">
                   <Form.Group controlId="uuid_validate">
-                    <Form.Label>Mã chương trình</Form.Label>
+                    <Form.Label className="text-black">
+                      Mã chương trình
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -379,7 +381,9 @@ function PointCreateEdit() {
                     />
                   </Form.Group>
                   <Form.Group controlId="name_validate">
-                    <Form.Label>Tên chương trình</Form.Label>
+                    <Form.Label className="text-black">
+                      Tên chương trình
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -398,7 +402,9 @@ function PointCreateEdit() {
 
                   <Row>
                     <Form.Group as={Col} md={6} controlId="time_start_validate">
-                      <Form.Label>Ngày bắt đầu</Form.Label>
+                      <Form.Label className="text-black">
+                        Ngày bắt đầu
+                      </Form.Label>
                       <Form.Control
                         required
                         type="date"
@@ -421,7 +427,9 @@ function PointCreateEdit() {
                       as={Col}
                       md={6}
                     >
-                      <Form.Label>Ngày kết thúc</Form.Label>
+                      <Form.Label className="text-black">
+                        Ngày kết thúc
+                      </Form.Label>
                       <Form.Control
                         required
                         type="date"
@@ -438,7 +446,9 @@ function PointCreateEdit() {
                     </Form.Group>
                   </Row>
                   <Form.Group controlId="customer_province_validate">
-                    <Form.Label>Chọn sản phẩm</Form.Label>
+                    <Form.Label className="text-black">
+                      Chọn sản phẩm
+                    </Form.Label>
 
                     <Select
                       isMulti
@@ -463,7 +473,9 @@ function PointCreateEdit() {
                     />
                   </Form.Group>
                   <Form.Group controlId="locations_validate">
-                    <Form.Label>Chọn tỉnh thành</Form.Label>
+                    <Form.Label className="text-black">
+                      Chọn tỉnh thành
+                    </Form.Label>
 
                     <Select
                       isMulti
@@ -487,7 +499,9 @@ function PointCreateEdit() {
                     />
                   </Form.Group>
                   <Form.Group controlId="objectives_validate">
-                    <Form.Label>Chọn đối tượng tham gia</Form.Label>
+                    <Form.Label className="text-black">
+                      Chọn đối tượng tham gia
+                    </Form.Label>
                     <Select
                       isMulti
                       name="colors"
@@ -510,7 +524,9 @@ function PointCreateEdit() {
                     />
                   </Form.Group>
                   <Form.Group controlId="agents_validate">
-                    <Form.Label>Chọn đại lý cấp 1</Form.Label>
+                    <Form.Label className="text-black">
+                      Chọn đại lý cấp 1
+                    </Form.Label>
 
                     <Select
                       isMulti
@@ -535,7 +551,7 @@ function PointCreateEdit() {
                     />
                   </Form.Group>
                   {/* <Form.Group controlId="point_validate">
-                    <Form.Label>Nhập số điểm</Form.Label>
+                    <Form.Label className='text-black'>Nhập số điểm</Form.Label>
                     <Form.Control
                       required
                       type="number"
@@ -551,7 +567,7 @@ function PointCreateEdit() {
                     </Form.Control.Feedback>
                   </Form.Group> */}
                   <Form.Group controlId="status_validate">
-                    <Form.Label>Trạng thái</Form.Label>
+                    <Form.Label className="text-black">Trạng thái</Form.Label>
                     <Form.Select
                       className="form-select"
                       name="status"
