@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Provider, useSelector } from "react-redux";
-import store, { RootState } from "../redux/store";
+import store, { persistor, RootState } from "../redux/store";
 import Header from "../components/common/header/header";
 import Switcher from "../components/common/switcher/switcher";
 import Sidebar from "../components/common/sidebar/sidebar";
@@ -9,6 +9,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "../components/common/footer/footer";
 import Tabtotop from "../components/common/tab-to-tap/tabtotap";
 import ToastProvider from "../components/AppToast";
+import { PersistGate } from "redux-persist/integration/react";
 
 function App() {
   const navigate = useNavigate();
@@ -25,22 +26,24 @@ function App() {
     <Fragment>
       <ToastProvider>
         <Provider store={store}>
-          <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
-            <Switcher />
-            <div className="page">
-              <Header />
-              <Sidebar />
-              <Pageheader />
-              <div className="main-content app-content">
-                <div className="container-fluid">
-                  <Outlet />
+          <PersistGate loading={null} persistor={persistor}>
+            <div style={{ display: `${lateLoad ? "block" : "none"}` }}>
+              <Switcher />
+              <div className="page">
+                <Header />
+                <Sidebar />
+                <Pageheader />
+                <div className="main-content app-content">
+                  <div className="container-fluid">
+                    <Outlet />
+                  </div>
                 </div>
+                <Footer />
               </div>
-              <Footer />
-            </div>
 
-            <Tabtotop />
-          </div>
+              <Tabtotop />
+            </div>
+          </PersistGate>
         </Provider>
       </ToastProvider>
     </Fragment>

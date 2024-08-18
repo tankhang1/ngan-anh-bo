@@ -204,13 +204,9 @@ const AppTable = <T extends DataItem>({
             <thead>
               <tr>
                 {headers.map(
-                  (item) =>
+                  (item, index) =>
                     item !== undefined && (
-                      <th
-                        scope="col"
-                        key={Math.random()}
-                        className="text-center"
-                      >
+                      <th scope="col" key={index} className="text-center">
                         {item.label}
                       </th>
                     )
@@ -218,13 +214,18 @@ const AppTable = <T extends DataItem>({
               </tr>
             </thead>
             {isLoading ? (
-              <p className="text text-base text-black">Loading....</p>
+              <tbody>
+                <tr className="text text-base text-black">
+                  <td>Loading....</td>
+                </tr>
+              </tbody>
             ) : (
               <tbody>
-                {pagingData.map((item) => (
-                  <tr key={Math.random()} className="text-center">
+                {pagingData.map((item, index) => (
+                  <tr key={index} className="text-center">
                     {headers.map(
-                      (header) => item !== undefined && header?.render?.(item)
+                      (header, index) =>
+                        item !== undefined && header?.render?.(item)
                     )}
                   </tr>
                 ))}
@@ -255,10 +256,10 @@ const AppTable = <T extends DataItem>({
                 </Pagination.Item>
 
                 {listButtonPaging.map(
-                  (item) =>
+                  (item, index) =>
                     item !== null && (
                       <Pagination.Item
-                        key={item}
+                        key={index}
                         active={page === item}
                         onClick={() => setPage(item)}
                       >
