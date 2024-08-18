@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialValue = {
   token: "",
   roles: "",
+  username: "",
   permission: {
     viewDashboard: false,
     viewAccounts: false,
@@ -55,10 +56,11 @@ const authSlice = createSlice({
   reducers: {
     updateAccountInfo: (
       state,
-      action: PayloadAction<{ token: string; roles: string }>
+      action: PayloadAction<{ token: string; roles: string; username: string }>
     ) => {
       state.token = action.payload.token;
       state.roles = action.payload.roles;
+      state.username = action.payload.username;
       if (state.roles === "ROLE_AGENT") {
         state.permission = {
           viewDashboard: true,

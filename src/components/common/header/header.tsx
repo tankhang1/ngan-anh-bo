@@ -1177,7 +1177,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     </div>
                     <div className="ms-2 my-auto d-none d-xl-flex">
                       <h6 className=" font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
-                        Ngan Anh Admin
+                        {store.getState().auth.username}
                       </h6>
                     </div>
                   </div>

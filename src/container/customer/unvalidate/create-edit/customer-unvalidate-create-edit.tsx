@@ -17,6 +17,7 @@ import {
   useGetListCustomerRegisterQuery,
   useGetListEmployeeQuery,
   useGetListGroupObjectiveQuery,
+  useGetListGroupRetailerQuery,
 } from "../../../../redux/api/manage/manage.api";
 import {
   useGetDistrictQuery,
@@ -73,6 +74,8 @@ function CustomerUnValidationCreateEdit() {
 
   const [createUpdateCustomer] = useCreateUpdateCustomerMutation();
   const [verifyCustomer] = useVerifyCustomerMutation();
+  const { data: groupRetailers } = useGetListGroupRetailerQuery();
+
   const { data: districts } = useGetDistrictQuery(
     {
       p: provinceId as string,
@@ -203,18 +206,15 @@ function CustomerUnValidationCreateEdit() {
         initialValues={{
           customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
-          customer_province:
-            customer?.customer_province ?? provinces?.[0]?.code,
-          customer_type:
-            customer?.customer_type ?? groupObjectives?.[0]?.symbol,
+          customer_province: customer?.customer_province ?? "",
+          customer_type: customer?.customer_type ?? "",
           name: customer?.name ?? "",
           province: customer?.province ?? "",
           info_primary: customer?.info_primary ?? 1,
           phone: customer?.phone ?? "",
           sign_board: customer?.sign_board ?? "",
           customer_address: customer?.customer_address ?? "",
-          customer_district:
-            customer?.customer_district ?? districts?.[0]?.value,
+          customer_district: customer?.customer_district ?? "",
           province_name: customer?.province_name ?? "",
           status: customer?.status ?? 1,
           time: customer?.time ?? "",
@@ -229,9 +229,10 @@ function CustomerUnValidationCreateEdit() {
           area_size: customer?.area_size ?? 0,
           source_channel_used: customer?.source_channel_used ?? "",
           avatar: customer?.avatar ?? "",
-          sale_code: customer?.sale_code ?? employees?.[0]?.code, // mã nhân viên
+          sale_code: customer?.sale_code ?? "", // mã nhân viên
           export_code: customer?.export_code, // mã xuất kho
           export_address: customer?.export_address,
+          retailer_group: customer?.retailer_group || "",
         }}
         onSubmit={() => {}}
         enableReinitialize
@@ -404,7 +405,7 @@ function CustomerUnValidationCreateEdit() {
                       </Row>
                       <Form.Group controlId="customer_type_validate">
                         <Form.Label className="text-black">
-                          Chọn đối tượng tham gia
+                          Nhóm khách hàng
                         </Form.Label>
                         <Form.Select
                           className="form-select"
@@ -418,6 +419,7 @@ function CustomerUnValidationCreateEdit() {
                           }
                           required
                         >
+                          <option value="">-- Chọn nhóm khách hàng --</option>
                           {groupObjectives?.map((item) => (
                             <option key={item.id} value={item.symbol}>
                               {item.name}
@@ -426,6 +428,32 @@ function CustomerUnValidationCreateEdit() {
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
                           {errors.customer_type as any}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group controlId="customer_type_validate">
+                        <Form.Label className="text-black">
+                          Nhóm đại lý
+                        </Form.Label>
+                        <Form.Select
+                          className="form-select"
+                          name="retailer_group"
+                          onChange={(e) =>
+                            setFieldValue("retailer_group", e.target.value)
+                          }
+                          isInvalid={
+                            touched.retailer_group && !!errors.retailer_group
+                          }
+                          required
+                        >
+                          <option value="">-- Chọn nhóm đại lý --</option>
+                          {groupRetailers?.map((item) => (
+                            <option key={item.id} value={item.code}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.retailer_group as any}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group controlId="phone_validate" className="mb-2">
@@ -535,6 +563,8 @@ function CustomerUnValidationCreateEdit() {
                           }
                           required
                         >
+                          <option value="">-- Chọn tỉnh thành --</option>
+
                           {provinces?.map((item, index) => (
                             <option value={item.code} key={index}>
                               {item.name}
@@ -562,6 +592,8 @@ function CustomerUnValidationCreateEdit() {
                           }
                           required
                         >
+                          <option value="">-- Chọn quận huyện --</option>
+
                           {districts?.map((item, index) => (
                             <option value={item.value} key={index}>
                               {item.label}
@@ -607,6 +639,10 @@ function CustomerUnValidationCreateEdit() {
                           isInvalid={touched.sale_code && !!errors.sale_code}
                           required
                         >
+                          <option value="">
+                            -- Chọn nhân viên phụ trách --
+                          </option>
+
                           {employees?.map((item) => (
                             <option key={item.id} value={item.code}>
                               {item.name}

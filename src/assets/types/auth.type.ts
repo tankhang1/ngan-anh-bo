@@ -5,4 +5,5 @@ export type TAuthReq = {
 export type TAuthRes = {
   token: string;
   roles: string;
+  username: string;
 };

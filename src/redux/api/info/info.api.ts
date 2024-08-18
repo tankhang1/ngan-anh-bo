@@ -1,5 +1,5 @@
 import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
-import { TProduct, TBin } from "../../../assets/types";
+import { TProduct, TBin, TBinPackage } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export enum InfoEnum {
@@ -44,6 +44,25 @@ export const infoApi = createApi({
           ? results.map((item) => ({ type: InfoEnum.BINS, item }))
           : [InfoEnum.BINS],
     }),
+    getBinPackageByCode: builder.query<TBinPackage, { val: string }>({
+      query: (params) => ({
+        url: "/api/bin-package/code",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
+    getProductBySku: builder.query<TProduct, { sku: string }>({
+      query: (params) => ({
+        url: "/api/product/code",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
   }),
 });
-export const { useGetListProductsQuery, useGetListBinsIdQuery } = infoApi;
+export const {
+  useGetListProductsQuery,
+  useGetListBinsIdQuery,
+  useGetBinPackageByCodeQuery,
+  useGetProductBySkuQuery,
+} = infoApi;

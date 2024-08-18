@@ -4,7 +4,12 @@ import {
   HTTPS_METHOD,
   LOCAL_KEY,
 } from "../../../constants";
-import { BASE_RES, TAgentForm, TFarmerForm } from "../../../assets/types";
+import {
+  BASE_RES,
+  TAgent,
+  TAgentForm,
+  TFarmerForm,
+} from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum CustomerEnum {
@@ -59,6 +64,13 @@ export const customerApi = createApi({
       }),
       invalidatesTags: [CustomerEnum.CREATE_FARMER],
     }),
+    getCustomerByCode: builder.query<TAgent, { c: string }>({
+      query: (params) => ({
+        url: "/api/customer/code",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
   }),
 });
 
@@ -67,4 +79,5 @@ export const {
   useUpdateAgentMutation,
   useUpdateFarmerMutation,
   useCreateFarmerMutation,
+  useGetCustomerByCodeQuery,
 } = customerApi;

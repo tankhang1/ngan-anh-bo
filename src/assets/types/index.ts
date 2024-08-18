@@ -7,6 +7,7 @@ export type TAgent = {
   customer_province: string | undefined; // hiện
   phone: string; // hiện
   province: string; // hiện
+  province_name: string;
   name: string; // hiện
   time: string; // hiện
   time_number: number; //
@@ -30,6 +31,8 @@ export type TAgent = {
   time_confirm: string | undefined; // xác nhận được tham gia chương trình tích lũy với số điện thoại
   customer_address: string | undefined;
   customer_district: string | undefined;
+  customer_area: string;
+  customer_province_name: string;
   gender: 0 | 1; // 0: nữ, 1: nam
   email?: string;
   birthday?: number; //yyyyMMdd
@@ -484,6 +487,7 @@ export type TCustomerRes = {
   time_number?: number; // ko cần
   source_channel_used?: string;
   source_campaign_code?: string; // ko cần
+  retailer_group?: string;
   code_hash?: string; // ko cần
   code?: string; // ko cần
   code_item?: number; // ko cần
@@ -596,4 +600,34 @@ export type TGroupRetailer = {
   code?: string;
   name?: string;
   note?: string;
+};
+
+export type TBinPackage = {
+  id: number;
+  code_item: number;
+  code: string;
+  code_hash: string;
+  seri: string;
+  bin_seri: string | null;
+  agent_code: string;
+  time_use: string; // ISO 8601 format date string
+  time_use_number: number;
+  time_export: string | null; // ISO 8601 format date string
+  time_export_number: number;
+  procedure_order_detail_item: number;
+  product_code: string;
+  product_sub_code: string;
+  batch_number: string;
+  register_phone: string | null;
+  register_name: string | null;
+  register_province: string;
+  source_channel_used: string;
+  source_campaign_code: string | null;
+  status: number;
+  manufacture_date: number; // Format: YYYYMMDD
+  expiration_date: number; // Format: YYYYMMDD
+  customer_code: string | null;
+  customer_name: string;
+  type_use: number;
+  zalo_device_id: string;
 };

@@ -43,11 +43,11 @@ const Home = () => {
     })
       .unwrap()
       .then((value) => {
-        localStorage.setItem(LOCAL_KEY.TOKEN, value.token);
         dispatch(
           updateAccountInfo({
             token: value.token,
             roles: value.roles,
+            username: value.username,
           })
         );
         routeChange();
