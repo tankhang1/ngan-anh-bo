@@ -160,13 +160,13 @@ function EmployeeCreateEdit() {
               return;
             }
             if (value?.status === 0) {
-              if (files1.length > 0 && values?.uuid) {
+              if (files1.length > 0 && employees?.uuid) {
                 const formData = new FormData();
                 formData.append("files", files1[0].file);
                 console.log(formData);
                 try {
                   await uploadStaffImage({
-                    id: values.uuid,
+                    id: employees?.uuid,
                     body: formData,
                   })
                     .unwrap()
@@ -302,9 +302,11 @@ function EmployeeCreateEdit() {
                             md={4}
                             controlId="image_validate"
                           >
-                            <Form.Label> Hình ảnh sản phẩm</Form.Label>
+                            <Form.Label className="text-black">
+                              Hình ảnh nhân viên
+                            </Form.Label>
                             {isCreate === "false" && isEdit === false ? (
-                              <Stack className="d-flex justify-content-center align-items-center">
+                              <Stack className="d-flex justify-content-center align-items-center text-black">
                                 <img
                                   src={
                                     values.avatar ||
@@ -321,7 +323,7 @@ function EmployeeCreateEdit() {
                                 <FilePond
                                   files={files1}
                                   onupdatefiles={setFiles1}
-                                  labelIdle="Drag & Drop your file here or click "
+                                  labelIdle="Kéo và bỏ ảnh tại đây"
                                   acceptedFileTypes={["image/jpeg"]}
                                 ></FilePond>
 
@@ -337,7 +339,9 @@ function EmployeeCreateEdit() {
                           </Form.Group>
                           <Stack as={Col} md={8}>
                             <Form.Group controlId="code_validate">
-                              <Form.Label>Mã nhân viên</Form.Label>
+                              <Form.Label className="text-black">
+                                Mã nhân viên
+                              </Form.Label>
                               <Form.Control
                                 required
                                 type="text"
@@ -352,7 +356,9 @@ function EmployeeCreateEdit() {
                               </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group controlId="name_validate">
-                              <Form.Label>Tên nhân viên</Form.Label>
+                              <Form.Label className="text-black">
+                                Tên nhân viên
+                              </Form.Label>
                               <Form.Control
                                 required
                                 type="text"
@@ -368,7 +374,9 @@ function EmployeeCreateEdit() {
                               </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group controlId="birthday_validate">
-                              <Form.Label>Ngày sinh</Form.Label>
+                              <Form.Label className="text-black">
+                                Ngày sinh
+                              </Form.Label>
                               <Form.Control
                                 required
                                 type="date"
@@ -385,12 +393,13 @@ function EmployeeCreateEdit() {
                                 {errors.birthday}
                               </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group controlId="gender_validate">
-                              <Form.Label>Chọn giới tính</Form.Label>
+                            <Form.Group>
+                              <Form.Label className="text-black">
+                                Chọn giới tính
+                              </Form.Label>
                               <Form.Select
                                 className="form-select"
                                 name="gender"
-                                id="gender_validate"
                                 defaultValue={values.gender}
                                 onChange={(e) =>
                                   setFieldValue("gender", e.target.value)
@@ -405,14 +414,15 @@ function EmployeeCreateEdit() {
                                 {errors.gender}
                               </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group controlId="phone_validate">
-                              <Form.Label>Số điện thoại</Form.Label>
+                            <Form.Group>
+                              <Form.Label className="text-black">
+                                Số điện thoại
+                              </Form.Label>
                               <Form.Control
                                 required
                                 type="text"
                                 placeholder="Số điện thoại"
                                 name="phone"
-                                id="phone_validate"
                                 defaultValue={values.phone}
                                 onChange={handleChange}
                                 isInvalid={touched.phone && !!errors.phone}
@@ -424,14 +434,13 @@ function EmployeeCreateEdit() {
                           </Stack>
                         </Row>
 
-                        <Form.Group controlId="email_validate">
-                          <Form.Label>Email</Form.Label>
+                        <Form.Group>
+                          <Form.Label className="text-black">Email</Form.Label>
                           <Form.Control
                             required
                             type="text"
                             placeholder="Email"
                             name="email"
-                            id="email_validate"
                             defaultValue={values.email}
                             onChange={handleChange}
                             isInvalid={touched.email && !!errors.email}
@@ -446,7 +455,7 @@ function EmployeeCreateEdit() {
                             md={6}
                             controlId="citizen_number_validate"
                           >
-                            <Form.Label>CCCD</Form.Label>
+                            <Form.Label className="text-black">CCCD</Form.Label>
                             <Form.Control
                               required
                               type="text"
@@ -469,7 +478,9 @@ function EmployeeCreateEdit() {
                             md={6}
                             controlId="citizen_day_validate"
                           >
-                            <Form.Label>Ngày cấp</Form.Label>
+                            <Form.Label className="text-black">
+                              Ngày cấp
+                            </Form.Label>
                             <Form.Control
                               required
                               type="date"
@@ -491,7 +502,9 @@ function EmployeeCreateEdit() {
                           controlId="province_validate"
                           className="mb-2"
                         >
-                          <Form.Label>Tỉnh thành</Form.Label>
+                          <Form.Label className="text-black">
+                            Tỉnh thành
+                          </Form.Label>
 
                           <Select
                             //@ts-ignore
@@ -521,7 +534,9 @@ function EmployeeCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="note_validate" className="mb-2">
-                          <Form.Label>Ghi chú</Form.Label>
+                          <Form.Label className="text-black">
+                            Ghi chú
+                          </Form.Label>
 
                           <Form.Control
                             required
@@ -544,33 +559,17 @@ function EmployeeCreateEdit() {
                 <Stack as={Col} md={6}>
                   <Card className="custom-card">
                     <Card.Header>
-                      <Card.Title>Thông tin Vai trò & Nhiệm vụ</Card.Title>
+                      <Card.Title className="text-black">
+                        Thông tin Vai trò & Nhiệm vụ
+                      </Card.Title>
                     </Card.Header>
                     <Card.Body>
                       <Stack>
                         <Form.Group controlId="role_validate">
-                          <Form.Label>Phòng ban</Form.Label>
-                          {/* <Form.Select
-                            className="form-select"
-                            onChange={(e) => {
-                              setFieldValue(
-                                "staff_department_code",
-                                e.target.value.split("-")[0]
-                              );
-                              setFieldValue(
-                                "staff_department_name",
-                                e.target.value.split("-")[1]
-                              );
-                            }}
-                            defaultValue={""}
-                            required
-                          >
-                            {departments?.map((item) => (
-                              <option value={`${item.code}-${item.name}`}>
-                                {item.name}
-                              </option>
-                            ))}
-                          </Form.Select> */}
+                          <Form.Label className="text-black">
+                            Phòng ban
+                          </Form.Label>
+
                           <Select
                             options={
                               departments?.map((item) => ({
@@ -611,28 +610,10 @@ function EmployeeCreateEdit() {
                           </Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group controlId="role_validate">
-                          <Form.Label>Vai trò</Form.Label>
-                          {/* <Form.Select
-                            className="form-select"
-                            defaultValue={""}
-                            onChange={(e) => {
-                              setFieldValue(
-                                "staff_role",
-                                e.target.value.split("-")[0]
-                              );
-                              setFieldValue(
-                                "staff_role_name",
-                                e.target.value.split("-")[1]
-                              );
-                            }}
-                            required
-                          >
-                            {roles?.map((item) => (
-                              <option value={}>
-                                {item.name}
-                              </option>
-                            ))}
-                          </Form.Select> */}
+                          <Form.Label className="text-black">
+                            Vai trò
+                          </Form.Label>
+
                           <Select
                             options={
                               roles?.map((item) => ({
@@ -674,7 +655,9 @@ function EmployeeCreateEdit() {
                           </Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group controlId="role_validate">
-                          <Form.Label>Vùng kinh doanh</Form.Label>
+                          <Form.Label className="text-black">
+                            Vùng kinh doanh
+                          </Form.Label>
                           <Select
                             isMulti
                             name="colors"
@@ -715,7 +698,9 @@ function EmployeeCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group controlId="role_validate">
-                          <Form.Label>Tỉnh thành</Form.Label>
+                          <Form.Label className="text-black">
+                            Tỉnh thành
+                          </Form.Label>
                           <Select
                             isMulti
                             name="colors"
@@ -758,7 +743,9 @@ function EmployeeCreateEdit() {
                           controlId="export_code_validate"
                           className="mb-2"
                         >
-                          <Form.Label>Mã số KH-XK</Form.Label>
+                          <Form.Label className="text-black">
+                            Mã số KH-XK
+                          </Form.Label>
 
                           <Form.Control
                             required
@@ -780,7 +767,9 @@ function EmployeeCreateEdit() {
                           controlId="export_address_validate"
                           className="mb-2"
                         >
-                          <Form.Label>Ghi chú địa chỉ nhận hàng</Form.Label>
+                          <Form.Label className="text-black">
+                            Ghi chú địa chỉ nhận hàng
+                          </Form.Label>
 
                           <Form.Control
                             required
