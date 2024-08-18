@@ -39,6 +39,8 @@ import {
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import * as Yup from "yup";
+import accountSchema from "../../schema/accounts.schema";
 
 const ACCOUNT_FILTERS = [
   {
@@ -361,6 +363,7 @@ function Accounts() {
               staff_code: employees?.[0].code,
               roles: "",
             }}
+            validationSchema={accountSchema}
             onSubmit={onSignUpAccount}
           >
             {({
@@ -425,11 +428,13 @@ function Accounts() {
                         ))}
                       </Form.Select>
 
-                      <Form.Control.Feedback type="invalid">
-                        {errors.staff_code}
-                      </Form.Control.Feedback>
+                      {!!errors.staff_code && touched.staff_code && (
+                        <Form.Control.Feedback type="invalid">
+                          {errors.staff_code}
+                        </Form.Control.Feedback>
+                      )}
                     </Form.Group>
-                    <Form.Group controlId="roles_validate">
+                    <Form.Group>
                       <Form.Label className="text-black">Vai trò</Form.Label>
                       <Select
                         //@ts-ignore
@@ -438,11 +443,11 @@ function Accounts() {
                           value: item.code,
                         }))}
                         className="default basic-multi-select custom-multi mb-3"
-                        id="choices-multiple-default"
                         menuPlacement="auto"
                         classNamePrefix="Select2"
                         isSearchable
                         isClearable
+                        required
                         isMulti
                         placeholder="Chọn vai trò"
                         value={values.roles}
@@ -450,9 +455,11 @@ function Accounts() {
                           setFieldValue("roles", value);
                         }}
                       />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.staff_code}
-                      </Form.Control.Feedback>
+                      {!!errors.roles && touched.roles && (
+                        <p style={{ fontSize: 12, color: "red" }}>
+                          {errors.roles}
+                        </p>
+                      )}
                     </Form.Group>
                   </Stack>
                 </Modal.Body>
