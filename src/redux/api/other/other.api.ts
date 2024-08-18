@@ -32,16 +32,6 @@ export enum OtherEnum {
 
 export const otherApi = createApi({
   reducerPath: "otherApi",
-  // baseQuery: fetchBaseQuery({
-  //   baseUrl: BASE_PORT_8180,
-  //   prepareHeaders: (headers) => {
-  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-  //     if (token) {
-  //       headers.set("Authorization", `Bearer ${token}`);
-  //     }
-  //     return headers;
-  //   },
-  // }),
   baseQuery: baseQueryWithReauth,
   tagTypes: [
     OtherEnum.CREATE_POINT_PROGRAM,

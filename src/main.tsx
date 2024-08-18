@@ -39,6 +39,7 @@ import EmployeeCreateEdit from "./container/employee/create-edit/employee-create
 import EmployeeRole from "./container/employee/role/employee-role.tsx";
 import EmployeeDepartment from "./container/employee/department/employee-department.tsx";
 import Accounts from "./container/accounts/accounts.tsx";
+import SettingGroupRetailer from "./container/settings/group-retailer/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -154,7 +155,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}setting/group-customer`}
                 element={<SettingGroupCustomer />}
               />
-
+              <Route
+                path={`${import.meta.env.BASE_URL}setting/group-retailer`}
+                element={<SettingGroupRetailer />}
+              />
               <Route
                 path={`${import.meta.env.BASE_URL}advancedui/ratings`}
                 element={<Ratings />}

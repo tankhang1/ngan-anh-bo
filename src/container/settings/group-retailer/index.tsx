@@ -11,45 +11,47 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TGroupCustomer } from "../../../assets/types";
+import { TGroupRetailer } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 
 import { Formik } from "formik";
-import { useGetListGroupObjectiveQuery } from "../../../redux/api/manage/manage.api";
-import { useCreateUpdateGroupObjectiveMutation } from "../../../redux/api/other/other.api";
+import { useGetListGroupRetailerQuery } from "../../../redux/api/manage/manage.api";
 import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useCreateGroupRetailerMutation } from "../../../redux/api/setting/setting.api";
 
-function SettingGroupCustomer() {
+function SettingGroupRetailer() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("symbol");
+  const [searchBy, setSearchBy] = useState("code");
   const deferSearchValue = useDeferredValue(search);
-  const [openAddPopup, setOpenAddPopup] = useState<TGroupCustomer | null>(null);
+  const [openAddPopup, setOpenAddPopup] = useState<TGroupRetailer | null>(null);
 
   const {
     data: groups,
     isLoading: isLoadingGroup,
     refetch,
-  } = useGetListGroupObjectiveQuery(null, {
+  } = useGetListGroupRetailerQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-  const [createUpdateGroup] = useCreateUpdateGroupObjectiveMutation();
-  const onCreateUpdateGroup = async (values: TGroupCustomer) => {
+  const [createGroupRetailer] = useCreateGroupRetailerMutation();
+  const onCreateUpdateGroup = async (values: TGroupRetailer) => {
+    console.log(values);
     setOpenAddPopup(null);
-    await createUpdateGroup(values).then((res) => {
+    await createGroupRetailer(values).then((res) => {
+      console.log(res);
       if (res?.data?.status === -2) {
-        toast.showToast("Nhóm khách hàng đã tồn tại");
+        toast.showToast("Nhóm đại lý đã tồn tại");
         return;
       }
       if (res.data?.status === 0) {
         refetch();
-        toast.showToast("Tạo nhóm khách hàng thành công");
+        toast.showToast("Tạo nhóm đại lý thành công");
         return;
       }
-      toast.showToast("Tạo nhóm khách hàng thất bại");
+      toast.showToast("Tạo nhóm đại lý thất bại");
     });
   };
   return (
@@ -94,7 +96,7 @@ function SettingGroupCustomer() {
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() =>
-                          setOpenAddPopup({ name: "", prefix: "", symbol: "" })
+                          setOpenAddPopup({ name: "", code: "", note: "" })
                         }
                       >
                         <i className="ri-add-line"></i>
@@ -112,59 +114,33 @@ function SettingGroupCustomer() {
           <AppTable
             isHeader={false}
             externalSearch={deferSearchValue}
-            title="Thông tin chương trình tích điểm"
+            title="Thông tin nhóm đại lý"
             isLoading={isLoadingGroup}
             headers={[
               {
                 key: "id",
                 label: "ID",
-                render: (value: TGroupCustomer) => (
+                render: (value: TGroupRetailer) => (
                   <td>
                     <AppId id={value.id ?? ""} />
                   </td>
                 ),
               },
               {
-                key: "symbol",
+                key: "code",
                 label: "Mã",
-                render: (value: TGroupCustomer) => <td>{value.symbol}</td>,
-              },
-              {
-                key: "prefix",
-                label: "Tên tiền tố",
-                render: (value: TGroupCustomer) => (
-                  <td>{value.prefix?.toUpperCase()}</td>
-                ),
+                render: (value: TGroupRetailer) => <td>{value.code}</td>,
               },
               {
                 key: "name",
-                label: "Tên nhóm khách hàng",
-                render: (value: TGroupCustomer) => <td>{value.name}</td>,
+                label: "Tên nhóm đại lý",
+                render: (value: TGroupRetailer) => <td>{value.name}</td>,
               },
-
-              permission.editSettingGroupCustomer
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => {
-                      console.log(value);
-                      return (
-                        <td>
-                          <span className="d-flex justify-content-center align-item-center">
-                            <button
-                              className="btn btn-icon btn-sm btn-primary-ghost"
-                              onClick={() => {
-                                setOpenAddPopup(value);
-                              }}
-                            >
-                              <i className="ti ti-edit"></i>
-                            </button>
-                          </span>
-                        </td>
-                      );
-                    },
-                  }
-                : undefined,
+              {
+                key: "note",
+                label: "Ghi chú",
+                render: (value: TGroupRetailer) => <td>{value.note}</td>,
+              },
             ]}
             data={groups || []}
             searchByExternal={searchBy}
@@ -178,13 +154,13 @@ function SettingGroupCustomer() {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title as="h6">Thêm mới nhóm khách hàng</Modal.Title>
+          <Modal.Title as="h6">Thêm mới nhóm đại lý</Modal.Title>
         </Modal.Header>
         <Formik
           initialValues={{
             name: openAddPopup?.name ?? "",
-            prefix: openAddPopup?.prefix ?? "",
-            symbol: openAddPopup?.symbol ?? "",
+            code: openAddPopup?.code ?? "",
+            note: openAddPopup?.note ?? "",
           }}
           onSubmit={onCreateUpdateGroup}
         >
@@ -192,52 +168,49 @@ function SettingGroupCustomer() {
             <form noValidate onSubmit={handleSubmit}>
               <Modal.Body>
                 <Stack className="d-flex gap-1">
-                  <Form.Group controlId="symbol_validate">
-                    <Form.Label>Mã nhóm khách hàng</Form.Label>
+                  <Form.Group>
+                    <Form.Label>Mã nhóm đại lý</Form.Label>
                     <Form.Control
                       required
                       type="text"
-                      id="symbol_validate"
-                      placeholder="Mã nhóm khách hàng"
-                      name="symbol"
-                      defaultValue={values.symbol}
+                      placeholder="Mã nhóm đại lý"
+                      name="code"
+                      defaultValue={values.code}
                       onChange={handleChange}
-                      isInvalid={touched.symbol && !!errors.symbol}
+                      isInvalid={touched.code && !!errors.code}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.symbol}
+                      {errors.code}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group controlId="prefix_validate">
-                    <Form.Label>Tiền tố</Form.Label>
+                  <Form.Group>
+                    <Form.Label>Tên nhóm đại lý</Form.Label>
                     <Form.Control
                       required
                       type="text"
-                      id="prefix_validate"
-                      placeholder="Tiền tố"
-                      name="prefix"
-                      defaultValue={values.prefix}
-                      onChange={handleChange}
-                      isInvalid={touched.prefix && !!errors.prefix}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.prefix}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group controlId="name_validate">
-                    <Form.Label>Tên nhóm khách hàng</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      id="name_validate"
-                      defaultValue={values.name}
-                      placeholder="Tên nhóm khách hàng"
+                      placeholder="Tên nhóm đại lý"
                       name="name"
+                      defaultValue={values.name}
                       onChange={handleChange}
                       isInvalid={touched.name && !!errors.name}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.name}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Ghi chú</Form.Label>
+                    <Form.Control
+                      required
+                      type="text"
+                      defaultValue={values.note}
+                      placeholder="Ghi chú"
+                      name="note"
+                      onChange={handleChange}
+                      isInvalid={touched.note && !!errors.note}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.note}
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Stack>
@@ -261,4 +234,4 @@ function SettingGroupCustomer() {
   );
 }
 
-export default SettingGroupCustomer;
+export default SettingGroupRetailer;

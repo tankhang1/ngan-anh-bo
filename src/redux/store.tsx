@@ -12,6 +12,7 @@ import { customerApi } from "./api/customer/customer.api";
 import { reportApi } from "./api/report/report.api";
 import { accountApi } from "./api/account/account.api";
 import AuthReducer from "./slices/authSlice";
+import { settingApi } from "./api/setting/setting.api";
 
 const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ const store = configureStore({
     [customerApi.reducerPath]: customerApi.reducer,
     [reportApi.reducerPath]: reportApi.reducer,
     [accountApi.reducerPath]: accountApi.reducer,
+    [settingApi.reducerPath]: settingApi.reducer,
   },
   // No need to explicitly pass middleware
   middleware: (getDefaultMiddleware) =>
@@ -41,7 +43,8 @@ const store = configureStore({
       .concat(otherApi.middleware)
       .concat(customerApi.middleware)
       .concat(reportApi.middleware)
-      .concat(accountApi.middleware),
+      .concat(accountApi.middleware)
+      .concat(settingApi.middleware),
 });
 
 export default store;

@@ -554,3 +554,11 @@ export type TAccountRole = {
   name: string;
   code: string;
 };
+
+export type TGroupRetailer = {
+  id?: string;
+  uuid?: string;
+  code?: string;
+  name?: string;
+  note?: string;
+};

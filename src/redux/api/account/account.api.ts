@@ -8,16 +8,6 @@ export enum AccountEnum {
 }
 export const accountApi = createApi({
   reducerPath: "accountApi",
-  // baseQuery: fetchBaseQuery({
-  //   baseUrl: `${BASE_PORT_8180}/admin`,
-  //   prepareHeaders: (headers) => {
-  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-  //     if (token) {
-  //       headers.set("Authorization", `Bearer ${token}`);
-  //     }
-  //     return;
-  //   },
-  // }),
   baseQuery: baseQueryWithReauth,
   tagTypes: [AccountEnum.ACCOUNTS, AccountEnum.ACCOUNT_ROLE],
   endpoints: (builder) => ({

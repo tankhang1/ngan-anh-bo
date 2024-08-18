@@ -1,19 +1,15 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import {
-  Button,
-  Card,
   Dropdown,
   InputGroup,
-  ListGroup,
   Modal,
   Nav,
   Offcanvas,
   Tab,
 } from "react-bootstrap";
-import SimpleBar from "simplebar-react";
 import { MENUITEMS } from "../sidebar/sidemenu";
 import DatePicker from "react-datepicker";
-import store, { RootState } from "../../../redux/store";
+import store from "../../../redux/store";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";

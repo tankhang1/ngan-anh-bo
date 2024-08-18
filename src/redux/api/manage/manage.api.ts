@@ -18,6 +18,7 @@ import {
   TReportDashboardMap,
   TEmployeeRole,
   TEmployeeDepartment,
+  TGroupRetailer,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export enum ManageEnum {
@@ -51,6 +52,7 @@ export enum ManageEnum {
   EMPLOYEE = "EMPLOYEE",
   EMPLOYEE_ROLE = "EMPLOYEE_ROLE",
   EMPLOYEE_DEPARTMENT = "EMPLOYEE_DEPARTMENT",
+  GROUP_RETAILER = "GROUP_RETAILER",
 }
 export const manageApi = createApi({
   reducerPath: "manageApi",
@@ -88,6 +90,7 @@ export const manageApi = createApi({
     ManageEnum.EMPLOYEE,
     ManageEnum.EMPLOYEE_ROLE,
     ManageEnum.EMPLOYEE_DEPARTMENT,
+    ManageEnum.GROUP_RETAILER,
   ],
   endpoints: (builder) => ({
     getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
@@ -493,6 +496,19 @@ export const manageApi = createApi({
             }))
           : [ManageEnum.EMPLOYEE_ROLE],
     }),
+    getListGroupRetailer: builder.query<TGroupRetailer[], void>({
+      query: () => ({
+        url: "/api/customer/retailer/group/list",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ id }) => ({
+              type: ManageEnum.GROUP_RETAILER,
+              id,
+            }))
+          : [ManageEnum.GROUP_RETAILER],
+    }),
   }),
 });
 export const {
@@ -527,4 +543,5 @@ export const {
   useGetListEmployeeQuery,
   useGetListEmployeeRoleQuery,
   useGetListEmployeeDepartmentQuery,
+  useGetListGroupRetailerQuery,
 } = manageApi;

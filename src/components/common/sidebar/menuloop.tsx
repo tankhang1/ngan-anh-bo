@@ -1,13 +1,7 @@
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 
-function Menuloop({
-  MENUITEMS,
-  toggleSidemenu,
-  level,
-  navItem,
-  isPermitAccess,
-}: any) {
+function Menuloop({ MENUITEMS, toggleSidemenu, level, isPermitAccess }: any) {
   return (
     <Fragment>
       <Link

@@ -120,6 +120,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.settingArea;
         case MENU_KEY.SETTING_GROUP_CUSTOMER:
           return permission.settingGroupCustomer;
+        case MENU_KEY.SETTING_GROUP_RETAILER:
+          return permission.viewRetailerGroup;
         case MENU_KEY.MANAGE_PERSONEL:
           return (
             permission.viewEmployee &&
@@ -137,7 +139,11 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramTopup
           );
         case MENU_KEY.MANAGE_SETTING:
-          return permission.settingArea || permission.settingGroupCustomer;
+          return (
+            permission.settingArea ||
+            permission.settingGroupCustomer ||
+            permission.viewRetailerGroup
+          );
         case MENU_KEY.MANAGE_OPERATOR:
           return permission.viewOperator;
         case MENU_KEY.MAIN_TITLE:

@@ -17,16 +17,6 @@ export enum CustomerEnum {
 }
 export const customerApi = createApi({
   reducerPath: "customerApi",
-  // baseQuery: fetchBaseQuery({
-  //   baseUrl: `${BASE_PORT_8180}/customer`,
-  //   prepareHeaders: (headers) => {
-  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-  //     if (token) {
-  //       headers.set("Authorization", `Bearer ${token}`);
-  //     }
-  //     return;
-  //   },
-  // }),
   baseQuery: baseQueryWithReauth,
   tagTypes: [
     CustomerEnum.CONFIRM_AGENT,

@@ -44,6 +44,8 @@ const initialValue = {
     settingGroupCustomer: false,
     createSettingGroupCustomer: false,
     editSettingGroupCustomer: false,
+    viewRetailerGroup: false,
+    createRetailerGroup: false,
     viewOperator: false,
   },
 };
@@ -102,6 +104,8 @@ const authSlice = createSlice({
           createSettingGroupCustomer: false,
           editSettingGroupCustomer: false,
           viewOperator: false,
+          viewRetailerGroup: false,
+          createRetailerGroup: false,
         };
       }
       if (state.roles === "ROLE_SUPERADMIN") {
@@ -148,6 +152,8 @@ const authSlice = createSlice({
           createSettingGroupCustomer: true,
           editSettingGroupCustomer: true,
           viewOperator: true,
+          viewRetailerGroup: true,
+          createRetailerGroup: true,
         };
       }
       if (state.roles === "ROLE_MARKETING") {
@@ -193,6 +199,8 @@ const authSlice = createSlice({
           createSettingGroupCustomer: false,
           editSettingGroupCustomer: false,
           viewOperator: false,
+          viewRetailerGroup: true,
+          createRetailerGroup: true,
         };
       }
       if (state.roles === "ROLE_BUSINESS") {
@@ -238,6 +246,8 @@ const authSlice = createSlice({
           createSettingGroupCustomer: false,
           editSettingGroupCustomer: false,
           viewOperator: false,
+          viewRetailerGroup: false,
+          createRetailerGroup: false,
         };
       }
 
