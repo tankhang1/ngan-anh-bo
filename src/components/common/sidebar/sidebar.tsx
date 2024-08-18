@@ -137,7 +137,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramTopup
           );
         case MENU_KEY.MANAGE_SETTING:
-          return permission.settingArea && permission.settingGroupCustomer;
+          return permission.settingArea || permission.settingGroupCustomer;
         case MENU_KEY.MANAGE_OPERATOR:
           return permission.viewOperator;
         case MENU_KEY.MAIN_TITLE:
@@ -832,10 +832,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     )}
                     {levelone.type === "link" &&
                     isPermitAccess(levelone?.key) ? (
-                      <div
-                        onClick={() =>
-                          navItem(levelone.path + "/", levelone?.key)
-                        }
+                      <Link
+                        to={levelone.path + "/"}
                         className={`side-menu__item ${
                           levelone.selected ? "active" : ""
                         } `}
@@ -851,7 +849,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
                             ""
                           )}
                         </span>
-                      </div>
+                      </Link>
                     ) : (
                       ""
                     )}
@@ -878,7 +876,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
                         MENUITEMS={levelone}
                         level={level + 1}
                         toggleSidemenu={toggleSidemenu}
-                        navItem={navItem}
+                        isPermitAccess={isPermitAccess}
                       />
                     ) : (
                       ""

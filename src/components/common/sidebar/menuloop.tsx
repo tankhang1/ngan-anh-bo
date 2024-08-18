@@ -1,7 +1,13 @@
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 
-function Menuloop({ MENUITEMS, toggleSidemenu, level, navItem }: any) {
+function Menuloop({
+  MENUITEMS,
+  toggleSidemenu,
+  level,
+  navItem,
+  isPermitAccess,
+}: any) {
   return (
     <Fragment>
       <Link
@@ -51,9 +57,9 @@ function Menuloop({ MENUITEMS, toggleSidemenu, level, navItem }: any) {
             }`}
             key={Math.random()}
           >
-            {firstlevel.type === "link" ? (
-              <div
-                onClick={() => navItem(firstlevel.path, firstlevel?.key)}
+            {firstlevel.type === "link" && isPermitAccess(firstlevel?.key) ? (
+              <Link
+                to={firstlevel.path}
                 className={`side-menu__item ${
                   firstlevel.selected ? "active" : ""
                 }`}
@@ -69,7 +75,7 @@ function Menuloop({ MENUITEMS, toggleSidemenu, level, navItem }: any) {
                     ""
                   )}
                 </span>
-              </div>
+              </Link>
             ) : (
               ""
             )}
@@ -89,12 +95,12 @@ function Menuloop({ MENUITEMS, toggleSidemenu, level, navItem }: any) {
             ) : (
               ""
             )}
-            {firstlevel.type === "sub" ? (
+            {firstlevel.type === "sub" && isPermitAccess(firstlevel?.key) ? (
               <Menuloop
                 MENUITEMS={firstlevel}
                 toggleSidemenu={toggleSidemenu}
                 level={level + 1}
-                navItem={navItem}
+                isPermitAccess={isPermitAccess}
               />
             ) : (
               ""
