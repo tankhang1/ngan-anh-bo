@@ -30,6 +30,7 @@ import {
   useCreateUpdateCustomerMutation,
   useGetNewUUIDQuery,
 } from "../../../../redux/api/other/other.api";
+import customerSchema from "../../../../schema/customers.schema";
 
 function CustomerValidationCreateEdit() {
   const { isCreate, id } = useParams();
@@ -195,6 +196,7 @@ function CustomerValidationCreateEdit() {
           export_address: customer?.export_address,
           retailer_group: customer?.retailer_group || "",
         }}
+        validationSchema={customerSchema}
         enableReinitialize
         onSubmit={handleSubmitAgent}
         // validationSchema={schema.nullable()}
@@ -262,7 +264,7 @@ function CustomerValidationCreateEdit() {
                       </Card.Title>
                     </Card.Header>
                     <Card.Body>
-                      <Form.Group controlId="customer_code_validate">
+                      <Form.Group>
                         <Form.Label className="text-black">
                           Mã khách hàng
                         </Form.Label>
@@ -276,7 +278,6 @@ function CustomerValidationCreateEdit() {
                           isInvalid={
                             touched.customer_code && !!errors.customer_code
                           }
-                          disabled
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.customer_code}

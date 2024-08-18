@@ -1,5 +1,10 @@
 import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
-import { TProduct, TBin, TBinPackage } from "../../../assets/types";
+import {
+  TProduct,
+  TBin,
+  TBinPackage,
+  TWarehouseExport,
+} from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export enum InfoEnum {
@@ -58,6 +63,12 @@ export const infoApi = createApi({
         params: params,
       }),
     }),
+    getWarehouseExportBin: builder.query<TWarehouseExport, string>({
+      query: (params) => ({
+        url: `/warehouse/export/bin-seri/${params}`,
+        method: HTTPS_METHOD.GET,
+      }),
+    }),
   }),
 });
 export const {
@@ -65,4 +76,5 @@ export const {
   useGetListBinsIdQuery,
   useGetBinPackageByCodeQuery,
   useGetProductBySkuQuery,
+  useGetWarehouseExportBinQuery,
 } = infoApi;

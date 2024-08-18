@@ -378,8 +378,8 @@ function Accounts() {
                 <Modal.Body>
                   <Stack className="d-flex gap-1">
                     <Form.Group controlId="username_validate">
-                      <Form.Label className="text-black">
-                        Tên đăng nhập
+                      <Form.Label className="text-black form-required">
+                        Tên đăng nhập <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -395,7 +395,9 @@ function Accounts() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId="password_validate">
-                      <Form.Label className="text-black">Mật khẩu</Form.Label>
+                      <Form.Label className="text-black">
+                        Mật khẩu <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
                       <Form.Control
                         required
                         type="text"
@@ -410,8 +412,8 @@ function Accounts() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group controlId="staff_code_validate">
-                      <Form.Label className="text-black">
-                        Tên nhân viên
+                      <Form.Label className="text-black form-required">
+                        Tên nhân viên <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Select
                         className="form-select"
@@ -435,7 +437,9 @@ function Accounts() {
                       )}
                     </Form.Group>
                     <Form.Group>
-                      <Form.Label className="text-black">Vai trò</Form.Label>
+                      <Form.Label className="text-black">
+                        Vai trò <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
                       <Select
                         //@ts-ignore
                         options={roles?.map((item) => ({

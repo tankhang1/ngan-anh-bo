@@ -14,6 +14,7 @@ import { useFormik } from "formik";
 import {
   useGetBinPackageByCodeQuery,
   useGetProductBySkuQuery,
+  useGetWarehouseExportBinQuery,
 } from "../../../redux/api/info/info.api";
 import { TAgent, TBinPackage, TProduct } from "../../../assets/types";
 import { useGetCustomerByCodeQuery } from "../../../redux/api/customer/customer.api";
@@ -45,7 +46,12 @@ function SearchProductCode() {
         skip: !binPackage?.product_code,
       }
     );
-
+  const { data: warehouseExport } = useGetWarehouseExportBinQuery(
+    binPackage?.seri || "",
+    {
+      skip: !binPackage?.seri,
+    }
+  );
   const { data: customer, isLoading: isLoadingCustomer } =
     useGetCustomerByCodeQuery(
       {
@@ -208,13 +214,7 @@ function SearchProductCode() {
                         - Mã thùng :{" "}
                         <span className="fw-normal">{binPackage?.seri}</span>
                       </span>
-                      {/**Procedure order code trong table procedure order detail */}
-                      <span className="text-black fs-17 fw-smibold">
-                        - Mã lệnh sản xuất :{" "}
-                        <span className="fw-normal">
-                          {binPackage?.procedure_order_detail_item}
-                        </span>
-                      </span>
+
                       <span className="text-black fs-17 fw-smibold">
                         - Lô sản xuất :{" "}
                         <span className="fw-normal">
@@ -225,11 +225,14 @@ function SearchProductCode() {
                       <span className="text-black fs-17 fw-smibold">
                         - Ngày xuất kho :{" "}
                         <span className="fw-normal">
-                          {binPackage?.time_export}
+                          {warehouseExport?.time}
                         </span>
                       </span>
                       <span className="text-black fs-17 fw-smibold">
-                        - Đại lý cấp 1 : <span className="fw-normal"></span>
+                        - Đại lý cấp 1 :{" "}
+                        <span className="fw-normal">
+                          {warehouseExport?.agent_name}
+                        </span>
                       </span>
                     </Stack>
                   ) : (
@@ -251,34 +254,40 @@ function SearchProductCode() {
                 </Card.Header>
                 <Card.Body>
                   {!isLoadingCustomer ? (
-                    <Stack gap={1}>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Đối tượng khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_type}
+                    customer ? (
+                      <Stack gap={1}>
+                        <span className="text-black fs-17 fw-smibold">
+                          - Đối tượng khách hàng :{" "}
+                          <span className="fw-normal">
+                            {customer?.customer_type}
+                          </span>
                         </span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Mã khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_code}
+                        <span className="text-black fs-17 fw-smibold">
+                          - Mã khách hàng :{" "}
+                          <span className="fw-normal">
+                            {customer?.customer_code}
+                          </span>
                         </span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Tên khách hàng :{" "}
-                        <span className="fw-normal">{customer?.name}</span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Số điện thoại :{" "}
-                        <span className="fw-normal">{customer?.phone}</span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Tỉnh :{" "}
-                        <span className="fw-normal">
-                          {customer?.province_name}
+                        <span className="text-black fs-17 fw-smibold">
+                          - Tên khách hàng :{" "}
+                          <span className="fw-normal">{customer?.name}</span>
                         </span>
-                      </span>
-                    </Stack>
+                        <span className="text-black fs-17 fw-smibold">
+                          - Số điện thoại :{" "}
+                          <span className="fw-normal">{customer?.phone}</span>
+                        </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          - Tỉnh :{" "}
+                          <span className="fw-normal">
+                            {customer?.province_name}
+                          </span>
+                        </span>
+                      </Stack>
+                    ) : (
+                      <div className="d-flex justify-content-center align-items-center">
+                        Chưa có thông tin
+                      </div>
+                    )
                   ) : (
                     <div className="d-flex justify-content-center align-items-center">
                       <CircularProgress />
@@ -294,42 +303,48 @@ function SearchProductCode() {
                 </Card.Header>
                 <Card.Body>
                   {!isLoadingCustomer ? (
-                    <Stack gap={1}>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Đối tượng khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_type}
+                    customer ? (
+                      <Stack gap={1}>
+                        <span className="text-black fs-17 fw-smibold">
+                          - Đối tượng khách hàng :{" "}
+                          <span className="fw-normal">
+                            {customer?.customer_type}
+                          </span>
                         </span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Mã khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_code}
+                        <span className="text-black fs-17 fw-smibold">
+                          - Mã khách hàng :{" "}
+                          <span className="fw-normal">
+                            {customer?.customer_code}
+                          </span>
                         </span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Tên khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_name}
+                        <span className="text-black fs-17 fw-smibold">
+                          - Tên khách hàng :{" "}
+                          <span className="fw-normal">
+                            {customer?.customer_name}
+                          </span>
                         </span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Số điện thoại :{" "}
-                        <span className="fw-normal">{customer?.phone}</span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Tỉnh :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_province_name}
+                        <span className="text-black fs-17 fw-smibold">
+                          - Số điện thoại :{" "}
+                          <span className="fw-normal">{customer?.phone}</span>
                         </span>
-                      </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Vùng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_area}
+                        <span className="text-black fs-17 fw-smibold">
+                          - Tỉnh :{" "}
+                          <span className="fw-normal">
+                            {customer?.customer_province_name}
+                          </span>
                         </span>
-                      </span>
-                    </Stack>
+                        <span className="text-black fs-17 fw-smibold">
+                          - Vùng :{" "}
+                          <span className="fw-normal">
+                            {customer?.customer_area}
+                          </span>
+                        </span>
+                      </Stack>
+                    ) : (
+                      <div className="d-flex justify-content-center align-items-center">
+                        Chưa có thông tin
+                      </div>
+                    )
                   ) : (
                     <div className="d-flex justify-content-center align-items-center">
                       <CircularProgress />

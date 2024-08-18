@@ -631,3 +631,29 @@ export type TBinPackage = {
   type_use: number;
   zalo_device_id: string;
 };
+
+export type TWarehouseExport = {
+  id: number;
+  code: string;
+  code_hash: string;
+  seri: string;
+  agent_code: string;
+  agent_name: string;
+  batch_number: string;
+  device: string | null;
+  sku: string;
+  sku_sub: string;
+  procedure_order_detail_item: number;
+  time: string;
+  time_number: string;
+  document_code: string;
+  document_code_detail: string | null;
+  goods_type: string;
+  address: string | null;
+  staff_import_code: string | null;
+  staff_import_name: string | null;
+  staff_export_code: string | null;
+  staff_export_name: string | null;
+  receiver: string | null;
+  work_center_export_code: string | null;
+};
