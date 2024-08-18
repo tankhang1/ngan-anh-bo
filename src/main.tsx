@@ -145,7 +145,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<IQrReport />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}report/program`}
+                path={`${import.meta.env.BASE_URL}report/program-point`}
                 element={<ProgramReport />}
               />
               <Route

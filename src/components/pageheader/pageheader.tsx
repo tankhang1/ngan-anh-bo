@@ -13,7 +13,7 @@ const MapLabel = new Map([
   ["topup", "Chương trình topup"],
   ["report", "Báo cáo"],
   ["iQr", "iQr"],
-  ["program", "Chương trình"],
+  ["program-point", "Chương trình tích điểm"],
   ["area", "Quản lý vùng"],
   ["group-customer", "Quản lý nhóm khách hàng"],
   ["validate", "Đã xác thực"],

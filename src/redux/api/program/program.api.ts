@@ -1,17 +1,6 @@
-import {
-  BASE_PORT_8180,
-  BASE_URL,
-  HTTPS_METHOD,
-  LOCAL_KEY,
-} from "../../../constants";
-import {
-  BaseQuery,
-  TPointTableDashboard,
-  TProgramPoint,
-  TProgramTopup,
-} from "../../../assets/types";
+import { BASE_PORT, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
+import { BaseQuery, TProgramPoint, TProgramTopup } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum ProgramEnum {
   COUNTER_PROGRAM_TOPUP = "COUNTER_PROGRAM_TOPUP",
   COUNTER_PROGRAM_POINT = "COUNTER_PROGRAM_POINT",
@@ -26,17 +15,16 @@ export enum ProgramEnum {
 }
 export const programApi = createApi({
   reducerPath: "programApi",
-  // baseQuery: fetchBaseQuery({
-  //   baseUrl: `${BASE_PORT_8180}/program`,
-  //   prepareHeaders: (headers) => {
-  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-  //     if (token) {
-  //       headers.set("Authorization", `Bearer ${token}`);
-  //     }
-  //     return;
-  //   },
-  // }),
-  baseQuery: baseQueryWithReauth,
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${BASE_PORT}/api`,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem(LOCAL_KEY.TOKEN);
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return;
+    },
+  }),
   tagTypes: [
     ProgramEnum.COUNTER_PROGRAM_TOPUP,
     ProgramEnum.COUNTER_PROGRAM_POINT,

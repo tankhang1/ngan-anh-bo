@@ -290,6 +290,39 @@ export type TTopupTableDashboard = {
   request_id: string;
   response_body: string;
 };
+
+export type TProgramPointDetail = {
+  id: string;
+  program_uuid: string;
+  program_name: string;
+  customer_code: string;
+  customer_name: string;
+  province_name: string;
+  area: string;
+  phone: string;
+  point: number;
+  point_coefficient: number;
+  agent_name: string;
+  code: string;
+  code_hash: string;
+  product_name: string;
+  time_earn: string;
+};
+export type TProgramTopupDetail = {
+  id: string;
+  program_name: string;
+  customer_code: string;
+  customer_name: string;
+  province_name: string;
+  area: string;
+  phone: string;
+  price: number;
+  agent_name: string;
+  code: string;
+  code_hash: string;
+  product_name: string;
+  time_topup: string;
+};
 export type TDevice = {
   id: number;
   device_name: string;

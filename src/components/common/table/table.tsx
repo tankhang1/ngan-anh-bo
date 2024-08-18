@@ -171,7 +171,7 @@ const AppTable = <T extends DataItem>({
                 )}
               </Dropdown.Menu>
             </Dropdown>
-            {filters && (
+            {filters && filters.length > 0 && (
               <Dropdown>
                 <Dropdown.Toggle
                   variant=""
@@ -183,7 +183,7 @@ const AppTable = <T extends DataItem>({
                   <i className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
                 </Dropdown.Toggle>
                 <Dropdown.Menu role="menu">
-                  {filters.map((filter, index) => (
+                  {filters?.map((filter, index) => (
                     <Dropdown.Item
                       key={index}
                       onClick={() => setFilterOption(filter)}

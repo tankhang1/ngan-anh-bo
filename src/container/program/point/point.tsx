@@ -161,8 +161,10 @@ function PointProgram() {
                           active={item.key === status}
                           key={index}
                           onClick={() => {
-                            setStatus(item.key);
-                            setListPoints([]);
+                            if (status !== item.key) {
+                              setStatus(item.key);
+                              setListPoints([]);
+                            }
                           }}
                         >
                           {item.label}

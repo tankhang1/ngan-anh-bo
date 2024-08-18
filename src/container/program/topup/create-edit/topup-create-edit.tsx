@@ -64,7 +64,7 @@ function TopupCreateEdit() {
     },
     {
       selectFromResult: ({ data }) => ({
-        data: data?.find((item) => item.uuid === +(id?.split("_")[0] ?? 0)),
+        data: data?.find((item) => item.uuid === (id?.split("_")[0] ?? 0)),
       }),
       skip: isCreate === "true",
     }

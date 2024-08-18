@@ -64,11 +64,12 @@ function PointCreateEdit() {
     },
     {
       selectFromResult: ({ data }) => ({
-        data: data?.find((item) => item.uuid === +(id?.split("_")[0] ?? 0)),
+        data: data?.find((item) => item.uuid === (id?.split("_")[0] ?? 0)),
       }),
       skip: isCreate === "true",
     }
   );
+
   // const schema = yup.object().shape({
   //   customer_code: yup.string().required().default(""),
   //   customer_name: yup.string().required().default(""),

@@ -278,7 +278,7 @@ export const MENUITEMS = [
         key: MENU_KEY.REPORT_IQR,
       },
       {
-        path: `${import.meta.env.BASE_URL}report/program`,
+        path: `${import.meta.env.BASE_URL}report/program-point`,
         type: "link",
         active: false,
         selected: false,

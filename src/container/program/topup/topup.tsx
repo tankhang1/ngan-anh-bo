@@ -157,8 +157,10 @@ function TopupProgram() {
                           active={item.key === status}
                           key={index}
                           onClick={() => {
-                            setStatus(item.key);
-                            setListTopups([]);
+                            if (status !== item.key) {
+                              setStatus(item.key);
+                              setListTopups([]);
+                            }
                           }}
                         >
                           {item.label}
