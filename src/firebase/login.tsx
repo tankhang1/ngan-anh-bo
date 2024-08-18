@@ -1,4 +1,4 @@
-import { Fragment, SetStateAction, useState } from "react";
+import { Fragment, SetStateAction, useRef, useState } from "react";
 import { Alert, Button, Card, Col, Form, Nav, Tab } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./firebaseapi";
@@ -54,38 +54,22 @@ const Home = () => {
       })
       .catch((err: { message: SetStateAction<string> }) => {
         console.log(err);
-        setError(err.message);
+        setError("Tài khoản hoặc mật khẩu bị sai");
       });
   };
-
+  const passwordRef = useRef<HTMLInputElement>(null);
   return (
     <Fragment>
       <div className="container">
         <div className="row justify-content-center align-items-center authentication authentication-basic h-100">
           <Col xxl={4} xl={5} lg={5} md={6} sm={8} className="col-12">
-            <div className="my-5 d-flex justify-content-center">
-              {/* <Link to={`${import.meta.env.BASE_URL}dashboards/sales`}>
-                <img src={NganAnhLogo} alt="logo" className="desktop-logo" />
-                <img src={desktopdark} alt="logo" className="desktop-dark" />
-              </Link> */}
-            </div>
+            <div className="my-5 d-flex justify-content-center"></div>
             <Tab.Container id="left-tabs-example" defaultActiveKey="nextjs">
               <Card>
                 <Nav
                   variant="pills"
                   className="justify-content-center authentication-tabs"
-                >
-                  {/* <Nav.Item>
-                    <Nav.Link eventKey="nextjs">
-                      <img src={react} alt="logo" className="desktop-logo" />
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="firebase">
-                      <img src={firebase} alt="logo" />
-                    </Nav.Link>
-                  </Nav.Item> */}
-                </Nav>
+                ></Nav>
                 <Tab.Content>
                   <Tab.Pane eventKey="nextjs" className="border-0">
                     <div className="card-body p-5 pt-1 rectangle3">
@@ -113,6 +97,12 @@ const Home = () => {
                             value={email}
                             onChange={changeHandler}
                             required
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === "Tab") {
+                                passwordRef.current?.click();
+                              }
+                            }}
                           />
                         </div>
                         <div className="col-xl-12 mb-2">
@@ -121,14 +111,6 @@ const Home = () => {
                             className="form-label text-default d-block"
                           >
                             Mật khẩu
-                            <Link
-                              to={`${
-                                import.meta.env.BASE_URL
-                              }authentication/resetpassword/resetbasic`}
-                              className="float-end text-primary"
-                            >
-                              Quên mật khẩu?
-                            </Link>
                           </Form.Label>
                           <div className="input-group">
                             <input
@@ -140,7 +122,14 @@ const Home = () => {
                               value={password}
                               onChange={changeHandler}
                               required
+                              ref={passwordRef}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  Login(e);
+                                }
+                              }}
                             />
+
                             <Button
                               variant=""
                               className="btn btn-light bg-transparent"

@@ -23,6 +23,7 @@ const MapLabel = new Map([
   ["department", "Quản lý bộ phận"],
   ["accounts", "Quản lý tài khoản"],
   ["group-retailer", "Quản lý nhóm đại lý"],
+  ["search-product-code", "Tra cứu mã sản phẩm"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

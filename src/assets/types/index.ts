@@ -108,6 +108,7 @@ export type TBin = {
   time_export_number: number;
   procedure_order_detail_item: number;
   product_code: string;
+  product_name: string;
   product_sub_code: string | undefined;
   batch_number: string;
   register_phone: string;
@@ -124,7 +125,7 @@ export type TBin = {
 };
 export type TProductDashboardTable = Pick<
   TBin,
-  "id" | "seri" | "bin_seri" | "product_code" | "time_use"
+  "id" | "seri" | "bin_seri" | "time_use" | "product_name" | "code"
 >;
 
 /*Topup */
@@ -348,6 +349,7 @@ export type TPackage = {
   time_export_number: number;
   procedure_order_detail_item: number;
   product_code: string;
+  product_name: string;
   product_sub_code: string | undefined;
   batch_number: string;
   register_phone: string;

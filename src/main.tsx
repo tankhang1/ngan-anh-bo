@@ -40,6 +40,7 @@ import EmployeeRole from "./container/employee/role/employee-role.tsx";
 import EmployeeDepartment from "./container/employee/department/employee-department.tsx";
 import Accounts from "./container/accounts/accounts.tsx";
 import SettingGroupRetailer from "./container/settings/group-retailer/index.tsx";
+import SearchProductCode from "./container/operator/search-product-code/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -106,6 +107,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}program/point`}
                 element={<PointProgram />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/search-product-code`}
+                element={<SearchProductCode />}
               />
               <Route
                 path={`${

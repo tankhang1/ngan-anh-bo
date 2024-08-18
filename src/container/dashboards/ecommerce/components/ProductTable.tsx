@@ -47,11 +47,11 @@ function ProductTable() {
               ),
             },
             {
-              key: "seri",
-              label: "Số Seri",
+              key: "code",
+              label: "Mã iQR",
               render: (value) => (
                 <td>
-                  <span className="fw-semibold">{value.seri}</span>
+                  <span className="fw-semibold">{value.code}</span>
                 </td>
               ),
             },
@@ -61,9 +61,9 @@ function ProductTable() {
               render: (value) => <td>{value.bin_seri}</td>,
             },
             {
-              key: "product_code",
-              label: "Mã sản phẩm",
-              render: (value) => <td>{value.product_code}</td>,
+              key: "product_name",
+              label: "Tên sản phẩm",
+              render: (value) => <td>{value.product_name}</td>,
             },
             {
               key: "time_use",
@@ -88,11 +88,11 @@ function ProductTable() {
               ),
             },
             {
-              key: "seri",
-              label: "Số Seri",
+              key: "code",
+              label: "Mã iQR",
               render: (value) => (
                 <td>
-                  <span className="fw-semibold">{value.seri}</span>
+                  <span className="fw-semibold">{value.code}</span>
                 </td>
               ),
             },
@@ -102,9 +102,9 @@ function ProductTable() {
               render: (value) => <td>{value.bin_seri}</td>,
             },
             {
-              key: "product_code",
-              label: "Mã sản phẩm",
-              render: (value) => <td>{value.product_code}</td>,
+              key: "product_name",
+              label: "Tên sản phẩm",
+              render: (value) => <td>{value.product_name}</td>,
             },
             {
               key: "time_use",
