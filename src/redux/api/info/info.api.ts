@@ -4,6 +4,7 @@ import {
   TBin,
   TBinPackage,
   TWarehouseExport,
+  TAgent,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -69,6 +70,13 @@ export const infoApi = createApi({
         method: HTTPS_METHOD.GET,
       }),
     }),
+    getCustomerByCode: builder.query<TAgent, { c: string }>({
+      query: (params) => ({
+        url: "/api/customer/code",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
   }),
 });
 export const {
@@ -77,4 +85,5 @@ export const {
   useGetBinPackageByCodeQuery,
   useGetProductBySkuQuery,
   useGetWarehouseExportBinQuery,
+  useGetCustomerByCodeQuery,
 } = infoApi;

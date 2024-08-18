@@ -117,6 +117,7 @@ export type TBin = {
   register_phone: string;
   register_name: string | undefined;
   register_province: string | undefined;
+  register_province_name?: string;
   source_channel_used: string | undefined;
   source_campaign_code: string | undefined;
   status: number;
@@ -621,6 +622,7 @@ export type TBinPackage = {
   register_phone: string | null;
   register_name: string | null;
   register_province: string;
+  register_province_name?: string;
   source_channel_used: string;
   source_campaign_code: string | null;
   status: number;

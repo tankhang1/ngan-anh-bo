@@ -64,13 +64,6 @@ export const customerApi = createApi({
       }),
       invalidatesTags: [CustomerEnum.CREATE_FARMER],
     }),
-    getCustomerByCode: builder.query<TAgent, { c: string }>({
-      query: (params) => ({
-        url: "/api/customer/code",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-    }),
   }),
 });
 
@@ -79,5 +72,4 @@ export const {
   useUpdateAgentMutation,
   useUpdateFarmerMutation,
   useCreateFarmerMutation,
-  useGetCustomerByCodeQuery,
 } = customerApi;

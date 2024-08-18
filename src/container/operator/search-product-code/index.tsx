@@ -13,11 +13,11 @@ import {
 import { useFormik } from "formik";
 import {
   useGetBinPackageByCodeQuery,
+  useGetCustomerByCodeQuery,
   useGetProductBySkuQuery,
   useGetWarehouseExportBinQuery,
 } from "../../../redux/api/info/info.api";
 import { TAgent, TBinPackage, TProduct } from "../../../assets/types";
-import { useGetCustomerByCodeQuery } from "../../../redux/api/customer/customer.api";
 import { BASE_PORT } from "../../../constants";
 import { fDate } from "../../../hooks";
 import { CircularProgress } from "@mui/material";
@@ -254,32 +254,24 @@ function SearchProductCode() {
                 </Card.Header>
                 <Card.Body>
                   {!isLoadingCustomer ? (
-                    customer ? (
+                    binPackage ? (
                       <Stack gap={1}>
                         <span className="text-black fs-17 fw-smibold">
-                          - Đối tượng khách hàng :{" "}
-                          <span className="fw-normal">
-                            {customer?.customer_type}
-                          </span>
-                        </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Mã khách hàng :{" "}
-                          <span className="fw-normal">
-                            {customer?.customer_code}
-                          </span>
-                        </span>
-                        <span className="text-black fs-17 fw-smibold">
                           - Tên khách hàng :{" "}
-                          <span className="fw-normal">{customer?.name}</span>
+                          <span className="fw-normal">
+                            {binPackage?.register_name}
+                          </span>
                         </span>
                         <span className="text-black fs-17 fw-smibold">
                           - Số điện thoại :{" "}
-                          <span className="fw-normal">{customer?.phone}</span>
+                          <span className="fw-normal">
+                            {binPackage?.register_phone}
+                          </span>
                         </span>
                         <span className="text-black fs-17 fw-smibold">
                           - Tỉnh :{" "}
                           <span className="fw-normal">
-                            {customer?.province_name}
+                            {binPackage?.register_province_name}
                           </span>
                         </span>
                       </Stack>
@@ -303,48 +295,42 @@ function SearchProductCode() {
                 </Card.Header>
                 <Card.Body>
                   {!isLoadingCustomer ? (
-                    customer ? (
-                      <Stack gap={1}>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Đối tượng khách hàng :{" "}
-                          <span className="fw-normal">
-                            {customer?.customer_type}
-                          </span>
+                    <Stack gap={1}>
+                      <span className="text-black fs-17 fw-smibold">
+                        - Đối tượng khách hàng :{" "}
+                        <span className="fw-normal">
+                          {customer?.customer_type}
                         </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Mã khách hàng :{" "}
-                          <span className="fw-normal">
-                            {customer?.customer_code}
-                          </span>
+                      </span>
+                      <span className="text-black fs-17 fw-smibold">
+                        - Mã khách hàng :{" "}
+                        <span className="fw-normal">
+                          {customer?.customer_code}
                         </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Tên khách hàng :{" "}
-                          <span className="fw-normal">
-                            {customer?.customer_name}
-                          </span>
+                      </span>
+                      <span className="text-black fs-17 fw-smibold">
+                        - Tên khách hàng :{" "}
+                        <span className="fw-normal">
+                          {customer?.customer_name}
                         </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Số điện thoại :{" "}
-                          <span className="fw-normal">{customer?.phone}</span>
+                      </span>
+                      <span className="text-black fs-17 fw-smibold">
+                        - Số điện thoại :{" "}
+                        <span className="fw-normal">{customer?.phone}</span>
+                      </span>
+                      <span className="text-black fs-17 fw-smibold">
+                        - Tỉnh :{" "}
+                        <span className="fw-normal">
+                          {customer?.customer_province_name}
                         </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Tỉnh :{" "}
-                          <span className="fw-normal">
-                            {customer?.customer_province_name}
-                          </span>
+                      </span>
+                      <span className="text-black fs-17 fw-smibold">
+                        - Vùng :{" "}
+                        <span className="fw-normal">
+                          {customer?.customer_area}
                         </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Vùng :{" "}
-                          <span className="fw-normal">
-                            {customer?.customer_area}
-                          </span>
-                        </span>
-                      </Stack>
-                    ) : (
-                      <div className="d-flex justify-content-center align-items-center">
-                        Chưa có thông tin
-                      </div>
-                    )
+                      </span>
+                    </Stack>
                   ) : (
                     <div className="d-flex justify-content-center align-items-center">
                       <CircularProgress />

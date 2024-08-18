@@ -66,6 +66,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}customer/validate`}
                 element={<CustomerValidation />}
               />
+              {/* <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/export`}
+                element={<CustomerUnValidationCreateEdit />}
+              /> */}
               <Route
                 path={`${
                   import.meta.env.BASE_URL
