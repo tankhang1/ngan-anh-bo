@@ -136,6 +136,7 @@ function EmployeeCreateEdit() {
           });
     } else {
       setIsEdit(!isEdit);
+      console.log("files", files1, isEdit);
       if (isEdit === true)
         await updateEmployee({
           ...values,
@@ -148,9 +149,14 @@ function EmployeeCreateEdit() {
           provinces: values.provinces
             ?.map((item) => item.value)
             .join(",") as any,
-          areas: values.areas?.map((item) => item.value).join(",") as any,
+          areas: values.areas
+            ? (values.areas?.map((item) => item.value).join(",") as any)
+            : "",
           province: values?.province?.value as any,
           uuid: employees?.uuid,
+          avatar:
+            employees?.avatar ||
+            `https://fgkawrverpi1qyawfgb.yis.vn/staff-image/${employees?.uuid}.jpeg`,
         })
           .unwrap()
           .then(async (value) => {
@@ -560,7 +566,7 @@ function EmployeeCreateEdit() {
                   <Card className="custom-card">
                     <Card.Header>
                       <Card.Title className="text-black">
-                        Thông tin Vai trò & Nhiệm vụ
+                        Thông tin Cấp bậc & Nhiệm vụ
                       </Card.Title>
                     </Card.Header>
                     <Card.Body>
@@ -611,7 +617,7 @@ function EmployeeCreateEdit() {
                         </Form.Group>
                         <Form.Group controlId="role_validate">
                           <Form.Label className="text-black">
-                            Vai trò
+                            Cấp bậc
                           </Form.Label>
 
                           <Select

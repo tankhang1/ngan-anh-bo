@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 const MapLabel = new Map([
   ["dashboards", "Thống kê theo ngày"],
   ["ecommerce", "Dashboard"],
-  ["agent", "Đại lí"],
+  ["agent", "Đại lý"],
   ["farmer", "Nông dân"],
   ["ce", "Chỉnh sửa thông tin"],
   ["product", "Thông tin sản phẩm"],

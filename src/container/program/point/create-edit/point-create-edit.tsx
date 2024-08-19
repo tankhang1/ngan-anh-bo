@@ -543,7 +543,7 @@ function PointCreateEdit() {
                       menuPlacement="auto"
                       classNamePrefix="Select2"
                       isSearchable
-                      placeholder="Chọn đại lí"
+                      placeholder="Chọn đại lý"
                       defaultValue={[listAgencyC1?.[0] as any]}
                       value={values.agents}
                       isLoading={isLoadingAgency}
