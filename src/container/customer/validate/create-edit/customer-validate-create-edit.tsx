@@ -902,7 +902,6 @@ function CustomerValidationCreateEdit() {
                             isInvalid={
                               touched.export_code && !!errors.export_code
                             }
-                            disabled
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.export_code}
@@ -922,7 +921,6 @@ function CustomerValidationCreateEdit() {
                             isInvalid={
                               touched.export_address && !!errors.export_address
                             }
-                            disabled
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.export_address}

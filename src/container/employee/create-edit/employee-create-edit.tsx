@@ -41,6 +41,7 @@ import { FilePondFile } from "filepond";
 import { format } from "date-fns";
 import Select from "react-select";
 import lodash from "lodash";
+import employeeSchema from "../../../schema/employee.schema";
 
 function EmployeeCreateEdit() {
   const { isCreate, id } = useParams();
@@ -110,6 +111,10 @@ function EmployeeCreateEdit() {
               toast.showToast("Nhân viên đã tồn tại");
               return;
             }
+            if (value?.status === -5) {
+              toast.showToast("Mã xuất kho đã tồn tại");
+              return;
+            }
             if (value?.status === 0) {
               if (files1.length > 0) {
                 const formData = new FormData();
@@ -136,7 +141,6 @@ function EmployeeCreateEdit() {
           });
     } else {
       setIsEdit(!isEdit);
-      console.log("files", files1, isEdit);
       if (isEdit === true)
         await updateEmployee({
           ...values,
@@ -156,7 +160,7 @@ function EmployeeCreateEdit() {
           uuid: employees?.uuid,
           avatar:
             employees?.avatar ||
-            `https://fgkawrverpi1qyawfgb.yis.vn/staff-image/${employees?.uuid}.jpeg`,
+            `${BASE_PORT}/staff-image/${employees?.uuid}.jpeg`,
         })
           .unwrap()
           .then(async (value) => {
@@ -236,7 +240,7 @@ function EmployeeCreateEdit() {
         }}
         enableReinitialize
         onSubmit={handleSubmitEmployee}
-        // validationSchema={schema.nullable()}
+        validationSchema={employeeSchema}
       >
         {({
           handleSubmit,
@@ -303,11 +307,7 @@ function EmployeeCreateEdit() {
                     <Card.Body>
                       <Stack>
                         <Row>
-                          <Form.Group
-                            as={Col}
-                            md={4}
-                            controlId="image_validate"
-                          >
+                          <Form.Group as={Col} md={4}>
                             <Form.Label className="text-black">
                               Hình ảnh nhân viên
                             </Form.Label>
@@ -325,7 +325,7 @@ function EmployeeCreateEdit() {
                                 />
                               </Stack>
                             ) : (
-                              <Form.Group controlId="image_validate">
+                              <Form.Group>
                                 <FilePond
                                   files={files1}
                                   onupdatefiles={setFiles1}
@@ -344,7 +344,7 @@ function EmployeeCreateEdit() {
                             </Form.Control.Feedback>
                           </Form.Group>
                           <Stack as={Col} md={8}>
-                            <Form.Group controlId="code_validate">
+                            <Form.Group>
                               <Form.Label className="text-black">
                                 Mã nhân viên
                               </Form.Label>
@@ -361,7 +361,7 @@ function EmployeeCreateEdit() {
                                 {errors.code}
                               </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group controlId="name_validate">
+                            <Form.Group>
                               <Form.Label className="text-black">
                                 Tên nhân viên
                               </Form.Label>
@@ -379,7 +379,7 @@ function EmployeeCreateEdit() {
                                 {errors.name}
                               </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group controlId="birthday_validate">
+                            <Form.Group>
                               <Form.Label className="text-black">
                                 Ngày sinh
                               </Form.Label>
@@ -456,11 +456,7 @@ function EmployeeCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Row>
-                          <Form.Group
-                            as={Col}
-                            md={6}
-                            controlId="citizen_number_validate"
-                          >
+                          <Form.Group as={Col} md={6}>
                             <Form.Label className="text-black">CCCD</Form.Label>
                             <Form.Control
                               required
@@ -479,11 +475,7 @@ function EmployeeCreateEdit() {
                               {errors.citizen_number}
                             </Form.Control.Feedback>
                           </Form.Group>
-                          <Form.Group
-                            as={Col}
-                            md={6}
-                            controlId="citizen_day_validate"
-                          >
+                          <Form.Group as={Col} md={6}>
                             <Form.Label className="text-black">
                               Ngày cấp
                             </Form.Label>
@@ -504,10 +496,7 @@ function EmployeeCreateEdit() {
                             </Form.Control.Feedback>
                           </Form.Group>
                         </Row>
-                        <Form.Group
-                          controlId="province_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group className="mb-2">
                           <Form.Label className="text-black">
                             Tỉnh thành
                           </Form.Label>
@@ -523,11 +512,11 @@ function EmployeeCreateEdit() {
                                 : []
                             }
                             className="default basic-multi-select custom-multi mb-3"
-                            id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
                             isSearchable
                             isClearable
+                            name="province"
                             placeholder="Chọn tỉnh"
                             value={values.province}
                             onChange={(value) =>
@@ -535,11 +524,13 @@ function EmployeeCreateEdit() {
                             }
                           />
 
-                          <Form.Control.Feedback type="invalid">
-                            {errors.province}
-                          </Form.Control.Feedback>
+                          {errors.province && touched.province && (
+                            <p style={{ color: "red", fontSize: 12 }}>
+                              {errors.province}
+                            </p>
+                          )}
                         </Form.Group>
-                        <Form.Group controlId="note_validate" className="mb-2">
+                        <Form.Group className="mb-2">
                           <Form.Label className="text-black">
                             Ghi chú
                           </Form.Label>
@@ -571,7 +562,7 @@ function EmployeeCreateEdit() {
                     </Card.Header>
                     <Card.Body>
                       <Stack>
-                        <Form.Group controlId="role_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
                             Phòng ban
                           </Form.Label>
@@ -611,11 +602,20 @@ function EmployeeCreateEdit() {
                               );
                             }}
                           />
+                          {errors.staff_department_code &&
+                            errors.staff_department_name &&
+                            touched.staff_department_code &&
+                            touched.staff_department_name && (
+                              <p style={{ color: "red", fontSize: 12 }}>
+                                {errors.staff_department_code}
+                              </p>
+                            )}
+
                           {/* <Form.Control.Feedback type="invalid">
                             {errors.gender}
                           </Form.Control.Feedback> */}
                         </Form.Group>
-                        <Form.Group controlId="role_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
                             Cấp bậc
                           </Form.Label>
@@ -655,12 +655,16 @@ function EmployeeCreateEdit() {
                               );
                             }}
                           />
-
-                          {/* <Form.Control.Feedback type="invalid">
-                            {errors.gender}
-                          </Form.Control.Feedback> */}
+                          {errors.staff_role &&
+                            errors.staff_role_name &&
+                            touched.staff_role &&
+                            touched.staff_role_name && (
+                              <p style={{ color: "red", fontSize: 12 }}>
+                                {errors.staff_role}
+                              </p>
+                            )}
                         </Form.Group>
-                        <Form.Group controlId="role_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
                             Vùng kinh doanh
                           </Form.Label>
@@ -699,11 +703,15 @@ function EmployeeCreateEdit() {
                             }}
                           />
 
-                          <Form.Control.Feedback type="invalid">
-                            {errors.gender}
-                          </Form.Control.Feedback>
+                          {errors.areas &&
+                            touched.areas &&
+                            values.areas?.length === 0 && (
+                              <p style={{ color: "red", fontSize: 12 }}>
+                                {errors.areas}
+                              </p>
+                            )}
                         </Form.Group>
-                        <Form.Group controlId="role_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
                             Tỉnh thành
                           </Form.Label>
@@ -732,9 +740,11 @@ function EmployeeCreateEdit() {
                             }
                           />
 
-                          <Form.Control.Feedback type="invalid">
-                            {errors.gender}
-                          </Form.Control.Feedback>
+                          {errors.provinces && touched.provinces && (
+                            <p style={{ color: "red", fontSize: 12 }}>
+                              {errors.provinces}
+                            </p>
+                          )}
                         </Form.Group>
                       </Stack>
                     </Card.Body>
@@ -745,10 +755,7 @@ function EmployeeCreateEdit() {
                     </Card.Header>
                     <Card.Body>
                       <Stack>
-                        <Form.Group
-                          controlId="export_code_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group className="mb-2">
                           <Form.Label className="text-black">
                             Mã số KH-XK
                           </Form.Label>
@@ -769,10 +776,7 @@ function EmployeeCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group
-                          controlId="export_address_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group className="mb-2">
                           <Form.Label className="text-black">
                             Ghi chú địa chỉ nhận hàng
                           </Form.Label>
