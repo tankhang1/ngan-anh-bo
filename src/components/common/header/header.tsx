@@ -10,7 +10,7 @@ import {
 import { MENUITEMS } from "../sidebar/sidemenu";
 import DatePicker from "react-datepicker";
 import store from "../../../redux/store";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 //IMAGES
@@ -35,6 +35,7 @@ interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const [startDatei, setStartDatei] = useState(new Date());
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
   const [show1, setShow1] = useState(false);
@@ -1210,10 +1211,12 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     <i className="fs-13 me-2 bx bx-help-circle"></i>Help
                   </Link>
                 </Dropdown.Item> */}
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to={`${import.meta.env.BASE_URL}`}>
-                    <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Thoát
-                  </Link>
+                <Dropdown.Item
+                  as="li"
+                  className="border-0"
+                  onClick={() => navigate(import.meta.env.BASE_URL)}
+                >
+                  <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Thoát
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
