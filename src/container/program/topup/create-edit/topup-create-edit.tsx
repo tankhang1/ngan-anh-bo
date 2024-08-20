@@ -19,7 +19,7 @@ import * as yup from "yup";
 import { TAgentForm, TTopupCreateForm } from "../../../../assets/types";
 import Select from "react-select";
 import { OBJECTIVES_SELECT } from "../../../../constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -47,7 +47,7 @@ registerPlugin(
 
 function TopupCreateEdit() {
   const toast = useContext(ToastContext);
-
+  const navigate = useNavigate();
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
 
@@ -272,32 +272,32 @@ function TopupCreateEdit() {
                     : "Chỉnh sửa chương trình topup"}
                 </Card.Title>
                 <div>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </Tooltip>
-                    }
+                  <button
+                    className="btn btn-danger-light"
+                    type={"button"}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
                   >
-                    {isCreate === "true" ? (
-                      <button
-                        className="btn  btn-purple-light ms-2"
-                        type="submit"
-                        onClick={() => {}}
-                      >
-                        Thêm mới
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-purple-light"
-                        type="submit"
-                        onClick={() => {}}
-                      >
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </button>
-                    )}
-                  </OverlayTrigger>
+                    Trở lại
+                  </button>
+                  {isCreate === "true" ? (
+                    <button
+                      className="btn  btn-purple-light ms-2"
+                      type="submit"
+                      onClick={() => {}}
+                    >
+                      Thêm mới
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-purple-light"
+                      type="submit"
+                      onClick={() => {}}
+                    >
+                      {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                    </button>
+                  )}
                 </div>
               </Card.Header>
               <Card.Body>

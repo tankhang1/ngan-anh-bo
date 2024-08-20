@@ -17,7 +17,7 @@ import {
   COUNTRIES,
   ProductTypeEnum,
 } from "../../../constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -53,16 +53,7 @@ function ProductCreateEdit() {
   const [files1, setFiles1] = useState<FilePondFile[] | any>([]);
   const toast = useContext(ToastContext);
   const { Formik } = formik;
-  // const schema = yup.object().shape({
-  //   customer_code: yup.string().required().default(""),
-  //   customer_name: yup.string().required().default(""),
-  //   customer_province: yup.string().required().default(""),
-  //   customer_type: yup.string().required("Trường bắt buộc"),
-  //   info_primary: yup.number().required(),
-  //   sign_board: yup.string().required(),
-  //   customer_address: yup.string().required(),
-  //   customer_district: yup.string().required(),
-  // });
+  const navigate = useNavigate();
 
   const { data: product } = useGetListProductsQuery(null, {
     selectFromResult: ({ data }) => ({
@@ -222,27 +213,27 @@ function ProductCreateEdit() {
                     : "Chỉnh sửa thông tin sản phẩm"}
                 </Card.Title>
                 <div>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </Tooltip>
-                    }
+                  <button
+                    className="btn btn-danger-light"
+                    type={"button"}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
                   >
-                    {isCreate === "true" ? (
-                      <button
-                        className="btn  btn-purple-light ms-2"
-                        type="submit"
-                      >
-                        Thêm mới
-                      </button>
-                    ) : (
-                      <button className="btn btn-purple-light" type="submit">
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </button>
-                    )}
-                  </OverlayTrigger>
+                    Trở lại
+                  </button>
+                  {isCreate === "true" ? (
+                    <button
+                      className="btn  btn-purple-light ms-2"
+                      type="submit"
+                    >
+                      Thêm mới
+                    </button>
+                  ) : (
+                    <button className="btn btn-purple-light" type="submit">
+                      {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                    </button>
+                  )}
                 </div>
               </Card.Header>
               <Card.Body>

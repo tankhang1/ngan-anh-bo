@@ -10,7 +10,7 @@ const customerSchema = Yup.object().shape({
 
   name: Yup.string().nullable(),
 
-  province: Yup.string().required("Tỉnh là bắt buộc"),
+  province: Yup.string().nullable(),
 
   info_primary: Yup.number()
     .required("Thông tin chính là bắt buộc")
@@ -22,7 +22,7 @@ const customerSchema = Yup.object().shape({
 
   sign_board: Yup.string().required("Biển hiệu là bắt buộc"),
 
-  customer_address: Yup.string().required("Địa chỉ khách hàng là bắt buộc"),
+  customer_address: Yup.string().nullable(),
 
   customer_district: Yup.string().required("Quận huyện khách hàng là bắt buộc"),
 
@@ -31,8 +31,6 @@ const customerSchema = Yup.object().shape({
   status: Yup.number()
     .oneOf([0, 1], "Trạng thái không hợp lệ")
     .required("Trạng thái là bắt buộc"),
-
-  time: Yup.string().required("Thời gian là bắt buộc"),
 
   gender: Yup.number()
     .oneOf([0, 1], "Giới tính không hợp lệ")

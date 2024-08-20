@@ -277,32 +277,19 @@ function CustomerUnValidationCreateEdit() {
                         Xác thực
                       </button>
                     </OverlayTrigger>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={
-                        <Tooltip className="tooltip">
-                          {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                        </Tooltip>
-                      }
-                    >
-                      {isCreate === "true" ? (
-                        <button
-                          className="btn  btn-purple-light ms-2"
-                          type="submit"
-                          onClick={() => {}}
-                        >
-                          Thêm mới
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-purple-light"
-                          type="submit"
-                          onClick={() => {}}
-                        >
-                          {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                        </button>
-                      )}
-                    </OverlayTrigger>
+
+                    {isCreate === "true" ? (
+                      <button
+                        className="btn  btn-purple-light ms-2"
+                        type="submit"
+                      >
+                        Thêm mới
+                      </button>
+                    ) : (
+                      <button className="btn btn-purple-light" type="submit">
+                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                      </button>
+                    )}
                   </div>
                 </Card.Header>
               </Card>
@@ -828,6 +815,7 @@ function CustomerUnValidationCreateEdit() {
                             value={values.phone}
                             onChange={handleChange}
                             isInvalid={touched.phone && !!errors.phone}
+                            disabled
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.phone}
@@ -835,7 +823,7 @@ function CustomerUnValidationCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Tỉnh đăng ký <span style={{ color: "red" }}>*</span>
+                            Tỉnh đăng ký
                           </Form.Label>
                           <Form.Control
                             required
@@ -853,22 +841,7 @@ function CustomerUnValidationCreateEdit() {
                             {errors.province_name}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        {/* <Form.Group controlId="sale_code_validate">
-                          <Form.Label className='text-black'>Huyện đăng ký</Form.Label>
-                          <Form.Control
-                            required
-                            type="text"
-                            placeholder="Huyện đăng ký"
-                            name="sale_code"
-                            value={values.sale_code}
-                            onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
-                            disabled
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
-                          </Form.Control.Feedback>
-                        </Form.Group> */}
+
                         <Form.Group className="mb-2">
                           <Form.Label className="text-black">
                             Nguồn tham gia
@@ -884,6 +857,7 @@ function CustomerUnValidationCreateEdit() {
                               touched.source_channel_used &&
                               !!errors.source_channel_used
                             }
+                            disabled
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.source_channel_used}

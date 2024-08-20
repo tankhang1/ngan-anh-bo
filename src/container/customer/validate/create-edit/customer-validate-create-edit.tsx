@@ -39,18 +39,7 @@ function CustomerValidationCreateEdit() {
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
   const navigate = useNavigate();
-  // const schema = yup.object().shape({
-  //   customer_code: yup.string().required(),
-  //   customer_name: yup.string().required(),
-  //   customer_province: yup.string().required(),
-  //   customer_type: yup.string().required("Trường bắt buộc"),
-  //   info_primary: yup.number().required(),
-  //   sign_board: yup.string().required(),
-  //   name: yup.string().required("Trường bắt buộc"),
-  //   province: yup.string().required("Trường bắt ")
-  //   customer_address: yup.string().required(),
-  //   customer_district: yup.string().required(),
-  // });
+
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: newUUID } = useGetNewUUIDQuery();
   const { data: groupRetailers } = useGetListGroupRetailerQuery();
@@ -67,8 +56,7 @@ function CustomerValidationCreateEdit() {
       skip: isCreate === "true",
     }
   );
-  //   const [updateAgent] = useUpdateAgentMutation();
-  //   const [createAgent] = useCreateAgentMutation();
+
   const [createUpdateCustomer] = useCreateUpdateCustomerMutation();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
@@ -199,7 +187,6 @@ function CustomerValidationCreateEdit() {
         validationSchema={customerSchema}
         enableReinitialize
         onSubmit={handleSubmitAgent}
-        // validationSchema={schema.nullable()}
       >
         {({
           handleSubmit,
@@ -224,48 +211,19 @@ function CustomerValidationCreateEdit() {
                     >
                       Trở lại
                     </button>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={
-                        <Tooltip className="tooltip">
-                          Xác thực người dùng
-                        </Tooltip>
-                      }
-                    >
+
+                    {isCreate === "true" ? (
                       <button
-                        className="btn btn-teal-light"
-                        type="button"
-                        onClick={() => onValidateCustomer(values)}
+                        className="btn  btn-purple-light ms-2"
+                        type="submit"
                       >
-                        Xác thực
+                        Thêm mới
                       </button>
-                    </OverlayTrigger>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={
-                        <Tooltip className="tooltip">
-                          {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                        </Tooltip>
-                      }
-                    >
-                      {isCreate === "true" ? (
-                        <button
-                          className="btn  btn-purple-light ms-2"
-                          type="submit"
-                          onClick={() => {}}
-                        >
-                          Thêm mới
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-purple-light"
-                          type="submit"
-                          onClick={() => {}}
-                        >
-                          {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                        </button>
-                      )}
-                    </OverlayTrigger>
+                    ) : (
+                      <button className="btn btn-purple-light" type="submit">
+                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                      </button>
+                    )}
                   </div>
                 </Card.Header>
               </Card>
@@ -791,6 +749,7 @@ function CustomerValidationCreateEdit() {
                             value={values.phone}
                             onChange={handleChange}
                             isInvalid={touched.phone && !!errors.phone}
+                            disabled
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.phone}
@@ -798,7 +757,7 @@ function CustomerValidationCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Tỉnh đăng ký <span style={{ color: "red" }}>*</span>
+                            Tỉnh đăng ký
                           </Form.Label>
                           <Form.Control
                             required
@@ -816,22 +775,6 @@ function CustomerValidationCreateEdit() {
                             {errors.province_name}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        {/* <Form.Group controlId="sale_code_validate">
-                          <Form.Label className='text-black'>Huyện đăng ký</Form.Label>
-                          <Form.Control
-                            required
-                            type="text"
-                            placeholder="Huyện đăng ký"
-                            name="sale_code"
-                            value={values.sale_code}
-                            onChange={handleChange}
-                            isInvalid={touched.sale_code && !!errors.sale_code}
-                            disabled
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.sale_code}
-                          </Form.Control.Feedback>
-                        </Form.Group> */}
                         <Form.Group className="mb-2">
                           <Form.Label className="text-black">
                             Nguồn tham gia
@@ -847,6 +790,7 @@ function CustomerValidationCreateEdit() {
                               touched.source_channel_used &&
                               !!errors.source_channel_used
                             }
+                            disabled
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.source_channel_used}

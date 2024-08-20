@@ -18,7 +18,7 @@ import { Formik } from "formik";
 import { TPointCreateForm } from "../../../../assets/types";
 import Select from "react-select";
 import { OBJECTIVES_SELECT, PROVINCES } from "../../../../constants";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -46,7 +46,7 @@ registerPlugin(
 
 function PointCreateEdit() {
   const toast = useContext(ToastContext);
-
+  const navigate = useNavigate();
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const { data: products, isLoading: isLoadingProducts } =
@@ -70,17 +70,6 @@ function PointCreateEdit() {
       skip: isCreate === "true",
     }
   );
-
-  // const schema = yup.object().shape({
-  //   customer_code: yup.string().required().default(""),
-  //   customer_name: yup.string().required().default(""),
-  //   customer_province: yup.string().required().default(""),
-  //   customer_type: yup.string().required("Trường bắt buộc"),
-  //   info_primary: yup.number().required(),
-  //   sign_board: yup.string().required(),
-  //   customer_address: yup.string().required(),
-  //   customer_district: yup.string().required(),
-  // });
 
   const mapProduct = useMemo(
     () =>
@@ -336,32 +325,33 @@ function PointCreateEdit() {
                     : "Chỉnh sửa chương trình tích điểm"}
                 </Card.Title>
                 <div>
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip className="tooltip">
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </Tooltip>
-                    }
+                  <button
+                    className="btn btn-danger-light"
+                    type={"button"}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
                   >
-                    {isCreate === "true" ? (
-                      <button
-                        className="btn  btn-purple-light ms-2"
-                        type="submit"
-                        onClick={() => {}}
-                      >
-                        Thêm mới
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-purple-light"
-                        type="submit"
-                        onClick={() => {}}
-                      >
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                      </button>
-                    )}
-                  </OverlayTrigger>
+                    Trở lại
+                  </button>
+
+                  {isCreate === "true" ? (
+                    <button
+                      className="btn  btn-purple-light ms-2"
+                      type="submit"
+                      onClick={() => {}}
+                    >
+                      Thêm mới
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-purple-light"
+                      type="submit"
+                      onClick={() => {}}
+                    >
+                      {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                    </button>
+                  )}
                 </div>
               </Card.Header>
               <Card.Body>
