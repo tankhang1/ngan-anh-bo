@@ -30,6 +30,7 @@ import {
 import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import roleSchema from "../../../schema/role.schema";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -61,6 +62,7 @@ function EmployeeRole() {
   };
   const handleSubmitRole = async (role: TEmployeeRole) => {
     console.log(role);
+    onModalClose();
     if (!role.name) {
       toast.showToast("Vui lòng điền tên vai trò");
       return;
@@ -272,7 +274,7 @@ function EmployeeRole() {
           }}
           enableReinitialize
           onSubmit={handleSubmitRole}
-          // validationSchema={schema.nullable()}
+          validationSchema={roleSchema}
         >
           {({
             handleSubmit,
@@ -286,7 +288,9 @@ function EmployeeRole() {
               <Modal.Body>
                 {modalInfo?.id && (
                   <Form.Group controlId="id_validate">
-                    <Form.Label className="text-black">Mã vai trò</Form.Label>
+                    <Form.Label className="text-black">
+                      Mã vai trò <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -303,7 +307,9 @@ function EmployeeRole() {
                   </Form.Group>
                 )}
                 <Form.Group controlId="name_validate">
-                  <Form.Label className="text-black">Vai trò</Form.Label>
+                  <Form.Label className="text-black">
+                    Vai trò <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
                   <Form.Control
                     required
                     type="text"
@@ -339,11 +345,7 @@ function EmployeeRole() {
                 <Button variant="danger" onClick={onModalClose}>
                   Hủy
                 </Button>
-                <Button
-                  variant="primary"
-                  type={"submit"}
-                  onClick={onModalClose}
-                >
+                <Button variant="primary" type={"submit"}>
                   Lưu
                 </Button>
               </Modal.Footer>

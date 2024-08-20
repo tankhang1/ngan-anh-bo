@@ -37,6 +37,7 @@ import {
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 import { NumericFormat } from "react-number-format";
+import topupProgramSchema from "../../../../schema/topupProgram.schema";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -252,7 +253,7 @@ function TopupCreateEdit() {
         }}
         enableReinitialize
         onSubmit={handleCreatePointProgram}
-        //validationSchema={schema}
+        validationSchema={topupProgramSchema}
       >
         {({
           handleSubmit,
@@ -303,7 +304,7 @@ function TopupCreateEdit() {
                 <Stack className="d-flex gap-1">
                   <Form.Group controlId="uuid_validate">
                     <Form.Label className="text-black">
-                      Mã chương trình
+                      Mã chương trình <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
@@ -322,7 +323,7 @@ function TopupCreateEdit() {
                   </Form.Group>
                   <Form.Group controlId="name_validate">
                     <Form.Label className="text-black">
-                      Tên chương trình
+                      Tên chương trình <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
@@ -343,7 +344,7 @@ function TopupCreateEdit() {
                   <Row>
                     <Form.Group as={Col} md={6} controlId="time_start_validate">
                       <Form.Label className="text-black">
-                        Ngày bắt đầu
+                        Ngày bắt đầu <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -368,7 +369,7 @@ function TopupCreateEdit() {
                       md={6}
                     >
                       <Form.Label className="text-black">
-                        Ngày kết thúc
+                        Ngày kết thúc <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -387,7 +388,7 @@ function TopupCreateEdit() {
                   </Row>
                   <Form.Group controlId="customer_province_validate">
                     <Form.Label className="text-black">
-                      Chọn sản phẩm
+                      Chọn sản phẩm <span style={{ color: "red" }}>*</span>
                     </Form.Label>
 
                     <Select
@@ -411,14 +412,17 @@ function TopupCreateEdit() {
                       value={values.products}
                       onChange={(value) => setFieldValue("products", value)}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.products}
-                    </Form.Control.Feedback>
+                    {errors.products && touched.products && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.products.toString()}
+                      </p>
+                    )}
                   </Form.Group>
 
                   <Form.Group controlId="objectives_validate">
                     <Form.Label className="text-black">
-                      Chọn đối tượng tham gia
+                      Chọn đối tượng tham gia{" "}
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Select
                       isMulti
@@ -440,25 +444,19 @@ function TopupCreateEdit() {
                       isClearable
                       onChange={(value) => setFieldValue("objectives", value)}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.objectives}
-                    </Form.Control.Feedback>
+                    {errors.objectives && touched.objectives && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.objectives.toString()}
+                      </p>
+                    )}
                   </Form.Group>
 
                   <Form.Group controlId="point_validate">
                     <Form.Label className="text-black">
-                      Nhập số tiền thưởng
+                      Nhập số tiền thưởng{" "}
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
-                    {/* <Form.Control
-                      required
-                      type="number"
-                      min={0}
-                      placeholder="Nhập số tiền thưởng"
-                      name="price"
-                      value={values.price}
-                      onChange={handleChange}
-                      isInvalid={touched.price && !!errors.price}
-                    /> */}
+
                     <NumericFormat
                       customInput={Form.Control as any}
                       defaultValue={values.price}
@@ -469,12 +467,16 @@ function TopupCreateEdit() {
                       min={1}
                       placeholder="Nhập số tiền thưởng"
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.price}
-                    </Form.Control.Feedback>
+                    {errors.price && touched.price && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.price.toString()}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group controlId="status_validate">
-                    <Form.Label className="text-black">Trạng thái</Form.Label>
+                    <Form.Label className="text-black">
+                      Trạng thái <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
                     <Form.Select
                       className="form-select"
                       name="status"

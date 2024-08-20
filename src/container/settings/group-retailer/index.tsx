@@ -170,7 +170,7 @@ function SettingGroupRetailer() {
                 <Stack className="d-flex gap-1">
                   <Form.Group>
                     <Form.Label className="text-black">
-                      Mã nhóm đại lý
+                      Mã nhóm đại lý <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
@@ -187,7 +187,7 @@ function SettingGroupRetailer() {
                   </Form.Group>
                   <Form.Group>
                     <Form.Label className="text-black">
-                      Tên nhóm đại lý
+                      Tên nhóm đại lý <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required

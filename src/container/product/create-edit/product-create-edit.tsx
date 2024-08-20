@@ -39,6 +39,7 @@ import { FilePondFile } from "filepond";
 import { ToastContext } from "../../../components/AppToast";
 import { fNumber } from "../../../hooks";
 import { NumericFormat } from "react-number-format";
+import productSchema from "../../../schema/product.schema";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -192,7 +193,7 @@ function ProductCreateEdit() {
           short_info: product?.short_info ?? "",
           sku_bin: product?.sku_bin ?? 0,
           sku_box: product?.sku_box ?? 0,
-          type: product?.type.toString() ?? 0,
+          type: product?.type.toString() ?? "",
           unit: product?.unit ?? "",
           mop: product?.mop ?? 0,
           device_code: product?.device_code ?? "",
@@ -201,11 +202,8 @@ function ProductCreateEdit() {
           c2_price_vnd: product?.c2_price_vnd ?? 0,
         }}
         enableReinitialize
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-
-        //validationSchema={schema.nullable()}
+        onSubmit={onHandleSubmit}
+        validationSchema={productSchema}
       >
         {({
           handleSubmit,
@@ -236,16 +234,11 @@ function ProductCreateEdit() {
                       <button
                         className="btn  btn-purple-light ms-2"
                         type="submit"
-                        onClick={() => onHandleSubmit(values)}
                       >
                         Thêm mới
                       </button>
                     ) : (
-                      <button
-                        className="btn btn-purple-light"
-                        type="submit"
-                        onClick={() => onHandleSubmit(values)}
-                      >
+                      <button className="btn btn-purple-light" type="submit">
                         {!isEdit ? "Chỉnh sửa" : "Lưu"}
                       </button>
                     )}
@@ -292,7 +285,7 @@ function ProductCreateEdit() {
                       <Stack className="d-flex gap-2">
                         <Form.Group controlId="code_validate">
                           <Form.Label className="text-black">
-                            Mã sản phẩm
+                            Mã sản phẩm <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -312,7 +305,7 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group controlId="product_name_detail_validate">
                           <Form.Label className="text-black">
-                            Tên sản phẩm
+                            Tên sản phẩm <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -333,7 +326,8 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group controlId="name_display_label_validate">
                           <Form.Label className="text-black">
-                            Tên sản phẩm (thu gọn)
+                            Tên sản phẩm (thu gọn){" "}
+                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -354,7 +348,8 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group controlId="brand_code_validate">
                           <Form.Label className="text-black">
-                            Mã thương hiệu
+                            Mã thương hiệu{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -374,7 +369,8 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group controlId="brand_name_validate">
                           <Form.Label className="text-black">
-                            Tên thương hiệu
+                            Tên thương hiệu{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -394,7 +390,8 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group controlId="category_code_validate">
                           <Form.Label className="text-black">
-                            Mã nhóm sản phẩm
+                            Mã nhóm sản phẩm{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -414,7 +411,8 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group controlId="category_name_validate">
                           <Form.Label className="text-black">
-                            Tên nhóm sản phẩm
+                            Tên nhóm sản phẩm{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -438,19 +436,9 @@ function ProductCreateEdit() {
                   <Row>
                     <Form.Group as={Col} md={4} controlId="point_validate">
                       <Form.Label className="text-black">
-                        Số điểm thưởng
+                        Số điểm thưởng <span style={{ color: "red" }}>*</span>
                       </Form.Label>
-                      {/* <Form.Control
-                        required
-                        type="number"
-                        min={1}
-                        id="point_validate"
-                        placeholder="Số điểm thưởng"
-                        name="point"
-                        defaultValue={values.point}
-                        onChange={handleChange}
-                        isInvalid={touched.point && !!errors.point}
-                      /> */}
+
                       <NumericFormat
                         thousandSeparator="."
                         decimalSeparator=","
@@ -461,9 +449,11 @@ function ProductCreateEdit() {
                         min={1}
                         placeholder="Số điểm thưởng"
                       />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.point}
-                      </Form.Control.Feedback>
+                      {errors.point && touched.point && (
+                        <p style={{ color: "red", fontSize: 12 }}>
+                          {errors.point}
+                        </p>
+                      )}
                     </Form.Group>
                     <Form.Group
                       as={Col}
@@ -471,19 +461,7 @@ function ProductCreateEdit() {
                       controlId="c1_price_vnd_validate"
                     >
                       <Form.Label className="text-black">Giá C1</Form.Label>
-                      {/* <Form.Control
-                        required
-                        type="number"
-                        min={0}
-                        id="c1_price_vnd_validate"
-                        placeholder="Số tiền 1"
-                        name="c1_price_vnd"
-                        defaultValue={fNumber(values.c1_price_vnd)}
-                        onChange={handleChange}
-                        isInvalid={
-                          touched.c1_price_vnd && !!errors.c1_price_vnd
-                        }
-                      /> */}
+
                       <NumericFormat
                         thousandSeparator="."
                         customInput={Form.Control as any}
@@ -495,9 +473,11 @@ function ProductCreateEdit() {
                         placeholder="Số tiền 1"
                         decimalSeparator=","
                       />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.c1_price_vnd}
-                      </Form.Control.Feedback>
+                      {errors.c1_price_vnd && touched.c1_price_vnd && (
+                        <p style={{ color: "red", fontSize: 12 }}>
+                          {errors.c1_price_vnd}
+                        </p>
+                      )}
                     </Form.Group>
                     <Form.Group
                       as={Col}
@@ -505,21 +485,7 @@ function ProductCreateEdit() {
                       controlId="c2_price_vnd_validate"
                     >
                       <Form.Label className="text-black">Giá C2</Form.Label>
-                      {/* <Form.Control
-                        required
-                        as={NumericFormat}
-                        type="number"
-                        min={0}
-                        id="c1_price_vnd_validate"
-                        placeholder="Số tiền 2"
-                        thousandSeparator
-                        name="c2_price_vnd"
-                        defaultValue={values.c2_price_vnd}
-                        onChange={handleChange}
-                        isInvalid={
-                          touched.c2_price_vnd && !!errors.c2_price_vnd
-                        }
-                      /> */}
+
                       <NumericFormat
                         thousandSeparator="."
                         customInput={Form.Control as any}
@@ -531,15 +497,18 @@ function ProductCreateEdit() {
                         placeholder="Số tiền 2"
                         decimalSeparator=","
                       />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.c2_price_vnd}
-                      </Form.Control.Feedback>
+                      {errors.c2_price_vnd && touched.c2_price_vnd && (
+                        <p style={{ color: "red", fontSize: 12 }}>
+                          {errors.c2_price_vnd}
+                        </p>
+                      )}
                     </Form.Group>
                   </Row>
                   <Row>
                     <Form.Group as={Col} md={6} controlId="type_validate">
                       <Form.Label className="text-black">
-                        Hình thức đóng gói
+                        Hình thức đóng gói{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Select
                         className="form-select"
@@ -551,6 +520,7 @@ function ProductCreateEdit() {
                         required
                       >
                         {[
+                          { value: "", label: "-- Chọn hình thức đóng gói --" },
                           {
                             value: ProductTypeEnum.PACKET.toString(),
                             label: "Gói",
@@ -582,7 +552,9 @@ function ProductCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={6} controlId="code_bin_validate">
-                      <Form.Label className="text-black">Mã thùng</Form.Label>
+                      <Form.Label className="text-black">
+                        Mã thùng <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
                       <Form.Select
                         className="form-select"
                         id="code_bin_validate"
@@ -592,6 +564,7 @@ function ProductCreateEdit() {
                         isInvalid={touched.code_bin && !!errors.code_bin}
                         required
                       >
+                        <option value={""}>-- Chọn mã thùng --</option>
                         {binIds?.map((item, index) => (
                           <option value={item} key={index}>
                             {item}
@@ -610,7 +583,8 @@ function ProductCreateEdit() {
                       controlId="pack_configuration_validate"
                     >
                       <Form.Label className="text-black">
-                        Quy cách đóng gói
+                        Quy cách đóng gói{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -631,7 +605,7 @@ function ProductCreateEdit() {
                     </Form.Group>
                     <Form.Group as={Col} md={4} controlId="net_weight_validate">
                       <Form.Label className="text-black">
-                        Trọng lượng
+                        Trọng lượng <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         type="number"
@@ -649,7 +623,7 @@ function ProductCreateEdit() {
                     </Form.Group>
                     <Form.Group as={Col} md={4} controlId="unit_validate">
                       <Form.Label className="text-black">
-                        Đơn vị tính
+                        Đơn vị tính <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Select
                         className="form-select"
@@ -661,6 +635,7 @@ function ProductCreateEdit() {
                         required
                       >
                         {[
+                          { value: "", label: "-- Chọn đơn vị tính --" },
                           { value: "gr", label: "Gram" },
                           { value: "ml", label: "Milliliter " },
                         ].map((item, index) => (
@@ -676,7 +651,7 @@ function ProductCreateEdit() {
                   </Row>
                   <Form.Group controlId="ingredient_id_validate">
                     <Form.Label className="text-black">
-                      Mã nguyên liệu
+                      Mã nguyên liệu <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Select
                       className="form-select"
@@ -689,6 +664,7 @@ function ProductCreateEdit() {
                         touched.ingredient_id && !!errors.ingredient_id
                       }
                     >
+                      <option value={""}>-- Mã nguyên liệu --</option>
                       {ingredients?.map((item, index) => (
                         <option value={item} key={index}>
                           {item}
@@ -796,6 +772,7 @@ function ProductCreateEdit() {
                         }
                         required
                       >
+                        <option value={""}>-- Chọn xuất xứ --</option>
                         {COUNTRIES.map((item, index) => (
                           <option value={item.value} key={index}>
                             {item.label}
@@ -819,7 +796,8 @@ function ProductCreateEdit() {
                   <Row>
                     <Form.Group as={Col} md={3} controlId="mop_validate">
                       <Form.Label className="text-black">
-                        Số lượng sản xuất tối thiểu
+                        Số lượng sản xuất tối thiểu{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -838,7 +816,8 @@ function ProductCreateEdit() {
                     </Form.Group>
                     <Form.Group as={Col} md={3} controlId="sku_bin_validate">
                       <Form.Label className="text-black">
-                        Số sản phẩm / thùng
+                        Số sản phẩm / thùng{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -852,12 +831,13 @@ function ProductCreateEdit() {
                         placeholder="Số sản phẩm / thùng"
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.mop}
+                        {errors.sku_bin}
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md={3} controlId="sku_box_validate">
                       <Form.Label className="text-black">
-                        Số sản phẩm / hộp
+                        Số sản phẩm / hộp{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -876,7 +856,7 @@ function ProductCreateEdit() {
                     </Form.Group>
                     <Form.Group as={Col} md={3} controlId="bin_pallet_validate">
                       <Form.Label className="text-black">
-                        Số thùng / lô
+                        Số thùng / lô <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -907,6 +887,7 @@ function ProductCreateEdit() {
                       isInvalid={touched.device_code && !!errors.device_code}
                       required
                     >
+                      <option value={""}>-- Chọn thiết bị --</option>
                       {devices?.map((item, index) => (
                         <option value={item.value} key={index}>
                           {item.label}

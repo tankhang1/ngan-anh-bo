@@ -228,6 +228,22 @@ function CustomerValidationCreateEdit() {
                       placement="top"
                       overlay={
                         <Tooltip className="tooltip">
+                          Xác thực người dùng
+                        </Tooltip>
+                      }
+                    >
+                      <button
+                        className="btn btn-teal-light"
+                        type="button"
+                        onClick={() => onValidateCustomer(values)}
+                      >
+                        Xác thực
+                      </button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip className="tooltip">
                           {!isEdit ? "Chỉnh sửa" : "Lưu"}
                         </Tooltip>
                       }
@@ -266,7 +282,7 @@ function CustomerValidationCreateEdit() {
                     <Card.Body>
                       <Form.Group>
                         <Form.Label className="text-black">
-                          Mã khách hàng
+                          Mã khách hàng <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control
                           required
@@ -284,13 +300,9 @@ function CustomerValidationCreateEdit() {
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Row className="mb-2">
-                        <Form.Group
-                          as={Col}
-                          md={4}
-                          controlId="customer_name_validate"
-                        >
+                        <Form.Group as={Col} md={4}>
                           <Form.Label className="text-black">
-                            Họ và tên
+                            Họ và tên <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -307,9 +319,9 @@ function CustomerValidationCreateEdit() {
                             {errors.customer_name}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group as={Col} md={4} controlId="gender_validate">
+                        <Form.Group as={Col} md={4}>
                           <Form.Label className="text-black">
-                            Giới tính
+                            Giới tính <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Select
                             className="form-select"
@@ -325,13 +337,9 @@ function CustomerValidationCreateEdit() {
                             <option value={1}>Nam</option>
                           </Form.Select>
                         </Form.Group>
-                        <Form.Group
-                          as={Col}
-                          md={4}
-                          controlId="birthday_validate"
-                        >
+                        <Form.Group as={Col} md={4}>
                           <Form.Label className="text-black">
-                            Ngày sinh
+                            Ngày sinh <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -346,9 +354,10 @@ function CustomerValidationCreateEdit() {
                           />
                         </Form.Group>
                       </Row>
-                      <Form.Group controlId="customer_type_validate">
+                      <Form.Group>
                         <Form.Label className="text-black">
-                          Nhóm khách hàng
+                          Nhóm khách hàng{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
                           className="form-select"
@@ -362,7 +371,6 @@ function CustomerValidationCreateEdit() {
                           }
                           required
                         >
-                          {" "}
                           <option value="">-- Chọn nhóm khách hàng --</option>
                           {groupObjectives?.map((item) => (
                             <option key={item.id} value={item.symbol}>
@@ -374,14 +382,13 @@ function CustomerValidationCreateEdit() {
                           {errors.customer_type as any}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group controlId="customer_type_validate">
+                      <Form.Group>
                         <Form.Label className="text-black">
                           Nhóm đại lý
                         </Form.Label>
                         <Form.Select
                           className="form-select"
                           name="retailer_group"
-                          value={values.retailer_group}
                           onChange={(e) =>
                             setFieldValue("retailer_group", e.target.value)
                           }
@@ -401,9 +408,9 @@ function CustomerValidationCreateEdit() {
                           {errors.retailer_group as any}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group controlId="phone_validate" className="mb-2">
+                      <Form.Group className="mb-2">
                         <Form.Label className="text-black">
-                          Số điện thoại
+                          Số điện thoại <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control
                           required
@@ -419,9 +426,9 @@ function CustomerValidationCreateEdit() {
                           {errors.phone}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group controlId="email_validate" className="mb-2">
+                      <Form.Group className="mb-2">
                         <Form.Label className="text-black">
-                          Địa chỉ email
+                          Địa chỉ email <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control
                           required
@@ -437,12 +444,7 @@ function CustomerValidationCreateEdit() {
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Row>
-                        <Form.Group
-                          as={Col}
-                          md={6}
-                          controlId="email_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group as={Col} md={6} className="mb-2">
                           <Form.Label className="text-black">CCCD</Form.Label>
                           <Form.Control
                             required
@@ -459,12 +461,7 @@ function CustomerValidationCreateEdit() {
                             {errors.citizen_number}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group
-                          as={Col}
-                          md={6}
-                          controlId="citizen_day_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group as={Col} md={6} className="mb-2">
                           <Form.Label className="text-black">
                             Ngày cấp CCCD
                           </Form.Label>
@@ -484,12 +481,9 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                       </Row>
-                      <Form.Group
-                        controlId="customer_province_validate"
-                        className="mb-2"
-                      >
+                      <Form.Group className="mb-2">
                         <Form.Label className="text-black">
-                          Tỉnh thành
+                          Tỉnh thành <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
                           className="form-select"
@@ -520,12 +514,10 @@ function CustomerValidationCreateEdit() {
                           {errors.customer_province}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group
-                        controlId="customer_district_validate"
-                        className="mb-2"
-                      >
+                      <Form.Group className="mb-2">
                         <Form.Label className="text-black">
-                          Chọn quận huyện
+                          Chọn quận huyện{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
                           className="form-select"
@@ -541,6 +533,7 @@ function CustomerValidationCreateEdit() {
                           required
                         >
                           <option value="">-- Chọn quận huyện --</option>
+
                           {districts?.map((item, index) => (
                             <option value={item.value} key={index}>
                               {item.label}
@@ -551,10 +544,7 @@ function CustomerValidationCreateEdit() {
                           {errors.customer_district}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group
-                        controlId="customer_address_validate"
-                        className="mb-2"
-                      >
+                      <Form.Group className="mb-2">
                         <Form.Label className="text-black">
                           Nhập địa chỉ chi tiết
                         </Form.Label>
@@ -575,9 +565,10 @@ function CustomerValidationCreateEdit() {
                         </Form.Control.Feedback>
                       </Form.Group>
 
-                      <Form.Group controlId="sale_code_validate">
+                      <Form.Group>
                         <Form.Label className="text-black">
-                          Nhân viên phụ trách
+                          Nhân viên phụ trách{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
                           className="form-select"
@@ -592,20 +583,21 @@ function CustomerValidationCreateEdit() {
                           <option value="">
                             -- Chọn nhân viên phụ trách --
                           </option>
+
                           {employees?.map((item) => (
                             <option key={item.id} value={item.code}>
                               {item.name}
                             </option>
                           ))}
                         </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.sale_code}
+                        </Form.Control.Feedback>
                       </Form.Group>
 
-                      <Form.Group
-                        controlId="business_document_validate"
-                        className="mb-2"
-                      >
+                      <Form.Group className="mb-2">
                         <Form.Label className="text-black">
-                          Giấy phép
+                          Giấy phép <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control
                           required
@@ -625,12 +617,7 @@ function CustomerValidationCreateEdit() {
                       </Form.Group>
 
                       <Row>
-                        <Form.Group
-                          as={Col}
-                          md={6}
-                          controlId="tags_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group as={Col} md={6} className="mb-2">
                           <Form.Label className="text-black">
                             Nhập cây trồng chính
                           </Form.Label>
@@ -647,12 +634,7 @@ function CustomerValidationCreateEdit() {
                             {errors.tags}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group
-                          as={Col}
-                          md={6}
-                          controlId="area_size_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group as={Col} md={6} className="mb-2">
                           <Form.Label className="text-black">
                             Nhập diện tích cây trồng chính
                           </Form.Label>
@@ -671,7 +653,7 @@ function CustomerValidationCreateEdit() {
                           </Form.Control.Feedback>
                         </Form.Group>
                       </Row>
-                      <Form.Group controlId="note_validate" className="mb-2">
+                      <Form.Group className="mb-2">
                         <Form.Label className="text-black">
                           Nhập ghi chú
                         </Form.Label>
@@ -689,9 +671,10 @@ function CustomerValidationCreateEdit() {
                         </Form.Control.Feedback>
                       </Form.Group>
 
-                      <Form.Group controlId="sign_board_validate">
+                      <Form.Group>
                         <Form.Label className="text-black">
-                          Nhập biển hiệu / Tên doanh nghiệp
+                          Nhập biển hiệu / Tên doanh nghiệp{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control
                           required
@@ -708,11 +691,7 @@ function CustomerValidationCreateEdit() {
                       </Form.Group>
 
                       <Row>
-                        <Form.Group
-                          as={Col}
-                          md={6}
-                          controlId="citizen_number_validate"
-                        >
+                        <Form.Group as={Col} md={6}>
                           <Form.Label className="text-black">
                             Số CCKD
                           </Form.Label>
@@ -750,13 +729,10 @@ function CustomerValidationCreateEdit() {
                         </Form.Group>
                       </Row>
 
-                      <Form.Group
-                        as={Col}
-                        md={6}
-                        controlId="info_primary_validate"
-                      >
+                      <Form.Group as={Col} md={6}>
                         <Form.Label className="text-black">
-                          Có tham gia tích điểm không
+                          Có tham gia tích điểm không{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Check
                           type="switch"
@@ -784,7 +760,7 @@ function CustomerValidationCreateEdit() {
                     </Card.Header>
                     <Card.Body>
                       <Stack>
-                        <Form.Group controlId="name_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
                             Tên đăng ký
                           </Form.Label>
@@ -802,9 +778,10 @@ function CustomerValidationCreateEdit() {
                             {errors.name}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="phone_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
-                            Số điện thoại
+                            Số điện thoại{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -814,15 +791,14 @@ function CustomerValidationCreateEdit() {
                             value={values.phone}
                             onChange={handleChange}
                             isInvalid={touched.phone && !!errors.phone}
-                            disabled
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.phone}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="sale_code_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
-                            Tỉnh đăng ký
+                            Tỉnh đăng ký <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
                             required
@@ -856,10 +832,7 @@ function CustomerValidationCreateEdit() {
                             {errors.sale_code}
                           </Form.Control.Feedback>
                         </Form.Group> */}
-                        <Form.Group
-                          controlId="source_channel_used_validate"
-                          className="mb-2"
-                        >
+                        <Form.Group className="mb-2">
                           <Form.Label className="text-black">
                             Nguồn tham gia
                           </Form.Label>
@@ -888,7 +861,7 @@ function CustomerValidationCreateEdit() {
                     </Card.Header>
                     <Card.Body>
                       <Stack>
-                        <Form.Group controlId="export_code_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
                             Mã số KH-XK
                           </Form.Label>
@@ -907,7 +880,7 @@ function CustomerValidationCreateEdit() {
                             {errors.export_code}
                           </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group controlId="export_address_validate">
+                        <Form.Group>
                           <Form.Label className="text-black">
                             Ghi chú thông tin địa chỉ giao hàng
                           </Form.Label>

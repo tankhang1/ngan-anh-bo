@@ -22,6 +22,7 @@ import {
 import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import departmentSchema from "../../../schema/department.schema";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -56,6 +57,7 @@ function EmployeeDepartment() {
       toast.showToast("Vui lòng điền tên vai trò");
       return;
     }
+    onModalClose();
     if (isCreate) {
       await createDepartment({
         code: department.code,
@@ -262,7 +264,7 @@ function EmployeeDepartment() {
       <Modal show={openCEModal} onHide={onModalClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isCreate ? "Thêm mới vai trò" : "Chỉnh sửa vai trò"}
+            {isCreate ? "Thêm bộ phận" : "Chỉnh sửa bộ phận"}
           </Modal.Title>
         </Modal.Header>
         <Formik
@@ -274,7 +276,7 @@ function EmployeeDepartment() {
           }}
           enableReinitialize
           onSubmit={handleSubmitRole}
-          // validationSchema={schema.nullable()}
+          validationSchema={departmentSchema}
         >
           {({
             handleSubmit,
@@ -286,30 +288,14 @@ function EmployeeDepartment() {
           }) => (
             <form noValidate onSubmit={handleSubmit}>
               <Modal.Body>
-                {modalInfo?.id && (
-                  <Form.Group controlId="id_validate">
-                    <Form.Label className="text-black">Mã vai trò</Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      placeholder="Mã nhân viên"
-                      name="id"
-                      defaultValue={values.id}
-                      onChange={handleChange}
-                      isInvalid={touched.id && !!errors.id}
-                      disabled
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.id}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                )}
                 <Form.Group controlId="name_validate">
-                  <Form.Label className="text-black">Mã phòng ban</Form.Label>
+                  <Form.Label className="text-black">
+                    Mã bộ phân <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
                   <Form.Control
                     required
                     type="text"
-                    placeholder="Mã phòng ban"
+                    placeholder="Mã bộ phân"
                     name="code"
                     defaultValue={values.code}
                     onChange={handleChange}
@@ -321,11 +307,13 @@ function EmployeeDepartment() {
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="name_validate">
-                  <Form.Label className="text-black">Tên phòng ban</Form.Label>
+                  <Form.Label className="text-black">
+                    Tên bộ phận <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
                   <Form.Control
                     required
                     type="text"
-                    placeholder="Tên phòng ban"
+                    placeholder="Tên bộ phận"
                     name="name"
                     defaultValue={values.name}
                     onChange={handleChange}
@@ -357,11 +345,7 @@ function EmployeeDepartment() {
                 <Button variant="danger" onClick={onModalClose}>
                   Hủy
                 </Button>
-                <Button
-                  variant="primary"
-                  type={"submit"}
-                  onClick={onModalClose}
-                >
+                <Button variant="primary" type={"submit"}>
                   Lưu
                 </Button>
               </Modal.Footer>

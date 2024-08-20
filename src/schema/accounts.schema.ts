@@ -1,15 +1,15 @@
 import * as Yup from "yup";
 const accountSchema = Yup.object().shape({
   username: Yup.string()
-    .min(2, "Tên quá ngắn")
-    .max(70, "Tên quá dài")
-    .required("Trường bắt buộc"),
+    .required("Tên đăng nhập là bắt buộc")
+    .min(3, "Tên đăng nhập phải có ít nhất 3 ký tự"),
+
   password: Yup.string()
-    .min(8, "Mật khẩu quá ngắn")
-    .required("Trường bắt buộc"),
-  roles: Yup.array()
-    .min(1, "Phải có ít nhất là một vai trò")
-    .required("Trường bắt buộc"),
-  staff_code: Yup.string().required("Trường bắt buộc"),
+    .required("Mật khẩu là bắt buộc")
+    .min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+
+  staff_code: Yup.string().required("Mã nhân viên là bắt buộc"),
+
+  roles: Yup.string().required("Vai trò là bắt buộc"),
 });
 export default accountSchema;

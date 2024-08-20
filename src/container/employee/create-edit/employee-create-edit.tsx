@@ -346,7 +346,8 @@ function EmployeeCreateEdit() {
                           <Stack as={Col} md={8}>
                             <Form.Group>
                               <Form.Label className="text-black">
-                                Mã nhân viên
+                                Mã nhân viên{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </Form.Label>
                               <Form.Control
                                 required
@@ -363,7 +364,8 @@ function EmployeeCreateEdit() {
                             </Form.Group>
                             <Form.Group>
                               <Form.Label className="text-black">
-                                Tên nhân viên
+                                Tên nhân viên{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </Form.Label>
                               <Form.Control
                                 required
@@ -381,7 +383,8 @@ function EmployeeCreateEdit() {
                             </Form.Group>
                             <Form.Group>
                               <Form.Label className="text-black">
-                                Ngày sinh
+                                Ngày sinh{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </Form.Label>
                               <Form.Control
                                 required
@@ -401,7 +404,8 @@ function EmployeeCreateEdit() {
                             </Form.Group>
                             <Form.Group>
                               <Form.Label className="text-black">
-                                Chọn giới tính
+                                Chọn giới tính{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </Form.Label>
                               <Form.Select
                                 className="form-select"
@@ -422,7 +426,8 @@ function EmployeeCreateEdit() {
                             </Form.Group>
                             <Form.Group>
                               <Form.Label className="text-black">
-                                Số điện thoại
+                                Số điện thoại{" "}
+                                <span style={{ color: "red" }}>*</span>
                               </Form.Label>
                               <Form.Control
                                 required
@@ -441,7 +446,9 @@ function EmployeeCreateEdit() {
                         </Row>
 
                         <Form.Group>
-                          <Form.Label className="text-black">Email</Form.Label>
+                          <Form.Label className="text-black">
+                            Email <span style={{ color: "red" }}>*</span>
+                          </Form.Label>
                           <Form.Control
                             required
                             type="text"
@@ -498,7 +505,7 @@ function EmployeeCreateEdit() {
                         </Row>
                         <Form.Group className="mb-2">
                           <Form.Label className="text-black">
-                            Tỉnh thành
+                            Tỉnh thành <span style={{ color: "red" }}>*</span>
                           </Form.Label>
 
                           <Select
@@ -564,7 +571,7 @@ function EmployeeCreateEdit() {
                       <Stack>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Phòng ban
+                            Phòng ban <span style={{ color: "red" }}>*</span>
                           </Form.Label>
 
                           <Select
@@ -617,7 +624,7 @@ function EmployeeCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Cấp bậc
+                            Cấp bậc <span style={{ color: "red" }}>*</span>
                           </Form.Label>
 
                           <Select
@@ -666,7 +673,8 @@ function EmployeeCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Vùng kinh doanh
+                            Vùng kinh doanh{" "}
+                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Select
                             isMulti
@@ -713,7 +721,7 @@ function EmployeeCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Tỉnh thành
+                            Tỉnh thành <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Select
                             isMulti

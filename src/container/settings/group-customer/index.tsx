@@ -194,7 +194,7 @@ function SettingGroupCustomer() {
                 <Stack className="d-flex gap-1">
                   <Form.Group controlId="symbol_validate">
                     <Form.Label className="text-black">
-                      Mã nhóm khách hàng
+                      Mã nhóm khách hàng <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
@@ -211,7 +211,9 @@ function SettingGroupCustomer() {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group controlId="prefix_validate">
-                    <Form.Label className="text-black">Tiền tố</Form.Label>
+                    <Form.Label className="text-black">
+                      Tiền tố <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
                     <Form.Control
                       required
                       type="text"
@@ -228,7 +230,8 @@ function SettingGroupCustomer() {
                   </Form.Group>
                   <Form.Group controlId="name_validate">
                     <Form.Label className="text-black">
-                      Tên nhóm khách hàng
+                      Tên nhóm khách hàng{" "}
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required

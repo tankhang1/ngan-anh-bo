@@ -36,6 +36,7 @@ import {
 } from "../../../../redux/api/program/program.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
+import pointProgramSchema from "../../../../schema/pointProgram.schema";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -316,7 +317,7 @@ function PointCreateEdit() {
         }}
         enableReinitialize
         onSubmit={handleCreatePointProgram}
-        //validationSchema={schema}
+        validationSchema={pointProgramSchema}
       >
         {({
           handleSubmit,
@@ -365,14 +366,13 @@ function PointCreateEdit() {
               </Card.Header>
               <Card.Body>
                 <Stack className="d-flex gap-1">
-                  <Form.Group controlId="uuid_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
-                      Mã chương trình
+                      Mã chương trình <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
                       type="text"
-                      id="uuid_validate"
                       placeholder="Mã chương trình"
                       name="uuid"
                       value={isCreate === "true" ? newUUID : values.uuid}
@@ -380,15 +380,17 @@ function PointCreateEdit() {
                       isInvalid={touched.uuid && !!errors.uuid}
                       disabled
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.uuid?.toString()}
+                    </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group controlId="name_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
-                      Tên chương trình
+                      Tên chương trình <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
                       type="text"
-                      id="name_validate"
                       placeholder="Tên chương trình"
                       name="name"
                       value={values.name}
@@ -402,14 +404,13 @@ function PointCreateEdit() {
                   </Form.Group>
 
                   <Row>
-                    <Form.Group as={Col} md={6} controlId="time_start_validate">
+                    <Form.Group as={Col} md={6}>
                       <Form.Label className="text-black">
-                        Ngày bắt đầu
+                        Ngày bắt đầu <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
                         type="date"
-                        id="time_start_validate"
                         placeholder="Ngày bắt đầu"
                         name="time_start"
                         value={values.time_start}
@@ -422,19 +423,13 @@ function PointCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group
-                      controlId="time_end_validate"
-                      className="mb-2"
-                      as={Col}
-                      md={6}
-                    >
+                    <Form.Group className="mb-2" as={Col} md={6}>
                       <Form.Label className="text-black">
-                        Ngày kết thúc
+                        Ngày kết thúc <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
                         type="date"
-                        id="time_end_validate"
                         placeholder="Ngày kết thúc"
                         name="time_end"
                         value={values.time_end}
@@ -446,9 +441,9 @@ function PointCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Row>
-                  <Form.Group controlId="customer_province_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
-                      Chọn sản phẩm
+                      Chọn sản phẩm <span style={{ color: "red" }}>*</span>
                     </Form.Label>
 
                     <Select
@@ -472,10 +467,16 @@ function PointCreateEdit() {
                       value={values.products}
                       onChange={(value) => setFieldValue("products", value)}
                     />
+
+                    {errors.products && touched.products && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.products.toString()}
+                      </p>
+                    )}
                   </Form.Group>
-                  <Form.Group controlId="locations_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
-                      Chọn tỉnh thành
+                      Chọn tỉnh thành <span style={{ color: "red" }}>*</span>
                     </Form.Label>
 
                     <Select
@@ -498,10 +499,16 @@ function PointCreateEdit() {
                       value={values.locations}
                       onChange={(value) => setFieldValue("locations", value)}
                     />
+                    {errors.locations && touched.locations && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.locations.toString()}
+                      </p>
+                    )}
                   </Form.Group>
                   <Form.Group controlId="objectives_validate">
                     <Form.Label className="text-black">
-                      Chọn đối tượng tham gia
+                      Chọn đối tượng tham gia{" "}
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Select
                       isMulti
@@ -524,9 +531,14 @@ function PointCreateEdit() {
                       onChange={(value) => setFieldValue("objectives", value)}
                     />
                   </Form.Group>
+                  {errors.objectives && touched.objectives && (
+                    <p style={{ color: "red", fontSize: 12 }}>
+                      {errors.objectives.toString()}
+                    </p>
+                  )}
                   <Form.Group controlId="agents_validate">
                     <Form.Label className="text-black">
-                      Chọn đại lý cấp 1
+                      Chọn đại lý cấp 1 <span style={{ color: "red" }}>*</span>
                     </Form.Label>
 
                     <Select
@@ -550,23 +562,13 @@ function PointCreateEdit() {
                       isClearable
                       onChange={(value) => setFieldValue("agents", value)}
                     />
+                    {errors.agents && touched.agents && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.agents.toString()}
+                      </p>
+                    )}
                   </Form.Group>
-                  {/* <Form.Group controlId="point_validate">
-                    <Form.Label className='text-black'>Nhập số điểm</Form.Label>
-                    <Form.Control
-                      required
-                      type="number"
-                      min={0}
-                      placeholder="Nhập số điểm"
-                      name="point"
-                      value={values.point}
-                      onChange={handleChange}
-                      isInvalid={touched.point && !!errors.point}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.point}
-                    </Form.Control.Feedback>
-                  </Form.Group> */}
+
                   <Form.Group controlId="status_validate">
                     <Form.Label className="text-black">Trạng thái</Form.Label>
                     <Form.Select
