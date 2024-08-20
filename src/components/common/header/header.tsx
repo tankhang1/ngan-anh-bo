@@ -1212,7 +1212,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                 </Dropdown.Item> */}
                 <Dropdown.Item as="li" className="border-0">
                   <Link to={`${import.meta.env.BASE_URL}`}>
-                    <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Log Out
+                    <i className="fs-13 me-2 bx bx-arrow-to-right"></i>Thoát
                   </Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
