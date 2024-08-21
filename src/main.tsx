@@ -41,6 +41,10 @@ import EmployeeDepartment from "./container/employee/department/employee-departm
 import Accounts from "./container/accounts/accounts.tsx";
 import SettingGroupRetailer from "./container/settings/group-retailer/index.tsx";
 import SearchProductCode from "./container/operator/search-product-code/index.tsx";
+import WarehouseExport from "./container/warehouse/export/warehouseExport.tsx";
+import SearchWarehouseExport from "./container/warehouse/export/searchWarehouseExport.tsx";
+import WarehouseImport from "./container/warehouse/import/warehouseImport.tsx";
+import SearchWarehouseImport from "./container/warehouse/import/searchWarehouseImport.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -66,12 +70,26 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}customer/validate`}
                 element={<CustomerValidation />}
               />
-              {/* <Route
+              <Route
+                path={`${import.meta.env.BASE_URL}warehouse/export`}
+                element={<WarehouseExport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}warehouse/import`}
+                element={<WarehouseImport />}
+              />
+              <Route
                 path={`${
                   import.meta.env.BASE_URL
-                }warehouse/export`}
-                element={<CustomerUnValidationCreateEdit />}
-              /> */}
+                }warehouse/export/search-warehouse-export`}
+                element={<SearchWarehouseExport />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/import/search-warehouse-import`}
+                element={<SearchWarehouseImport />}
+              />
               <Route
                 path={`${
                   import.meta.env.BASE_URL

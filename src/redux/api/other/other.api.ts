@@ -92,6 +92,14 @@ export const otherApi = createApi({
       }),
       invalidatesTags: [OtherEnum.CUSTOMER],
     }),
+    updateCustomer: builder.mutation<BASE_RES, TCustomerRes>({
+      query: (body) => ({
+        url: `/customer/update`,
+        method: HTTPS_METHOD.POST,
+        body: body,
+      }),
+      invalidatesTags: [OtherEnum.CUSTOMER],
+    }),
     verifyCustomer: builder.mutation<BASE_RES, TCustomerRes>({
       query: (body) => ({
         url: `/customer/verify`,
@@ -168,6 +176,7 @@ export const {
   useVerifyCustomerMutation,
   useCreateUpdateGroupObjectiveMutation,
   useCreateEmployeeMutation,
+  useUpdateCustomerMutation,
   useUpdateEmployeeMutation,
   useCreateEmployeeDepartmentMutation,
   useCreateEmployeeRoleMutation,

@@ -92,7 +92,6 @@ const AppTable = <T extends DataItem>({
     externalSearch,
     isHeader,
   ]);
-
   const pagingData = useMemo(() => {
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE;
@@ -101,11 +100,11 @@ const AppTable = <T extends DataItem>({
   const MAX_PAGE = useMemo(
     () =>
       Math.ceil(
-        (searchValue?.length === 0
+        (searchValue?.length === 0 && externalSearch?.length === 0
           ? maxPage ?? filterData.length
           : filterData.length ?? 0) / PAGE_SIZE
       ),
-    [deferSearchValue, filterOption, filterData.length, maxPage]
+    [deferSearchValue, filterOption, filterData, maxPage, externalSearch]
   );
 
   const listButtonPaging = useMemo(() => {
@@ -126,7 +125,7 @@ const AppTable = <T extends DataItem>({
     if (page !== 1) {
       setPage(1);
     }
-  }, [isChange, searchBy, searchByExternal]);
+  }, [isChange, searchBy, searchByExternal, externalSearch]);
 
   useEffect(() => {
     setExternalPage?.(page);
@@ -237,7 +236,7 @@ const AppTable = <T extends DataItem>({
       <Card.Footer>
         <div className="d-flex flex-sm-row gap-2 flex-column align-items-center">
           <div>
-            Tổng cộng {maxPage ?? filterData.length} items{" "}
+            Tổng cộng {externalSearch ? filterData.length : maxPage} items{" "}
             <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
           </div>
           <div className="ms-auto">

@@ -11,6 +11,7 @@ const icon3 = <i className="ti ti-settings"></i>;
 const icon4 = <i className="bi bi-people"></i>;
 const icon5 = <i className="bx bx-user-voice"></i>;
 const icon6 = <i className="bx bx-user-circle"></i>;
+const icon7 = <i className="ti ti-building-warehouse"></i>;
 export const MENU_KEY = {
   DASHBOARD: "DASHBOARD",
   ACCOUNTS: "ACCOUNTS",
@@ -38,6 +39,11 @@ export const MENU_KEY = {
   MANAGE_TITLE: "MANAGE_TITLE",
   REPORT_TITLE: "REPORT_TITLE",
   SETTING_TITLE: "SETTING_TITLE",
+  MANAGE_WAREHOUSE: "MANAGE_WAREHOUSE",
+  WARE_HOUSE_MANAGE_EXPORT: "WARE_HOUSE_MANAGE_EXPORT",
+  WARE_HOUSE_MANAGE_IMPORT: "WARE_HOUSE_MANAGE_IMPORT",
+  SEARCH_WAREHOUSE_EXPORT: "SEARCH_WAREHOUSE_EXPORT",
+  SEARCH_WAREHOUSE_IMPORT: "SEARCH_WAREHOUSE_IMPORT",
 };
 
 export const MENUITEMS = [
@@ -126,6 +132,55 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "Tra cứu mã sản phẩm",
+      },
+    ],
+  },
+  {
+    title: "Thông tin kho",
+    icon: icon7,
+    badgetxt: "",
+    type: "sub",
+    active: true,
+    selected: false,
+    dirchange: false,
+    key: MENU_KEY.MANAGE_WAREHOUSE,
+    children: [
+      {
+        path: `${
+          import.meta.env.BASE_URL
+        }warehouse/export/search-warehouse-export`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Tra cứu thông tin xuất kho",
+      },
+
+      {
+        path: `${
+          import.meta.env.BASE_URL
+        }warehouse/import/search-warehouse-import`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Tra cứu thông tin nhập kho",
+      },
+      {
+        path: `${import.meta.env.BASE_URL}warehouse/export`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Danh sách xuất kho",
+      },
+      {
+        path: `${import.meta.env.BASE_URL}warehouse/import`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Danh sách nhập kho",
       },
     ],
   },

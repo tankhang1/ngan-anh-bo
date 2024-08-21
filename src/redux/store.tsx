@@ -15,6 +15,7 @@ import AuthReducer from "./slices/authSlice";
 import { settingApi } from "./api/setting/setting.api";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import { warehouseApi } from "./api/warehouse/warehouse.api";
 
 const persistConfig = {
   key: "root",
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   [reportApi.reducerPath]: reportApi.reducer,
   [accountApi.reducerPath]: accountApi.reducer,
   [settingApi.reducerPath]: settingApi.reducer,
+  [warehouseApi.reducerPath]: warehouseApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -59,7 +61,8 @@ const store = configureStore({
       .concat(customerApi.middleware)
       .concat(reportApi.middleware)
       .concat(accountApi.middleware)
-      .concat(settingApi.middleware),
+      .concat(settingApi.middleware)
+      .concat(warehouseApi.middleware),
 });
 
 export default store;

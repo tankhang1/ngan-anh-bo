@@ -29,6 +29,7 @@ import { NumericFormat } from "react-number-format";
 import {
   useCreateUpdateCustomerMutation,
   useGetNewUUIDQuery,
+  useUpdateCustomerMutation,
 } from "../../../../redux/api/other/other.api";
 import customerSchema from "../../../../schema/customers.schema";
 
@@ -57,7 +58,8 @@ function CustomerValidationCreateEdit() {
     }
   );
 
-  const [createUpdateCustomer] = useCreateUpdateCustomerMutation();
+  const [createCustomer] = useCreateUpdateCustomerMutation();
+  const [updateCustomer] = useUpdateCustomerMutation();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
   const { data: districts } = useGetDistrictQuery(
@@ -72,7 +74,7 @@ function CustomerValidationCreateEdit() {
 
   const handleSubmitAgent = async (values: TCustomerRes) => {
     if (isCreate === "true") {
-      await createUpdateCustomer({
+      await createCustomer({
         ...values,
         uuid: values?.uuid ? values.uuid : newUUID?.toString(),
         info_primary: values.info_primary ? 1 : 0,
@@ -109,7 +111,7 @@ function CustomerValidationCreateEdit() {
     } else {
       setIsEdit(!isEdit);
       if (isEdit === true)
-        await createUpdateCustomer({
+        await updateCustomer({
           ...values,
           uuid: values?.uuid ? values.uuid : newUUID?.toString(),
           info_primary: values.info_primary ? 1 : 0,
@@ -135,7 +137,7 @@ function CustomerValidationCreateEdit() {
               return;
             }
             if (value?.status === 0) {
-              toast.showToast("Thêm đại lý thành công");
+              toast.showToast("Cập nhật khách hàng thành công");
               return;
             }
             toast.showToast("Cập nhật thất bại");

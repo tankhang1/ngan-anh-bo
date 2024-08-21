@@ -371,6 +371,7 @@ export type BaseQuery = {
   p?: string; //phone
   t?: string; //Loaij khach hang (chờ xác thực)
   k?: string; //loại khách hàng (đã xác thực)
+  type?: string;
 };
 export type TPackage = {
   id: number;
@@ -658,4 +659,47 @@ export type TWarehouseExport = {
   staff_export_name: string | null;
   receiver: string | null;
   work_center_export_code: string | null;
+};
+
+export type TWarehouseDocument = {
+  id: number;
+  agent_code: string;
+  agent_name: string;
+  time_export: string; // Assuming this is a date-time string
+  time_export_number: number;
+  address: string;
+  note: string;
+  total: number;
+  export_time_day: number;
+  document_code: string;
+  document_code_detail: string;
+  goods_type: string; // Assuming "SALE" is one of the possible values
+  staff_import_code: string;
+  staff_import_name: string;
+  staff_export_code: string;
+  staff_export_name: string;
+  receiver: string;
+  work_center_export_code: string;
+};
+
+export type TWarehouseDocumentImport = {
+  id: number;
+  agent_code: string;
+  agent_name: string;
+  time_import: string; // Assuming this is a date-time string
+  time_import_number: number; // Assuming long corresponds to number in TypeScript
+  address: string;
+  note: string;
+  total: number;
+  import_time_day: number;
+  document_code: string;
+  document_code_detail: string;
+  goods_type: string;
+  staff_import_code: string;
+  staff_import_name: string;
+  staff_export_code: string;
+  staff_export_name: string;
+  shipper: string;
+  work_center_export_code: string;
+  work_center_import_code: string;
 };

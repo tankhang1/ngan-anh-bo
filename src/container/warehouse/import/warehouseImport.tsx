@@ -5,52 +5,42 @@ import { Formik } from "formik";
 import {
   useGetExportDetailCounterQuery,
   useGetExportDetailQuery,
-  useGetExportDocumentsQuery,
+  useGetImportDetailCounterQuery,
+  useGetImportDetailQuery,
+  useGetImportDocumentsQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
-import {
-  BaseQuery,
-  TWarehouseDocument,
-  TWarehouseExport,
-} from "../../../assets/types";
+import { BaseQuery, TWarehouseExport } from "../../../assets/types";
 import { exportExcelFile, fDate } from "../../../hooks";
 import { format } from "date-fns";
 type TSearchItem = {
   label: string;
   value: string;
 };
-const TypeBinExport: TSearchItem[] = [
+const TypeBinImport: TSearchItem[] = [
   {
-    label: "Hàng hóa",
-    value: "SALE",
+    label: "Trả hàng",
+    value: "RETURN",
   },
   {
-    label: "Khuyến mãi",
-    value: "MARKETING",
-  },
-  {
-    label: "Hàng mượn",
-    value: "BORROW",
-  },
-  {
-    label: "Hàng quảng bá",
-    value: "PROMOTION",
+    label: "Chuyển kho",
+    value: "WAREHOUSE",
   },
 ];
-type TExportForm = {
+type TImportForm = {
   document_code: string;
   type: string;
   start_date: string;
   end_date: string;
 };
-const WarehouseExport = () => {
+const WarehouseImport = () => {
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
 
   const {
-    data: exports,
-    isLoading: loadingExport,
-    refetch: refetchExport,
-  } = useGetExportDocumentsQuery(
+    data: imports,
+    isLoading: loadingImport,
+    refetch: refetchImport,
+  } = useGetImportDocumentsQuery(
     {
       st: query?.st,
       ed: query?.ed,
@@ -62,7 +52,7 @@ const WarehouseExport = () => {
     }
   );
 
-  const onSearch = (values: TExportForm) => {
+  const onSearch = (values: TImportForm) => {
     setSearch(values.document_code);
     if (
       query?.st === +(format(values.start_date, "yyyyMMdd") + "0000") &&
@@ -76,10 +66,10 @@ const WarehouseExport = () => {
       type: values?.type,
     });
 
-    refetchExport();
+    refetchImport();
   };
   const handleExportExcel = () => {
-    if (exports) exportExcelFile(exports, "Thông tin xuất kho");
+    if (imports) exportExcelFile(imports, "Thông tin nhập kho");
   };
 
   return (
@@ -167,9 +157,9 @@ const WarehouseExport = () => {
                               isInvalid={touched.type && !!errors.type}
                             >
                               <option value={""}>
-                                -- Chọn loại xuất kho --
+                                -- Chọn loại nhập kho --
                               </option>
-                              {TypeBinExport.map((item, index) => (
+                              {TypeBinImport.map((item, index) => (
                                 <option value={item.value} key={index}>
                                   {item.label}
                                 </option>
@@ -241,9 +231,9 @@ const WarehouseExport = () => {
         <Card className="custom-card">
           <AppTable
             isHeader={false}
-            title="Thông tin xuất kho"
-            isLoading={loadingExport}
-            maxPage={exports?.length}
+            title="Thông tin nhập kho"
+            isLoading={loadingImport}
+            maxPage={imports?.length}
             headers={[
               {
                 key: "document_code",
@@ -261,27 +251,27 @@ const WarehouseExport = () => {
                 render: ({ agent_name }) => <td>{agent_name}</td>,
               },
               {
-                key: "staff_export_code",
-                label: "Mã nhân viên xuất kho",
-                render: ({ staff_export_code }) => <td>{staff_export_code}</td>,
+                key: "staff_import_code",
+                label: "Mã nhân viên nhập kho",
+                render: ({ staff_import_code }) => <td>{staff_import_code}</td>,
               },
               {
-                key: "staff_export_name",
-                label: "Tên nhân viên xuất kho",
-                render: ({ staff_export_name }) => <td>{staff_export_name}</td>,
+                key: "staff_import_name",
+                label: "Tên nhân viên nhập kho",
+                render: ({ staff_import_name }) => <td>{staff_import_name}</td>,
               },
               {
-                key: "receiver",
-                label: "Tên người nhận",
-                render: ({ receiver }) => <td>{receiver}</td>,
+                key: "shipper",
+                label: "Người giao hàng",
+                render: ({ shipper }) => <td>{shipper}</td>,
               },
               {
-                key: "time",
-                label: "Thời gian xuất kho",
-                render: ({ time_export }) => <td>{time_export}</td>,
+                key: "time_import",
+                label: "Thời gian nhập kho",
+                render: ({ time_import }) => <td>{time_import}</td>,
               },
             ]}
-            data={exports || []}
+            data={imports || []}
             externalSearch={search}
             searchByExternal="document_code"
           />
@@ -291,4 +281,4 @@ const WarehouseExport = () => {
   );
 };
 
-export default WarehouseExport;
+export default WarehouseImport;
