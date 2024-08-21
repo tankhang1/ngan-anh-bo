@@ -33,31 +33,54 @@ import {
 import {
   useGetListProgramPointStatusQuery,
   useGetListProgramTopupByTimeQuery,
+  useGetListProgramTopupStatusQuery,
 } from "../../../../redux/api/program/program.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 import { NumericFormat } from "react-number-format";
 import topupProgramSchema from "../../../../schema/topupProgram.schema";
+import { useGetListGroupRetailerQuery } from "../../../../redux/api/manage/manage.api";
 
 registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginImageExifOrientation,
   FilePondPluginFileValidateType
 );
-
+type TSearchItem = {
+  label: string;
+  value: string;
+};
+const TypeBinExport: TSearchItem[] = [
+  {
+    label: "Hàng hóa",
+    value: "SALE",
+  },
+  {
+    label: "Khuyến mãi",
+    value: "MARKETING",
+  },
+  {
+    label: "Hàng mượn",
+    value: "BORROW",
+  },
+  {
+    label: "Hàng quảng bá",
+    value: "PROMOTION",
+  },
+];
 function TopupCreateEdit() {
   const toast = useContext(ToastContext);
   const navigate = useNavigate();
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
+  const { data: retailerGroup } = useGetListGroupRetailerQuery();
 
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
-    refetchOnFocus: true,
     skip: isCreate !== "true",
   });
-  const { data: topupProgram } = useGetListProgramPointStatusQuery(
+  const { data: topupProgram } = useGetListProgramTopupStatusQuery(
     {
       status: +(id?.split("_")[1] ?? 0),
       nu: +(id?.split("_")[2] ?? 0),
@@ -71,16 +94,6 @@ function TopupCreateEdit() {
     }
   );
   const { Formik } = formik;
-  const schema = yup.object().shape({
-    customer_code: yup.string().required().default(""),
-    customer_name: yup.string().required().default(""),
-    customer_province: yup.string().required().default(""),
-    customer_type: yup.string().required("Trường bắt buộc"),
-    info_primary: yup.number().required(),
-    sign_board: yup.string().required(),
-    customer_address: yup.string().required(),
-    customer_district: yup.string().required(),
-  });
 
   const mapProduct = useMemo(
     () =>
@@ -250,6 +263,9 @@ function TopupCreateEdit() {
             isCreate === "true"
               ? newUUID?.toString()
               : topupProgram?.uuid.toString(),
+          agent_or_group_name: topupProgram?.agent_or_group_name || 0,
+          goods_type: topupProgram?.goods_type || "",
+          retailer_group: topupProgram?.retailer_group || "",
         }}
         enableReinitialize
         onSubmit={handleCreatePointProgram}
@@ -285,16 +301,11 @@ function TopupCreateEdit() {
                     <button
                       className="btn  btn-purple-light ms-2"
                       type="submit"
-                      onClick={() => {}}
                     >
                       Thêm mới
                     </button>
                   ) : (
-                    <button
-                      className="btn btn-purple-light"
-                      type="submit"
-                      onClick={() => {}}
-                    >
+                    <button className="btn btn-purple-light" type="submit">
                       {!isEdit ? "Chỉnh sửa" : "Lưu"}
                     </button>
                   )}
@@ -302,7 +313,7 @@ function TopupCreateEdit() {
               </Card.Header>
               <Card.Body>
                 <Stack className="d-flex gap-1">
-                  <Form.Group controlId="uuid_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
                       Mã chương trình <span style={{ color: "red" }}>*</span>
                     </Form.Label>
@@ -321,7 +332,7 @@ function TopupCreateEdit() {
                       {errors.uuid}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group controlId="name_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
                       Tên chương trình <span style={{ color: "red" }}>*</span>
                     </Form.Label>
@@ -342,7 +353,7 @@ function TopupCreateEdit() {
                   </Form.Group>
 
                   <Row>
-                    <Form.Group as={Col} md={6} controlId="time_start_validate">
+                    <Form.Group as={Col} md={6}>
                       <Form.Label className="text-black">
                         Ngày bắt đầu <span style={{ color: "red" }}>*</span>
                       </Form.Label>
@@ -362,12 +373,7 @@ function TopupCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group
-                      controlId="time_end_validate"
-                      className="mb-2"
-                      as={Col}
-                      md={6}
-                    >
+                    <Form.Group className="mb-2" as={Col} md={6}>
                       <Form.Label className="text-black">
                         Ngày kết thúc <span style={{ color: "red" }}>*</span>
                       </Form.Label>
@@ -386,7 +392,7 @@ function TopupCreateEdit() {
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Row>
-                  <Form.Group controlId="customer_province_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
                       Chọn sản phẩm <span style={{ color: "red" }}>*</span>
                     </Form.Label>
@@ -419,7 +425,7 @@ function TopupCreateEdit() {
                     )}
                   </Form.Group>
 
-                  <Form.Group controlId="objectives_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
                       Chọn đối tượng tham gia{" "}
                       <span style={{ color: "red" }}>*</span>
@@ -451,7 +457,7 @@ function TopupCreateEdit() {
                     )}
                   </Form.Group>
 
-                  <Form.Group controlId="point_validate">
+                  <Form.Group>
                     <Form.Label className="text-black">
                       Nhập số tiền thưởng{" "}
                       <span style={{ color: "red" }}>*</span>
@@ -473,7 +479,86 @@ function TopupCreateEdit() {
                       </p>
                     )}
                   </Form.Group>
-                  <Form.Group controlId="status_validate">
+                  <Form.Group>
+                    <Form.Label className="text-black">
+                      Nhóm đại lý <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                    <Form.Select
+                      className="form-select"
+                      name="retailer_group"
+                      defaultValue={values.retailer_group}
+                      onChange={handleChange}
+                      isInvalid={
+                        touched.retailer_group && !!errors.retailer_group
+                      }
+                      required
+                    >
+                      <option value={""}>-- Chọn nhóm đại lý --</option>
+                      {retailerGroup?.map((item, index) => (
+                        <option value={item.code} key={index}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    {errors.retailer_group && touched.retailer_group && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.retailer_group.toString()}
+                      </p>
+                    )}
+                  </Form.Group>
+
+                  <Form.Group>
+                    <Form.Label className="text-black">
+                      Chọn theo nhóm đại lý / đại lý{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                    <Form.Check
+                      type="switch"
+                      className="form-check-lg form-switch"
+                      checked={values.agent_or_group_name === 1}
+                      onChange={(event) => {
+                        setFieldValue(
+                          "agent_or_group_name",
+                          event.target.checked ? 1 : 0
+                        );
+                      }}
+                      required
+                      name="agent_or_group_name"
+                    />
+                    {errors.agent_or_group_name &&
+                      touched.agent_or_group_name && (
+                        <p style={{ color: "red", fontSize: 12 }}>
+                          {errors.agent_or_group_name.toString()}
+                        </p>
+                      )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className="text-nowrap text-black">
+                      Loại hàng hóa: <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                    <Form.Select
+                      className="form-select"
+                      name="goods_type"
+                      defaultValue={values.goods_type}
+                      onChange={(e) =>
+                        setFieldValue("goods_type", e.target.value)
+                      }
+                      isInvalid={touched.goods_type && !!errors.goods_type}
+                    >
+                      <option value={""}>-- Chọn loại hàng --</option>
+                      {TypeBinExport.map((item, index) => (
+                        <option value={item.value} key={index}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    {errors.goods_type && touched.goods_type && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.goods_type.toString()}
+                      </p>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
                     <Form.Label className="text-black">
                       Trạng thái <span style={{ color: "red" }}>*</span>
                     </Form.Label>

@@ -29,7 +29,10 @@ import {
   useGetNewUUIDQuery,
   useUpdatePointProgramMutation,
 } from "../../../../redux/api/other/other.api";
-import { useGetListAgencyC1Query } from "../../../../redux/api/manage/manage.api";
+import {
+  useGetListAgencyC1Query,
+  useGetListGroupRetailerQuery,
+} from "../../../../redux/api/manage/manage.api";
 import {
   useGetListProgramPointByTimeQuery,
   useGetListProgramPointStatusQuery,
@@ -43,7 +46,28 @@ registerPlugin(
   FilePondPluginImageExifOrientation,
   FilePondPluginFileValidateType
 );
-
+type TSearchItem = {
+  label: string;
+  value: string;
+};
+const TypeBinExport: TSearchItem[] = [
+  {
+    label: "Hàng hóa",
+    value: "SALE",
+  },
+  {
+    label: "Khuyến mãi",
+    value: "MARKETING",
+  },
+  {
+    label: "Hàng mượn",
+    value: "BORROW",
+  },
+  {
+    label: "Hàng quảng bá",
+    value: "PROMOTION",
+  },
+];
 function PointCreateEdit() {
   const toast = useContext(ToastContext);
   const navigate = useNavigate();
@@ -52,7 +76,6 @@ function PointCreateEdit() {
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
-    refetchOnFocus: true,
     skip: isCreate !== "true",
   });
   const { data: listAgencyC1, isLoading: isLoadingAgency } =
@@ -70,6 +93,8 @@ function PointCreateEdit() {
       skip: isCreate === "true",
     }
   );
+
+  const { data: retailerGroup } = useGetListGroupRetailerQuery();
 
   const mapProduct = useMemo(
     () =>
@@ -303,6 +328,9 @@ function PointCreateEdit() {
             (isCreate === "true"
               ? newUUID?.toString()
               : pointProgram?.uuid.toString()) ?? ("" as any),
+          agent_or_group_name: pointProgram?.agent_or_group_name || 0,
+          goods_type: pointProgram?.goods_type || "",
+          retailer_group: pointProgram?.retailer_group || "",
         }}
         enableReinitialize
         onSubmit={handleCreatePointProgram}
@@ -316,7 +344,13 @@ function PointCreateEdit() {
           touched,
           errors,
         }) => (
-          <form noValidate onSubmit={handleSubmit}>
+          <form
+            noValidate
+            onSubmit={(e) => {
+              console.log("cer", errors);
+              handleSubmit(e);
+            }}
+          >
             <Card className="custom-card">
               <Card.Header className="justify-content-between">
                 <Card.Title>
@@ -339,16 +373,11 @@ function PointCreateEdit() {
                     <button
                       className="btn  btn-purple-light ms-2"
                       type="submit"
-                      onClick={() => {}}
                     >
                       Thêm mới
                     </button>
                   ) : (
-                    <button
-                      className="btn btn-purple-light"
-                      type="submit"
-                      onClick={() => {}}
-                    >
+                    <button className="btn btn-purple-light" type="submit">
                       {!isEdit ? "Chỉnh sửa" : "Lưu"}
                     </button>
                   )}
@@ -558,7 +587,85 @@ function PointCreateEdit() {
                       </p>
                     )}
                   </Form.Group>
+                  <Form.Group>
+                    <Form.Label className="text-black">
+                      Nhóm đại lý <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                    <Form.Select
+                      className="form-select"
+                      name="retailer_group"
+                      defaultValue={values.retailer_group}
+                      onChange={handleChange}
+                      isInvalid={
+                        touched.retailer_group && !!errors.retailer_group
+                      }
+                      required
+                    >
+                      <option value={""}>-- Chọn nhóm đại lý --</option>
+                      {retailerGroup?.map((item, index) => (
+                        <option value={item.code} key={index}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    {errors.retailer_group && touched.retailer_group && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.retailer_group.toString()}
+                      </p>
+                    )}
+                  </Form.Group>
 
+                  <Form.Group>
+                    <Form.Label className="text-black">
+                      Chọn theo nhóm đại lý / đại lý{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                    <Form.Check
+                      type="switch"
+                      className="form-check-lg form-switch"
+                      checked={values.agent_or_group_name === 1 ? true : false}
+                      onChange={(value) => {
+                        setFieldValue(
+                          "agent_or_group_name",
+                          value.target.checked ? 1 : 0
+                        );
+                      }}
+                      required
+                      name="agent_or_group_name"
+                    />
+                    {errors.agent_or_group_name &&
+                      touched.agent_or_group_name && (
+                        <p style={{ color: "red", fontSize: 12 }}>
+                          {errors.agent_or_group_name.toString()}
+                        </p>
+                      )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className="text-nowrap text-black">
+                      Loại hàng hóa: <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                    <Form.Select
+                      className="form-select"
+                      name="goods_type"
+                      defaultValue={values.goods_type}
+                      onChange={(e) =>
+                        setFieldValue("goods_type", e.target.value)
+                      }
+                      isInvalid={touched.goods_type && !!errors.goods_type}
+                    >
+                      <option value={""}>-- Chọn loại hàng --</option>
+                      {TypeBinExport.map((item, index) => (
+                        <option value={item.value} key={index}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    {errors.goods_type && touched.goods_type && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.goods_type.toString()}
+                      </p>
+                    )}
+                  </Form.Group>
                   <Form.Group controlId="status_validate">
                     <Form.Label className="text-black">Trạng thái</Form.Label>
                     <Form.Select

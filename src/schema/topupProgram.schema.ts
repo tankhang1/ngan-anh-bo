@@ -34,7 +34,13 @@ const topupProgramSchema = Yup.object().shape({
   status: Yup.number()
     .oneOf([0, 1, 2, 3], "Trạng thái không hợp lệ")
     .required("Trạng thái là bắt buộc"),
+  agent_or_group_name: Yup.number().required(
+    "Chọn theo đại lý hoặc nhóm đại lý là bắt buộc"
+  ),
 
+  agents: Yup.array(),
+
+  retailer_group: Yup.string(),
   uuid: Yup.string().required("Mã chương trình là bắt buộc"),
 });
 export default topupProgramSchema;

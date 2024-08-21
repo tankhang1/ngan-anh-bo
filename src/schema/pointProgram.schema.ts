@@ -10,16 +10,13 @@ const pointProgramSchema = Yup.object().shape({
         label: Yup.string().required("Tên sản phẩm là bắt buộc"),
       })
     ),
+  agent_or_group_name: Yup.number().required(
+    "Chọn theo đại lý hoặc nhóm đại lý là bắt buộc"
+  ),
 
-  agents: Yup.array()
-    .min(1, "Vui lòng chọn ít nhất một đại lý")
-    .of(
-      Yup.object({
-        value: Yup.string().required("Mã đại lý là bắt buộc"),
-        label: Yup.string().required("Tên đại lý là bắt buộc"),
-      })
-    ),
+  agents: Yup.array(),
 
+  retailer_group: Yup.string(),
   point_coefficient: Yup.number()
     .min(1, "Hệ số điểm phải lớn hơn hoặc bằng 1")
     .required("Hệ số điểm là bắt buộc"),
@@ -48,6 +45,7 @@ const pointProgramSchema = Yup.object().shape({
         label: Yup.string().required("Tên tỉnh là bắt buộc"),
       })
     ),
+  goods_type: Yup.string().required("Loại hàng hóa là bắt buộc"),
 
   status: Yup.number()
     .oneOf([0, 1], "Trạng thái không hợp lệ")
