@@ -73,7 +73,6 @@ function TopupCreateEdit() {
   const navigate = useNavigate();
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
-  const { data: retailerGroup } = useGetListGroupRetailerQuery();
 
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
@@ -263,9 +262,7 @@ function TopupCreateEdit() {
             isCreate === "true"
               ? newUUID?.toString()
               : topupProgram?.uuid.toString(),
-          agent_or_group_name: topupProgram?.agent_or_group_name || 0,
           goods_type: topupProgram?.goods_type || "",
-          retailer_group: topupProgram?.retailer_group || "",
         }}
         enableReinitialize
         onSubmit={handleCreatePointProgram}
@@ -479,59 +476,7 @@ function TopupCreateEdit() {
                       </p>
                     )}
                   </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="text-black">
-                      Nhóm đại lý <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="retailer_group"
-                      defaultValue={values.retailer_group}
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.retailer_group && !!errors.retailer_group
-                      }
-                      required
-                    >
-                      <option value={""}>-- Chọn nhóm đại lý --</option>
-                      {retailerGroup?.map((item, index) => (
-                        <option value={item.code} key={index}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    {errors.retailer_group && touched.retailer_group && (
-                      <p style={{ color: "red", fontSize: 12 }}>
-                        {errors.retailer_group.toString()}
-                      </p>
-                    )}
-                  </Form.Group>
 
-                  <Form.Group>
-                    <Form.Label className="text-black">
-                      Chọn theo nhóm đại lý / đại lý{" "}
-                      <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Form.Check
-                      type="switch"
-                      className="form-check-lg form-switch"
-                      checked={values.agent_or_group_name === 1}
-                      onChange={(event) => {
-                        setFieldValue(
-                          "agent_or_group_name",
-                          event.target.checked ? 1 : 0
-                        );
-                      }}
-                      required
-                      name="agent_or_group_name"
-                    />
-                    {errors.agent_or_group_name &&
-                      touched.agent_or_group_name && (
-                        <p style={{ color: "red", fontSize: 12 }}>
-                          {errors.agent_or_group_name.toString()}
-                        </p>
-                      )}
-                  </Form.Group>
                   <Form.Group>
                     <Form.Label className="text-nowrap text-black">
                       Loại hàng hóa: <span style={{ color: "red" }}>*</span>

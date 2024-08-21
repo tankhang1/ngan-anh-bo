@@ -205,8 +205,7 @@ export type TProgramPoint = {
   agents: string;
   locations: string;
   objectives: string;
-  retailer_group: string;
-  agent_or_group_name: number;
+
   goods_type: string;
 };
 export type TProgramTopup = {
@@ -229,8 +228,7 @@ export type TProgramTopup = {
   products: string;
   locations: string;
   objectives: string;
-  retailer_group: string;
-  agent_or_group_name: number;
+
   goods_type: string;
 };
 
@@ -245,8 +243,7 @@ export type TTopupCreateForm = {
   locations: string | string[];
   status: number;
   uuid?: number;
-  retailer_group: string;
-  agent_or_group_name: number;
+
   goods_type: string;
 };
 
