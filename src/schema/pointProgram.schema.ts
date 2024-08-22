@@ -10,7 +10,7 @@ const pointProgramSchema = Yup.object().shape({
         label: Yup.string().required("Tên sản phẩm là bắt buộc"),
       })
     ),
-  agent_or_group_name: Yup.number().required(
+  agent_or_group_agent: Yup.number().required(
     "Chọn theo đại lý hoặc nhóm đại lý là bắt buộc"
   ),
 

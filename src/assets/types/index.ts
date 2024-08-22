@@ -261,7 +261,7 @@ export type TPointCreateForm = {
   time_start_number?: number | string;
   time_end_number?: number | string;
   retailer_group?: string;
-  agent_or_group_name: number;
+  agent_or_group_agent: number;
   goods_type: string;
 };
 

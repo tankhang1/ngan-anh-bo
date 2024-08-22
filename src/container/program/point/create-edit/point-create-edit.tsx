@@ -328,7 +328,7 @@ function PointCreateEdit() {
             (isCreate === "true"
               ? newUUID?.toString()
               : pointProgram?.uuid.toString()) ?? ("" as any),
-          agent_or_group_name: pointProgram?.agent_or_group_name || 0,
+          agent_or_group_agent: pointProgram?.agent_or_group_agent || 0,
           goods_type: pointProgram?.goods_type || "",
           retailer_group: pointProgram?.retailer_group || "",
         }}
@@ -623,20 +623,20 @@ function PointCreateEdit() {
                     <Form.Check
                       type="switch"
                       className="form-check-lg form-switch"
-                      checked={values.agent_or_group_name === 1 ? true : false}
+                      checked={values.agent_or_group_agent === 1 ? true : false}
                       onChange={(value) => {
                         setFieldValue(
-                          "agent_or_group_name",
+                          "agent_or_group_agent",
                           value.target.checked ? 1 : 0
                         );
                       }}
                       required
-                      name="agent_or_group_name"
+                      name="agent_or_group_agent"
                     />
-                    {errors.agent_or_group_name &&
-                      touched.agent_or_group_name && (
+                    {errors.agent_or_group_agent &&
+                      touched.agent_or_group_agent && (
                         <p style={{ color: "red", fontSize: 12 }}>
-                          {errors.agent_or_group_name.toString()}
+                          {errors.agent_or_group_agent.toString()}
                         </p>
                       )}
                   </Form.Group>
