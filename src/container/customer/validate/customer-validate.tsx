@@ -68,6 +68,7 @@ function CustomerValidation() {
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       t: customerType,
+      s: 1,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -80,6 +81,7 @@ function CustomerValidation() {
         nu: page - 1,
         sz: 10,
         t: customerType,
+        s: 1,
       },
       {
         refetchOnMountOrArgChange: true,

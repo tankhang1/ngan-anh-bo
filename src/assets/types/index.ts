@@ -383,6 +383,7 @@ export type BaseQuery = {
   t?: string; //Loaij khach hang (chờ xác thực)
   k?: string; //loại khách hàng (đã xác thực)
   type?: string;
+  s?: number;
 };
 export type TPackage = {
   id: number;

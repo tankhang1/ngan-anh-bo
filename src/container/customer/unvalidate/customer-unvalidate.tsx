@@ -59,6 +59,7 @@ function CustomerUnValidation() {
   const { data: counterCustomer } = useGetCounterCustomerRegisterQuery(
     {
       t: customerType,
+      s: 0,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -70,6 +71,7 @@ function CustomerUnValidation() {
         nu: page - 1,
         sz: 10,
         t: customerType,
+        s: 0,
       },
       {
         refetchOnMountOrArgChange: true,
