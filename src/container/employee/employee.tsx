@@ -93,7 +93,7 @@ function Employee() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {permission.createEmployee && (
+                  {permission.createEmployee ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -111,8 +111,8 @@ function Employee() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
-                  {permission.exportEmployee && (
+                  ) : null}
+                  {permission.exportEmployee ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -130,7 +130,7 @@ function Employee() {
                         <i className="ti ti-database-export"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

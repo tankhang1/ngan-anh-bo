@@ -21,6 +21,7 @@ import {
   TGroupRetailer,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { TPermit } from "../../slices/authSlice";
 export enum ManageEnum {
   AGENTS = "AGENTS",
   AGENTS_STATUS = "AGENTS_STATUS",
@@ -51,6 +52,7 @@ export enum ManageEnum {
   LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
   EMPLOYEE = "EMPLOYEE",
   EMPLOYEE_ROLE = "EMPLOYEE_ROLE",
+  ROLE_PERMISSION = "ROLE_PERMISSION",
   EMPLOYEE_DEPARTMENT = "EMPLOYEE_DEPARTMENT",
   GROUP_RETAILER = "GROUP_RETAILER",
 }
@@ -480,6 +482,19 @@ export const manageApi = createApi({
             }))
           : [ManageEnum.EMPLOYEE_ROLE],
     }),
+    getRolePermissionList: builder.query<TPermit[], void | null>({
+      query: () => ({
+        url: "/api/staff/role-permission/list",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? results.map(({ feature_code }) => ({
+              type: ManageEnum.EMPLOYEE_ROLE,
+              feature_code,
+            }))
+          : [ManageEnum.EMPLOYEE_ROLE],
+    }),
     getListEmployeeDepartment: builder.query<
       TEmployeeDepartment[],
       void | null
@@ -531,6 +546,7 @@ export const {
   useGetCounterPacketGatewayQuery,
   useGetCounterAgentStatusQuery,
   useGetCounterFarmerStatusQuery,
+  useGetRolePermissionListQuery,
   useGetListAgencyC1Query,
   useGetReportDashboardByDayQuery,
   useGetCounterDayByDayQuery,

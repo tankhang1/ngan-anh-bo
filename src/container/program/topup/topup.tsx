@@ -168,7 +168,7 @@ function TopupProgram() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  {permission.createProgramTopup && (
+                  {permission.createProgramTopup ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -186,7 +186,7 @@ function TopupProgram() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

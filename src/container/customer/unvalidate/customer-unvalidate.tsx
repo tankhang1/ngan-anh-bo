@@ -164,7 +164,7 @@ function CustomerUnValidation() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {permission.createCustomer && (
+                  {permission.createUnValidateCustomer ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -182,8 +182,8 @@ function CustomerUnValidation() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
-                  {permission.exportCustomer && (
+                  ) : null}
+                  {permission.exportUnValidateCustomer ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -201,7 +201,7 @@ function CustomerUnValidation() {
                         <i className="ti ti-database-export"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -302,7 +302,7 @@ function CustomerUnValidation() {
                   </td>
                 ),
               },
-              permission.editCustomer
+              permission.editUnValidateCustomer
                 ? {
                     key: "",
                     label: "Chức năng",

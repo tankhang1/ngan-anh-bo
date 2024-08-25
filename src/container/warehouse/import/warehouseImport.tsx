@@ -12,6 +12,8 @@ import {
 import { BaseQuery, TWarehouseExport } from "../../../assets/types";
 import { exportExcelFile, fDate } from "../../../hooks";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 type TSearchItem = {
   label: string;
   value: string;
@@ -33,6 +35,7 @@ type TImportForm = {
   end_date: string;
 };
 const WarehouseImport = () => {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
 
@@ -101,18 +104,20 @@ const WarehouseImport = () => {
                         <p className="text-lg fw-semibold mb-0">
                           Lọc thông tin
                         </p>
-                        <Button
-                          variant=""
-                          aria-label="button"
-                          type="button"
-                          className="btn btn-success-light ms-2"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          data-bs-title="Add Contact"
-                          onClick={handleExportExcel}
-                        >
-                          Xuất Excel
-                        </Button>
+                        {permission.warehouseExportFileImport ? (
+                          <Button
+                            variant=""
+                            aria-label="button"
+                            type="button"
+                            className="btn btn-success-light ms-2"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            data-bs-title="Add Contact"
+                            onClick={handleExportExcel}
+                          >
+                            Xuất Excel
+                          </Button>
+                        ) : null}
                       </div>
 
                       <div className="d-flex flex-column flex-md-row mt-sm-0 mt-2 gap-4 align-items-center justify-content-between">

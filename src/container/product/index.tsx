@@ -163,7 +163,7 @@ function ProductPage() {
                       </Dropdown.Menu>
                     </Dropdown>
                   </OverlayTrigger>
-                  {permission.createProduct && (
+                  {permission.createProduct ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -181,8 +181,8 @@ function ProductPage() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
-                  {permission.exportProduct && (
+                  ) : null}
+                  {permission.exportProduct ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -200,7 +200,7 @@ function ProductPage() {
                         <i className="ti ti-database-export"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

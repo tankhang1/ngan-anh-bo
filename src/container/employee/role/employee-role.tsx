@@ -165,7 +165,7 @@ function EmployeeRole() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {permission.createRole && (
+                  {permission.createRole ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -187,7 +187,7 @@ function EmployeeRole() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

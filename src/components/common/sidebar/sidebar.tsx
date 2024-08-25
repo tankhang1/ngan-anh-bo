@@ -88,24 +88,134 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
   function isPermitAccess(key?: string) {
     if (key) {
       switch (key) {
+        case MENU_KEY.MAIN_TITLE:
+          return permission.viewDashboard;
         case MENU_KEY.DASHBOARD:
           return permission.viewDashboard;
+        case MENU_KEY.MANAGE_TITLE:
+          if (
+            permission.viewAccounts ||
+            permission.viewListAccounts ||
+            permission.viewOperatorSearchCustomerToday ||
+            permission.viewOperatorSearchCustomerUnValidateToday ||
+            permission.viewOperatorSearchCustomerValidateToday ||
+            permission.viewOperatorSearchProduct ||
+            permission.viewOperatorSearchTopupToday ||
+            permission.viewValidateCustomer ||
+            permission.viewListValidateCustomer ||
+            permission.viewListUnValidateCustomer ||
+            permission.viewListValidateCustomer ||
+            permission.viewEmployee ||
+            permission.viewListEmployee ||
+            permission.viewRoles ||
+            permission.viewDepartment ||
+            permission.viewProducts ||
+            permission.viewListProducts ||
+            permission.warehouseSearchExport ||
+            permission.warehouseSearchImport ||
+            permission.warehouseListImport ||
+            permission.warehouseListExport ||
+            permission.warehouseReportExport ||
+            permission.warehouseInventoryInfo ||
+            permission.viewProgramPoint ||
+            permission.viewProgramTopup ||
+            permission.viewProgramChance ||
+            permission.viewListProgramPoint ||
+            permission.viewListProgramTopup ||
+            permission.viewListProgramChance
+          )
+            return true;
+          return false;
         case MENU_KEY.ACCOUNTS:
-          return permission.viewAccounts;
+          return permission.viewAccounts || permission.viewListAccounts;
+        case MENU_KEY.MANAGE_OPERATOR:
+          return (
+            permission.viewOperatorSearchCustomerToday ||
+            permission.viewOperatorSearchCustomerUnValidateToday ||
+            permission.viewOperatorSearchCustomerValidateToday ||
+            permission.viewOperatorSearchProduct ||
+            permission.viewOperatorSearchTopupToday
+          );
+        case MENU_KEY.MANAGE_WAREHOUSE:
+          return (
+            permission.warehouseSearchExport ||
+            permission.warehouseSearchImport ||
+            permission.warehouseListExport ||
+            permission.warehouseListImport ||
+            permission.warehouseReportExport ||
+            permission.warehouseInventoryInfo
+          );
+        case MENU_KEY.OPERATORS_SEARCH_PRODUCT:
+          return permission.viewOperatorSearchProduct;
+        case MENU_KEY.OPERATORS_SEARCH_CUSTOMER_TODAY:
+          return permission.viewOperatorSearchCustomerToday;
+        case MENU_KEY.OPERATORS_SEARCH_TOPUP_TODAY:
+          return permission.viewOperatorSearchTopupToday;
+        case MENU_KEY.OPERATORS_SEARCH_CUSTOMER_VALIDATE_TODAY:
+          return permission.viewOperatorSearchCustomerValidateToday;
+        case MENU_KEY.OPERATORS_SEARCH_CUSTOMER_UNVALIDATE_TODAY:
+          return permission.viewOperatorSearchCustomerUnValidateToday;
         case MENU_KEY.CUSTOMERS:
-          return permission.viewCustomer;
+          return (
+            permission.viewListValidateCustomer ||
+            permission.viewValidateCustomer ||
+            permission.viewUnValidateCustomer ||
+            permission.viewListUnValidateCustomer
+          );
+        case MENU_KEY.CUSTOMERS_VALIDATE:
+          return (
+            permission.viewValidateCustomer ||
+            permission.viewListValidateCustomer
+          );
+        case MENU_KEY.CUSTOMERS_UNVALIDATE:
+          return (
+            permission.viewUnValidateCustomer ||
+            permission.viewListUnValidateCustomer
+          );
+        case MENU_KEY.MANAGE_PERSONEL:
+          return (
+            permission.viewEmployee ||
+            permission.viewListEmployee ||
+            permission.viewRoles ||
+            permission.viewDepartment
+          );
         case MENU_KEY.EMPLOYEES:
-          return permission.viewEmployee;
+          return permission.viewEmployee || permission.viewListEmployee;
         case MENU_KEY.ROLES:
           return permission.viewRoles;
         case MENU_KEY.DEPARTMENTS:
           return permission.viewDepartment;
         case MENU_KEY.PRODUCTS:
-          return permission.viewProducts;
+          return permission.viewProducts || permission.viewListProducts;
+        case MENU_KEY.MANAGE_PROGRAM:
+          return (
+            permission.viewProgramPoint ||
+            permission.viewProgramTopup ||
+            permission.viewProgramChance ||
+            permission.viewListProgramChance ||
+            permission.viewListProgramPoint ||
+            permission.viewListProgramTopup
+          );
         case MENU_KEY.PROGRRAM_POINT:
-          return permission.viewProgramPoint;
+          return permission.viewProgramPoint || permission.viewListProgramPoint;
         case MENU_KEY.PROGRAM_TOPUP:
-          return permission.viewProgramTopup;
+          return permission.viewProgramTopup || permission.viewListProgramTopup;
+        case MENU_KEY.PROGRAM_CHANCE:
+          return (
+            permission.viewProgramChance || permission.viewListProgramChance
+          );
+        case MENU_KEY.REPORT_TITLE:
+          if (
+            permission.reportAgent ||
+            permission.reportFarmer ||
+            permission.reportIQR ||
+            permission.reportProgramPoint ||
+            permission.reportProgramTopup ||
+            permission.reportProgramChance ||
+            permission.reportSMS
+          )
+            return true;
+          return false;
         case MENU_KEY.REPORT_AGENT:
           return permission.reportAgent;
         case MENU_KEY.REPORT_FARMER:
@@ -116,27 +226,25 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.reportProgramPoint;
         case MENU_KEY.REPORT_PROGRAM_TOPUP:
           return permission.reportProgramTopup;
+        case MENU_KEY.REPORT_CHANCE:
+          return permission.reportProgramChance;
+        case MENU_KEY.REPORT_SMS:
+          return permission.reportSMS;
         case MENU_KEY.SETTING_AREA:
           return permission.settingArea;
         case MENU_KEY.SETTING_GROUP_CUSTOMER:
           return permission.settingGroupCustomer;
         case MENU_KEY.SETTING_GROUP_RETAILER:
           return permission.viewRetailerGroup;
-        case MENU_KEY.MANAGE_PERSONEL:
-          return (
-            permission.viewEmployee &&
-            permission.viewRoles &&
-            permission.viewDepartment
-          );
-        case MENU_KEY.MANAGE_PROGRAM:
-          return permission.viewProgramPoint && permission.viewProgramTopup;
         case MENU_KEY.MANAGE_REPORT:
           return (
-            permission.reportAgent &&
-            permission.reportFarmer &&
-            permission.reportIQR &&
-            permission.reportProgramPoint &&
-            permission.reportProgramTopup
+            permission.reportAgent ||
+            permission.reportFarmer ||
+            permission.reportIQR ||
+            permission.reportProgramPoint ||
+            permission.reportProgramTopup ||
+            permission.reportProgramChance ||
+            permission.reportSMS
           );
         case MENU_KEY.MANAGE_SETTING:
           return (
@@ -144,36 +252,13 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.settingGroupCustomer ||
             permission.viewRetailerGroup
           );
-        case MENU_KEY.MANAGE_OPERATOR:
-          return permission.viewOperator;
-        case MENU_KEY.MAIN_TITLE:
-          return permission.viewDashboard;
-        case MENU_KEY.MANAGE_TITLE:
-          if (
-            permission.viewAccounts ||
-            permission.viewOperator ||
-            permission.viewCustomer ||
-            permission.viewEmployee ||
-            permission.viewRoles ||
-            permission.viewDepartment ||
-            permission.viewProducts ||
-            permission.viewProgramPoint ||
-            permission.viewProgramTopup
-          )
-            return true;
-          return false;
-        case MENU_KEY.REPORT_TITLE:
-          if (
-            permission.reportAgent ||
-            permission.reportFarmer ||
-            permission.reportIQR ||
-            permission.reportProgramPoint ||
-            permission.reportProgramTopup
-          )
-            return true;
-          return false;
+
         case MENU_KEY.SETTING_TITLE:
-          if (permission.settingArea || permission.settingGroupCustomer)
+          if (
+            permission.settingArea ||
+            permission.settingGroupCustomer ||
+            permission.viewRetailerGroup
+          )
             return true;
           return false;
         default:

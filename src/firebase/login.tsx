@@ -48,6 +48,7 @@ const Home = () => {
             token: value.token,
             roles: value.roles,
             username: value.username,
+            roles_permission: value.roles_permission,
           })
         );
         routeChange();

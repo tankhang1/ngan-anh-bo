@@ -1,3 +1,5 @@
+import { TPermit } from "../../redux/slices/authSlice";
+
 /**Agent */
 export type TAgent = {
   id: number;
@@ -596,7 +598,8 @@ export type TAccount = {
   created?: string;
   modified?: string;
   role_list?: string[] | { label: string; value: string }[] | string;
-  roles?: string[] | { label: string; value: string }[] | string;
+  roles?: string | string[];
+  roles_permission?: TPermit[];
 };
 
 export type TAccountRole = {

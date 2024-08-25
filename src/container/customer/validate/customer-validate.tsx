@@ -24,7 +24,6 @@ import {
   useGetListCustomerQuery,
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
-import { PROVINCES } from "../../../constants";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -44,32 +43,6 @@ const AGENT_FILTERS = [
   },
 ];
 
-const CUSTOMER_TYPE = [
-  {
-    key: "RETAILER",
-    label: "Đại lý cấp 1",
-  },
-  {
-    key: "RETAILER2",
-    label: "Đại lý cấp 2",
-  },
-  {
-    key: "DISTRIBUTOR",
-    label: "Nhà phân phối",
-  },
-  {
-    key: "CTV",
-    label: "Cộng tác viên",
-  },
-  {
-    key: "FARMER",
-    label: "Nông dân",
-  },
-  {
-    key: "Other",
-    label: "Không hợp tác",
-  },
-];
 function CustomerValidation() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
@@ -196,7 +169,7 @@ function CustomerValidation() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {permission.createCustomer && (
+                  {permission.createValidateCustomer ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -214,8 +187,8 @@ function CustomerValidation() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
-                  {permission.exportCustomer && (
+                  ) : null}
+                  {permission.exportValidateCustomer ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -233,7 +206,7 @@ function CustomerValidation() {
                         <i className="ti ti-database-export"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -340,7 +313,7 @@ function CustomerValidation() {
                   </td>
                 ),
               },
-              permission.editCustomer
+              permission.editValidateCustomer
                 ? {
                     key: "",
                     label: "Chức năng",

@@ -1,9 +1,8 @@
 import React, {
   Fragment,
-  useCallback,
   useContext,
   useDeferredValue,
-  useEffect,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -34,12 +33,11 @@ import { ToastContext } from "../../components/AppToast";
 import { Formik } from "formik";
 import {
   useGetListEmployeeQuery,
-  useGetListEmployeeRoleQuery,
+  useGetRolePermissionListQuery,
 } from "../../redux/api/manage/manage.api";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import * as Yup from "yup";
 import accountSchema from "../../schema/accounts.schema";
 
 const ACCOUNT_FILTERS = [
@@ -65,7 +63,6 @@ function Accounts() {
   const deferSearchValue = useDeferredValue(search);
   const [openAddNewAccount, setOpenAddNewAccount] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
-  const navigate = useNavigate();
   const {
     data: accounts,
     isLoading: isLoadingAccount,
@@ -75,7 +72,15 @@ function Accounts() {
   const [signUp] = useSignUpAccountMutation();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: roles } = useGetAccountRoleListQuery();
+  const { data: rolesPermission } = useGetRolePermissionListQuery();
 
+  const filterPermission = (role?: string) => {
+    if (!roles) return [];
+    const permissions = rolesPermission?.filter(
+      (item) => item.role_code === role
+    );
+    return permissions ?? [];
+  };
   const onDeleteAccount = async () => {
     if (username !== null) {
       await deleteAccount(username)
@@ -102,9 +107,8 @@ function Accounts() {
       username: values.username,
       password: values.password,
       staff_code: values.staff_code,
-      roles: (values.roles as { label: string; value: string }[]).map(
-        (item) => item.value
-      ),
+      roles: [values.roles as string],
+      roles_permission: filterPermission(values.roles as string),
     })
       .unwrap()
       .then((value) => {
@@ -168,7 +172,7 @@ function Accounts() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {permission.createAccount && (
+                  {permission.createAccount ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={
@@ -190,8 +194,8 @@ function Accounts() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
-                  {permission.exportAccount && (
+                  ) : null}
+                  {permission.exportAccount ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -209,7 +213,7 @@ function Accounts() {
                         <i className="ti ti-database-export"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -440,30 +444,24 @@ function Accounts() {
                       <Form.Label className="text-black">
                         Vai trò <span style={{ color: "red" }}>*</span>
                       </Form.Label>
-                      <Select
-                        //@ts-ignore
-                        options={roles?.map((item) => ({
-                          label: item.name,
-                          value: item.code,
-                        }))}
-                        className="default basic-multi-select custom-multi mb-3"
-                        menuPlacement="auto"
-                        classNamePrefix="Select2"
-                        isSearchable
-                        isClearable
+
+                      <Form.Select
+                        className="form-select"
+                        name="retailer_group"
+                        onChange={(e) => setFieldValue("roles", e.target.value)}
+                        isInvalid={touched.roles && !!errors.roles}
                         required
-                        isMulti
-                        placeholder="Chọn vai trò"
-                        value={values.roles}
-                        onChange={(value) => {
-                          setFieldValue("roles", value);
-                        }}
-                      />
-                      {!!errors.roles && touched.roles && (
-                        <p style={{ fontSize: 12, color: "red" }}>
-                          {errors.roles}
-                        </p>
-                      )}
+                      >
+                        <option value="">-- Chọn vai trò --</option>
+                        {roles?.map((item) => (
+                          <option key={item.id} value={item.code}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.roles as any}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Stack>
                 </Modal.Body>

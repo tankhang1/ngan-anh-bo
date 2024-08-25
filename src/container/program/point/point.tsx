@@ -172,7 +172,7 @@ function PointProgram() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  {permission.createProgramPoint && (
+                  {permission.createProgramPoint ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -190,7 +190,7 @@ function PointProgram() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

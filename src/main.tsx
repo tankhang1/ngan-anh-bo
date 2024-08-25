@@ -208,10 +208,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}errors/error401`}
                 element={<Error401 />}
               />
-              <Route
-                path={`${import.meta.env.BASE_URL}errors/error404`}
-                element={<Error404 />}
-              />
+              <Route path={"*"} element={<Error404 />} />
               <Route
                 path={`${import.meta.env.BASE_URL}errors/error500`}
                 element={<Error500 />}

@@ -34,26 +34,17 @@ import {
   useVerifyCustomerMutation,
 } from "../../../../redux/api/other/other.api";
 import customerSchema from "../../../../schema/customers.schema";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
 
 function CustomerUnValidationCreateEdit() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
   const navigate = useNavigate();
-  // const schema = yup.object().shape({
-  //   customer_code: yup.string().required(),
-  //   customer_name: yup.string().required(),
-  //   customer_province: yup.string().required(),
-  //   customer_type: yup.string().required("Trường bắt buộc"),
-  //   info_primary: yup.number().required(),
-  //   sign_board: yup.string().required(),
-  //   name: yup.string().required("Trường bắt buộc"),
-  //   province: yup.string().required("Trường bắt ")
-  //   customer_address: yup.string().required(),
-  //   customer_district: yup.string().required(),
-  // });
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
@@ -263,22 +254,24 @@ function CustomerUnValidationCreateEdit() {
                     >
                       Trở lại
                     </button>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={
-                        <Tooltip className="tooltip">
-                          Xác thực người dùng
-                        </Tooltip>
-                      }
-                    >
-                      <button
-                        className="btn btn-teal-light"
-                        type="button"
-                        onClick={() => onValidateCustomer(values)}
+                    {permission.verifyUnvalidateCustomer && (
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip className="tooltip">
+                            Xác thực người dùng
+                          </Tooltip>
+                        }
                       >
-                        Xác thực
-                      </button>
-                    </OverlayTrigger>
+                        <button
+                          className="btn btn-teal-light"
+                          type="button"
+                          onClick={() => onValidateCustomer(values)}
+                        >
+                          Xác thực
+                        </button>
+                      </OverlayTrigger>
+                    )}
 
                     {isCreate === "true" ? (
                       <button

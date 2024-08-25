@@ -175,6 +175,15 @@ function PointCreateEdit() {
     [pointProgram]
   );
 
+  const isDisableField = () => {
+    if (!pointProgram) return false;
+    if (pointProgram?.status === 3) return true;
+    // if (status===2)
+    // {
+    //   if
+    // }
+  };
+
   const [updatePointProgram] = useUpdatePointProgramMutation();
   const [createPointProgram] = useCreatePointProgramMutation();
 

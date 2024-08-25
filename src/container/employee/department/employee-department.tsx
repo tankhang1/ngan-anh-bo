@@ -158,7 +158,7 @@ function EmployeeDepartment() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {permission.createDepartment && (
+                  {permission.createDepartment ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -180,7 +180,7 @@ function EmployeeDepartment() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
