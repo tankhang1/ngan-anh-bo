@@ -145,6 +145,18 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.warehouseReportExport ||
             permission.warehouseInventoryInfo
           );
+        case MENU_KEY.SEARCH_WAREHOUSE_EXPORT:
+          return permission.warehouseSearchExport;
+        case MENU_KEY.SEARCH_WAREHOUSE_IMPORT:
+          return permission.warehouseSearchImport;
+        case MENU_KEY.WARE_HOUSE_MANAGE_IMPORT:
+          return permission.warehouseListImport;
+        case MENU_KEY.WARE_HOUSE_MANAGE_EXPORT:
+          return permission.warehouseListExport;
+        case MENU_KEY.WAREHOUSES_REPORT_EXPORT:
+          return permission.warehouseReportExport;
+        case MENU_KEY.WAREHOUSES_INVENTORY_INFO:
+          return permission.warehouseInventoryInfo;
         case MENU_KEY.OPERATORS_SEARCH_PRODUCT:
           return permission.viewOperatorSearchProduct;
         case MENU_KEY.OPERATORS_SEARCH_CUSTOMER_TODAY:

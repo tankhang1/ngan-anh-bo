@@ -97,6 +97,12 @@ function CustomerValidation() {
       setListCustomers([...listCustomers, ...customers]);
     }
   }, [customers, counterCustomer]);
+
+  useEffect(() => {
+    if (groupObjectives) {
+      setCustomerType(groupObjectives?.[0].symbol);
+    }
+  }, [groupObjectives]);
   return (
     <Fragment>
       <Col xl={12}>
