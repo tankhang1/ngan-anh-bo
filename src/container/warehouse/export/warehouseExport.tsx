@@ -1,12 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Form, Modal, Stack } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
 import {
+  useGetExportByDocumentCounterQuery,
   useGetExportByDocumentQuery,
   useGetExportDocumentsQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
-import { BaseQuery } from "../../../assets/types";
+import { BaseQuery, TWarehouseDocument } from "../../../assets/types";
 import { exportExcelFile } from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
@@ -44,6 +45,8 @@ const WarehouseExport = () => {
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
+  const [listExports, setListExports] = useState<TWarehouseDocument[]>([]);
+  const [page, setPage] = useState(1);
 
   const {
     data: exports,
@@ -54,6 +57,8 @@ const WarehouseExport = () => {
       st: query?.st,
       ed: query?.ed,
       type: query?.type,
+      nu: page - 1,
+      sz: 10,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -61,6 +66,17 @@ const WarehouseExport = () => {
     }
   );
 
+  const { data: counterExports } = useGetExportByDocumentCounterQuery(
+    {
+      st: query?.st,
+      ed: query?.ed,
+      type: query?.type,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !query ? true : false,
+    }
+  );
   const { data: exportDetail, isLoading: loadingExportDetail } =
     useGetExportByDocumentQuery(
       {
@@ -71,24 +87,36 @@ const WarehouseExport = () => {
       }
     );
   const onSearch = (values: TExportForm) => {
-    setSearch(values.document_code);
+    if (values.document_code !== search) setSearch(values.document_code);
+
     if (
       query?.st === +(format(values.start_date, "yyyyMMdd") + "0000") &&
       query?.ed === +(format(values.end_date, "yyyyMMdd") + "2359") &&
       query?.type === values?.type
     )
       return;
-    setQuery({
-      st: +(format(values.start_date, "yyyyMMdd") + "0000"),
-      ed: +(format(values.end_date, "yyyyMMdd") + "2359"),
-      type: values?.type,
-    });
-
-    refetchExport();
+    setListExports([]);
+    setTimeout(() => {
+      setQuery({
+        st: +(format(values.start_date, "yyyyMMdd") + "0000"),
+        ed: +(format(values.end_date, "yyyyMMdd") + "2359"),
+        type: values?.type,
+      });
+      refetchExport();
+    }, 200);
   };
   const handleExportExcel = () => {
     if (exports) exportExcelFile(exports, "Thông tin xuất kho");
   };
+  useEffect(() => {
+    if (
+      counterExports &&
+      exports &&
+      listExports.length + exports.length <= counterExports
+    ) {
+      setListExports([...listExports, ...exports]);
+    }
+  }, [exports, counterExports]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -252,7 +280,8 @@ const WarehouseExport = () => {
             isHeader={false}
             title="Thông tin xuất kho"
             isLoading={loadingExport}
-            maxPage={exports?.length}
+            maxPage={counterExports}
+            setExternalPage={setPage}
             headers={[
               {
                 key: "document_code",
@@ -306,7 +335,7 @@ const WarehouseExport = () => {
                 ),
               },
             ]}
-            data={exports || []}
+            data={listExports || []}
             externalSearch={search}
             searchByExternal="document_code"
           />

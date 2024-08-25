@@ -672,6 +672,7 @@ export type TWarehouseExport = {
   staff_export_name: string | null;
   receiver: string | null;
   work_center_export_code: string | null;
+  work_center_import_code: string | null;
 };
 
 export type TWarehouseDocument = {
