@@ -1,10 +1,11 @@
 import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
-import { Button, Card, Col, Form, Stack } from "react-bootstrap";
+import { Button, Card, Col, Form, Modal, Stack } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
 import {
   useGetExportDetailCounterQuery,
   useGetExportDetailQuery,
+  useGetImportByDocumentQuery,
   useGetImportDetailCounterQuery,
   useGetImportDetailQuery,
   useGetImportDocumentsQuery,
@@ -38,6 +39,7 @@ const WarehouseImport = () => {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
+  const [documentDetail, setDocumentDetail] = useState<string | undefined>();
 
   const {
     data: imports,
@@ -54,7 +56,15 @@ const WarehouseImport = () => {
       skip: !query ? true : false,
     }
   );
-
+  const { data: importDetail, isLoading: loadingImportDetail } =
+    useGetImportByDocumentQuery(
+      {
+        code: documentDetail!,
+      },
+      {
+        skip: documentDetail ? false : true,
+      }
+    );
   const onSearch = (values: TImportForm) => {
     setSearch(values.document_code);
     if (
@@ -275,6 +285,22 @@ const WarehouseImport = () => {
                 label: "Thời gian nhập kho",
                 render: ({ time_import }) => <td>{time_import}</td>,
               },
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() => {
+                        setDocumentDetail(value.document_code);
+                      }}
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
             ]}
             data={imports || []}
             externalSearch={search}
@@ -282,6 +308,63 @@ const WarehouseImport = () => {
           />
         </Card>
       </Col>
+      <Modal
+        show={documentDetail ? true : false}
+        onHide={() => setDocumentDetail(undefined)}
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Danh sách thùng</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AppTable
+            isHeader={false}
+            title="Thông tin nhập kho"
+            isLoading={loadingImportDetail}
+            maxPage={importDetail?.length}
+            headers={[
+              {
+                key: "document_code",
+                label: "Mã phiếu",
+                render: ({ document_code }) => <td>{document_code}</td>,
+              },
+              {
+                key: "agent_code",
+                label: "Mã đại lý",
+                render: ({ agent_code }) => <td>{agent_code}</td>,
+              },
+              {
+                key: "agent_name",
+                label: "Tên đại lý",
+                render: ({ agent_name }) => <td>{agent_name}</td>,
+              },
+              {
+                key: "batch_number",
+                label: "Mã lô",
+                render: ({ batch_number }) => <td>{batch_number}</td>,
+              },
+              {
+                key: "seri",
+                label: "Mã thùng",
+                render: ({ seri }) => <td>{seri}</td>,
+              },
+              {
+                key: "seri",
+                label: "Mã thùng",
+                render: ({ seri }) => <td>{seri}</td>,
+              },
+              {
+                key: "time",
+                label: "Thời gian nhâp kho",
+                render: ({ time }) => <td>{time}</td>,
+              },
+            ]}
+            data={importDetail || []}
+            searchByExternal="document_code"
+            externalSearch=""
+          />
+        </Modal.Body>
+      </Modal>
     </Fragment>
   );
 };

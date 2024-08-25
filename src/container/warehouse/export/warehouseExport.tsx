@@ -1,18 +1,13 @@
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
-import { Button, Card, Col, Form, Stack } from "react-bootstrap";
+import React, { Fragment, useState } from "react";
+import { Button, Card, Col, Form, Modal, Stack } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
 import {
-  useGetExportDetailCounterQuery,
-  useGetExportDetailQuery,
+  useGetExportByDocumentQuery,
   useGetExportDocumentsQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
-import {
-  BaseQuery,
-  TWarehouseDocument,
-  TWarehouseExport,
-} from "../../../assets/types";
-import { exportExcelFile, fDate } from "../../../hooks";
+import { BaseQuery } from "../../../assets/types";
+import { exportExcelFile } from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -48,6 +43,7 @@ const WarehouseExport = () => {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
+  const [documentDetail, setDocumentDetail] = useState<string | undefined>();
 
   const {
     data: exports,
@@ -65,6 +61,15 @@ const WarehouseExport = () => {
     }
   );
 
+  const { data: exportDetail, isLoading: loadingExportDetail } =
+    useGetExportByDocumentQuery(
+      {
+        code: documentDetail!,
+      },
+      {
+        skip: documentDetail ? false : true,
+      }
+    );
   const onSearch = (values: TExportForm) => {
     setSearch(values.document_code);
     if (
@@ -84,7 +89,6 @@ const WarehouseExport = () => {
   const handleExportExcel = () => {
     if (exports) exportExcelFile(exports, "Thông tin xuất kho");
   };
-
   return (
     <Fragment>
       <Col xl={12}>
@@ -285,6 +289,22 @@ const WarehouseExport = () => {
                 label: "Thời gian xuất kho",
                 render: ({ time_export }) => <td>{time_export}</td>,
               },
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() => {
+                        setDocumentDetail(value.document_code);
+                      }}
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
             ]}
             data={exports || []}
             externalSearch={search}
@@ -292,6 +312,85 @@ const WarehouseExport = () => {
           />
         </Card>
       </Col>
+      <Modal
+        show={documentDetail ? true : false}
+        onHide={() => setDocumentDetail(undefined)}
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Danh sách thùng</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AppTable
+            isHeader={false}
+            title="Thông tin xuất kho"
+            isLoading={loadingExportDetail}
+            maxPage={exportDetail?.length}
+            headers={[
+              {
+                key: "document_code",
+                label: "Mã phiếu",
+                render: ({ document_code }) => <td>{document_code}</td>,
+              },
+              {
+                key: "agent_code",
+                label: "Mã đại lý",
+                render: ({ agent_code }) => <td>{agent_code}</td>,
+              },
+              {
+                key: "agent_name",
+                label: "Tên đại lý",
+                render: ({ agent_name }) => <td>{agent_name}</td>,
+              },
+              {
+                key: "batch_number",
+                label: "Mã lô",
+                render: ({ batch_number }) => <td>{batch_number}</td>,
+              },
+              {
+                key: "seri",
+                label: "Mã thùng",
+                render: ({ seri }) => <td>{seri}</td>,
+              },
+              {
+                key: "sku",
+                label: "Mã sản phẩm",
+                render: ({ sku }) => <td>{sku}</td>,
+              },
+              {
+                key: "staff_export_code",
+                label: "Mã nhân viên xuất kho",
+                render: ({ staff_export_code }) => <td>{staff_export_code}</td>,
+              },
+              {
+                key: "staff_export_name",
+                label: "Tên nhân viên xuất kho",
+                render: ({ staff_export_name }) => <td>{staff_export_name}</td>,
+              },
+              {
+                key: "receiver",
+                label: "Người nhận",
+                render: ({ receiver }) => <td>{receiver}</td>,
+              },
+              {
+                key: "work_center_export_code",
+                label: "Mã kho",
+                render: ({ work_center_export_code }) => (
+                  <td>{work_center_export_code}</td>
+                ),
+              },
+              {
+                key: "time",
+                label: "Thời gian xuất kho",
+                render: ({ time }) => <td>{time}</td>,
+              },
+            ]}
+            data={exportDetail || []}
+            searchByExternal="document_code"
+            externalSearch=""
+          />
+        </Modal.Body>
+      </Modal>
     </Fragment>
   );
 };

@@ -105,6 +105,37 @@ function SearchWarehouseExport() {
                   render: ({ seri }) => <td>{seri}</td>,
                 },
                 {
+                  key: "sku",
+                  label: "Mã sản phẩm",
+                  render: ({ sku }) => <td>{sku}</td>,
+                },
+                {
+                  key: "staff_export_code",
+                  label: "Mã nhân viên xuất kho",
+                  render: ({ staff_export_code }) => (
+                    <td>{staff_export_code}</td>
+                  ),
+                },
+                {
+                  key: "staff_export_name",
+                  label: "Tên nhân viên xuất kho",
+                  render: ({ staff_export_name }) => (
+                    <td>{staff_export_name}</td>
+                  ),
+                },
+                {
+                  key: "receiver",
+                  label: "Người nhận",
+                  render: ({ receiver }) => <td>{receiver}</td>,
+                },
+                {
+                  key: "work_center_export_code",
+                  label: "Mã kho",
+                  render: ({ work_center_export_code }) => (
+                    <td>{work_center_export_code}</td>
+                  ),
+                },
+                {
                   key: "time",
                   label: "Thời gian xuất kho",
                   render: ({ time }) => <td>{time}</td>,
