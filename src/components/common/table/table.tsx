@@ -49,7 +49,6 @@ const AppTable = <T extends DataItem>({
   const [searchBy, setSearchBy] = useState(headers[0]);
   const [searchValue, setSearchValue] = useState("");
   const deferSearchValue = useDeferredValue(searchValue);
-  console.log("data", data);
   const filterData = useMemo(() => {
     if (!data) return [];
     if (filterOption && filterOption?.value !== "ALL")

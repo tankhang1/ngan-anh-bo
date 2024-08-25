@@ -153,7 +153,7 @@ export type TTopupDashboardTable = Pick<
 >;
 
 export enum TObjectiveEnum {
-  RETAILER = "RETAILER",
+  RETAILER = "RETAILER2",
   FARMER = "FARMER",
 }
 

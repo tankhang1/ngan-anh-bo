@@ -88,6 +88,7 @@ function TopupProgram() {
     ) {
       setListTopups([...listTopups, ...programTopups]);
     }
+    if (counterProgramTopup === 0 && listTopups.length !== 0) setListTopups([]);
   }, [programTopups, counterProgramTopup]);
 
   return (

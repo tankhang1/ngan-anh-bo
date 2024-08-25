@@ -19,9 +19,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 
 export enum OtherEnum {
-  CREATE_POINT_PROGRAM = "CREATE_POINT_PROGRAM",
+  CREATE_POINT_PROGRAM = "LIST_PROGRAM_POINT_STATUS",
   CREATE_TOPUP_PROGRAM = "CREATE_TOPUP_PROGRAM",
-  UPDATE_POINT_PROGRAM = "UPDATE_POINT_PROGRAM",
+  UPDATE_POINT_PROGRAM = "LIST_PROGRAM_POINT_STATUS",
   UPDATE_TOPUP_PROGRAM = "UPDATE_TOPUP_PROGRAM",
   CUSTOMER = "CUSTOMER",
   LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
@@ -60,7 +60,7 @@ export const otherApi = createApi({
       }),
       invalidatesTags: [OtherEnum.CREATE_POINT_PROGRAM],
     }),
-    createTopupProgram: builder.mutation<void, TTopupCreateForm>({
+    createTopupProgram: builder.mutation<BASE_RES, TTopupCreateForm>({
       query: (body) => ({
         url: `/program/topup/create`,
         method: HTTPS_METHOD.POST,
@@ -68,7 +68,7 @@ export const otherApi = createApi({
       }),
       invalidatesTags: [OtherEnum.CREATE_TOPUP_PROGRAM],
     }),
-    updateTopupProgram: builder.mutation<void, TTopupCreateForm>({
+    updateTopupProgram: builder.mutation<BASE_RES, TTopupCreateForm>({
       query: (body) => ({
         url: `/program/topup/update`,
         method: HTTPS_METHOD.POST,

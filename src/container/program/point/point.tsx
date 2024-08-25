@@ -16,6 +16,7 @@ import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
 import {
+  useGetCounterProgramPointByStatusQuery,
   useGetCounterProgramPointQuery,
   useGetListProgramPointStatusQuery,
 } from "../../../redux/api/program/program.api";
@@ -65,7 +66,7 @@ function PointProgram() {
   const [listPoints, setListPoints] = useState<TProgramPoint[]>([]);
   const [page, setPage] = useState(1);
 
-  const { data: counterProgramPoint } = useGetCounterProgramPointQuery(
+  const { data: counterProgramPoint } = useGetCounterProgramPointByStatusQuery(
     {
       status: status,
     },
@@ -93,6 +94,7 @@ function PointProgram() {
     ) {
       setListPoints([...listPoints, ...programPoints]);
     }
+    if (counterProgramPoint === 0 && listPoints.length !== 0) setListPoints([]);
   }, [programPoints, counterProgramPoint]);
   return (
     <Fragment>

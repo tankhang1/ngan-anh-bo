@@ -37,19 +37,25 @@ const pointProgramSchema = Yup.object().shape({
 
   time_start: Yup.date().nullable().required("Ngày bắt đầu là bắt buộc"),
 
-  locations: Yup.array()
-    .min(1, "Vui lòng chọn ít nhất một địa điểm")
+  // locations: Yup.array()
+  //   .min(1, "Vui lòng chọn ít nhất một địa điểm")
+  //   .of(
+  //     Yup.object({
+  //       value: Yup.string().required("Giá trị bắt buộc"),
+  //       label: Yup.string().required("Giá trị là bắt buộc"),
+  //     })
+  //   ),
+  goods_type: Yup.array()
+    .min(1, "Vui lòng chọn ít nhất 1 loại sản phẩm")
     .of(
       Yup.object({
-        value: Yup.string().required("Mã tỉnh là bắt buộc"),
-        label: Yup.string().required("Tên tỉnh là bắt buộc"),
+        value: Yup.string().required("Giá trị bắt buộc"),
+        label: Yup.string().required("Giá trị là bắt buộc"),
       })
     ),
-  goods_type: Yup.string().required("Loại hàng hóa là bắt buộc"),
 
   status: Yup.number()
-    .oneOf([0, 1], "Trạng thái không hợp lệ")
-    .required("Trạng thái là bắt buộc"),
+  .required("Trạng thái là bắt buộc"),
 
   uuid: Yup.string().required("UUID là bắt buộc"),
 });

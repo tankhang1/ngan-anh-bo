@@ -7,7 +7,9 @@ const accountSchema = Yup.object().shape({
   password: Yup.string()
     .required("Mật khẩu là bắt buộc")
     .min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
-
+  password_recheck: Yup.string()
+    .required("Vui lòng xác nhận mật khẩu")
+    .oneOf([Yup.ref("password"), ""], "Mật khẩu không khớp"),
   staff_code: Yup.string().required("Mã nhân viên là bắt buộc"),
 
   roles: Yup.string().required("Vai trò là bắt buộc"),

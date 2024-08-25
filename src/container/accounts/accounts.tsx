@@ -63,6 +63,9 @@ function Accounts() {
   const deferSearchValue = useDeferredValue(search);
   const [openAddNewAccount, setOpenAddNewAccount] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
+  const [employeeRole, setEmployeeRole] = useState("");
+  const [showPW1, setShowPW1] = useState(false);
+  const [showPW2, setShowPW2] = useState(false);
   const {
     data: accounts,
     isLoading: isLoadingAccount,
@@ -364,6 +367,7 @@ function Accounts() {
             initialValues={{
               username: "",
               password: "",
+              password_recheck: "",
               staff_code: employees?.[0].code,
               roles: "",
             }}
@@ -402,18 +406,88 @@ function Accounts() {
                       <Form.Label className="text-black">
                         Mật khẩu <span style={{ color: "red" }}>*</span>
                       </Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        placeholder="Mật khẩu"
-                        name="password"
-                        defaultValue={values.password}
-                        onChange={handleChange}
-                        isInvalid={touched.password && !!errors.password}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.password}
-                      </Form.Control.Feedback>
+                      <InputGroup>
+                        <Form.Control
+                          required
+                          type={showPW1 ? "text" : "password"}
+                          placeholder="Mật khẩu"
+                          name="password"
+                          defaultValue={values.password}
+                          onChange={handleChange}
+                          isInvalid={touched.password && !!errors.password}
+                        ></Form.Control>
+                        <Button
+                          variant=""
+                          className="btn btn-light bg-transparent"
+                          type="button"
+                          onClick={() => setShowPW1(!showPW1)}
+                          id="button-addon2"
+                        >
+                          <i
+                            className={`${
+                              showPW1 ? "ri-eye-line" : "ri-eye-off-line"
+                            } align-middle`}
+                          ></i>
+                        </Button>
+                      </InputGroup>
+                      {touched.password && !!errors.password && (
+                        <p
+                          style={{
+                            color: "red",
+                            fontSize: 12,
+                            marginTop: 4,
+                            fontWeight: 350,
+                          }}
+                        >
+                          {errors.password}
+                        </p>
+                      )}
+                    </Form.Group>
+                    <Form.Group controlId="password_validate">
+                      <Form.Label className="text-black">
+                        Nhập lại mật khẩu{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <InputGroup>
+                        <Form.Control
+                          required
+                          type={showPW2 ? "text" : "password"}
+                          placeholder="Mật khẩu"
+                          name="password_recheck"
+                          defaultValue={values.password_recheck}
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.password_recheck &&
+                            !!errors.password_recheck
+                          }
+                        />
+                        <Button
+                          variant=""
+                          className="btn btn-light bg-transparent"
+                          type="button"
+                          onClick={() => setShowPW2(!showPW2)}
+                          id="button-addon2"
+                        >
+                          <i
+                            className={`${
+                              showPW2 ? "ri-eye-line" : "ri-eye-off-line"
+                            } align-middle`}
+                          ></i>
+                        </Button>
+                      </InputGroup>
+                      {touched.password_recheck &&
+                        !!errors.password_recheck && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: 12,
+                              marginTop: 4,
+                              fontWeight: 350,
+                            }}
+                          >
+                            {errors.password_recheck}
+                          </p>
+                        )}
                     </Form.Group>
                     <Form.Group controlId="staff_code_validate">
                       <Form.Label className="text-black form-required">

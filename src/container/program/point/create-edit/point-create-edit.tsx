@@ -5,15 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import {
-  Card,
-  Col,
-  OverlayTrigger,
-  Row,
-  Stack,
-  Tooltip,
-  Form,
-} from "react-bootstrap";
+import { Card, Col, Row, Stack, Form, Badge } from "react-bootstrap";
 import { Formik } from "formik";
 import { TPointCreateForm } from "../../../../assets/types";
 import Select from "react-select";
@@ -175,18 +167,24 @@ function PointCreateEdit() {
     [pointProgram]
   );
 
-  const isDisableField = () => {
-    if (!pointProgram) return false;
-    if (pointProgram?.status === 3) return true;
-    // if (status===2)
-    // {
-    //   if
-    // }
-  };
-
+  const mapGoodsType = useCallback(
+    (goods_type?: string) => {
+      if (!goods_type) return [];
+      let checkListGoodsType =
+        goods_type[0] !== "," ? "," + goods_type : goods_type;
+      checkListGoodsType =
+        checkListGoodsType[checkListGoodsType.length - 1] !== ","
+          ? checkListGoodsType + "," + goods_type
+          : checkListGoodsType;
+      return TypeBinExport?.filter((objective) =>
+        checkListGoodsType.includes("," + objective.value + ",")
+      );
+    },
+    [pointProgram]
+  );
   const [updatePointProgram] = useUpdatePointProgramMutation();
   const [createPointProgram] = useCreatePointProgramMutation();
-
+  //@ts-ignore
   const handleCreatePointProgram = async (values: TPointCreateForm) => {
     if (isCreate === "true") {
       await createPointProgram({
@@ -211,12 +209,20 @@ function PointCreateEdit() {
               ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
               : values.objectives.map((item) => item.value).join(",")
             : "",
-        locations:
-          typeof values.locations !== "string"
-            ? values.locations.length === 1 &&
-              values.locations[0]?.value === "all"
-              ? PROVINCES?.map((item) => item.value).join(",")
-              : values.locations.map((item) => item.value).join(",")
+        // locations:
+        //   typeof values.locations !== "string"
+        //     ? values.locations.length === 1 &&
+        //       values.locations[0]?.value === "all"
+        //       ? PROVINCES?.map((item) => item.value).join(",")
+        //       : values.locations.map((item) => item.value).join(",")
+        //     : "",
+        locations: "all",
+        goods_type:
+          typeof values.goods_type !== "string"
+            ? values.goods_type.length === 1 &&
+              values.goods_type[0]?.value === "all"
+              ? TypeBinExport?.map((item) => item.value).join(",")
+              : values.goods_type.map((item) => item.value).join(",")
             : "",
         point_coefficient: +(values?.point_coefficient ?? 0),
         time_start:
@@ -273,12 +279,20 @@ function PointCreateEdit() {
                 ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
                 : values.objectives.map((item) => item.value).join(",")
               : "",
-          locations:
-            typeof values.locations !== "string"
-              ? values.locations.length === 1 &&
-                values.locations[0]?.value === "all"
-                ? PROVINCES?.map((item) => item.value).join(",")
-                : values.locations.map((item) => item.value).join(",")
+          // locations:
+          //   typeof values.locations !== "string"
+          //     ? values.locations.length === 1 &&
+          //       values.locations[0]?.value === "all"
+          //       ? PROVINCES?.map((item) => item.value).join(",")
+          //       : values.locations.map((item) => item.value).join(",")
+          //     : "",
+          locations: "all",
+          goods_type:
+            typeof values.goods_type !== "string"
+              ? values.goods_type.length === 1 &&
+                values.goods_type[0]?.value === "all"
+                ? TypeBinExport?.map((item) => item.value).join(",")
+                : values.goods_type.map((item) => item.value).join(",")
               : "",
           point_coefficient: +(values?.point_coefficient ?? 0),
           time_start:
@@ -316,6 +330,57 @@ function PointCreateEdit() {
     }
   };
 
+  const isDisableAccess = (type: string) => {
+    if (isCreate === "true") return false;
+    if (!isEdit) return true;
+    switch (type) {
+      case "name":
+        return true;
+      case "time_start":
+        return true;
+      case "time_end":
+        return false;
+      case "products":
+        return false;
+      case "agent_or_group_agent":
+        return false;
+      case "retailer_group":
+        return false;
+      case "agents":
+        return false;
+      case "status":
+        return false;
+      default:
+        return false;
+    }
+  };
+  const MapBadge = () => {
+    if (isCreate === "true") return null;
+    if (pointProgram?.status === 0)
+      return (
+        <Badge bg="warning-gradient" className="badge">
+          Chờ kích hoạt
+        </Badge>
+      );
+    if (pointProgram?.status === 1)
+      return (
+        <Badge bg="success" className="badge">
+          Đang chạy{" "}
+        </Badge>
+      );
+    if (pointProgram?.status === 2)
+      return (
+        <Badge bg="info" className="badge">
+          Kết thúc
+        </Badge>
+      );
+    if (pointProgram?.status === 3)
+      return (
+        <Badge bg="danger" className="badge">
+          Tạm dừng
+        </Badge>
+      );
+  };
   return (
     <Fragment>
       <Formik
@@ -331,14 +396,15 @@ function PointCreateEdit() {
           time_start: pointProgram?.time_start
             ? format(new Date(pointProgram.time_start), "yyyy-MM-dd")
             : ("" as any),
-          locations: (mapProvince(pointProgram?.locations) ?? "") as any,
+          // locations: (mapProvince(pointProgram?.locations) ?? "") as any,
+          locations: "all",
           status: pointProgram?.status ?? 0,
           uuid:
             (isCreate === "true"
               ? newUUID?.toString()
               : pointProgram?.uuid.toString()) ?? ("" as any),
           agent_or_group_agent: pointProgram?.agent_or_group_agent || 0,
-          goods_type: pointProgram?.goods_type || "",
+          goods_type: mapGoodsType(pointProgram?.goods_type) ?? "",
           retailer_group: pointProgram?.retailer_group || "",
         }}
         enableReinitialize
@@ -362,12 +428,15 @@ function PointCreateEdit() {
           >
             <Card className="custom-card">
               <Card.Header className="justify-content-between">
-                <Card.Title>
-                  {!isEdit
-                    ? "Thông tin chương trình tích điểm"
-                    : "Chỉnh sửa chương trình tích điểm"}
-                </Card.Title>
-                <div>
+                <div className="d-flex gap-2">
+                  <Card.Title>
+                    {!isEdit
+                      ? "Thông tin chương trình tích điểm"
+                      : "Chỉnh sửa chương trình tích điểm"}
+                  </Card.Title>
+                  {MapBadge()}
+                </div>
+                <div className="gap-2 d-flex">
                   <button
                     className="btn btn-danger-light"
                     type={"button"}
@@ -424,7 +493,7 @@ function PointCreateEdit() {
                       value={values.name}
                       onChange={handleChange}
                       isInvalid={touched.name && !!errors.name}
-                      disabled={isCreate !== "true"}
+                      disabled={isDisableAccess("name")}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.name}
@@ -445,6 +514,7 @@ function PointCreateEdit() {
                         lang="vi"
                         onChange={handleChange}
                         isInvalid={touched.time_start && !!errors.time_start}
+                        disabled={isDisableAccess("time_start")}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.time_start?.toString()}
@@ -463,6 +533,12 @@ function PointCreateEdit() {
                         value={values.time_end}
                         onChange={handleChange}
                         isInvalid={touched.time_end && !!errors.time_end}
+                        min={
+                          isCreate === "true"
+                            ? format(new Date(), "yyyy-MM-dd")
+                            : values.time_end
+                        }
+                        disabled={isDisableAccess("time_end")}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.time_end?.toString()}
@@ -478,12 +554,16 @@ function PointCreateEdit() {
                       isMulti
                       name="colors"
                       options={
-                        [
-                          { value: "all", label: "Chọn tất cả" },
-                          ...(mapProduct ?? []),
-                        ] as any
+                        values?.products?.[0]?.value === "all"
+                          ? []
+                          : values?.products?.length > 0
+                          ? ([...(mapProduct ?? [])] as any)
+                          : ([
+                              { value: "all", label: "Chọn tất cả" },
+                              ...(mapProduct ?? []),
+                            ] as any)
                       }
-                      className="default basic-multi-select custom-multi mb-3"
+                      className="basic-multi-select custom-multi mb-3"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -494,6 +574,7 @@ function PointCreateEdit() {
                       isLoading={isLoadingProducts}
                       value={values.products}
                       onChange={(value) => setFieldValue("products", value)}
+                      isDisabled={isDisableAccess("products")}
                     />
 
                     {errors.products && touched.products && (
@@ -502,7 +583,7 @@ function PointCreateEdit() {
                       </p>
                     )}
                   </Form.Group>
-                  <Form.Group>
+                  {/* <Form.Group>
                     <Form.Label className="text-black">
                       Chọn tỉnh thành <span style={{ color: "red" }}>*</span>
                     </Form.Label>
@@ -511,12 +592,16 @@ function PointCreateEdit() {
                       isMulti
                       name="colors"
                       options={
-                        [
-                          { value: "all", label: "Chọn tất cả" },
-                          ...PROVINCES,
-                        ] as any
+                        values.locations?.[0]?.value === "all"
+                          ? []
+                          : values.locations?.length > 0
+                          ? ([...PROVINCES] as any)
+                          : ([
+                              { value: "all", label: "Chọn tất cả" },
+                              ...PROVINCES,
+                            ] as any)
                       }
-                      className="default basic-multi-select custom-multi mb-3"
+                      className=" basic-multi-select custom-multi mb-3"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -532,7 +617,7 @@ function PointCreateEdit() {
                         {errors.locations.toString()}
                       </p>
                     )}
-                  </Form.Group>
+                  </Form.Group> */}
                   <Form.Group controlId="objectives_validate">
                     <Form.Label className="text-black">
                       Chọn đối tượng tham gia{" "}
@@ -542,12 +627,16 @@ function PointCreateEdit() {
                       isMulti
                       name="colors"
                       options={
-                        [
-                          { value: "all", label: "Chọn tất cả" },
-                          ...(OBJECTIVES_SELECT || []),
-                        ] as any
+                        values.objectives?.[0] === "all"
+                          ? []
+                          : values.objectives?.length > 0
+                          ? ([...(OBJECTIVES_SELECT || [])] as any)
+                          : ([
+                              { value: "all", label: "Chọn tất cả" },
+                              ...(OBJECTIVES_SELECT || []),
+                            ] as any)
                       }
-                      className="default basic-multi-select custom-multi mb-3"
+                      className="basic-multi-select custom-multi mb-3"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -557,6 +646,7 @@ function PointCreateEdit() {
                       value={values.objectives}
                       isClearable
                       onChange={(value) => setFieldValue("objectives", value)}
+                      isDisabled={isDisableAccess("objectives")}
                     />
                   </Form.Group>
                   {errors.objectives && touched.objectives && (
@@ -564,69 +654,10 @@ function PointCreateEdit() {
                       {errors.objectives.toString()}
                     </p>
                   )}
-                  <Form.Group controlId="agents_validate">
-                    <Form.Label className="text-black">
-                      Chọn đại lý cấp 1 <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-
-                    <Select
-                      isMulti
-                      name="colors"
-                      options={
-                        [
-                          { value: "all", label: "Chọn tất cả" },
-                          ...(listAgencyC1 || []),
-                        ] as any
-                      }
-                      className="default basic-multi-select custom-multi mb-3"
-                      id="choices-multiple-default"
-                      menuPlacement="auto"
-                      classNamePrefix="Select2"
-                      isSearchable
-                      placeholder="Chọn đại lý"
-                      defaultValue={[listAgencyC1?.[0] as any]}
-                      value={values.agents}
-                      isLoading={isLoadingAgency}
-                      isClearable
-                      onChange={(value) => setFieldValue("agents", value)}
-                    />
-                    {errors.agents && touched.agents && (
-                      <p style={{ color: "red", fontSize: 12 }}>
-                        {errors.agents.toString()}
-                      </p>
-                    )}
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="text-black">
-                      Nhóm đại lý <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="retailer_group"
-                      defaultValue={values.retailer_group}
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.retailer_group && !!errors.retailer_group
-                      }
-                      required
-                    >
-                      <option value={""}>-- Chọn nhóm đại lý --</option>
-                      {retailerGroup?.map((item, index) => (
-                        <option value={item.code} key={index}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    {errors.retailer_group && touched.retailer_group && (
-                      <p style={{ color: "red", fontSize: 12 }}>
-                        {errors.retailer_group.toString()}
-                      </p>
-                    )}
-                  </Form.Group>
 
                   <Form.Group>
                     <Form.Label className="text-black">
-                      Chọn theo nhóm đại lý / đại lý{" "}
+                      Chọn theo nhóm đại lý{" "}
                       <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Check
@@ -641,6 +672,7 @@ function PointCreateEdit() {
                       }}
                       required
                       name="agent_or_group_agent"
+                      disabled={isDisableAccess("agent_or_group_agent")}
                     />
                     {errors.agent_or_group_agent &&
                       touched.agent_or_group_agent && (
@@ -649,26 +681,96 @@ function PointCreateEdit() {
                         </p>
                       )}
                   </Form.Group>
+                  {values.agent_or_group_agent ? (
+                    <Form.Group>
+                      <Form.Label className="text-black">
+                        Nhóm đại lý <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <Form.Select
+                        className="form-select"
+                        name="retailer_group"
+                        defaultValue={values.retailer_group}
+                        onChange={handleChange}
+                        isInvalid={
+                          touched.retailer_group && !!errors.retailer_group
+                        }
+                        required
+                        disabled={isDisableAccess("retailer_group")}
+                      >
+                        <option value={""}>-- Chọn nhóm đại lý --</option>
+                        {retailerGroup?.map((item, index) => (
+                          <option value={item.code} key={index}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Form.Select>
+                      {errors.retailer_group && touched.retailer_group && (
+                        <p style={{ color: "red", fontSize: 12 }}>
+                          {errors.retailer_group.toString()}
+                        </p>
+                      )}
+                    </Form.Group>
+                  ) : (
+                    <Form.Group controlId="agents_validate">
+                      <Form.Label className="text-black">
+                        Chọn đại lý cấp 1{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+
+                      <Select
+                        isMulti
+                        name="colors"
+                        options={
+                          values?.agents?.[0]?.value === "all"
+                            ? []
+                            : values?.agents?.length > 0
+                            ? ([...(listAgencyC1 || [])] as any)
+                            : ([
+                                { value: "all", label: "Chọn tất cả" },
+                                ...(listAgencyC1 || []),
+                              ] as any)
+                        }
+                        className=" basic-multi-select custom-multi mb-3"
+                        id="choices-multiple-default"
+                        menuPlacement="auto"
+                        classNamePrefix="Select2"
+                        isSearchable
+                        placeholder="Chọn đại lý"
+                        defaultValue={[listAgencyC1?.[0] as any]}
+                        value={values.agents}
+                        isLoading={isLoadingAgency}
+                        isClearable
+                        onChange={(value) => setFieldValue("agents", value)}
+                        isDisabled={isDisableAccess("agents")}
+                      />
+                      {errors.agents && touched.agents && (
+                        <p style={{ color: "red", fontSize: 12 }}>
+                          {errors.agents.toString()}
+                        </p>
+                      )}
+                    </Form.Group>
+                  )}
                   <Form.Group>
                     <Form.Label className="text-nowrap text-black">
                       Loại hàng hóa: <span style={{ color: "red" }}>*</span>
                     </Form.Label>
-                    <Form.Select
-                      className="form-select"
+                    <Select
+                      isMulti
                       name="goods_type"
-                      defaultValue={values.goods_type}
-                      onChange={(e) =>
-                        setFieldValue("goods_type", e.target.value)
-                      }
-                      isInvalid={touched.goods_type && !!errors.goods_type}
-                    >
-                      <option value={""}>-- Chọn loại hàng --</option>
-                      {TypeBinExport.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
+                      options={[...(TypeBinExport || [])]}
+                      className="basic-multi-select custom-multi mb-3"
+                      id="choices-multiple-default"
+                      menuPlacement="auto"
+                      classNamePrefix="Select2"
+                      isSearchable
+                      placeholder="Chọn loại hàng hóa"
+                      defaultValue={[TypeBinExport?.[0] as any]}
+                      value={values.goods_type}
+                      isClearable
+                      onChange={(value) => setFieldValue("goods_type", value)}
+                      isDisabled={isDisableAccess("goods_type")}
+                    />
+
                     {errors.goods_type && touched.goods_type && (
                       <p style={{ color: "red", fontSize: 12 }}>
                         {errors.goods_type.toString()}
@@ -676,23 +778,25 @@ function PointCreateEdit() {
                     )}
                   </Form.Group>
                   <Form.Group controlId="status_validate">
-                    <Form.Label className="text-black">Trạng thái</Form.Label>
-                    <Form.Select
-                      className="form-select"
-                      name="status"
-                      onChange={handleChange}
-                      value={values.status}
-                      isInvalid={touched.status && !!errors.status}
+                    <Form.Label className="text-black">
+                      Tạm dừng chương trình
+                    </Form.Label>
+                    <Form.Check
+                      type="switch"
+                      className="form-check-lg form-switch"
+                      checked={values.status === 3 ? true : false}
+                      onChange={(value) => {
+                        setFieldValue("status", value.target.checked ? 3 : 1);
+                      }}
                       required
-                    >
-                      <option value={0} label="Chờ kích hoạt" />
-                      <option value={1} label="Đang chạy" />
-                      <option value={2} label="Hết thời hạn" />
-                      <option value={3} label="Tạm dừng" />
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.status}
-                    </Form.Control.Feedback>
+                      name="status"
+                      disabled={isDisableAccess("status")}
+                    />
+                    {errors.status && touched.status && (
+                      <p style={{ color: "red", fontSize: 12 }}>
+                        {errors.status.toString()}
+                      </p>
+                    )}
                   </Form.Group>
                 </Stack>
               </Card.Body>
