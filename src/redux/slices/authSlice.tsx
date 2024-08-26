@@ -16,8 +16,7 @@ type TFeatureCode =
   | "PROGRAMS_POINTS"
   | "PROGRAMS_TOPUPS"
   | "PROGRAM_CHANCE"
-  | "REPORTS_AGENTS"
-  | "REPORTS_FARMERS"
+  | "REPORTS_CUSTOMER"
   | "REPORTS_IQR"
   | "REPORTS_POINT"
   | "REPORTS_TOPUP"
@@ -98,8 +97,7 @@ const initialValue = {
     viewListProgramChance: 0,
     createProgramChance: 0,
     editProgramChance: 0,
-    reportAgent: 0,
-    reportFarmer: 0,
+    reportCustomer: 0,
     reportIQR: 0,
     reportProgramPoint: 0,
     reportProgramTopup: 0,
@@ -226,16 +224,12 @@ const onPermissionFeature = (permission: TPermit) => {
         editProgramChance: permission.permit_edit,
       };
     }
-    case "REPORTS_AGENTS": {
+    case "REPORTS_CUSTOMER": {
       return {
-        reportAgent: permission.permit_view_list,
+        reportCustomer: permission.permit_view_list,
       };
     }
-    case "REPORTS_FARMERS": {
-      return {
-        reportFarmer: permission.permit_view_list,
-      };
-    }
+
     case "REPORTS_IQR": {
       return {
         reportIQR: permission.permit_view_list,
@@ -399,8 +393,7 @@ const authSlice = createSlice({
         viewListProgramChance: 0,
         createProgramChance: 0,
         editProgramChance: 0,
-        reportAgent: 0,
-        reportFarmer: 0,
+        reportCustomer: 0,
         reportIQR: 0,
         reportProgramPoint: 0,
         reportProgramTopup: 0,

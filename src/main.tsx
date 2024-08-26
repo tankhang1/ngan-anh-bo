@@ -45,6 +45,7 @@ import WarehouseExport from "./container/warehouse/export/warehouseExport.tsx";
 import SearchWarehouseExport from "./container/warehouse/export/searchWarehouseExport.tsx";
 import WarehouseImport from "./container/warehouse/import/warehouseImport.tsx";
 import SearchWarehouseImport from "./container/warehouse/import/searchWarehouseImport.tsx";
+import CustomerReport from "./container/report/CustomerReport/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -156,13 +157,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}report`}
                 element={<ReportPage />}
               /> */}
-              <Route
+              {/* <Route
                 path={`${import.meta.env.BASE_URL}report/agent`}
                 element={<AgentReport />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}report/farmer`}
                 element={<FarmerReport />}
+              /> */}
+              <Route
+                path={`${import.meta.env.BASE_URL}report/customer`}
+                element={<CustomerReport />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}report/iQr`}

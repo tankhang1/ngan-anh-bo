@@ -25,8 +25,7 @@ export const MENU_KEY = {
   PROGRRAM_POINT: "PROGRAM_POINT",
   PROGRAM_TOPUP: "PROGRAM_TOPUP",
   PROGRAM_CHANCE: "PROGRAM_CHANCE",
-  REPORT_AGENT: "REPORT_AGENT",
-  REPORT_FARMER: "REPORT_FARMER",
+  REPORT_CUSTOMER: "REPORT_CUSTOMER",
   REPORT_CHANCE: "REPORT_CHANCE",
   REPORT_IQR: "REPORT_IQR",
   REPORT_SMS: "REPORT_SMS",
@@ -355,22 +354,13 @@ export const MENUITEMS = [
 
     children: [
       {
-        path: `${import.meta.env.BASE_URL}report/agent`,
+        path: `${import.meta.env.BASE_URL}report/customer`,
         type: "link",
         active: false,
         selected: false,
         dirchange: false,
-        title: "Đại lý",
-        key: MENU_KEY.REPORT_AGENT,
-      },
-      {
-        path: `${import.meta.env.BASE_URL}report/farmer`,
-        type: "link",
-        active: false,
-        selected: false,
-        dirchange: false,
-        title: "Nông dân",
-        key: MENU_KEY.REPORT_FARMER,
+        title: "Khách hàng",
+        key: MENU_KEY.REPORT_CUSTOMER,
       },
       {
         path: `${import.meta.env.BASE_URL}report/iQr`,

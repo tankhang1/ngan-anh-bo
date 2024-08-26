@@ -218,8 +218,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           );
         case MENU_KEY.REPORT_TITLE:
           if (
-            permission.reportAgent ||
-            permission.reportFarmer ||
+            permission.reportCustomer ||
             permission.reportIQR ||
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
@@ -228,10 +227,9 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           )
             return true;
           return false;
-        case MENU_KEY.REPORT_AGENT:
-          return permission.reportAgent;
-        case MENU_KEY.REPORT_FARMER:
-          return permission.reportFarmer;
+        case MENU_KEY.REPORT_CUSTOMER:
+          return permission.reportCustomer;
+
         case MENU_KEY.REPORT_IQR:
           return permission.reportIQR;
         case MENU_KEY.REPORT_PROGRAM_POINT:
@@ -250,8 +248,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.viewRetailerGroup;
         case MENU_KEY.MANAGE_REPORT:
           return (
-            permission.reportAgent ||
-            permission.reportFarmer ||
+            permission.reportCustomer ||
             permission.reportIQR ||
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
