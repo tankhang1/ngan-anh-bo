@@ -58,7 +58,7 @@ function TopupProgram() {
   const [searchBy, setSearchBy] = useState(TOPUP_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(1);
   const [listTopups, setListTopups] = useState<TProgramTopup[]>([]);
   const [page, setPage] = useState(1);
   const { data: counterProgramTopup } = useGetCounterProgramTopupByStatusQuery(

@@ -61,7 +61,7 @@ function PointProgram() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(POINT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(1);
   const navigate = useNavigate();
   const [listPoints, setListPoints] = useState<TProgramPoint[]>([]);
   const [page, setPage] = useState(1);

@@ -218,6 +218,7 @@ function TopupCreateEdit() {
         .unwrap()
         .then((value) => {
           if (value.status === 0) {
+            navigate(-1);
             toast.showToast("Thêm mới chương trình thành công");
           } else if (value.status === -4)
             toast.showToast("Ngày bắt đầu sau 1 ngày");
@@ -273,6 +274,7 @@ function TopupCreateEdit() {
           .unwrap()
           .then((value) => {
             if (value.status === 0) {
+              navigate(-1);
               toast.showToast("Cập nhật chương trình thành công");
             }
             if (value.status === -4) toast.showToast("Ngày bắt đầu sau 1 ngày");

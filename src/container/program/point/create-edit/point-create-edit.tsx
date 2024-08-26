@@ -242,6 +242,7 @@ function PointCreateEdit() {
         .unwrap()
         .then((value) => {
           if (value.status === 0) {
+            navigate(-1);
             toast.showToast("Thêm mới chương trình thành công");
             return;
           }

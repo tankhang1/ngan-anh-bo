@@ -80,7 +80,6 @@ function CustomerUnValidationCreateEdit() {
   const onValidateCustomer = async (values: TCustomerRes) => {
     await verifyCustomer({
       ...values,
-      uuid: values?.uuid ? values.uuid : newUUID?.toString(),
       info_primary: values.info_primary ? 1 : 0,
       customer_province: provinceId,
       status: 1,
@@ -197,6 +196,7 @@ function CustomerUnValidationCreateEdit() {
     <Fragment>
       <Formik
         initialValues={{
+          uuid: customer?.uuid ?? newUUID?.toString(),
           customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
           customer_province: customer?.customer_province ?? "",
