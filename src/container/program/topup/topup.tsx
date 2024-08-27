@@ -80,16 +80,6 @@ function TopupProgram() {
         refetchOnMountOrArgChange: true,
       }
     );
-  useEffect(() => {
-    if (
-      counterProgramTopup &&
-      programTopups &&
-      listTopups.length + programTopups.length <= counterProgramTopup
-    ) {
-      setListTopups([...listTopups, ...programTopups]);
-    }
-    if (counterProgramTopup === 0 && listTopups.length !== 0) setListTopups([]);
-  }, [programTopups, counterProgramTopup]);
 
   return (
     <Fragment>
@@ -107,6 +97,7 @@ function TopupProgram() {
                       placeholder="Tìm kiếm thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
+                      value={search}
                     />
                     <Button
                       variant=""
@@ -134,7 +125,10 @@ function TopupProgram() {
                         <Dropdown.Item
                           active={item.key === searchBy}
                           key={index}
-                          onClick={() => setSearchBy(item.key)}
+                          onClick={() => {
+                            setSearch("");
+                            setSearchBy(item.key);
+                          }}
                         >
                           {item.label}
                         </Dropdown.Item>
@@ -159,6 +153,7 @@ function TopupProgram() {
                           key={index}
                           onClick={() => {
                             if (status !== item.key) {
+                              setSearch("");
                               setStatus(item.key);
                               setListTopups([]);
                             }
@@ -343,7 +338,7 @@ function TopupProgram() {
                   }
                 : undefined,
             ]}
-            data={listTopups || []}
+            data={programTopups || []}
             filters={[
               {
                 key: "status",

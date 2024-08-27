@@ -114,6 +114,7 @@ function SettingGroupCustomer() {
             externalSearch={deferSearchValue}
             title="Thông tin chương trình tích điểm"
             isLoading={isLoadingGroup}
+            maxPage={groups?.length}
             headers={[
               {
                 key: "id",

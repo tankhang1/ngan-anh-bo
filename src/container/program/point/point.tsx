@@ -86,16 +86,6 @@ function PointProgram() {
       }
     );
 
-  useEffect(() => {
-    if (
-      counterProgramPoint &&
-      programPoints &&
-      listPoints.length + programPoints.length <= counterProgramPoint
-    ) {
-      setListPoints([...listPoints, ...programPoints]);
-    }
-    if (counterProgramPoint === 0 && listPoints.length !== 0) setListPoints([]);
-  }, [programPoints, counterProgramPoint]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -408,7 +398,7 @@ function PointProgram() {
                   }
                 : undefined,
             ]}
-            data={listPoints || []}
+            data={programPoints || []}
             filters={[
               {
                 key: "status",

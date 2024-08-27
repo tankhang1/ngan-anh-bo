@@ -116,6 +116,7 @@ function SettingGroupRetailer() {
             externalSearch={deferSearchValue}
             title="Thông tin nhóm đại lý"
             isLoading={isLoadingGroup}
+            maxPage={groups?.length}
             headers={[
               {
                 key: "id",
