@@ -285,8 +285,8 @@ fieldset:disabled .btn {
     &::-webkit-input-placeholder {
         font-size: 0.8rem;
         font-weight: 500;
-        opacity: 0.4;
-        color: $default-text-color;
+        opacity: 0.8;
+        color:black;
         padding-inline-start: 0px;
         transition: padding-inline-start 0.1s ease-in;
     }
@@ -294,22 +294,22 @@ fieldset:disabled .btn {
     &:-moz-placeholder { /* Firefox 18- */
         font-size: 0.8rem;
         font-weight: 500;
-        opacity: 0.4;
-        color: $default-text-color;
+        opacity: 0.8;
+        color:black;
     }
     
     &::-moz-placeholder {  /* Firefox 19+ */
         font-size: 0.8rem;
         font-weight: 500;
-        opacity: 0.4;
-        color: $default-text-color;
+        opacity: 0.8;
+        color: black;
     }
     
     &:-ms-input-placeholder {
         font-size: 0.8rem;
         font-weight: 500;
-        opacity: 0.4;
-        color: $default-text-color;
+        opacity: 0.8;
+        color: black;
     }
 } 
 /* End::placeholder */
@@ -824,4 +824,47 @@ fieldset:disabled .btn {
         }
       }
     }
+  }
+
+/* Base placeholder styles */
+.custom-placeholder::placeholder {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: black !important;
+    transition: padding-inline-start 0.1s ease-in;
+  }
+  
+  /* WebKit browsers (Chrome, Safari) */
+  .custom-placeholder::-webkit-input-placeholder {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: black !important;
+    transition: padding-inline-start 0.1s ease-in;
+  }
+  
+  /* Mozilla Firefox 19+ */
+  .custom-placeholder::-moz-placeholder {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: black !important;
+  }
+  
+  /* Mozilla Firefox 18- */
+  .custom-placeholder:-moz-placeholder {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: black !important;
+  }
+  
+  /* Internet Explorer 10-11 */
+  .custom-placeholder:-ms-input-placeholder {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: black !important;
+  }
+  
+  /* Add a transition effect on focus */
+  .custom-placeholder:focus::placeholder {
+    padding-inline-start: 0.3rem;
+    transition: padding-inline-start 0.1s ease-in;
   }

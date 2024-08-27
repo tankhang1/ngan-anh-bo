@@ -47,8 +47,10 @@ function EmployeeRole() {
   const [openCEModal, setOpenCEModal] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
   const deferSearchValue = useDeferredValue(search);
-  const [updateRole] = useUpdateEmployeeRoleMutation();
-  const [createRole] = useCreateEmployeeRoleMutation();
+  const [updateRole, { isLoading: isLoadingUpdate }] =
+    useUpdateEmployeeRoleMutation();
+  const [createRole, { isLoading: isLoadingCreate }] =
+    useCreateEmployeeRoleMutation();
   const toast = useContext(ToastContext);
 
   const {
@@ -342,11 +344,21 @@ function EmployeeRole() {
                 </Form.Group>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="danger" onClick={onModalClose}>
-                  Hủy
-                </Button>
-                <Button variant="primary" type={"submit"}>
-                  Lưu
+                <Button variant="danger">Hủy</Button>
+                <Button
+                  variant="primary"
+                  className={`btn justify-content-center align-items-center ${
+                    isLoadingCreate || (isLoadingUpdate && "btn-loader ")
+                  }`}
+                  type="submit"
+                >
+                  <span>Xác nhận</span>
+                  {isLoadingCreate ||
+                    (isLoadingUpdate && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
+                      </span>
+                    ))}
                 </Button>
               </Modal.Footer>
             </form>

@@ -77,8 +77,10 @@ function EmployeeCreateEdit() {
   const { data: provinces } = useGetListProvinceQuery();
   const { data: roles } = useGetListEmployeeRoleQuery();
   const { data: departments } = useGetListEmployeeDepartmentQuery();
-  const [createEmployee] = useCreateEmployeeMutation();
-  const [updateEmployee] = useUpdateEmployeeMutation();
+  const [createEmployee, { isLoading: isLoadingCreate }] =
+    useCreateEmployeeMutation();
+  const [updateEmployee, { isLoading: isLoadingUpdate }] =
+    useUpdateEmployeeMutation();
   const [uploadStaffImage] = useUploadStaffFileMutation();
   const groupArea = useMemo(
     () => lodash.groupBy(provinces || [], "area"),
@@ -269,32 +271,38 @@ function EmployeeCreateEdit() {
                     >
                       Trở lại
                     </button>
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={
-                        <Tooltip className="tooltip">
-                          {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                        </Tooltip>
-                      }
-                    >
-                      {isCreate === "true" ? (
-                        <button
-                          className="btn  btn-purple-light ms-2"
-                          type="submit"
-                          onClick={() => {}}
-                        >
-                          Thêm mới
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-purple-light"
-                          type="submit"
-                          onClick={() => {}}
-                        >
-                          {!isEdit ? "Chỉnh sửa" : "Lưu"}
-                        </button>
-                      )}
-                    </OverlayTrigger>
+
+                    {isCreate === "true" ? (
+                      <button
+                        type="submit"
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
+                          isLoadingCreate && "btn-loader "
+                        }`}
+                      >
+                        <span>Thêm mới</span>
+                        {isLoadingCreate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
+                          isLoadingUpdate && "btn-loader "
+                        }`}
+                      >
+                        <span>
+                          {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
+                        </span>
+                        {isLoadingUpdate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
+                      </button>
+                    )}
                   </div>
                 </Card.Header>
               </Card>
@@ -357,6 +365,10 @@ function EmployeeCreateEdit() {
                                 defaultValue={values.code}
                                 onChange={handleChange}
                                 isInvalid={touched.code && !!errors.code}
+                                className="input-placeholder"
+                                disabled={
+                                  isCreate === "false" && isEdit === false
+                                }
                               />
                               <Form.Control.Feedback type="invalid">
                                 {errors.code}
@@ -373,9 +385,13 @@ function EmployeeCreateEdit() {
                                 placeholder="Tên nhân viên"
                                 name="name"
                                 id="name_validate"
-                                defaultValue={values.name}
+                                defaultValue={values.name as string}
                                 onChange={handleChange}
                                 isInvalid={touched.name && !!errors.name}
+                                className="input-placeholder"
+                                disabled={
+                                  isCreate === "false" && isEdit === false
+                                }
                               />
                               <Form.Control.Feedback type="invalid">
                                 {errors.name}
@@ -383,19 +399,21 @@ function EmployeeCreateEdit() {
                             </Form.Group>
                             <Form.Group>
                               <Form.Label className="text-black">
-                                Ngày sinh{" "}
-                                <span style={{ color: "red" }}>*</span>
+                                Ngày sinh
                               </Form.Label>
                               <Form.Control
                                 required
                                 type="date"
                                 placeholder="Ngày sinh"
                                 name="birthday"
-                                id="birthday_validate"
                                 defaultValue={values.birthday}
                                 onChange={handleChange}
                                 isInvalid={
                                   touched.birthday && !!errors.birthday
+                                }
+                                className="input-placeholder"
+                                disabled={
+                                  isCreate === "false" && isEdit === false
                                 }
                               />
                               <Form.Control.Feedback type="invalid">
@@ -408,7 +426,7 @@ function EmployeeCreateEdit() {
                                 <span style={{ color: "red" }}>*</span>
                               </Form.Label>
                               <Form.Select
-                                className="form-select"
+                                className="form-select input-placeholder"
                                 name="gender"
                                 defaultValue={values.gender}
                                 onChange={(e) =>
@@ -416,6 +434,9 @@ function EmployeeCreateEdit() {
                                 }
                                 isInvalid={touched.gender && !!errors.gender}
                                 required
+                                disabled={
+                                  isCreate === "false" && isEdit === false
+                                }
                               >
                                 <option value={0}>Nữ</option>
                                 <option value={1}>Nam</option>
@@ -437,6 +458,10 @@ function EmployeeCreateEdit() {
                                 defaultValue={values.phone}
                                 onChange={handleChange}
                                 isInvalid={touched.phone && !!errors.phone}
+                                className="input-placeholder"
+                                disabled={
+                                  isCreate === "false" && isEdit === false
+                                }
                               />
                               <Form.Control.Feedback type="invalid">
                                 {errors.phone}
@@ -454,9 +479,11 @@ function EmployeeCreateEdit() {
                             type="text"
                             placeholder="Email"
                             name="email"
-                            defaultValue={values.email}
+                            defaultValue={values.email as string}
                             onChange={handleChange}
                             isInvalid={touched.email && !!errors.email}
+                            className="input-placeholder"
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.email}
@@ -471,11 +498,15 @@ function EmployeeCreateEdit() {
                               placeholder="CCCD"
                               name="citizen_number"
                               id="citizen_number_validate"
-                              defaultValue={values.citizen_number}
+                              defaultValue={values.citizen_number as string}
                               onChange={handleChange}
                               isInvalid={
                                 touched.citizen_number &&
                                 !!errors.citizen_number
+                              }
+                              className="input-placeholder"
+                              disabled={
+                                isCreate === "false" && isEdit === false
                               }
                             />
                             <Form.Control.Feedback type="invalid">
@@ -496,6 +527,10 @@ function EmployeeCreateEdit() {
                               onChange={handleChange}
                               isInvalid={
                                 touched.citizen_day && !!errors.citizen_day
+                              }
+                              className="input-placeholder"
+                              disabled={
+                                isCreate === "false" && isEdit === false
                               }
                             />
                             <Form.Control.Feedback type="invalid">
@@ -518,7 +553,7 @@ function EmployeeCreateEdit() {
                                   }))
                                 : []
                             }
-                            className="default basic-multi-select custom-multi mb-3"
+                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
                             isSearchable
@@ -528,6 +563,9 @@ function EmployeeCreateEdit() {
                             value={values.province}
                             onChange={(value) =>
                               setFieldValue("province", value)
+                            }
+                            isDisabled={
+                              isCreate === "false" && isEdit === false
                             }
                           />
 
@@ -548,9 +586,11 @@ function EmployeeCreateEdit() {
                             placeholder="Ghi chú"
                             name="note"
                             id="note_validate"
-                            defaultValue={values.note}
+                            defaultValue={values.note as string}
                             onChange={handleChange}
                             isInvalid={touched.note && !!errors.note}
+                            className="input-placeholder"
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.note}
@@ -581,7 +621,7 @@ function EmployeeCreateEdit() {
                                 value: `${item.code}-${item.name}`,
                               })) as any
                             }
-                            className="default basic-multi-select custom-multi mb-3"
+                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
@@ -608,6 +648,9 @@ function EmployeeCreateEdit() {
                                 value.value.split("-")[1]
                               );
                             }}
+                            isDisabled={
+                              isCreate === "false" && isEdit === false
+                            }
                           />
                           {errors.staff_department_code &&
                             errors.staff_department_name &&
@@ -634,7 +677,7 @@ function EmployeeCreateEdit() {
                                 value: `${item.id}-${item.name}`,
                               })) as any
                             }
-                            className="default basic-multi-select custom-multi mb-3"
+                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
@@ -661,6 +704,9 @@ function EmployeeCreateEdit() {
                                 value.value.split("-")[1]
                               );
                             }}
+                            isDisabled={
+                              isCreate === "false" && isEdit === false
+                            }
                           />
                           {errors.staff_role &&
                             errors.staff_role_name &&
@@ -685,7 +731,7 @@ function EmployeeCreateEdit() {
                                 value: item,
                               })) as any
                             }
-                            className="default basic-multi-select custom-multi mb-3"
+                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
@@ -709,6 +755,9 @@ function EmployeeCreateEdit() {
                                   }))
                               );
                             }}
+                            isDisabled={
+                              isCreate === "false" && isEdit === false
+                            }
                           />
 
                           {errors.areas &&
@@ -735,7 +784,7 @@ function EmployeeCreateEdit() {
                                   }))
                                 : []
                             }
-                            className="default basic-multi-select custom-multi mb-3"
+                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
@@ -745,6 +794,9 @@ function EmployeeCreateEdit() {
                             value={values.provinces}
                             onChange={(value) =>
                               setFieldValue("provinces", value)
+                            }
+                            isDisabled={
+                              isCreate === "false" && isEdit === false
                             }
                           />
 
@@ -778,6 +830,8 @@ function EmployeeCreateEdit() {
                             isInvalid={
                               touched.export_code && !!errors.export_code
                             }
+                            className="input-placeholder"
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.export_code}
@@ -799,6 +853,8 @@ function EmployeeCreateEdit() {
                             isInvalid={
                               touched.export_address && !!errors.export_address
                             }
+                            className="input-placeholder"
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.export_address}

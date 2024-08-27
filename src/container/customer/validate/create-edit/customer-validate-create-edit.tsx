@@ -1,13 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import {
-  Card,
-  Col,
-  Form,
-  OverlayTrigger,
-  Row,
-  Tooltip,
-  Stack,
-} from "react-bootstrap";
+import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
@@ -59,8 +51,10 @@ function CustomerValidationCreateEdit() {
     }
   );
 
-  const [createCustomer] = useCreateUpdateCustomerMutation();
-  const [updateCustomer] = useUpdateCustomerMutation();
+  const [createCustomer, { isLoading: isLoadingCreate }] =
+    useCreateUpdateCustomerMutation();
+  const [updateCustomer, { isLoading: isLoadingUpdate }] =
+    useUpdateCustomerMutation();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
   const { data: districts } = useGetDistrictQuery(
@@ -157,7 +151,6 @@ function CustomerValidationCreateEdit() {
     <Fragment>
       <Formik
         initialValues={{
-          customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
           customer_province: customer?.customer_province ?? "",
           customer_type: customer?.customer_type ?? "",
@@ -217,14 +210,33 @@ function CustomerValidationCreateEdit() {
 
                     {isCreate === "true" ? (
                       <button
-                        className="btn  btn-purple-light ms-2"
+                        className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                          isLoadingCreate && "btn-loader"
+                        }`}
                         type="submit"
                       >
-                        Thêm mới
+                        <span>Thêm mới</span>
+                        {isLoadingCreate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
                       </button>
                     ) : (
-                      <button className="btn btn-purple-light" type="submit">
-                        {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
+                          isLoadingUpdate && "btn-loader"
+                        }`}
+                        type="submit"
+                      >
+                        <span>
+                          {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
+                        </span>
+                        {isLoadingUpdate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
                       </button>
                     )}
                   </div>
@@ -241,31 +253,13 @@ function CustomerValidationCreateEdit() {
                       </Card.Title>
                     </Card.Header>
                     <Card.Body>
-                      <Form.Group>
-                        <Form.Label className="text-black">
-                          Mã khách hàng <span style={{ color: "red" }}>*</span>
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          placeholder="Mã khách hàng"
-                          name="customer_code"
-                          value={values.customer_code}
-                          onChange={handleChange}
-                          isInvalid={
-                            touched.customer_code && !!errors.customer_code
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.customer_code}
-                        </Form.Control.Feedback>
-                      </Form.Group>
                       <Row className="mb-2">
                         <Form.Group as={Col} md={4}>
                           <Form.Label className="text-black">
                             Họ và tên <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
+                            className="input-placeholder"
                             required
                             type="text"
                             placeholder="Họ và tên"
@@ -275,6 +269,7 @@ function CustomerValidationCreateEdit() {
                             isInvalid={
                               touched.customer_name && !!errors.customer_name
                             }
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.customer_name}
@@ -285,7 +280,7 @@ function CustomerValidationCreateEdit() {
                             Giới tính <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Select
-                            className="form-select"
+                            className="form-select input-placeholder"
                             name="gender"
                             value={values.gender}
                             onChange={(e) =>
@@ -293,6 +288,7 @@ function CustomerValidationCreateEdit() {
                             }
                             isInvalid={touched.gender && !!errors.gender}
                             required
+                            disabled={isCreate === "false" && isEdit === false}
                           >
                             <option value={0}>Nữ</option>
                             <option value={1}>Nam</option>
@@ -303,6 +299,7 @@ function CustomerValidationCreateEdit() {
                             Ngày sinh <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Form.Control
+                            className="input-placeholder"
                             required
                             type="date"
                             id="birthday_validate"
@@ -312,6 +309,7 @@ function CustomerValidationCreateEdit() {
                             lang="vi"
                             onChange={handleChange}
                             isInvalid={touched.birthday && !!errors.birthday}
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                         </Form.Group>
                       </Row>
@@ -321,7 +319,7 @@ function CustomerValidationCreateEdit() {
                           <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
-                          className="form-select"
+                          className="form-select input-placeholder"
                           name="customer_type"
                           value={values.customer_type}
                           onChange={(e) =>
@@ -331,6 +329,7 @@ function CustomerValidationCreateEdit() {
                             touched.customer_type && !!errors.customer_type
                           }
                           required
+                          disabled={isCreate === "false" && isEdit === false}
                         >
                           <option value="">-- Chọn nhóm khách hàng --</option>
                           {groupObjectives?.map((item) => (
@@ -348,7 +347,7 @@ function CustomerValidationCreateEdit() {
                           Nhóm đại lý
                         </Form.Label>
                         <Form.Select
-                          className="form-select"
+                          className="form-select input-placeholder"
                           name="retailer_group"
                           onChange={(e) =>
                             setFieldValue("retailer_group", e.target.value)
@@ -357,6 +356,7 @@ function CustomerValidationCreateEdit() {
                             touched.retailer_group && !!errors.retailer_group
                           }
                           required
+                          disabled={isCreate === "false" && isEdit === false}
                         >
                           <option value="">-- Chọn nhóm đại lý --</option>
                           {groupRetailers?.map((item) => (
@@ -378,10 +378,12 @@ function CustomerValidationCreateEdit() {
                           type="text"
                           id="phone_validate"
                           placeholder="Nhập số điện thoại"
+                          className="input-placeholder"
                           name="phone"
                           value={values.phone}
                           onChange={handleChange}
                           isInvalid={touched.phone && !!errors.phone}
+                          disabled={isCreate === "false" && isEdit === false}
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.phone}
@@ -395,10 +397,12 @@ function CustomerValidationCreateEdit() {
                           required
                           type="email"
                           placeholder="Nhập địa chỉ chi tiết"
+                          className="input-placeholder"
                           name="email"
                           value={values.email}
                           onChange={handleChange}
                           isInvalid={touched.email && !!errors.email}
+                          disabled={isCreate === "false" && isEdit === false}
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.email}
@@ -411,12 +415,14 @@ function CustomerValidationCreateEdit() {
                             required
                             type="text"
                             placeholder="Nhập căn cước công dân"
+                            className="input-placeholder"
                             name="citizen_number"
                             value={values.citizen_number}
                             onChange={handleChange}
                             isInvalid={
                               touched.citizen_number && !!errors.citizen_number
                             }
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.citizen_number}
@@ -432,10 +438,12 @@ function CustomerValidationCreateEdit() {
                             placeholder="Nhập ngày cấp CCCD"
                             name="citizen_day"
                             value={values.citizen_day}
+                            className="input-placeholder"
                             onChange={handleChange}
                             isInvalid={
                               touched.citizen_day && !!errors.citizen_day
                             }
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.citizen_day}
@@ -447,7 +455,7 @@ function CustomerValidationCreateEdit() {
                           Tỉnh thành <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
-                          className="form-select"
+                          className="form-select input-placeholder"
                           name="customer_province"
                           value={values.customer_province}
                           onChange={(value) => {
@@ -462,6 +470,7 @@ function CustomerValidationCreateEdit() {
                             !!errors.customer_province
                           }
                           required
+                          disabled={isCreate === "false" && isEdit === false}
                         >
                           <option value="">-- Chọn tỉnh thành --</option>
 
@@ -481,7 +490,7 @@ function CustomerValidationCreateEdit() {
                           <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
-                          className="form-select"
+                          className="form-select input-placeholder"
                           name="customer_district"
                           value={values.customer_district}
                           onChange={(e) =>
@@ -492,6 +501,7 @@ function CustomerValidationCreateEdit() {
                             !!errors.customer_district
                           }
                           required
+                          disabled={isCreate === "false" && isEdit === false}
                         >
                           <option value="">-- Chọn quận huyện --</option>
 
@@ -515,11 +525,13 @@ function CustomerValidationCreateEdit() {
                           placeholder="Nhập địa chỉ chi tiết"
                           name="customer_address"
                           value={values.customer_address}
+                          className="input-placeholder"
                           onChange={handleChange}
                           isInvalid={
                             touched.customer_address &&
                             !!errors.customer_address
                           }
+                          disabled={isCreate === "false" && isEdit === false}
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.customer_address}
@@ -532,7 +544,7 @@ function CustomerValidationCreateEdit() {
                           <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Select
-                          className="form-select"
+                          className="form-select input-placeholder"
                           name="sale_code"
                           value={values.sale_code}
                           onChange={(e) =>
@@ -540,6 +552,7 @@ function CustomerValidationCreateEdit() {
                           }
                           isInvalid={touched.sale_code && !!errors.sale_code}
                           required
+                          disabled={isCreate === "false" && isEdit === false}
                         >
                           <option value="">
                             -- Chọn nhân viên phụ trách --
@@ -567,10 +580,12 @@ function CustomerValidationCreateEdit() {
                           name="business_document"
                           value={values.business_document}
                           onChange={handleChange}
+                          className="input-placeholder"
                           isInvalid={
                             touched.business_document &&
                             !!errors.business_document
                           }
+                          disabled={isCreate === "false" && isEdit === false}
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.business_document}
@@ -589,7 +604,9 @@ function CustomerValidationCreateEdit() {
                             name="tags"
                             value={values.tags}
                             onChange={handleChange}
+                            className="input-placeholder"
                             isInvalid={touched.tags && !!errors.tags}
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.tags}
@@ -607,7 +624,9 @@ function CustomerValidationCreateEdit() {
                             name="area_size"
                             onChange={handleChange}
                             min={1}
+                            className="input-placeholder"
                             placeholder="Diện tích cây trồng chính"
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.area_size}
@@ -624,7 +643,9 @@ function CustomerValidationCreateEdit() {
                           placeholder="Ghi chú"
                           name="note"
                           value={values.note}
+                          className="input-placeholder"
                           onChange={handleChange}
+                          disabled={isCreate === "false" && isEdit === false}
                           isInvalid={touched.note && !!errors.note}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -644,7 +665,9 @@ function CustomerValidationCreateEdit() {
                           name="sign_board"
                           value={values.sign_board}
                           onChange={handleChange}
+                          className="input-placeholder"
                           isInvalid={touched.sign_board && !!errors.sign_board}
+                          disabled={isCreate === "false" && isEdit === false}
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.sign_board}
@@ -663,9 +686,11 @@ function CustomerValidationCreateEdit() {
                             name="citizen_number"
                             value={values.citizen_number}
                             onChange={handleChange}
+                            className="input-placeholder"
                             isInvalid={
                               touched.citizen_number && !!errors.citizen_number
                             }
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.citizen_number}
@@ -682,10 +707,12 @@ function CustomerValidationCreateEdit() {
                             name="citizen_day"
                             value={values.citizen_day}
                             lang="vi"
+                            className="input-placeholder"
                             onChange={handleChange}
                             isInvalid={
                               touched.citizen_day && !!errors.citizen_day
                             }
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                         </Form.Group>
                       </Row>
@@ -705,7 +732,9 @@ function CustomerValidationCreateEdit() {
                             )
                           }
                           required
+                          className="input-placeholder"
                           name="info_primary"
+                          disabled={isCreate === "false" && isEdit === false}
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.info_primary}
@@ -817,11 +846,13 @@ function CustomerValidationCreateEdit() {
                             type="text"
                             placeholder="Mã số KH-XK"
                             name="export_code"
+                            className="input-placeholder"
                             value={values.export_code}
                             onChange={handleChange}
                             isInvalid={
                               touched.export_code && !!errors.export_code
                             }
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.export_code}
@@ -835,12 +866,14 @@ function CustomerValidationCreateEdit() {
                             required
                             type="text"
                             placeholder="Ghi chú thông tin địa chỉ giao hàng"
+                            className="input-placeholder"
                             name="export_address"
                             value={values.export_address}
                             onChange={handleChange}
                             isInvalid={
                               touched.export_address && !!errors.export_address
                             }
+                            disabled={isCreate === "false" && isEdit === false}
                           />
                           <Form.Control.Feedback type="invalid">
                             {errors.export_address}

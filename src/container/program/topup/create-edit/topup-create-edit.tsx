@@ -170,8 +170,10 @@ function TopupCreateEdit() {
         return false;
     }
   };
-  const [updateTopupProgram] = useUpdateTopupProgramMutation();
-  const [createTopupProgram] = useCreateTopupProgramMutation();
+  const [updateTopupProgram, { isLoading: isLoadingUpdate }] =
+    useUpdateTopupProgramMutation();
+  const [createTopupProgram, { isLoading: isLoadingCreate }] =
+    useCreateTopupProgramMutation();
 
   const handleCreatePointProgram = async (values: TTopupCreateForm) => {
     if (isCreate === "true") {
@@ -369,14 +371,33 @@ function TopupCreateEdit() {
                   </button>
                   {isCreate === "true" ? (
                     <button
-                      className="btn  btn-purple-light ms-2"
+                      className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                        isLoadingCreate && "btn-loader"
+                      }`}
                       type="submit"
                     >
-                      Thêm mới
+                      <span>Thêm mới</span>
+                      {isLoadingCreate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
                     </button>
                   ) : (
-                    <button className="btn btn-purple-light" type="submit">
-                      {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                    <button
+                      className={`btn btn-purple-light justify-content-center align-items-center ${
+                        isLoadingUpdate && "btn-loader"
+                      }`}
+                      type="submit"
+                    >
+                      <span>
+                        {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
+                      </span>
+                      {isLoadingUpdate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
                     </button>
                   )}
                 </div>
@@ -411,6 +432,7 @@ function TopupCreateEdit() {
                       type="text"
                       id="name_validate"
                       placeholder="Tên chương trình"
+                      className="input-placeholder"
                       name="name"
                       value={values.name}
                       onChange={handleChange}
@@ -432,6 +454,7 @@ function TopupCreateEdit() {
                         type="date"
                         id="time_start_validate"
                         placeholder="Ngày bắt đầu"
+                        className="input-placeholder"
                         name="time_start"
                         value={values.time_start}
                         lang="vi"
@@ -453,6 +476,7 @@ function TopupCreateEdit() {
                         type="date"
                         id="time_end_validate"
                         placeholder="Ngày kết thúc"
+                        className="input-placeholder"
                         name="time_end"
                         value={values.time_end}
                         onChange={handleChange}
@@ -487,7 +511,7 @@ function TopupCreateEdit() {
                               ...(mapProduct ?? []),
                             ] as any)
                       }
-                      className=" basic-multi-select custom-multi mb-3"
+                      className=" basic-multi-select custom-multi mb-3 input-placeholder"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -521,7 +545,7 @@ function TopupCreateEdit() {
                           ...(OBJECTIVES_SELECT || []),
                         ] as any
                       }
-                      className=" basic-multi-select custom-multi mb-3"
+                      className=" basic-multi-select custom-multi mb-3 input-placeholder"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -547,7 +571,7 @@ function TopupCreateEdit() {
                     </Form.Label>
 
                     <Form.Select
-                      className="form-select"
+                      className="form-select input-placeholder"
                       name="price"
                       onChange={handleChange}
                       value={values.price}
@@ -577,7 +601,7 @@ function TopupCreateEdit() {
                       isMulti
                       name="goods_type"
                       options={[...(TypeBinExport || [])] as any}
-                      className="basic-multi-select custom-multi mb-3"
+                      className="basic-multi-select custom-multi mb-3 input-placeholder"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -602,7 +626,7 @@ function TopupCreateEdit() {
                     </Form.Label>
                     <Form.Check
                       type="switch"
-                      className="form-check-lg form-switch"
+                      className="form-check-lg form-switch input-placeholder"
                       checked={values.status === 3 ? true : false}
                       onChange={(value) => {
                         setFieldValue("status", value.target.checked ? 3 : 1);

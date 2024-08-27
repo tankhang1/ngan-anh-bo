@@ -2480,17 +2480,17 @@ progress {
 }
 
 .form-control::-moz-placeholder {
-    color: var(--bs-secondary-color);
+    color: black;
     opacity: 1;
 }
 
 .form-control::placeholder {
-    color: var(--bs-secondary-color);
+    color: black !important;
     opacity: 1;
 }
 
 .form-control:disabled {
-    background-color: var(--bs-secondary-bg);
+    background-color: green($color: #000000);
     opacity: 1;
 }
 
@@ -14337,3 +14337,4 @@ html[dir="rtl"] {
         color: var(--bs-code-color) !important;
     }
 }
+

@@ -37,7 +37,9 @@ function Employee() {
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
   const { data: employees, isLoading: isLoadingEmployee } =
-    useGetListEmployeeQuery();
+    useGetListEmployeeQuery(null, {
+      refetchOnMountOrArgChange: true,
+    });
 
   const handleExportExcel = () => {
     if (employees) exportExcelFile(employees, "Danh sách nhân viên");

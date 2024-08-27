@@ -63,7 +63,6 @@ function Accounts() {
   const deferSearchValue = useDeferredValue(search);
   const [openAddNewAccount, setOpenAddNewAccount] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
-  const [employeeRole, setEmployeeRole] = useState("");
   const [showPW1, setShowPW1] = useState(false);
   const [showPW2, setShowPW2] = useState(false);
   const {
@@ -71,8 +70,9 @@ function Accounts() {
     isLoading: isLoadingAccount,
     refetch: refetchAccount,
   } = useGetAllAccountQuery();
-  const [deleteAccount] = useDeleteAccountMutation();
-  const [signUp] = useSignUpAccountMutation();
+  const [deleteAccount, { isLoading: isLoadingDelete }] =
+    useDeleteAccountMutation();
+  const [signUp, { isLoading: isLoadingSignUp }] = useSignUpAccountMutation();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: roles } = useGetAccountRoleListQuery();
   const { data: rolesPermission } = useGetRolePermissionListQuery();
@@ -140,6 +140,7 @@ function Accounts() {
                       placeholder="Tìm kiếm thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
+                      value={search}
                     />
                     <Button
                       variant=""
@@ -167,7 +168,10 @@ function Accounts() {
                         <Dropdown.Item
                           active={item.key === searchBy}
                           key={index}
-                          onClick={() => setSearchBy(item.key)}
+                          onClick={() => {
+                            setSearch("");
+                            setSearchBy(item.key);
+                          }}
                         >
                           {item.label}
                         </Dropdown.Item>
@@ -230,6 +234,7 @@ function Accounts() {
             externalSearch={deferSearchValue}
             title="Thông tin tài khoản"
             isLoading={isLoadingAccount}
+            maxPage={accounts?.length}
             headers={[
               {
                 key: "id",
@@ -348,8 +353,19 @@ function Accounts() {
           <Button variant="secondary" onClick={() => setUsername(null)}>
             Hủy
           </Button>
-          <Button variant="primary" onClick={onDeleteAccount}>
-            Xác nhận
+          <Button
+            variant="primary"
+            className={`btn justify-content-center align-items-center ${
+              isLoadingDelete && "btn-loader "
+            }`}
+            onClick={onDeleteAccount}
+          >
+            <span>Xác nhận</span>
+            {isLoadingDelete && (
+              <span className="loading">
+                <i className="ri-loader-2-fill fs-19"></i>
+              </span>
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -546,8 +562,20 @@ function Accounts() {
                   >
                     Đóng
                   </Button>
-                  <Button variant="primary" type="submit">
-                    Xác nhận
+
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    className={`btn justify-content-center align-items-center ${
+                      isLoadingSignUp && "btn-loader "
+                    }`}
+                  >
+                    <span>Xác nhận</span>
+                    {isLoadingSignUp && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
+                      </span>
+                    )}
                   </Button>
                 </Modal.Footer>
               </form>

@@ -15,7 +15,7 @@ import { updateAccountInfo } from "../redux/slices/authSlice";
 // import NganAnhLogo from "../assets/images/brand-logos/ngan-anh-logo.png";
 
 const Home = () => {
-  const [signIn] = useSignInMutation();
+  const [signIn, { isLoading }] = useSignInMutation();
   const dispatch = useDispatch();
   const [passwordshow1, setpasswordshow1] = useState(false);
   const [err, setError] = useState("");
@@ -167,10 +167,17 @@ const Home = () => {
                         <div className="col-xl-12 d-grid mt-2">
                           <Button
                             variant="primary"
-                            className="btn btn-lg"
+                            className={`btn btn-lg justify-content-center align-items-center ${
+                              isLoading && "btn-loader "
+                            }`}
                             onClick={Login}
                           >
-                            Đăng nhập
+                            <span className="me-2"> Đăng nhập</span>
+                            {isLoading && (
+                              <span className="loading">
+                                <i className="ri-loader-2-fill fs-19"></i>
+                              </span>
+                            )}
                           </Button>
                         </div>
                       </div>

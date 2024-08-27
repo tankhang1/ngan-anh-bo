@@ -15,7 +15,6 @@ const employeeSchema = Yup.object().shape({
     .required("Trường bắt buộc"),
   email: Yup.string().email().required("Trường bắt buộc"),
   gender: Yup.number().required("Trường bắt buộc"),
-  birthday: Yup.string().required("Trường bắt buộc"),
   citizen_number: Yup.string(),
   citizen_day: Yup.string(),
   note: Yup.string(),

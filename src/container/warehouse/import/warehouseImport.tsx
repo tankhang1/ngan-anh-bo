@@ -45,9 +45,6 @@ const WarehouseImport = () => {
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
-  const [listImports, setListImports] = useState<TWarehouseDocumentImport[]>(
-    []
-  );
   const [page, setPage] = useState(1);
 
   const {
@@ -95,7 +92,6 @@ const WarehouseImport = () => {
       query?.type === values?.type
     )
       return;
-    setListImports([]);
     setTimeout(() => {
       setQuery({
         st: +(format(values.start_date, "yyyyMMdd") + "0000"),
@@ -109,15 +105,7 @@ const WarehouseImport = () => {
   const handleExportExcel = () => {
     if (imports) exportExcelFile(imports, "Thông tin nhập kho");
   };
-  useEffect(() => {
-    if (
-      counterImports &&
-      imports &&
-      listImports.length + imports.length <= counterImports
-    ) {
-      setListImports([...listImports, ...imports]);
-    }
-  }, [imports, counterImports]);
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -344,7 +332,7 @@ const WarehouseImport = () => {
                 ),
               },
             ]}
-            data={listImports || []}
+            data={imports || []}
             externalSearch={search}
             searchByExternal="document_code"
           />

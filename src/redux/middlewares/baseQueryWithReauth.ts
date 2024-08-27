@@ -3,6 +3,7 @@ import { BaseQueryFn, FetchArgs } from "@reduxjs/toolkit/query";
 import baseQuery from "./baseQuery";
 import { resetAccountInfo, resetToken } from "../slices/authSlice";
 import { HTTPS_METHOD } from "../../constants";
+import store from "../store";
 
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
@@ -17,11 +18,27 @@ const baseQueryWithReauth: BaseQueryFn<
       {
         url: "/refresh-token",
         method: HTTPS_METHOD.POST,
+        headers: {
+          Authorization: `Bearer ${store.getState().auth.token}`, // Correct syntax for the Authorization header
+        },
       },
       api,
       extraOptions
     );
-
+    console.log(
+      "rebase auth",
+      refreshResult,
+      {
+        url: "/refresh-token",
+        method: HTTPS_METHOD.POST,
+        headers: {
+          Authorization: `Bearer ${store.getState().auth.token}`, // Correct syntax for the Authorization header
+        },
+      },
+      args,
+      api,
+      extraOptions
+    );
     if (refreshResult.data) {
       // Assuming the API response contains the new token
       const newToken = (refreshResult.data as { data: string }).data;

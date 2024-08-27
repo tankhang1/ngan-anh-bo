@@ -92,18 +92,17 @@ const AppTable = <T extends DataItem>({
     isHeader,
   ]);
   const pagingData = useMemo(() => {
+    if (setExternalPage) {
+      return filterData;
+    }
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE;
     return filterData.slice(from, to);
-  }, [filterData, page]);
-  const MAX_PAGE = useMemo(
-    () =>
-      Math.ceil(
-        (searchValue?.length === 0 && externalSearch?.length === 0
-          ? maxPage ?? filterData.length
-          : filterData.length ?? 0) / PAGE_SIZE
-      ),
-    [deferSearchValue, filterOption, filterData, maxPage, externalSearch]
+  }, [filterData, page, setExternalPage]);
+  const MAX_PAGE = Math.ceil(
+    (searchValue?.length === 0 && externalSearch?.length === 0
+      ? maxPage ?? filterData.length
+      : filterData.length ?? 0) / PAGE_SIZE
   );
 
   const listButtonPaging = useMemo(() => {
@@ -119,7 +118,7 @@ const AppTable = <T extends DataItem>({
       if (index + page <= MAX_PAGE) return index + page;
       return null;
     });
-  }, [data.length, page]);
+  }, [data.length, page, MAX_PAGE]);
   useEffect(() => {
     if (page !== 1) {
       setPage(1);
@@ -234,7 +233,7 @@ const AppTable = <T extends DataItem>({
       </Card.Body>
       <Card.Footer>
         <div className="d-flex flex-sm-row gap-2 flex-column align-items-center">
-          <div>
+          <div className="text-black">
             Tổng cộng {externalSearch ? filterData.length : maxPage} items{" "}
             <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
           </div>

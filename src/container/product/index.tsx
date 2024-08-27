@@ -99,6 +99,7 @@ function ProductPage() {
                       placeholder="Tìm kiếm thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
+                      value={search}
                     />
                     <Button
                       variant=""
@@ -126,7 +127,10 @@ function ProductPage() {
                         <Dropdown.Item
                           active={item.key === searchBy}
                           key={index}
-                          onClick={() => setSearchBy(item.key)}
+                          onClick={() => {
+                            setSearch("");
+                            setSearchBy(item.key);
+                          }}
                         >
                           {item.label}
                         </Dropdown.Item>
@@ -155,7 +159,10 @@ function ProductPage() {
                           <Dropdown.Item
                             active={item.key === changeType}
                             key={index}
-                            onClick={() => setChangeType(item.key)}
+                            onClick={() => {
+                              setSearch("");
+                              setChangeType(item.key);
+                            }}
                           >
                             {item.label}
                           </Dropdown.Item>
@@ -215,6 +222,7 @@ function ProductPage() {
             title="Thông tin sản phẩm"
             isLoading={isLoadingProduct}
             isChange={changeType}
+            maxPage={filterProducts.length}
             headers={[
               {
                 key: "image_url",

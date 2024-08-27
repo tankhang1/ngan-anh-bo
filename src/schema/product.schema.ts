@@ -79,11 +79,11 @@ const productSchema = Yup.object().shape({
     .min(1, "Điểm phải lớn hơn hoặc bằng 1")
     .required("Điểm là bắt buộc"),
 
-  c1_price_vnd: Yup.number()
+  c1_price_vnd: Yup.string()
     .min(0, "Giá C1 phải lớn hơn hoặc bằng 0")
     .required("Giá C1 là bắt buộc"),
 
-  c2_price_vnd: Yup.number()
+  c2_price_vnd: Yup.string()
     .min(0, "Giá C2 phải lớn hơn hoặc bằng 0")
     .required("Giá C2 là bắt buộc"),
 });

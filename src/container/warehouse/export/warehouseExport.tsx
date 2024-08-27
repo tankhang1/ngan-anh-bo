@@ -45,12 +45,11 @@ const WarehouseExport = () => {
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
-  const [listExports, setListExports] = useState<TWarehouseDocument[]>([]);
   const [page, setPage] = useState(1);
 
   const {
     data: exports,
-    isLoading: loadingExport,
+    isLoading: isLoadingExport,
     refetch: refetchExport,
   } = useGetExportDocumentsQuery(
     {
@@ -95,7 +94,6 @@ const WarehouseExport = () => {
       query?.type === values?.type
     )
       return;
-    setListExports([]);
     setTimeout(() => {
       setQuery({
         st: +(format(values.start_date, "yyyyMMdd") + "0000"),
@@ -108,15 +106,7 @@ const WarehouseExport = () => {
   const handleExportExcel = () => {
     if (exports) exportExcelFile(exports, "Thông tin xuất kho");
   };
-  useEffect(() => {
-    if (
-      counterExports &&
-      exports &&
-      listExports.length + exports.length <= counterExports
-    ) {
-      setListExports([...listExports, ...exports]);
-    }
-  }, [exports, counterExports]);
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -279,7 +269,7 @@ const WarehouseExport = () => {
           <AppTable
             isHeader={false}
             title="Thông tin xuất kho"
-            isLoading={loadingExport}
+            isLoading={isLoadingExport}
             maxPage={counterExports}
             setExternalPage={setPage}
             headers={[
@@ -335,7 +325,7 @@ const WarehouseExport = () => {
                 ),
               },
             ]}
-            data={listExports || []}
+            data={exports || []}
             externalSearch={search}
             searchByExternal="document_code"
           />

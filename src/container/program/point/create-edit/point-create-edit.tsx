@@ -182,8 +182,10 @@ function PointCreateEdit() {
     },
     [pointProgram]
   );
-  const [updatePointProgram] = useUpdatePointProgramMutation();
-  const [createPointProgram] = useCreatePointProgramMutation();
+  const [updatePointProgram, { isLoading: isLoadingUpdate }] =
+    useUpdatePointProgramMutation();
+  const [createPointProgram, { isLoading: isLoadingCreate }] =
+    useCreatePointProgramMutation();
   //@ts-ignore
   const handleCreatePointProgram = async (values: TPointCreateForm) => {
     if (isCreate === "true") {
@@ -450,14 +452,33 @@ function PointCreateEdit() {
 
                   {isCreate === "true" ? (
                     <button
-                      className="btn  btn-purple-light ms-2"
+                      className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                        isLoadingCreate && "btn-loader"
+                      }`}
                       type="submit"
                     >
-                      Thêm mới
+                      <span>Thêm mới</span>
+                      {isLoadingCreate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
                     </button>
                   ) : (
-                    <button className="btn btn-purple-light" type="submit">
-                      {!isEdit ? "Chỉnh sửa" : "Lưu"}
+                    <button
+                      className={`btn btn-purple-light justify-content-center align-items-center ${
+                        isLoadingUpdate && "btn-loader"
+                      }`}
+                      type="submit"
+                    >
+                      <span>
+                        {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
+                      </span>
+                      {isLoadingUpdate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
                     </button>
                   )}
                 </div>
@@ -493,6 +514,7 @@ function PointCreateEdit() {
                       name="name"
                       value={values.name}
                       onChange={handleChange}
+                      className="input-placeholder"
                       isInvalid={touched.name && !!errors.name}
                       disabled={isDisableAccess("name")}
                     />
@@ -512,6 +534,7 @@ function PointCreateEdit() {
                         placeholder="Ngày bắt đầu"
                         name="time_start"
                         value={values.time_start}
+                        className="input-placeholder"
                         lang="vi"
                         onChange={handleChange}
                         isInvalid={touched.time_start && !!errors.time_start}
@@ -531,6 +554,7 @@ function PointCreateEdit() {
                         type="date"
                         placeholder="Ngày kết thúc"
                         name="time_end"
+                        className="input-placeholder"
                         value={values.time_end}
                         onChange={handleChange}
                         isInvalid={touched.time_end && !!errors.time_end}
@@ -564,7 +588,7 @@ function PointCreateEdit() {
                               ...(mapProduct ?? []),
                             ] as any)
                       }
-                      className="basic-multi-select custom-multi mb-3"
+                      className="basic-multi-select custom-multi mb-3 input-placeholder"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -637,7 +661,7 @@ function PointCreateEdit() {
                               ...(OBJECTIVES_SELECT || []),
                             ] as any)
                       }
-                      className="basic-multi-select custom-multi mb-3"
+                      className="basic-multi-select custom-multi mb-3 input-placeholder"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -663,7 +687,7 @@ function PointCreateEdit() {
                     </Form.Label>
                     <Form.Check
                       type="switch"
-                      className="form-check-lg form-switch"
+                      className="form-check-lg form-switch input-placeholder"
                       checked={values.agent_or_group_agent === 1 ? true : false}
                       onChange={(value) => {
                         setFieldValue(
@@ -688,7 +712,7 @@ function PointCreateEdit() {
                         Nhóm đại lý <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Select
-                        className="form-select"
+                        className="form-select input-placeholder"
                         name="retailer_group"
                         defaultValue={values.retailer_group}
                         onChange={handleChange}
@@ -731,7 +755,7 @@ function PointCreateEdit() {
                                 ...(listAgencyC1 || []),
                               ] as any)
                         }
-                        className=" basic-multi-select custom-multi mb-3"
+                        className=" basic-multi-select custom-multi mb-3 input-placeholder"
                         id="choices-multiple-default"
                         menuPlacement="auto"
                         classNamePrefix="Select2"
@@ -759,7 +783,7 @@ function PointCreateEdit() {
                       isMulti
                       name="goods_type"
                       options={[...(TypeBinExport || [])]}
-                      className="basic-multi-select custom-multi mb-3"
+                      className="basic-multi-select custom-multi mb-3 input-placeholder"
                       id="choices-multiple-default"
                       menuPlacement="auto"
                       classNamePrefix="Select2"
@@ -784,7 +808,7 @@ function PointCreateEdit() {
                     </Form.Label>
                     <Form.Check
                       type="switch"
-                      className="form-check-lg form-switch"
+                      className="form-check-lg form-switch input-placeholder"
                       checked={values.status === 3 ? true : false}
                       onChange={(value) => {
                         setFieldValue("status", value.target.checked ? 3 : 1);

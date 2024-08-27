@@ -34,8 +34,8 @@ const AGENT_FILTERS = [
     label: "ID",
   },
   {
-    key: "name",
-    label: "Tên đại lý",
+    key: "customer_name",
+    label: "Tên khách hàng",
   },
   {
     key: "phone",
@@ -51,18 +51,16 @@ function CustomerValidation() {
 
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
-  const deferSearchValue = useDeferredValue(search);
   const [customerType, setCustomerType] = useState<string>(
     groupObjectives?.[0].symbol || ""
   );
   const [page, setPage] = useState(1);
-  const [listCustomers, setListCustomers] = useState<TCustomerRes[]>([]);
   const navigate = useNavigate();
 
   const onChangeCustomerType = (type: string) => {
     if (type !== customerType) {
+      setSearch("");
       setCustomerType(type);
-      setListCustomers([]);
     }
   };
   const { data: counterCustomer } = useGetCounterCustomerQuery(
@@ -88,15 +86,6 @@ function CustomerValidation() {
         skip: customerType ? false : true,
       }
     );
-  useEffect(() => {
-    if (
-      counterCustomer &&
-      customers &&
-      listCustomers.length + customers.length <= counterCustomer
-    ) {
-      setListCustomers([...listCustomers, ...customers]);
-    }
-  }, [customers, counterCustomer]);
 
   useEffect(() => {
     if (groupObjectives) {
@@ -119,6 +108,7 @@ function CustomerValidation() {
                       placeholder="Tìm kiếm thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
+                      value={search}
                     />
                     <Button
                       variant=""
@@ -169,7 +159,10 @@ function CustomerValidation() {
                         <Dropdown.Item
                           active={item.symbol === customerType}
                           key={index}
-                          onClick={() => onChangeCustomerType(item.symbol)}
+                          onClick={() => {
+                            setSearch("");
+                            onChangeCustomerType(item.symbol);
+                          }}
                         >
                           {item.name}
                         </Dropdown.Item>
@@ -225,7 +218,7 @@ function CustomerValidation() {
         <Card className="custom-card">
           <AppTable
             isHeader={false}
-            externalSearch={deferSearchValue}
+            externalSearch={search}
             title="Thông tin đại lý"
             isLoading={isLoadingCustomer}
             setExternalPage={setPage}
@@ -344,7 +337,7 @@ function CustomerValidation() {
                   }
                 : undefined,
             ]}
-            data={listCustomers || []}
+            data={customers || []}
             filters={[
               {
                 key: "status",

@@ -1,7 +1,5 @@
 import * as Yup from "yup";
 const customerSchema = Yup.object().shape({
-  customer_code: Yup.string().required("Mã khách hàng là bắt buộc"),
-
   customer_name: Yup.string().required("Tên khách hàng là bắt buộc"),
 
   customer_province: Yup.string().required("Tỉnh thành khách hàng là bắt buộc"),
@@ -12,9 +10,7 @@ const customerSchema = Yup.object().shape({
 
   province: Yup.string().nullable(),
 
-  info_primary: Yup.number()
-    .required("Thông tin chính là bắt buộc")
-    .min(1, "Thông tin chính không hợp lệ"),
+  info_primary: Yup.number().required("Thông tin chính là bắt buộc"),
 
   phone: Yup.string()
     .required("Số điện thoại là bắt buộc")

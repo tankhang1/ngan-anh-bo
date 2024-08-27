@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -24,50 +24,44 @@ import { CircularProgress } from "@mui/material";
 
 function SearchProductCode() {
   const [searchValue, setSearchValue] = useState("");
-  // const [product, setProduct] = useState<TProduct>();
-  // const [agent, setAgent] = useState<TAgent>();
-  // const [binPackage, setBinPackage] = useState<TBinPackage>();
   const [isPermitSearch, setIsPermitSearch] = useState(false);
-  const { data: binPackage, isLoading: isLoadingBinPackage } =
+  const [isLoading, setIsLoading] = useState(false);
+  const { data: binPackage, isFetching: isFetchingBinPackage } =
     useGetBinPackageByCodeQuery(
       {
-        val: searchValue,
+        val: searchValue.trim(),
       },
       {
-        skip: !isPermitSearch,
+        skip: !isPermitSearch || !searchValue,
       }
     );
-  const { data: product, isLoading: isLoadingProduct } =
-    useGetProductBySkuQuery(
-      {
-        sku: binPackage?.product_code || "",
-      },
-      {
-        skip: !binPackage?.product_code,
-      }
-    );
+  const { data: product } = useGetProductBySkuQuery(
+    {
+      sku: binPackage?.product_code || "",
+    },
+    {
+      skip: !binPackage?.product_code,
+    }
+  );
   const { data: warehouseExport } = useGetWarehouseExportBinQuery(
     binPackage?.seri || "",
     {
       skip: !binPackage?.seri,
     }
   );
-  const { data: customer, isLoading: isLoadingCustomer } =
-    useGetCustomerByCodeQuery(
-      {
-        c: binPackage?.customer_code || "",
-      },
-      {
-        skip: !binPackage?.customer_code,
-      }
-    );
+  const { data: customer } = useGetCustomerByCodeQuery(
+    {
+      c: binPackage?.customer_code || "",
+    },
+    {
+      skip: !binPackage?.customer_code,
+    }
+  );
   const onSearch = () => {
     setIsPermitSearch(true);
+    setIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   setIsPermitSearch(false);
-  // }, [binPackage]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -87,12 +81,17 @@ function SearchProductCode() {
                     onKeyDown={(e) => {
                       if (e.key === "Enter") onSearch();
                     }}
+                    onBeforeInputCapture={() => {
+                      setIsPermitSearch(false);
+                      setIsLoading(true);
+                    }}
                   />
                   <Button
                     className="btn btn-danger rounded-2"
                     onClick={() => {
                       setIsPermitSearch(false);
                       setSearchValue("");
+                      setIsLoading(false);
                     }}
                   >
                     <i className="ti ti-x"></i>
@@ -115,230 +114,229 @@ function SearchProductCode() {
       <Row>
         <Col md={6}>
           <Stack>
-            {isPermitSearch && (
-              <Card className="custom-card p-3">
-                <Card.Header>
-                  <h5>Thông tin sản phẩm</h5>
-                </Card.Header>
-                <Card.Body>
-                  {isLoadingProduct || isLoadingBinPackage ? (
-                    <div className="d-flex justify-content-center align-items-center">
-                      <CircularProgress />
-                    </div>
-                  ) : (
-                    <Row>
-                      <Col md={6}>
-                        <img
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "fill",
-                            borderRadius: 10,
-                          }}
-                          src={
-                            product?.code
-                              ? `${BASE_PORT}/${product?.code}.jpg`
-                              : "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
-                          }
-                        />
-                      </Col>
-                      <Col md={6}>
-                        <Stack gap={1}>
-                          <span className="text-black fs-17 fw-smibold">
-                            &#x2022; Mã sản phẩm :{" "}
-                            <span className="fw-normal">{product?.code}</span>
+            <Card className="custom-card p-3">
+              <Card.Header>
+                <h5>Thông tin sản phẩm</h5>
+              </Card.Header>
+              <Card.Body>
+                {isLoading || isFetchingBinPackage ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    <CircularProgress />
+                  </div>
+                ) : !binPackage ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    Chưa có thông tin
+                  </div>
+                ) : (
+                  <Row>
+                    <Col md={6}>
+                      <img
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "fill",
+                          borderRadius: 10,
+                        }}
+                        src={
+                          product?.code
+                            ? `${BASE_PORT}/${product?.code}.jpg`
+                            : "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
+                        }
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <Stack gap={1}>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Mã sản phẩm :{" "}
+                          <span className="fw-normal">{product?.code}</span>
+                        </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Tên sản phẩm :{" "}
+                          <span className="fw-normal">
+                            {product?.product_name_detail}
                           </span>
-                          <span className="text-black fs-17 fw-smibold">
-                            &#x2022; Tên sản phẩm :{" "}
-                            <span className="fw-normal">
-                              {product?.product_name_detail}
-                            </span>
+                        </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Nhóm sản phẩm :{" "}
+                          <span className="fw-normal">
+                            {product?.category_name}
                           </span>
-                          <span className="text-black fs-17 fw-smibold">
-                            &#x2022; Nhóm sản phẩm :{" "}
-                            <span className="fw-normal">
-                              {product?.category_name}
-                            </span>
-                          </span>
-                          <span className="text-black fs-17 fw-smibold">
-                            &#x2022; Mã nhắn tin / QR :{" "}
-                            <span className="fw-normal">{searchValue}</span>
-                          </span>
+                        </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Mã nhắn tin / QR :{" "}
+                          <span className="fw-normal">{searchValue}</span>
+                        </span>
 
-                          <span className="text-black fs-17 fw-smibold">
-                            &#x2022; Ngày sản xuất :{" "}
-                            <span className="fw-normal">
-                              {binPackage?.manufacture_date
-                                ? fDate(binPackage.manufacture_date)
-                                : ""}
-                            </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Ngày sản xuất :{" "}
+                          <span className="fw-normal">
+                            {binPackage?.manufacture_date
+                              ? fDate(binPackage.manufacture_date)
+                              : ""}
                           </span>
-                          <span className="text-black fs-17 fw-smibold">
-                            &#x2022; Ngày hết hạn :{" "}
-                            <span className="fw-normal">
-                              {binPackage?.expiration_date
-                                ? fDate(binPackage.expiration_date)
-                                : ""}
-                            </span>
+                        </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Ngày hết hạn :{" "}
+                          <span className="fw-normal">
+                            {binPackage?.expiration_date
+                              ? fDate(binPackage.expiration_date)
+                              : ""}
                           </span>
-                          <span className="text-black fs-17 fw-smibold">
-                            &#x2022; Trạng thái :{" "}
-                            <span className="fw-normal">
-                              {binPackage?.status === 1 ? (
-                                <Badge bg="danger">Đã sử dụng</Badge>
-                              ) : binPackage?.status === 2 ? (
-                                <Badge bg="warning">
-                                  Sản phẩm được thu hồi
-                                </Badge>
-                              ) : (
-                                <Badge bg="success">Chưa sử dụng</Badge>
-                              )}
-                            </span>
+                        </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Trạng thái :{" "}
+                          <span className="fw-normal">
+                            {binPackage?.status === 1 ? (
+                              <Badge bg="danger">Đã sử dụng</Badge>
+                            ) : binPackage?.status === 2 ? (
+                              <Badge bg="warning">Sản phẩm được thu hồi</Badge>
+                            ) : (
+                              <Badge bg="success">Chưa sử dụng</Badge>
+                            )}
                           </span>
-                        </Stack>
-                      </Col>
-                    </Row>
-                  )}
-                </Card.Body>
-              </Card>
-            )}
-            {isPermitSearch && (
-              <Card className="custom-card p-3">
-                <Card.Header>
-                  <h5>Thông tin xuất kho</h5>
-                </Card.Header>
-                <Card.Body>
-                  {!isLoadingBinPackage ? (
-                    <Stack gap={1}>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Mã thùng :{" "}
-                        <span className="fw-normal">{binPackage?.seri}</span>
-                      </span>
+                        </span>
+                      </Stack>
+                    </Col>
+                  </Row>
+                )}
+              </Card.Body>
+            </Card>
 
-                      <span className="text-black fs-17 fw-smibold">
-                        - Lô sản xuất :{" "}
-                        <span className="fw-normal">
-                          {binPackage?.batch_number}
-                        </span>
+            <Card className="custom-card p-3">
+              <Card.Header>
+                <h5>Thông tin xuất kho</h5>
+              </Card.Header>
+              <Card.Body>
+                {isLoading || isFetchingBinPackage ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    <CircularProgress />
+                  </div>
+                ) : !binPackage ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    Chưa có thông tin
+                  </div>
+                ) : (
+                  <Stack gap={1}>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Mã thùng :{" "}
+                      <span className="fw-normal">{binPackage?.seri}</span>
+                    </span>
+
+                    <span className="text-black fs-17 fw-smibold">
+                      - Lô sản xuất :{" "}
+                      <span className="fw-normal">
+                        {binPackage?.batch_number}
                       </span>
-                      {/*Table code export bin lấy được agent code , batchnumber , mã lô, thời gian xuất kho, loại hàng hóa, địa chỉ giao, người nhận hàng, nhân viên giao hàng, loại hàng hóa phần xuất kho --> từ seri thùng lấy ra */}
-                      <span className="text-black fs-17 fw-smibold">
-                        - Ngày xuất kho :{" "}
-                        <span className="fw-normal">
-                          {warehouseExport?.time}
-                        </span>
+                    </span>
+                    {/*Table code export bin lấy được agent code , batchnumber , mã lô, thời gian xuất kho, loại hàng hóa, địa chỉ giao, người nhận hàng, nhân viên giao hàng, loại hàng hóa phần xuất kho --> từ seri thùng lấy ra */}
+                    <span className="text-black fs-17 fw-smibold">
+                      - Ngày xuất kho :{" "}
+                      <span className="fw-normal">{warehouseExport?.time}</span>
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Đại lý cấp 1 :{" "}
+                      <span className="fw-normal">
+                        {warehouseExport?.agent_name}
                       </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Đại lý cấp 1 :{" "}
-                        <span className="fw-normal">
-                          {warehouseExport?.agent_name}
-                        </span>
-                      </span>
-                    </Stack>
-                  ) : (
-                    <div className="d-flex justify-content-center align-items-center">
-                      <CircularProgress />
-                    </div>
-                  )}
-                </Card.Body>
-              </Card>
-            )}
+                    </span>
+                  </Stack>
+                )}
+              </Card.Body>
+            </Card>
           </Stack>
         </Col>
         <Col md={6}>
           <Stack>
-            {isPermitSearch && (
-              <Card className="custom-card p-3">
-                <Card.Header>
-                  <h5>Thông tin khách hàng đăng ký</h5>
-                </Card.Header>
-                <Card.Body>
-                  {!isLoadingCustomer ? (
-                    binPackage ? (
-                      <Stack gap={1}>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Tên khách hàng :{" "}
-                          <span className="fw-normal">
-                            {binPackage?.register_name}
-                          </span>
-                        </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Số điện thoại :{" "}
-                          <span className="fw-normal">
-                            {binPackage?.register_phone}
-                          </span>
-                        </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          - Tỉnh :{" "}
-                          <span className="fw-normal">
-                            {binPackage?.register_province_name}
-                          </span>
-                        </span>
-                      </Stack>
-                    ) : (
-                      <div className="d-flex justify-content-center align-items-center">
-                        Chưa có thông tin
-                      </div>
-                    )
-                  ) : (
-                    <div className="d-flex justify-content-center align-items-center">
-                      <CircularProgress />
-                    </div>
-                  )}
-                </Card.Body>
-              </Card>
-            )}
-            {isPermitSearch && (
-              <Card className="custom-card p-3">
-                <Card.Header>
-                  <h5>Thông tin khách hàng đã xác thực</h5>
-                </Card.Header>
-                <Card.Body>
-                  {!isLoadingCustomer ? (
-                    <Stack gap={1}>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Đối tượng khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_type}
-                        </span>
+            <Card className="custom-card p-3">
+              <Card.Header>
+                <h5>Thông tin khách hàng đăng ký</h5>
+              </Card.Header>
+              <Card.Body>
+                {isLoading || isFetchingBinPackage ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    <CircularProgress />
+                  </div>
+                ) : binPackage ? (
+                  <Stack gap={1}>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Tên khách hàng :{" "}
+                      <span className="fw-normal">
+                        {binPackage?.register_name}
                       </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Mã khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_code}
-                        </span>
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Số điện thoại :{" "}
+                      <span className="fw-normal">
+                        {binPackage?.register_phone}
                       </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Tên khách hàng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_name}
-                        </span>
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Tỉnh :{" "}
+                      <span className="fw-normal">
+                        {binPackage?.register_province_name}
                       </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Số điện thoại :{" "}
-                        <span className="fw-normal">{customer?.phone}</span>
+                    </span>
+                  </Stack>
+                ) : (
+                  <div className="d-flex justify-content-center align-items-center">
+                    Chưa có thông tin
+                  </div>
+                )}
+              </Card.Body>
+            </Card>
+            <Card className="custom-card p-3">
+              <Card.Header>
+                <h5>Thông tin khách hàng đã xác thực</h5>
+              </Card.Header>
+              <Card.Body>
+                {isLoading || isFetchingBinPackage ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    <CircularProgress />
+                  </div>
+                ) : !binPackage ? (
+                  <div className="d-flex justify-content-center align-items-center">
+                    Chưa có thông tin
+                  </div>
+                ) : (
+                  <Stack gap={1}>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Đối tượng khách hàng :{" "}
+                      <span className="fw-normal">
+                        {customer?.customer_type}
                       </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Tỉnh :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_province_name}
-                        </span>
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Mã khách hàng :{" "}
+                      <span className="fw-normal">
+                        {customer?.customer_code}
                       </span>
-                      <span className="text-black fs-17 fw-smibold">
-                        - Vùng :{" "}
-                        <span className="fw-normal">
-                          {customer?.customer_area}
-                        </span>
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Tên khách hàng :{" "}
+                      <span className="fw-normal">
+                        {customer?.customer_name}
                       </span>
-                    </Stack>
-                  ) : (
-                    <div className="d-flex justify-content-center align-items-center">
-                      <CircularProgress />
-                    </div>
-                  )}
-                </Card.Body>
-              </Card>
-            )}
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Số điện thoại :{" "}
+                      <span className="fw-normal">{customer?.phone}</span>
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Tỉnh :{" "}
+                      <span className="fw-normal">
+                        {customer?.customer_province_name}
+                      </span>
+                    </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Vùng :{" "}
+                      <span className="fw-normal">
+                        {customer?.customer_area}
+                      </span>
+                    </span>
+                  </Stack>
+                )}
+              </Card.Body>
+            </Card>
           </Stack>
         </Col>
       </Row>
