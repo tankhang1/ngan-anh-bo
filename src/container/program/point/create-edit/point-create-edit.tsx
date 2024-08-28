@@ -23,6 +23,8 @@ import {
 } from "../../../../redux/api/other/other.api";
 import {
   useGetListAgencyC1Query,
+  useGetListAgentsQuery,
+  useGetListCustomerQuery,
   useGetListGroupRetailerQuery,
 } from "../../../../redux/api/manage/manage.api";
 import {
@@ -73,6 +75,7 @@ function PointCreateEdit() {
   });
   const { data: listAgencyC1, isLoading: isLoadingAgency } =
     useGetListAgencyC1Query();
+  console.log(listAgencyC1);
   const { data: pointProgram } = useGetListProgramPointStatusQuery(
     {
       status: +(id?.split("_")[1] ?? 0),

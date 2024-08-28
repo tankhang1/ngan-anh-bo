@@ -349,11 +349,20 @@ export const manageApi = createApi({
     }),
     getListAgencyC1: builder.query<{ label: string; value: string }[], void>({
       query: () => ({
-        url: "/api/register/agent-c1/list",
+        url: "/api/customer/list",
         method: HTTPS_METHOD.GET,
+        params: {
+          nu: 0,
+          sz: 9999,
+          t: "RETAILER1",
+          s: 1,
+        },
       }),
-      transformResponse: (response: TAgencyC1[]) => {
-        return response.map((item) => ({ label: item.name, value: item.code }));
+      transformResponse: (response: TCustomerRes[]) => {
+        return response.map((item) => ({
+          label: item.customer_name!,
+          value: item.customer_code!,
+        }));
       },
       providesTags: (response) =>
         response

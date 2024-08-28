@@ -165,6 +165,8 @@ function TopupCreateEdit() {
         return false;
       case "products":
         return false;
+      case "objectives":
+        return false;
       case "price":
         return false;
       case "status":
@@ -570,7 +572,7 @@ function TopupCreateEdit() {
                       value={values.objectives}
                       isClearable
                       onChange={(value) => setFieldValue("objectives", value)}
-                      isDisabled={true}
+                      isDisabled={isDisableAccess("objectives")}
                     />
                     {errors.objectives && touched.objectives && (
                       <p style={{ color: "red", fontSize: 12 }}>
