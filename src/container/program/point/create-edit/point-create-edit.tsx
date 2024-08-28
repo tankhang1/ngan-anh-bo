@@ -69,6 +69,7 @@ function PointCreateEdit() {
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
     skip: isCreate !== "true",
+    refetchOnMountOrArgChange: true,
   });
   const { data: listAgencyC1, isLoading: isLoadingAgency } =
     useGetListAgencyC1Query();

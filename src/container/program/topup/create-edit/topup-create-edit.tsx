@@ -72,6 +72,7 @@ function TopupCreateEdit() {
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
     skip: isCreate !== "true",
+    refetchOnMountOrArgChange: true,
   });
   const { data: topupProgram } = useGetListProgramTopupStatusQuery(
     {

@@ -34,7 +34,9 @@ function CustomerValidationCreateEdit() {
   const navigate = useNavigate();
 
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
-  const { data: newUUID } = useGetNewUUIDQuery();
+  const { data: newUUID } = useGetNewUUIDQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
   const { data: groupRetailers } = useGetListGroupRetailerQuery();
   const { data: customer } = useGetListCustomerQuery(
     {

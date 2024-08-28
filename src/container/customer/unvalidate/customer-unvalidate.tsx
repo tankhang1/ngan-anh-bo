@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import React, { Fragment, useDeferredValue, useState } from "react";
 import {
   Button,
   Card,
@@ -15,12 +15,8 @@ import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
-  useGetCounterCustomerRegisterQuery,
   useGetListCustomerQuery,
-  useGetListCustomerRegisterQuery,
-  useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
-import { PROVINCES } from "../../../constants";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
@@ -52,7 +48,6 @@ function CustomerUnValidation() {
   const deferSearchValue = useDeferredValue(search);
   const [customerType, setCustomerType] = useState(CUSTOMER_TYPE[0].key);
   const [page, setPage] = useState(1);
-  const [listCustomers, setListCustomers] = useState<TCustomerRes[]>([]);
   const navigate = useNavigate();
 
   // const { data: groupObjectives } = useGetListGroupObjectiveQuery();
@@ -80,18 +75,9 @@ function CustomerUnValidation() {
   const onChangeCustomerType = (type: string) => {
     if (type !== customerType) {
       setCustomerType(type);
-      setListCustomers([]);
     }
   };
-  useEffect(() => {
-    if (
-      counterCustomer &&
-      customers &&
-      listCustomers.length + customers.length <= counterCustomer
-    ) {
-      setListCustomers([...listCustomers, ...customers]);
-    }
-  }, [customers, counterCustomer]);
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -327,7 +313,7 @@ function CustomerUnValidation() {
                   }
                 : undefined,
             ]}
-            data={listCustomers || []}
+            data={customers || []}
             filters={[
               {
                 key: "status",

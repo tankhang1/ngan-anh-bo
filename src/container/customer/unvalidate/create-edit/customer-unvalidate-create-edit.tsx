@@ -49,7 +49,9 @@ function CustomerUnValidationCreateEdit() {
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
-  const { data: newUUID } = useGetNewUUIDQuery();
+  const { data: newUUID } = useGetNewUUIDQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
   const { data: customer } = useGetListCustomerRegisterQuery(
     {
       t: id?.split("_")[1],

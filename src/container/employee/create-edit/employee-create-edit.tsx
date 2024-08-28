@@ -51,21 +51,10 @@ function EmployeeCreateEdit() {
 
   const { Formik } = formik;
   const navigate = useNavigate();
-  // const schema = yup.object().shape({
-  //   customer_code: yup.string().required(),
-  //   customer_name: yup.string().required(),
-  //   customer_province: yup.string().required(),
-  //   customer_type: yup.string().required("Trường bắt buộc"),
-  //   info_primary: yup.number().required(),
-  //   sign_board: yup.string().required(),
-  //   name: yup.string().required("Trường bắt buộc"),
-  //   province: yup.string().required("Trường bắt ")
-  //   customer_address: yup.string().required(),
-  //   customer_district: yup.string().required(),
-  // });
 
   const { data: newUUID } = useGetNewUUIDQuery(null, {
     skip: isCreate !== "true",
+    refetchOnMountOrArgChange: true,
   });
   const { data: employees } = useGetListEmployeeQuery(null, {
     selectFromResult: ({ data }) => ({
