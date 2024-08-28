@@ -324,7 +324,7 @@ function CustomerValidation() {
                           className="btn btn-icon btn-sm btn-primary-ghost"
                           onClick={() =>
                             navigate(
-                              `ce/${false}/${value.id}_${customerType}_${
+                              `ce/${false}/${value.uuid}_${customerType}_${
                                 page - 1
                               }`
                             )

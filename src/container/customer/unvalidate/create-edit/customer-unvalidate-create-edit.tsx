@@ -14,6 +14,7 @@ import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  useGetListCustomerQuery,
   useGetListCustomerRegisterQuery,
   useGetListEmployeeQuery,
   useGetListGroupObjectiveQuery,
@@ -51,8 +52,9 @@ function CustomerUnValidationCreateEdit() {
   const { data: provinces } = useGetListProvinceQuery();
   const { data: newUUID } = useGetNewUUIDQuery(null, {
     refetchOnMountOrArgChange: true,
+    skip: isCreate !== "true",
   });
-  const { data: customer } = useGetListCustomerRegisterQuery(
+  const { data: customer } = useGetListCustomerQuery(
     {
       t: id?.split("_")[1],
       nu: +(id?.split("_")[2] ?? 0),
@@ -61,12 +63,11 @@ function CustomerUnValidationCreateEdit() {
     },
     {
       selectFromResult: ({ data }) => ({
-        data: data?.find((customer) => customer.id == id?.split("_")[0]),
+        data: data?.find((customer) => customer.uuid == id?.split("_")[0]),
       }),
       skip: isCreate === "true",
     }
   );
-
   const [createCustomer, { isLoading: isLoadingCreate }] =
     useCreateUpdateCustomerMutation();
   const [updateCustomer, { isLoading: isLoadingUpdate }] =
@@ -202,7 +203,7 @@ function CustomerUnValidationCreateEdit() {
     <Fragment>
       <Formik
         initialValues={{
-          uuid: customer?.uuid ?? newUUID?.toString(),
+          uuid: customer?.uuid,
           customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
           customer_province: customer?.customer_province ?? "",
@@ -245,7 +246,13 @@ function CustomerUnValidationCreateEdit() {
           touched,
           errors,
         }) => (
-          <form noValidate onSubmit={handleSubmit}>
+          <form
+            noValidate
+            onSubmit={(e) => {
+              console.log(errors);
+              handleSubmit(e);
+            }}
+          >
             <Stack>
               <Card className="custom-card">
                 <Card.Header className="justify-content-between">
@@ -307,7 +314,12 @@ function CustomerUnValidationCreateEdit() {
                         className={`btn  btn-purple-light justify-content-center align-items-center ${
                           isLoadingUpdate && "btn-loader "
                         }`}
-                        type="submit"
+                        onClick={() => {
+                          if (!isEdit) setIsEdit(true);
+                          else {
+                            if (!errors) handleSubmitAgent(values);
+                          }
+                        }}
                       >
                         <span>{!isEdit ? "Chỉnh sửa" : "Lưu"}</span>
                         {isLoadingUpdate && (

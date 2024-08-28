@@ -47,7 +47,7 @@ function CustomerValidationCreateEdit() {
     },
     {
       selectFromResult: ({ data }) => ({
-        data: data?.find((customer) => customer.id == id?.split("_")[0]),
+        data: data?.find((customer) => customer.uuid == id?.split("_")[0]),
       }),
       skip: isCreate === "true",
     }
@@ -230,7 +230,12 @@ function CustomerValidationCreateEdit() {
                         className={`btn btn-purple-light justify-content-center align-items-center ${
                           isLoadingUpdate && "btn-loader"
                         }`}
-                        type="submit"
+                        onClick={() => {
+                          if (!isEdit) setIsEdit(true);
+                          else {
+                            if (!errors) handleSubmitAgent(values);
+                          }
+                        }}
                       >
                         <span>
                           {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
