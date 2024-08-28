@@ -153,6 +153,8 @@ function TopupCreateEdit() {
   const isDisableAccess = (type: string) => {
     if (isCreate === "true") return false;
     if (!isEdit) return true;
+    if (topupProgram?.status === 2) return true;
+    if (topupProgram?.status === 1 && type !== "status") return true;
     switch (type) {
       case "name":
         return true;
@@ -278,9 +280,17 @@ function TopupCreateEdit() {
             if (value.status === 0) {
               navigate(-1);
               toast.showToast("Cập nhật chương trình thành công");
+              return;
             }
-            if (value.status === -4) toast.showToast("Ngày bắt đầu sau 1 ngày");
-            else toast.showToast(value.message);
+            if (value.status === -4) {
+              toast.showToast("Ngày bắt đầu sau 1 ngày");
+              return;
+            }
+            if (value.status === -6) {
+              toast.showToast("Chương trình đang chạy");
+              return;
+            }
+            toast.showToast(value.message);
           })
           .catch(() => {
             toast.showToast("Cập nhật thất bại");
@@ -404,6 +414,10 @@ function TopupCreateEdit() {
               </Card.Header>
               <Card.Body>
                 <Stack className="d-flex gap-1">
+                  <p style={{ color: "red" }}>
+                    * Chỉ chương trình được tạm dừng hoặc chờ kích hoạt mới được
+                    chỉnh sửa thông tin
+                  </p>
                   <Form.Group>
                     <Form.Label className="text-black">
                       Mã chương trình <span style={{ color: "red" }}>*</span>

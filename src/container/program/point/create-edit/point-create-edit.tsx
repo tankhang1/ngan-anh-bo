@@ -324,6 +324,10 @@ function PointCreateEdit() {
               toast.showToast("Ngày bắt đầu sau 1 ngày");
               return;
             }
+            if (value.status === -6) {
+              toast.showToast("Chương trình đang chạy");
+              return;
+            }
             toast.showToast(value.message);
           })
           .catch(() => {
@@ -336,6 +340,9 @@ function PointCreateEdit() {
   const isDisableAccess = (type: string) => {
     if (isCreate === "true") return false;
     if (!isEdit) return true;
+    if (pointProgram?.status === 2) return true;
+    if (pointProgram?.status === 1 && type !== "status") return true;
+
     switch (type) {
       case "name":
         return true;
@@ -439,6 +446,7 @@ function PointCreateEdit() {
                   </Card.Title>
                   {MapBadge()}
                 </div>
+
                 <div className="gap-2 d-flex">
                   <button
                     className="btn btn-danger-light"
@@ -485,6 +493,11 @@ function PointCreateEdit() {
               </Card.Header>
               <Card.Body>
                 <Stack className="d-flex gap-1">
+                  <p style={{ color: "red" }}>
+                    * Chỉ chương trình được tạm dừng hoặc chờ kích hoạt mới được
+                    chỉnh sửa thông tin
+                  </p>
+
                   <Form.Group>
                     <Form.Label className="text-black">
                       Mã chương trình <span style={{ color: "red" }}>*</span>

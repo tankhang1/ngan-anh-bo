@@ -16,11 +16,8 @@ const baseQueryWithReauth: BaseQueryFn<
     // Token expired or unauthorized, attempt to refresh the token
     const refreshResult = await baseQuery(
       {
-        url: "/refresh-token",
+        url: "/admin/refresh-token",
         method: HTTPS_METHOD.POST,
-        headers: {
-          Authorization: `Bearer ${store.getState().auth.token}`, // Correct syntax for the Authorization header
-        },
       },
       api,
       extraOptions
@@ -29,7 +26,7 @@ const baseQueryWithReauth: BaseQueryFn<
       "rebase auth",
       refreshResult,
       {
-        url: "/refresh-token",
+        url: "/admin/refresh-token",
         method: HTTPS_METHOD.POST,
         headers: {
           Authorization: `Bearer ${store.getState().auth.token}`, // Correct syntax for the Authorization header

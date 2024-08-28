@@ -303,6 +303,11 @@ const WarehouseImport = () => {
                 render: ({ shipper }) => <td>{shipper}</td>,
               },
               {
+                key: "goods_type",
+                label: "Loại hàng nhập  ",
+                render: ({ goods_type }) => <td>{goods_type}</td>,
+              },
+              {
                 key: "work_center_import_code",
                 label: "Mã kho",
                 render: ({ work_center_import_code }) => (

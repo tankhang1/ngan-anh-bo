@@ -151,6 +151,7 @@ function CustomerValidationCreateEdit() {
     <Fragment>
       <Formik
         initialValues={{
+          uuid: customer?.uuid,
           customer_name: customer?.customer_name ?? "",
           customer_province: customer?.customer_province ?? "",
           customer_type: customer?.customer_type ?? "",

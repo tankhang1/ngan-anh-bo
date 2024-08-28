@@ -289,6 +289,11 @@ const WarehouseExport = () => {
                 render: ({ agent_name }) => <td>{agent_name}</td>,
               },
               {
+                key: "goods_type",
+                label: "Loại hàng xuất",
+                render: ({ goods_type }) => <td>{goods_type}</td>,
+              },
+              {
                 key: "staff_export_code",
                 label: "Mã nhân viên xuất kho",
                 render: ({ staff_export_code }) => <td>{staff_export_code}</td>,

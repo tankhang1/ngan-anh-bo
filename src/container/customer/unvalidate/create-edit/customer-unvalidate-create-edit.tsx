@@ -269,7 +269,9 @@ function CustomerUnValidationCreateEdit() {
                           }
                         >
                           <button
-                            onClick={() => onValidateCustomer(values)}
+                            onClick={() =>
+                              !errors && onValidateCustomer(values)
+                            }
                             className={`btn btn-teal-light justify-content-center align-items-center ${
                               isLoadingVerify && "btn-loader "
                             }`}

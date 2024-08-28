@@ -56,7 +56,7 @@ function CustomerUnValidation() {
   const navigate = useNavigate();
 
   // const { data: groupObjectives } = useGetListGroupObjectiveQuery();
-  const { data: counterCustomer } = useGetCounterCustomerRegisterQuery(
+  const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       t: customerType,
       s: 0,
@@ -66,7 +66,7 @@ function CustomerUnValidation() {
     }
   );
   const { data: customers, isLoading: isLoadingCustomer } =
-    useGetListCustomerRegisterQuery(
+    useGetListCustomerQuery(
       {
         nu: page - 1,
         sz: 10,
@@ -166,7 +166,7 @@ function CustomerUnValidation() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {permission.createUnValidateCustomer ? (
+                  {/* {permission.createUnValidateCustomer ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -184,7 +184,7 @@ function CustomerUnValidation() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  ) : null}
+                  ) : null} */}
                   {permission.exportUnValidateCustomer ? (
                     <OverlayTrigger
                       placement="top"

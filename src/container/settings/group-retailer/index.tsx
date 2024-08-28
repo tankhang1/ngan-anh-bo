@@ -36,7 +36,8 @@ function SettingGroupRetailer() {
   } = useGetListGroupRetailerQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
-  const [createGroupRetailer] = useCreateGroupRetailerMutation();
+  const [createGroupRetailer, { isLoading: isLoadingCreate }] =
+    useCreateGroupRetailerMutation();
   const onCreateUpdateGroup = async (values: TGroupRetailer) => {
     console.log(values);
     setOpenAddPopup(null);
@@ -227,8 +228,19 @@ function SettingGroupRetailer() {
                 >
                   Đóng
                 </Button>
-                <Button variant="primary" type="submit">
-                  Xác nhận
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className={`btn justify-content-center align-items-center ${
+                    isLoadingCreate && "btn-loader "
+                  }`}
+                >
+                  <span>Xác nhận</span>
+                  {isLoadingCreate && (
+                    <span className="loading">
+                      <i className="ri-loader-2-fill fs-19"></i>
+                    </span>
+                  )}
                 </Button>
               </Modal.Footer>
             </form>

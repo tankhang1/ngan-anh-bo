@@ -36,7 +36,8 @@ function SettingGroupCustomer() {
   } = useGetListGroupObjectiveQuery(null, {
     refetchOnMountOrArgChange: true,
   });
-  const [createUpdateGroup] = useCreateUpdateGroupObjectiveMutation();
+  const [createUpdateGroup, { isLoading: isLoadingCreate }] =
+    useCreateUpdateGroupObjectiveMutation();
   const onCreateUpdateGroup = async (values: TGroupCustomer) => {
     setOpenAddPopup(null);
     await createUpdateGroup(values).then((res) => {
@@ -143,29 +144,29 @@ function SettingGroupCustomer() {
                 render: (value: TGroupCustomer) => <td>{value.name}</td>,
               },
 
-              permission.editSettingGroupCustomer
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => {
-                      console.log(value);
-                      return (
-                        <td>
-                          <span className="d-flex justify-content-center align-item-center">
-                            <button
-                              className="btn btn-icon btn-sm btn-primary-ghost"
-                              onClick={() => {
-                                setOpenAddPopup(value);
-                              }}
-                            >
-                              <i className="ti ti-edit"></i>
-                            </button>
-                          </span>
-                        </td>
-                      );
-                    },
-                  }
-                : undefined,
+              // permission.editSettingGroupCustomer
+              //   ? {
+              //       key: "",
+              //       label: "Chức năng",
+              //       render: (value) => {
+              //         console.log(value);
+              //         return (
+              //           <td>
+              //             <span className="d-flex justify-content-center align-item-center">
+              //               <button
+              //                 className="btn btn-icon btn-sm btn-primary-ghost"
+              //                 onClick={() => {
+              //                   setOpenAddPopup(value);
+              //                 }}
+              //               >
+              //                 <i className="ti ti-edit"></i>
+              //               </button>
+              //             </span>
+              //           </td>
+              //         );
+              //       },
+              //     }
+              //   : undefined,
             ]}
             data={groups || []}
             searchByExternal={searchBy}
@@ -257,8 +258,19 @@ function SettingGroupCustomer() {
                 >
                   Đóng
                 </Button>
-                <Button variant="primary" type="submit">
-                  Xác nhận
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className={`btn justify-content-center align-items-center ${
+                    isLoadingCreate && "btn-loader "
+                  }`}
+                >
+                  <span>Xác nhận</span>
+                  {isLoadingCreate && (
+                    <span className="loading">
+                      <i className="ri-loader-2-fill fs-19"></i>
+                    </span>
+                  )}
                 </Button>
               </Modal.Footer>
             </form>
