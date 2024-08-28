@@ -87,7 +87,8 @@ function CustomerUnValidationCreateEdit() {
   const onValidateCustomer = async (values: TCustomerRes) => {
     await verifyCustomer({
       ...values,
-      info_primary: values.info_primary ? 1 : 0,
+      uuid: values?.uuid ? values.uuid : newUUID?.toString(),
+      info_primary: 0,
       customer_province: provinceId,
       status: 1,
       gender: +(values?.gender ?? 1),
@@ -273,7 +274,7 @@ function CustomerUnValidationCreateEdit() {
                         >
                           <button
                             onClick={() => {
-                              verifyCustomer(values);
+                              onValidateCustomer(values);
                             }}
                             className={`btn btn-teal-light justify-content-center align-items-center ${
                               isLoadingVerify && "btn-loader "
