@@ -203,7 +203,7 @@ function CustomerUnValidationCreateEdit() {
     <Fragment>
       <Formik
         initialValues={{
-          uuid: customer?.uuid,
+          uuid: customer?.uuid ?? newUUID?.toString(),
           customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
           customer_province: customer?.customer_province ?? "",
@@ -246,13 +246,7 @@ function CustomerUnValidationCreateEdit() {
           touched,
           errors,
         }) => (
-          <form
-            noValidate
-            onSubmit={(e) => {
-              console.log(errors);
-              handleSubmit(e);
-            }}
-          >
+          <form noValidate onSubmit={handleSubmit}>
             <Stack>
               <Card className="custom-card">
                 <Card.Header className="justify-content-between">
@@ -278,9 +272,9 @@ function CustomerUnValidationCreateEdit() {
                           }
                         >
                           <button
-                            onClick={() =>
-                              !errors && onValidateCustomer(values)
-                            }
+                            onClick={() => {
+                              verifyCustomer(values);
+                            }}
                             className={`btn btn-teal-light justify-content-center align-items-center ${
                               isLoadingVerify && "btn-loader "
                             }`}
@@ -314,14 +308,11 @@ function CustomerUnValidationCreateEdit() {
                         className={`btn  btn-purple-light justify-content-center align-items-center ${
                           isLoadingUpdate && "btn-loader "
                         }`}
-                        onClick={() => {
-                          if (!isEdit) setIsEdit(true);
-                          else {
-                            if (!errors) handleSubmitAgent(values);
-                          }
-                        }}
+                        type="submit"
                       >
-                        <span>{!isEdit ? "Chỉnh sửa" : "Lưu"}</span>
+                        <span>
+                          {!isLoadingUpdate && !isEdit ? "Chỉnh sửa" : "Lưu"}
+                        </span>
                         {isLoadingUpdate && (
                           <span className="loading">
                             <i className="ri-loader-2-fill fs-19"></i>

@@ -230,12 +230,7 @@ function CustomerValidationCreateEdit() {
                         className={`btn btn-purple-light justify-content-center align-items-center ${
                           isLoadingUpdate && "btn-loader"
                         }`}
-                        onClick={() => {
-                          if (!isEdit) setIsEdit(true);
-                          else {
-                            if (!errors) handleSubmitAgent(values);
-                          }
-                        }}
+                        type="submit"
                       >
                         <span>
                           {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
