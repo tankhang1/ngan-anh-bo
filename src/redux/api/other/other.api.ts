@@ -1,9 +1,4 @@
-import {
-  BASE_PORT_8180,
-  BASE_URL,
-  HTTPS_METHOD,
-  LOCAL_KEY,
-} from "../../../constants";
+import { HTTPS_METHOD } from "../../../constants";
 
 import {
   BASE_RES,
@@ -15,7 +10,7 @@ import {
   TPointCreateForm,
   TTopupCreateForm,
 } from "../../../assets/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 
 export enum OtherEnum {

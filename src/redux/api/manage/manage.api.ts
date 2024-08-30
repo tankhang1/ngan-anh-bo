@@ -3,7 +3,6 @@ import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
 import {
   TTopup,
   TPackage,
-  TAgencyC1,
   TAgent,
   TFarmer,
   TGetListAgentsRes,

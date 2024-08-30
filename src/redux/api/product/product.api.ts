@@ -1,11 +1,11 @@
-import { BASE_PORT_8180, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
+import { HTTPS_METHOD } from "../../../constants";
 import {
   TDevice,
   TProduct,
   TProductForm,
   TIngredient,
 } from "../../../assets/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum ProductEnum {
   PRODUCT_CODE = "PRODUCT_CODE",
@@ -16,16 +16,6 @@ export enum ProductEnum {
 }
 export const productApi = createApi({
   reducerPath: "productApi",
-  // baseQuery: fetchBaseQuery({
-  //   baseUrl: `${BASE_PORT_8180}/product`,
-  //   prepareHeaders: (headers) => {
-  //     const token = localStorage.getItem(LOCAL_KEY.TOKEN);
-  //     if (token) {
-  //       headers.set("Authorization", `Bearer ${token}`);
-  //     }
-  //     return headers;
-  //   },
-  // }),
   baseQuery: baseQueryWithReauth,
   tagTypes: [
     ProductEnum.DEVICES,

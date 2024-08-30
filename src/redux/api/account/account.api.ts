@@ -1,6 +1,6 @@
 import { BASE_RES, TAccount, TAccountRole } from "../../../assets/types";
-import { BASE_PORT_8180, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { HTTPS_METHOD } from "../../../constants";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum AccountEnum {
   ACCOUNTS = "ACCOUNTS",

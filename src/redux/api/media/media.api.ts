@@ -1,4 +1,4 @@
-import { BASE_PORT, BASE_URL, HTTPS_METHOD } from "../../../constants";
+import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
 import { TArea, TProvince } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 

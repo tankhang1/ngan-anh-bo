@@ -211,11 +211,9 @@ const AppTable = <T extends DataItem>({
               </tr>
             </thead>
             {isLoading ? (
-              <tbody>
-                <tr className="text text-base text-black">
-                  <td>Loading....</td>
-                </tr>
-              </tbody>
+              <div className="d-flex w-100 align-items-center justify-content-center">
+                <p className=" text-sm">Loading....</p>
+              </div>
             ) : (
               <tbody>
                 {pagingData.map((item, index) => (

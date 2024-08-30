@@ -1,16 +1,6 @@
-import {
-  BASE_PORT_8180,
-  BASE_URL,
-  HTTPS_METHOD,
-  LOCAL_KEY,
-} from "../../../constants";
-import {
-  BASE_RES,
-  TAgent,
-  TAgentForm,
-  TFarmerForm,
-} from "../../../assets/types";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { HTTPS_METHOD } from "../../../constants";
+import { BASE_RES, TAgentForm, TFarmerForm } from "../../../assets/types";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
 export enum CustomerEnum {
   CREATE_AGENT = "CREATE_AGENT",
