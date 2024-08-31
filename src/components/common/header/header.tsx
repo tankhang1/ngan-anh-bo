@@ -15,21 +15,6 @@ import { connect } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 //IMAGES
 
-import media34 from "../../../assets/images/media/media-34.jpg";
-import media35 from "../../../assets/images/media/media-35.jpg";
-import media36 from "../../../assets/images/media/media-36.jpg";
-import faces16 from "../../../assets/images/faces/16.jpg";
-import faces9 from "../../../assets/images/faces/9.jpg";
-import faces6 from "../../../assets/images/faces/6.jpg";
-import faces2 from "../../../assets/images/faces/2.jpg";
-import faces8 from "../../../assets/images/faces/8.jpg";
-import faces14 from "../../../assets/images/faces/14.jpg";
-import faces11 from "../../../assets/images/faces/11.jpg";
-import png1 from "../../../assets/images/ecommerce/png/1.png";
-import png15 from "../../../assets/images/ecommerce/png/15.png";
-import png40 from "../../../assets/images/ecommerce/png/40.png";
-import png8 from "../../../assets/images/ecommerce/png/8.png";
-import png11 from "../../../assets/images/ecommerce/png/11.png";
 import ngananhlogo from "../../../assets/images/brand-logos/ngan-anh-logo.png";
 interface HeaderProps {}
 
@@ -301,7 +286,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const cartProduct = [
     {
       id: 1,
-      src: png1,
+      src: "",
       name: "Cactus mini plant",
       quantity: "02",
       price: "$1,299.00",
@@ -310,7 +295,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
     },
     {
       id: 2,
-      src: png15,
+      src: "",
       name: "Sports shoes for men",
       quantity: "01",
       price: "$179.29",
@@ -319,7 +304,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
     },
     {
       id: 3,
-      src: png40,
+      src: "",
       name: "Pink color smart watch",
       quantity: "03",
       oldpr: "$599",
@@ -327,7 +312,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
     },
     {
       id: 4,
-      src: png8,
+      src: "",
       name: "Red Leafs plant",
       quantity: "01",
       oldpr: "$799",
@@ -335,7 +320,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
     },
     {
       id: 5,
-      src: png11,
+      src: "",
       name: "Good luck mini plant",
       quantity: "02",
       oldpr: "$99",
@@ -352,8 +337,8 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
     setCartItemCount(updatedCart.length);
   };
 
-  const img1 = <img src={faces2} alt="" />;
-  const img2 = <img src={faces8} alt="" />;
+  const img1 = <img src={""} alt="" />;
+  const img2 = <img src={""} alt="" />;
 
   const initialNotifications = [
     {
@@ -1341,7 +1326,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       <div className="d-flex">
                         <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                           <img
-                            src={faces16}
+                            src={""}
                             alt="img"
                             className="avatar avatar-md rounded-2 me-3"
                           />
@@ -1403,7 +1388,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       <div className="d-flex">
                         <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                           <img
-                            src={faces6}
+                            src={""}
                             alt="img"
                             className="avatar avatar-md rounded-2 me-3"
                           />
@@ -1465,7 +1450,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       <div className="d-flex">
                         <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                           <img
-                            src={faces9}
+                            src={""}
                             alt="img"
                             className="avatar avatar-md rounded-2 me-3"
                           />
@@ -1536,7 +1521,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       <i className="activity-icon">
                         <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                           <img
-                            src={faces14}
+                            src={""}
                             alt="img"
                             className="avatar avatar-xs rounded-2 me-3"
                           />
@@ -1626,7 +1611,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       <i className="activity-icon">
                         <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                           <img
-                            src={faces11}
+                            src={""}
                             alt="img"
                             className="avatar avatar-xs rounded-2 me-3"
                           />
@@ -1665,13 +1650,13 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       </p>
                       <div className="activity-images mt-3">
                         <Link to={`${import.meta.env.BASE_URL}apps/gallery`}>
-                          <img src={media34} alt="thumb1" />
+                          <img src={""} alt="thumb1" />
                         </Link>
                         <Link to={`${import.meta.env.BASE_URL}apps/gallery`}>
-                          <img src={media35} alt="thumb1" />
+                          <img src={""} alt="thumb1" />
                         </Link>
                         <Link to={`${import.meta.env.BASE_URL}apps/gallery`}>
-                          <img src={media36} alt="thumb1" />
+                          <img src={""} alt="thumb1" />
                         </Link>
                       </div>
                     </div>
@@ -1681,7 +1666,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                       <i className="activity-icon">
                         <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                           <img
-                            src={faces16}
+                            src={""}
                             alt="img"
                             className="avatar avatar-xs rounded-2 me-3"
                           />
@@ -1714,7 +1699,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     <div className="me-2">
                       <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                         <img
-                          src={faces16}
+                          src={""}
                           alt="img"
                           className="avatar avatar-md rounded-2"
                         />
@@ -1777,7 +1762,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     <div className="me-2">
                       <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                         <img
-                          src={faces16}
+                          src={""}
                           alt="img"
                           className="avatar avatar-md rounded-2"
                         />
@@ -1843,7 +1828,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     <div className="me-2">
                       <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                         <img
-                          src={faces16}
+                          src={""}
                           alt="img"
                           className="avatar avatar-md rounded-2"
                         />
@@ -1876,7 +1861,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                     <div className="me-2">
                       <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
                         <img
-                          src={faces16}
+                          src={""}
                           alt="img"
                           className="avatar avatar-md rounded-2"
                         />

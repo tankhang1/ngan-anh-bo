@@ -3,7 +3,6 @@ import { Component, useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 
 //IMAGES
-import faces1 from "../../../../assets/images/faces/1.jpg";
 
 interface spark3 {
   options?: ApexOptions;
@@ -2109,7 +2108,7 @@ export class Annotations extends Component<{}, spark3> {
                 size: 0,
               },
               image: {
-                path: faces1,
+                path: "",
               },
             },
           ],
