@@ -4,8 +4,6 @@ import App from "./pages/App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Ecommerce from "./container/dashboards/ecommerce/ecommerce.tsx";
 
-import Ratings from "./container/advancedui/ratings/ratings.tsx";
-
 import Undermaintanace from "./container/authentication/undermaintenance/undermaintenance.tsx";
 
 import Nointernet from "./container/authentication/nointernet/nointernet.tsx";
@@ -193,17 +191,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}setting/group-retailer`}
                 element={<SettingGroupRetailer />}
               />
-              <Route
-                path={`${import.meta.env.BASE_URL}advancedui/ratings`}
-                element={<Ratings />}
-              />
 
-              <Route
-                path={`${
-                  import.meta.env.BASE_URL
-                }authentication/undermaintenance`}
-                element={<Undermaintanace />}
-              />
               <Route
                 path={`${import.meta.env.BASE_URL}authentication/nointernet`}
                 element={<Nointernet />}
