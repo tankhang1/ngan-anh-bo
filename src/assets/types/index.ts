@@ -155,6 +155,7 @@ export type TTopupDashboardTable = Pick<
 export enum TObjectiveEnum {
   RETAILER = "RETAILER2",
   FARMER = "FARMER",
+  ANONYMOUS = "ANONYMOUS",
 }
 
 export type TAgentForm = {

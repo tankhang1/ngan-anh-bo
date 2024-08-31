@@ -439,6 +439,7 @@ const OBJECTIVES_SELECT = [
     value: TObjectiveEnum.RETAILER,
   },
   { label: "Nông dân", value: TObjectiveEnum.FARMER },
+  { label: "Chưa định danh", value: TObjectiveEnum.ANONYMOUS },
 ];
 
 const AccountPermission = new Map([
