@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useContext,
-  useDeferredValue,
-  useMemo,
-  useState,
-} from "react";
+import React, { Fragment, useContext, useDeferredValue, useState } from "react";
 import {
   Button,
   Card,
@@ -20,7 +14,6 @@ import {
 import AppTable from "../../components/common/table/table";
 import { TAccount } from "../../assets/types";
 import AppId from "../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
 
 import {
   useDeleteAccountMutation,
@@ -35,7 +28,6 @@ import {
   useGetListEmployeeQuery,
   useGetRolePermissionListQuery,
 } from "../../redux/api/manage/manage.api";
-import Select from "react-select";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import accountSchema from "../../schema/accounts.schema";

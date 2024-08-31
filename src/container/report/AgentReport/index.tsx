@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, lazy } from "react";
 import { Stack } from "react-bootstrap";
-import Report from "../components/AgentReport";
+import { PageLoading } from "../../../redux/middlewares/pageLoading";
+const Report = PageLoading(lazy(() => import("../components/AgentReport")));
 function AgentReport() {
   return (
     <Fragment>

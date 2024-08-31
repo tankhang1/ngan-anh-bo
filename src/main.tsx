@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./pages/App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -21,8 +21,6 @@ import TopupCreateEdit from "./container/program/topup/create-edit/topup-create-
 import PointCreateEdit from "./container/program/point/create-edit/point-create-edit.tsx";
 import { Provider } from "react-redux";
 import store from "./redux/store.tsx";
-import AgentReport from "./container/report/AgentReport/index.tsx";
-import FarmerReport from "./container/report/FarmerReport/index.tsx";
 import IQrReport from "./container/report/iQrReport/index.tsx";
 import ProgramReport from "./container/report/ProgramReport/index.tsx";
 import TopupReport from "./container/report/TopupReport/index.tsx";
@@ -36,7 +34,9 @@ import Employee from "./container/employee/employee.tsx";
 import EmployeeCreateEdit from "./container/employee/create-edit/employee-create-edit.tsx";
 import EmployeeRole from "./container/employee/role/employee-role.tsx";
 import EmployeeDepartment from "./container/employee/department/employee-department.tsx";
-import Accounts from "./container/accounts/accounts.tsx";
+const Accounts = PageLoading(
+  lazy(() => import("./container/accounts/accounts.tsx"))
+);
 import SettingGroupRetailer from "./container/settings/group-retailer/index.tsx";
 import SearchProductCode from "./container/operator/search-product-code/index.tsx";
 import WarehouseExport from "./container/warehouse/export/warehouseExport.tsx";
@@ -44,6 +44,7 @@ import SearchWarehouseExport from "./container/warehouse/export/searchWarehouseE
 import WarehouseImport from "./container/warehouse/import/warehouseImport.tsx";
 import SearchWarehouseImport from "./container/warehouse/import/searchWarehouseImport.tsx";
 import CustomerReport from "./container/report/CustomerReport/index.tsx";
+import { PageLoading } from "./redux/middlewares/pageLoading.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>

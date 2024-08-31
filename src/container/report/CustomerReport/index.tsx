@@ -1,7 +1,13 @@
-import React, { Fragment } from "react";
+import React, { Fragment, lazy } from "react";
 import { Stack } from "react-bootstrap";
-import AgentReport from "../components/AgentReport";
-import FarmerReport from "../components/FarmerReport";
+
+import { PageLoading } from "../../../redux/middlewares/pageLoading";
+const AgentReport = PageLoading(
+  lazy(() => import("../components/AgentReport"))
+);
+const FarmerReport = PageLoading(
+  lazy(() => import("../components/FarmerReport"))
+);
 
 const CustomerReport = () => {
   return (

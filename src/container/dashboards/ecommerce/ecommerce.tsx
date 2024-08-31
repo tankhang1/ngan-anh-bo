@@ -1,19 +1,32 @@
-import React, { FC, Fragment } from "react";
+import React, { FC, Fragment, lazy } from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import { PageLoading } from "../../../redux/middlewares/pageLoading";
 
 //IMAGES
 
-import OutstandingReport from "./components/OutstandingReport";
-import AgentReport from "./components/AgentReport";
-import FarmerReport from "./components/FarmerReport";
-import ServiceReport from "./components/ServiceReport";
-import ServiceReportDonut from "./components/ServiceReportDonut";
-import ProductTable from "./components/ProductTable";
-import TableAgent from "./components/TableAgent";
-import TableFarmer from "./components/TableFarmer";
-import TableTopup from "./components/TableTopup";
-import TablePoint from "./components/TablePoint";
-import TableBrandname from "./components/TableBrandname";
+const OutstandingReport = PageLoading(
+  lazy(() => import("./components/OutstandingReport"))
+);
+const AgentReport = PageLoading(lazy(() => import("./components/AgentReport")));
+const FarmerReport = PageLoading(
+  lazy(() => import("./components/FarmerReport"))
+);
+const ServiceReport = PageLoading(
+  lazy(() => import("./components/ServiceReport"))
+);
+const ServiceReportDonut = PageLoading(
+  lazy(() => import("./components/ServiceReportDonut"))
+);
+const ProductTable = PageLoading(
+  lazy(() => import("./components/ProductTable"))
+);
+const TableAgent = PageLoading(lazy(() => import("./components/TableAgent")));
+const TableFarmer = PageLoading(lazy(() => import("./components/TableFarmer")));
+const TableTopup = PageLoading(lazy(() => import("./components/TableTopup")));
+const TablePoint = PageLoading(lazy(() => import("./components/TablePoint")));
+const TableBrandname = PageLoading(
+  lazy(() => import("./components/TableBrandname"))
+);
 
 interface EcommerceProps {}
 

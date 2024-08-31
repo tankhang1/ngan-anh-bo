@@ -1,5 +1,5 @@
 import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
-import { Card, Col, Dropdown, Pagination, Row } from "react-bootstrap";
+import { Card, Dropdown, Pagination } from "react-bootstrap";
 import Loading from "../../../assets/images/apps/loading.gif";
 import Empty from "../../../assets/images/apps/empty.jpg";
 
