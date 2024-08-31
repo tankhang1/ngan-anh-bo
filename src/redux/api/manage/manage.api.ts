@@ -21,6 +21,7 @@ import {
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TPermit } from "../../slices/authSlice";
+import { TagsEnum } from "../tags.enum.api";
 export enum ManageEnum {
   AGENTS = "AGENTS",
   AGENTS_STATUS = "AGENTS_STATUS",
@@ -61,37 +62,22 @@ export const manageApi = createApi({
     baseUrl: BASE_PORT,
   }),
   tagTypes: [
-    ManageEnum.AGENTS,
-    ManageEnum.AGENTS_STATUS,
-    ManageEnum.FARMERS,
-    ManageEnum.BRANDNAMES,
-    ManageEnum.BIN,
-    ManageEnum.BINS,
-    ManageEnum.TOPUPS,
-    ManageEnum.PACKETS,
-    ManageEnum.COUNTER_BRANDNAME,
-    ManageEnum.COUNTER_BIN,
-    ManageEnum.COUNTER_TOPUP,
-    ManageEnum.COUNTER_FARMER,
-    ManageEnum.COUNTER_AGENT,
-    ManageEnum.COUNTER_PACKET,
-    ManageEnum.COUNTER_AGENT_STATUS,
-    ManageEnum.COUNTER_FARMER_STATUS,
-    ManageEnum.COUNTER_BIN_GATEWAY,
-    ManageEnum.COUNTER_PACKET_GATEWAY,
-    ManageEnum.FARMERS_STATUS,
-    ManageEnum.LIST_AGENCY_C1,
-    ManageEnum.REPORT_DASHBOARD_DAY,
-    ManageEnum.REPORT_DASHBOARD_DAY_BY_DAY,
-    ManageEnum.CUSTOMER_REGISTER,
-    ManageEnum.COUNTER_CUSTOMER_REGISTER,
-    ManageEnum.CUSTOMER,
-    ManageEnum.COUNTER_CUSTOMER,
-    ManageEnum.LIST_GROUP_OBJECTIVE,
-    ManageEnum.EMPLOYEE,
-    ManageEnum.EMPLOYEE_ROLE,
-    ManageEnum.EMPLOYEE_DEPARTMENT,
-    ManageEnum.GROUP_RETAILER,
+    TagsEnum.AGENTS,
+    TagsEnum.FARMERS,
+    TagsEnum.BRANDNAMES,
+    TagsEnum.TOPUPS,
+    TagsEnum.PACKETS,
+    TagsEnum.BINS,
+    TagsEnum.AGENTS_C1,
+    TagsEnum.CUSTOMER_REGISTER,
+    TagsEnum.CUSTOMER,
+    TagsEnum.CUSTOMER_OBJECTIVE,
+    TagsEnum.EMPLOYEE,
+    TagsEnum.EMPLOYEE_ROLE,
+    TagsEnum.ROLE_PERMISSION,
+    TagsEnum.EMPLOYEE_DEPARTMENT,
+    TagsEnum.ROLE_PERMISSION,
+    TagsEnum.RETAILER_GROUP,
   ],
   endpoints: (builder) => ({
     getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
@@ -122,41 +108,15 @@ export const manageApi = createApi({
       providesTags: (results) =>
         results
           ? [
-              ...results.listUnValidateAgents,
-              ...results.listValidateAgents,
-            ].map(({ id }) => ({ type: ManageEnum.AGENTS, id }))
-          : [ManageEnum.AGENTS],
+              ...[
+                ...results.listUnValidateAgents,
+                ...results.listValidateAgents,
+              ].map(({ id }) => ({ type: TagsEnum.AGENTS as const, id })),
+              TagsEnum.AGENTS,
+            ]
+          : [TagsEnum.AGENTS],
     }),
-    getListAgentsByStatus: builder.query<TAgent[], BaseQuery | null>({
-      query: (params) => ({
-        url: "/api/register/agent/status",
-        method: HTTPS_METHOD.GET,
-        params: params === null ? {} : params,
-      }),
-      providesTags: (results) =>
-        results
-          ? results.map(({ customer_code }) => ({
-              type: ManageEnum.AGENTS_STATUS,
-              customer_code,
-            }))
-          : [ManageEnum.AGENTS_STATUS],
-    }),
-    getCounterAgent: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/register/agent/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_AGENT],
-    }),
-    getCounterAgentStatus: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/register/agent/status/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_AGENT_STATUS],
-    }),
+
     getListFarmers: builder.query<TGetListFarmersRes, BaseQuery>({
       query: (params) => ({
         url: "/api/register/farmer/list",
@@ -178,40 +138,13 @@ export const manageApi = createApi({
       providesTags: (results) =>
         results
           ? [
-              ...results.listUnValidateFarmers,
-              ...results.listValidateFarmers,
-            ].map(({ id }) => ({ type: ManageEnum.FARMERS, id }))
-          : [ManageEnum.FARMERS],
-    }),
-    getListFarmersByStatus: builder.query<TFarmer[], BaseQuery>({
-      query: (params) => ({
-        url: "/api/register/farmer/status",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: (results) =>
-        results
-          ? results.map(({ code }) => ({
-              type: ManageEnum.FARMERS_STATUS,
-              code,
-            }))
-          : [ManageEnum.FARMERS_STATUS],
-    }),
-    getCounterFarmer: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/register/farmer/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_FARMER],
-    }),
-    getCounterFarmerStatus: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/register/farmer/status/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_FARMER_STATUS],
+              ...[
+                ...results.listUnValidateFarmers,
+                ...results.listValidateFarmers,
+              ].map(({ id }) => ({ type: TagsEnum.FARMERS as const, id })),
+              TagsEnum.FARMERS,
+            ]
+          : [TagsEnum.FARMERS],
     }),
     getListBrandnames: builder.query<TGetListBrandnamesRes, BaseQuery>({
       query: (params) => ({
@@ -221,16 +154,14 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({ type: ManageEnum.BRANDNAMES, id }))
-          : [ManageEnum.BRANDNAMES],
-    }),
-    getCounterBrandname: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/report/brandname/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_BRANDNAME],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.BRANDNAMES as const,
+                id,
+              })),
+              TagsEnum.BRANDNAMES,
+            ]
+          : [TagsEnum.BRANDNAMES],
     }),
     getBin: builder.query<TBin, { val: string }>({
       query: (params) => ({
@@ -238,7 +169,6 @@ export const manageApi = createApi({
         method: HTTPS_METHOD.GET,
         params: params,
       }),
-      providesTags: [ManageEnum.BIN],
     }),
     getTopups: builder.query<TTopup[], BaseQuery>({
       query: (params) => ({
@@ -248,16 +178,14 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({ type: ManageEnum.TOPUPS, id }))
-          : [ManageEnum.TOPUPS],
-    }),
-    getCounterTopup: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/report/topup/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_TOPUP],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.TOPUPS as const,
+                id,
+              })),
+              TagsEnum.TOPUPS,
+            ]
+          : [TagsEnum.TOPUPS],
     }),
     getPackets: builder.query<
       { qrCode: TPackage[]; sms: TPackage[] },
@@ -282,27 +210,14 @@ export const manageApi = createApi({
       },
       providesTags: (results) =>
         results
-          ? [...results.qrCode, ...results.sms].map(({ id }) => ({
-              type: ManageEnum.PACKETS,
-              id,
-            }))
-          : [ManageEnum.PACKETS],
-    }),
-    getCounterPacket: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/report/package/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_PACKET],
-    }),
-    getCounterPacketGateway: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/report/package/gateway/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_PACKET_GATEWAY],
+          ? [
+              ...[...results.qrCode, ...results.sms].map(({ id }) => ({
+                type: TagsEnum.PACKETS as const,
+                id,
+              })),
+              TagsEnum.PACKETS,
+            ]
+          : [TagsEnum.PACKETS],
     }),
     getBins: builder.query<{ qrCode: TBin[]; sms: TBin[] }, BaseQuery>({
       query: (params) => ({
@@ -324,28 +239,16 @@ export const manageApi = createApi({
       },
       providesTags: (results) =>
         results
-          ? [...results.qrCode, ...results.sms].map(({ id }) => ({
-              type: ManageEnum.BINS,
-              id,
-            }))
-          : [ManageEnum.BINS],
+          ? [
+              ...[...results.qrCode, ...results.sms].map(({ id }) => ({
+                type: TagsEnum.BINS as const,
+                id,
+              })),
+              TagsEnum.BINS,
+            ]
+          : [TagsEnum.BINS],
     }),
-    getCounterBin: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/report/bin/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_BIN],
-    }),
-    getCounterBinGateWay: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/report/bin/gateway/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: [ManageEnum.COUNTER_BIN_GATEWAY],
-    }),
+
     getListAgencyC1: builder.query<{ label: string; value: string }[], void>({
       query: () => ({
         url: "/api/customer/list",
@@ -365,11 +268,14 @@ export const manageApi = createApi({
       },
       providesTags: (response) =>
         response
-          ? response.map(({ value }) => ({
-              type: ManageEnum.LIST_AGENCY_C1,
-              value,
-            }))
-          : [ManageEnum.LIST_AGENCY_C1],
+          ? [
+              ...response.map(({ value }) => ({
+                type: TagsEnum.AGENTS_C1 as const,
+                value,
+              })),
+              TagsEnum.AGENTS_C1,
+            ]
+          : [TagsEnum.AGENTS_C1],
     }),
     getReportDashboardByDay: builder.query<
       TReportDashboardMap,
@@ -392,28 +298,8 @@ export const manageApi = createApi({
         qrcode: result.qrcode,
         sms: result.sms,
       }),
-      providesTags: [ManageEnum.REPORT_DASHBOARD_DAY],
     }),
-    getCounterDayByDay: builder.query<
-      TReportDashboard,
-      { st: number; ed: number }
-    >({
-      query: (params) => ({
-        url: "/api/report/dashboard/day-by-day",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
 
-      providesTags: [ManageEnum.REPORT_DASHBOARD_DAY_BY_DAY],
-    }),
-    getCounterCustomerRegister: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/customer/register/counter",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
-      providesTags: [ManageEnum.COUNTER_CUSTOMER_REGISTER],
-    }),
     getListCustomerRegister: builder.query<TCustomerRes[], BaseQuery>({
       query: (params) => ({
         url: "/api/customer/register/list",
@@ -422,11 +308,14 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({
-              type: ManageEnum.CUSTOMER_REGISTER,
-              id,
-            }))
-          : [ManageEnum.CUSTOMER_REGISTER],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.CUSTOMER_REGISTER as const,
+                id,
+              })),
+              TagsEnum.CUSTOMER_REGISTER,
+            ]
+          : [TagsEnum.CUSTOMER_REGISTER],
     }),
     getCounterCustomer: builder.query<number, BaseQuery>({
       query: (params) => ({
@@ -434,7 +323,6 @@ export const manageApi = createApi({
         method: HTTPS_METHOD.GET,
         params,
       }),
-      providesTags: [ManageEnum.COUNTER_CUSTOMER],
     }),
     getListCustomer: builder.query<TCustomerRes[], BaseQuery>({
       query: (params) => ({
@@ -444,25 +332,30 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({
-              type: ManageEnum.CUSTOMER,
-              id,
-            }))
-          : [ManageEnum.CUSTOMER],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.CUSTOMER as const,
+                id,
+              })),
+              TagsEnum.CUSTOMER,
+            ]
+          : [TagsEnum.CUSTOMER],
     }),
     getListGroupObjective: builder.query<TGroupCustomer[], void | null>({
       query: () => ({
         url: "/api/customer/group/list",
         method: HTTPS_METHOD.GET,
       }),
-
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({
-              type: ManageEnum.LIST_GROUP_OBJECTIVE,
-              id,
-            }))
-          : [ManageEnum.LIST_GROUP_OBJECTIVE],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.CUSTOMER_OBJECTIVE as const,
+                id,
+              })),
+              TagsEnum.CUSTOMER_OBJECTIVE,
+            ]
+          : [TagsEnum.CUSTOMER_OBJECTIVE],
     }),
     getListEmployee: builder.query<TEmployee[], void | null>({
       query: () => ({
@@ -471,11 +364,14 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ uuid }) => ({
-              type: ManageEnum.EMPLOYEE,
-              uuid,
-            }))
-          : [ManageEnum.EMPLOYEE],
+          ? [
+              ...results.map(({ uuid }) => ({
+                type: TagsEnum.EMPLOYEE as const,
+                uuid,
+              })),
+              TagsEnum.EMPLOYEE,
+            ]
+          : [TagsEnum.EMPLOYEE],
     }),
     getListEmployeeRole: builder.query<TEmployeeRole[], void | null>({
       query: () => ({
@@ -484,11 +380,14 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({
-              type: ManageEnum.EMPLOYEE_ROLE,
-              id,
-            }))
-          : [ManageEnum.EMPLOYEE_ROLE],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.EMPLOYEE_ROLE as const,
+                id,
+              })),
+              TagsEnum.EMPLOYEE_ROLE,
+            ]
+          : [TagsEnum.EMPLOYEE_ROLE],
     }),
     getRolePermissionList: builder.query<TPermit[], void | null>({
       query: () => ({
@@ -497,11 +396,14 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ feature_code }) => ({
-              type: ManageEnum.EMPLOYEE_ROLE,
-              feature_code,
-            }))
-          : [ManageEnum.EMPLOYEE_ROLE],
+          ? [
+              ...results.map(({ feature_code }) => ({
+                type: TagsEnum.ROLE_PERMISSION as const,
+                feature_code,
+              })),
+              TagsEnum.ROLE_PERMISSION,
+            ]
+          : [TagsEnum.ROLE_PERMISSION],
     }),
     getListEmployeeDepartment: builder.query<
       TEmployeeDepartment[],
@@ -513,11 +415,14 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({
-              type: ManageEnum.EMPLOYEE_ROLE,
-              id,
-            }))
-          : [ManageEnum.EMPLOYEE_ROLE],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.EMPLOYEE_DEPARTMENT as const,
+                id,
+              })),
+              TagsEnum.EMPLOYEE_DEPARTMENT,
+            ]
+          : [TagsEnum.EMPLOYEE_DEPARTMENT],
     }),
     getListGroupRetailer: builder.query<TGroupRetailer[], void>({
       query: () => ({
@@ -526,40 +431,28 @@ export const manageApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({
-              type: ManageEnum.GROUP_RETAILER,
-              id,
-            }))
-          : [ManageEnum.GROUP_RETAILER],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.RETAILER_GROUP as const,
+                id,
+              })),
+              TagsEnum.RETAILER_GROUP,
+            ]
+          : [TagsEnum.RETAILER_GROUP],
     }),
   }),
 });
 export const {
   useGetListAgentsQuery,
-  useGetListAgentsByStatusQuery,
-  useLazyGetListAgentsByStatusQuery,
   useGetListFarmersQuery,
   useGetListBrandnamesQuery,
-  useGetCounterBrandnameQuery,
-  useGetCounterTopupQuery,
-  useGetCounterFarmerQuery,
   useGetBinQuery,
   useGetBinsQuery,
   useGetTopupsQuery,
   useGetPacketsQuery,
-  useGetCounterBinQuery,
-  useGetCounterAgentQuery,
-  useGetCounterPacketQuery,
-  useGetCounterBinGateWayQuery,
-  useGetCounterPacketGatewayQuery,
-  useGetCounterAgentStatusQuery,
-  useGetCounterFarmerStatusQuery,
   useGetRolePermissionListQuery,
   useGetListAgencyC1Query,
   useGetReportDashboardByDayQuery,
-  useGetCounterDayByDayQuery,
-  useGetListFarmersByStatusQuery,
-  useGetCounterCustomerRegisterQuery,
   useGetListCustomerRegisterQuery,
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,

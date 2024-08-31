@@ -8,7 +8,6 @@ import { mediaApi } from "./api/media/media.api";
 import { programApi } from "./api/program/program.api";
 import { manageApi } from "./api/manage/manage.api";
 import { otherApi } from "./api/other/other.api";
-import { customerApi } from "./api/customer/customer.api";
 import { reportApi } from "./api/report/report.api";
 import { accountApi } from "./api/account/account.api";
 import AuthReducer from "./slices/authSlice";
@@ -33,7 +32,6 @@ const rootReducer = combineReducers({
   [manageApi.reducerPath]: manageApi.reducer,
   [otherApi.reducerPath]: otherApi.reducer,
   [programApi.reducerPath]: programApi.reducer,
-  [customerApi.reducerPath]: customerApi.reducer,
   [reportApi.reducerPath]: reportApi.reducer,
   [accountApi.reducerPath]: accountApi.reducer,
   [settingApi.reducerPath]: settingApi.reducer,
@@ -58,7 +56,6 @@ const store = configureStore({
       .concat(programApi.middleware)
       .concat(manageApi.middleware)
       .concat(otherApi.middleware)
-      .concat(customerApi.middleware)
       .concat(reportApi.middleware)
       .concat(accountApi.middleware)
       .concat(settingApi.middleware)

@@ -2,14 +2,12 @@ import { BASE_RES, TAccount, TAccountRole } from "../../../assets/types";
 import { HTTPS_METHOD } from "../../../constants";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
-export enum AccountEnum {
-  ACCOUNTS = "ACCOUNTS",
-  ACCOUNT_ROLE = "ACCOUNT_ROLE",
-}
+import { TagsEnum } from "../tags.enum.api";
+
 export const accountApi = createApi({
   reducerPath: "accountApi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: [AccountEnum.ACCOUNTS, AccountEnum.ACCOUNT_ROLE],
+  tagTypes: [TagsEnum.ACCOUNTS, TagsEnum.ACCOUNT_ROLE],
   endpoints: (builder) => ({
     getAllAccount: builder.query<TAccount[], void>({
       query: () => ({
@@ -17,8 +15,14 @@ export const accountApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({ type: AccountEnum.ACCOUNTS, id }))
-          : [AccountEnum.ACCOUNTS],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.ACCOUNTS as const,
+                id,
+              })),
+              TagsEnum.ACCOUNTS,
+            ]
+          : [TagsEnum.ACCOUNTS],
     }),
     signUpAccount: builder.mutation<BASE_RES, TAccount>({
       query: (body) => ({
@@ -26,14 +30,14 @@ export const accountApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [AccountEnum.ACCOUNTS],
+      invalidatesTags: [TagsEnum.ACCOUNTS],
     }),
     deleteAccount: builder.mutation<BASE_RES, string>({
       query: (body) => ({
         url: `/admin/account/remove/${body}`,
         method: HTTPS_METHOD.POST,
       }),
-      invalidatesTags: [AccountEnum.ACCOUNTS],
+      invalidatesTags: [TagsEnum.ACCOUNTS],
     }),
     getAccountRoleList: builder.query<TAccountRole[], void>({
       query: () => ({
@@ -41,8 +45,14 @@ export const accountApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({ type: AccountEnum.ACCOUNT_ROLE, id }))
-          : [AccountEnum.ACCOUNT_ROLE],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.ACCOUNT_ROLE as const,
+                id,
+              })),
+              TagsEnum.ACCOUNT_ROLE,
+            ]
+          : [TagsEnum.ACCOUNT_ROLE],
     }),
   }),
 });

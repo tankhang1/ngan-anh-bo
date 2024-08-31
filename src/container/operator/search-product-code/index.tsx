@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import {
   Badge,
   Button,
@@ -10,22 +10,18 @@ import {
   Stack,
 } from "react-bootstrap";
 
-import { useFormik } from "formik";
 import {
   useGetBinPackageByCodeQuery,
   useGetCustomerByCodeQuery,
   useGetProductBySkuQuery,
   useGetWarehouseExportBinQuery,
 } from "../../../redux/api/info/info.api";
-import { TAgent, TBinPackage, TProduct } from "../../../assets/types";
 import { BASE_PORT } from "../../../constants";
 import { fDate } from "../../../hooks";
-import { CircularProgress } from "@mui/material";
-
+import Loading from "../../../assets/images/apps/loading.gif";
 function SearchProductCode() {
   const [searchValue, setSearchValue] = useState("");
   const [isPermitSearch, setIsPermitSearch] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { data: binPackage, isFetching: isFetchingBinPackage } =
     useGetBinPackageByCodeQuery(
       {
@@ -59,7 +55,6 @@ function SearchProductCode() {
   );
   const onSearch = () => {
     setIsPermitSearch(true);
-    setIsLoading(false);
   };
 
   return (
@@ -83,7 +78,6 @@ function SearchProductCode() {
                     }}
                     onBeforeInputCapture={() => {
                       setIsPermitSearch(false);
-                      setIsLoading(true);
                     }}
                   />
                   <Button
@@ -91,7 +85,6 @@ function SearchProductCode() {
                     onClick={() => {
                       setIsPermitSearch(false);
                       setSearchValue("");
-                      setIsLoading(false);
                     }}
                   >
                     <i className="ti ti-x"></i>
@@ -119,9 +112,9 @@ function SearchProductCode() {
                 <h5>Thông tin sản phẩm</h5>
               </Card.Header>
               <Card.Body>
-                {isLoading || isFetchingBinPackage ? (
+                {isFetchingBinPackage ? (
                   <div className="d-flex justify-content-center align-items-center">
-                    <CircularProgress />
+                    <img src={Loading} className="w-25" />
                   </div>
                 ) : !binPackage ? (
                   <div className="d-flex justify-content-center align-items-center">
@@ -207,9 +200,9 @@ function SearchProductCode() {
                 <h5>Thông tin xuất kho</h5>
               </Card.Header>
               <Card.Body>
-                {isLoading || isFetchingBinPackage ? (
+                {isFetchingBinPackage ? (
                   <div className="d-flex justify-content-center align-items-center">
-                    <CircularProgress />
+                    <img src={Loading} className="w-25" />
                   </div>
                 ) : !binPackage ? (
                   <div className="d-flex justify-content-center align-items-center">
@@ -252,9 +245,9 @@ function SearchProductCode() {
                 <h5>Thông tin khách hàng đăng ký</h5>
               </Card.Header>
               <Card.Body>
-                {isLoading || isFetchingBinPackage ? (
+                {isFetchingBinPackage ? (
                   <div className="d-flex justify-content-center align-items-center">
-                    <CircularProgress />
+                    <img src={Loading} className="w-25" />
                   </div>
                 ) : binPackage ? (
                   <Stack gap={1}>
@@ -276,6 +269,12 @@ function SearchProductCode() {
                         {binPackage?.register_province_name}
                       </span>
                     </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Khu vực :{" "}
+                      <span className="fw-normal">
+                        {binPackage?.register_area}
+                      </span>
+                    </span>
                   </Stack>
                 ) : (
                   <div className="d-flex justify-content-center align-items-center">
@@ -289,9 +288,9 @@ function SearchProductCode() {
                 <h5>Thông tin khách hàng đã xác thực</h5>
               </Card.Header>
               <Card.Body>
-                {isLoading || isFetchingBinPackage ? (
+                {isFetchingBinPackage ? (
                   <div className="d-flex justify-content-center align-items-center">
-                    <CircularProgress />
+                    <img src={Loading} className="w-25" />
                   </div>
                 ) : !binPackage ? (
                   <div className="d-flex justify-content-center align-items-center">

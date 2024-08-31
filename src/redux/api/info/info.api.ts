@@ -7,13 +7,7 @@ import {
   TAgent,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-export enum InfoEnum {
-  PRODUCTS = "PRODUCTS",
-  BINS = "BINS",
-  PRODUCT_CODE = "PRODUCT_CODE",
-  DEVICES = "DEVICES",
-}
+import { TagsEnum } from "../tags.enum.api";
 
 export const infoApi = createApi({
   reducerPath: "infoApi",
@@ -21,10 +15,10 @@ export const infoApi = createApi({
     baseUrl: BASE_PORT,
   }),
   tagTypes: [
-    InfoEnum.PRODUCTS,
-    InfoEnum.BINS,
-    InfoEnum.PRODUCT_CODE,
-    InfoEnum.DEVICES,
+    TagsEnum.PRODUCTS,
+    TagsEnum.BINS,
+    TagsEnum.PRODUCT_CODE,
+    TagsEnum.DEVICES,
   ],
   endpoints: (builder) => ({
     getListProducts: builder.query<TProduct[], void | null>({
@@ -34,8 +28,14 @@ export const infoApi = createApi({
       }),
       providesTags: (results) =>
         results
-          ? results.map(({ id }) => ({ type: InfoEnum.PRODUCTS, id }))
-          : [InfoEnum.PRODUCTS],
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.PRODUCTS as const,
+                id,
+              })),
+              TagsEnum.PRODUCTS,
+            ]
+          : [TagsEnum.PRODUCTS],
     }),
     getListBinsId: builder.query<string[], void>({
       query: () => ({
@@ -47,8 +47,14 @@ export const infoApi = createApi({
       },
       providesTags: (results) =>
         results
-          ? results.map((item) => ({ type: InfoEnum.BINS, item }))
-          : [InfoEnum.BINS],
+          ? [
+              ...results.map((item) => ({
+                type: TagsEnum.BINS as const,
+                item,
+              })),
+              TagsEnum.BINS,
+            ]
+          : [TagsEnum.BINS],
     }),
     getBinPackageByCode: builder.query<TBinPackage, { val: string }>({
       query: (params) => ({

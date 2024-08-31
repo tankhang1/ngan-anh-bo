@@ -7,6 +7,7 @@ import {
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
+import { TagsEnum } from "../tags.enum.api";
 export enum ProductEnum {
   PRODUCT_CODE = "PRODUCT_CODE",
   DEVICES = "DEVICES",
@@ -17,19 +18,14 @@ export enum ProductEnum {
 export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: [
-    ProductEnum.DEVICES,
-    ProductEnum.PRODUCT_CODE,
-    ProductEnum.INGREDIENTS,
-    ProductEnum.CREATE_PRODUCT,
-    ProductEnum.UPDATE_PRODUCT,
-  ],
+  tagTypes: [TagsEnum.PRODUCTS, TagsEnum.DEVICES, TagsEnum.INGREDIENTS],
   endpoints: (builder) => ({
     getNewProductCode: builder.query<string, void | null>({
       query: () => ({
         url: "/product/code-new",
         method: HTTPS_METHOD.GET,
         responseHandler: (response) => response.text(),
+        cache: "no-cache",
       }),
       keepUnusedDataFor: 0,
     }),
@@ -46,11 +42,14 @@ export const productApi = createApi({
       },
       providesTags: (results) =>
         results
-          ? results.map(({ value }) => ({
-              type: ProductEnum.DEVICES,
-              value,
-            }))
-          : [ProductEnum.DEVICES],
+          ? [
+              ...results.map(({ value }) => ({
+                type: TagsEnum.DEVICES as const,
+                value,
+              })),
+              TagsEnum.DEVICES,
+            ]
+          : [TagsEnum.DEVICES],
     }),
     getListIngredients: builder.query<string[], void>({
       query: () => ({
@@ -62,11 +61,14 @@ export const productApi = createApi({
       },
       providesTags: (results) =>
         results
-          ? results.map((item) => ({
-              type: ProductEnum.INGREDIENTS,
-              item,
-            }))
-          : [ProductEnum.INGREDIENTS],
+          ? [
+              ...results.map((item) => ({
+                type: TagsEnum.INGREDIENTS as const,
+                item,
+              })),
+              TagsEnum.INGREDIENTS,
+            ]
+          : [TagsEnum.INGREDIENTS],
     }),
     createProduct: builder.mutation<any, TProductForm>({
       query: (body) => ({
@@ -74,7 +76,7 @@ export const productApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [ProductEnum.CREATE_PRODUCT],
+      invalidatesTags: [TagsEnum.PRODUCTS],
     }),
     updateProduct: builder.mutation<any, TProduct>({
       query: (body) => ({
@@ -82,7 +84,9 @@ export const productApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [ProductEnum.UPDATE_PRODUCT],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.PRODUCTS as const, id: arg.id! },
+      ],
     }),
   }),
 });

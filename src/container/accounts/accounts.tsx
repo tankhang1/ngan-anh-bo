@@ -57,11 +57,8 @@ function Accounts() {
   const [username, setUsername] = useState<string | null>(null);
   const [showPW1, setShowPW1] = useState(false);
   const [showPW2, setShowPW2] = useState(false);
-  const {
-    data: accounts,
-    isLoading: isLoadingAccount,
-    refetch: refetchAccount,
-  } = useGetAllAccountQuery();
+  const { data: accounts, isLoading: isLoadingAccount } =
+    useGetAllAccountQuery();
   const [deleteAccount, { isLoading: isLoadingDelete }] =
     useDeleteAccountMutation();
   const [signUp, { isLoading: isLoadingSignUp }] = useSignUpAccountMutation();
@@ -83,7 +80,6 @@ function Accounts() {
         .then((value) => {
           if (value.status === 0) {
             toast.showToast(`Xóa tài khoản ${username} thành công`);
-            refetchAccount();
           } else {
             toast.showToast(`Xóa tài khoản ${username} thất bại`);
           }
@@ -108,7 +104,6 @@ function Accounts() {
       .unwrap()
       .then((value) => {
         if (value.status === 0) {
-          refetchAccount();
           toast.showToast("Đăng ký tài khoản thành công");
         } else toast.showToast("Đăng ký tài khoản thất bại");
       })

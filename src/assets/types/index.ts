@@ -638,6 +638,7 @@ export type TBinPackage = {
   register_name: string | null;
   register_province: string;
   register_province_name?: string;
+  register_area?: string;
   source_channel_used: string;
   source_campaign_code: string | null;
   status: number;

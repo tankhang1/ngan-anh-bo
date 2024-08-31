@@ -12,6 +12,7 @@ import {
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
+import { TagsEnum } from "../tags.enum.api";
 
 export enum OtherEnum {
   CREATE_POINT_PROGRAM = "LIST_PROGRAM_POINT_STATUS",
@@ -29,15 +30,13 @@ export const otherApi = createApi({
   reducerPath: "otherApi",
   baseQuery: baseQueryWithReauth,
   tagTypes: [
-    OtherEnum.CREATE_POINT_PROGRAM,
-    OtherEnum.CREATE_TOPUP_PROGRAM,
-    OtherEnum.UPDATE_POINT_PROGRAM,
-    OtherEnum.UPDATE_TOPUP_PROGRAM,
-    OtherEnum.CUSTOMER,
-    OtherEnum.LIST_GROUP_OBJECTIVE,
-    OtherEnum.EMPLOYEE,
-    OtherEnum.EMPLOYEE_ROLE,
-    OtherEnum.EMPLOYEE_DEPARTMENT,
+    TagsEnum.PROGRAM_POINT,
+    TagsEnum.PROGRAM_TOPUP,
+    TagsEnum.CUSTOMER,
+    TagsEnum.CUSTOMER_OBJECTIVE,
+    TagsEnum.EMPLOYEE,
+    TagsEnum.EMPLOYEE_ROLE,
+    TagsEnum.EMPLOYEE_DEPARTMENT,
   ],
   endpoints: (builder) => ({
     getNewUUID: builder.query<number, void | null>({
@@ -45,6 +44,7 @@ export const otherApi = createApi({
         url: "/generate/uuid",
         method: HTTPS_METHOD.GET,
         responseHandler: (response) => response.text(),
+        cache: "no-cache",
       }),
     }),
     createPointProgram: builder.mutation<BASE_RES, TPointCreateForm>({
@@ -53,7 +53,7 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [OtherEnum.CREATE_POINT_PROGRAM],
+      invalidatesTags: [TagsEnum.PROGRAM_POINT],
     }),
     createTopupProgram: builder.mutation<BASE_RES, TTopupCreateForm>({
       query: (body) => ({
@@ -61,7 +61,7 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [OtherEnum.CREATE_TOPUP_PROGRAM],
+      invalidatesTags: [TagsEnum.PROGRAM_TOPUP],
     }),
     updateTopupProgram: builder.mutation<BASE_RES, TTopupCreateForm>({
       query: (body) => ({
@@ -69,7 +69,9 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [OtherEnum.UPDATE_TOPUP_PROGRAM],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.PROGRAM_TOPUP, uuid: arg.uuid },
+      ],
     }),
     updatePointProgram: builder.mutation<BASE_RES, TPointCreateForm>({
       query: (body) => ({
@@ -77,7 +79,9 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [OtherEnum.UPDATE_POINT_PROGRAM],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.PROGRAM_POINT, uuid: arg.uuid },
+      ],
     }),
     createUpdateCustomer: builder.mutation<BASE_RES, TCustomerRes>({
       query: (body) => ({
@@ -85,7 +89,7 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [OtherEnum.CUSTOMER],
+      invalidatesTags: [TagsEnum.CUSTOMER],
     }),
     updateCustomer: builder.mutation<BASE_RES, TCustomerRes>({
       query: (body) => ({
@@ -93,7 +97,9 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [OtherEnum.CUSTOMER],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.CUSTOMER, id: arg.id! },
+      ],
     }),
     verifyCustomer: builder.mutation<BASE_RES, TCustomerRes>({
       query: (body) => ({
@@ -101,7 +107,9 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body: body,
       }),
-      invalidatesTags: [OtherEnum.CUSTOMER],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.CUSTOMER, id: arg.id! },
+      ],
     }),
     createUpdateGroupObjective: builder.mutation<BASE_RES, TGroupCustomer>({
       query: (body) => ({
@@ -109,7 +117,7 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
-      invalidatesTags: [OtherEnum.LIST_GROUP_OBJECTIVE],
+      invalidatesTags: [TagsEnum.CUSTOMER_OBJECTIVE],
     }),
     createEmployee: builder.mutation<BASE_RES, TEmployee>({
       query: (body) => ({
@@ -117,7 +125,7 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
-      invalidatesTags: [OtherEnum.EMPLOYEE],
+      invalidatesTags: [TagsEnum.EMPLOYEE],
     }),
     updateEmployee: builder.mutation<BASE_RES, TEmployee>({
       query: (body) => ({
@@ -125,7 +133,9 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
-      invalidatesTags: [OtherEnum.EMPLOYEE],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.EMPLOYEE as const, uuid: arg.uuid! },
+      ],
     }),
     createEmployeeRole: builder.mutation<BASE_RES, TEmployeeRole>({
       query: (body) => ({
@@ -133,7 +143,7 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
-      invalidatesTags: [OtherEnum.EMPLOYEE_ROLE],
+      invalidatesTags: [TagsEnum.EMPLOYEE_ROLE],
     }),
     createEmployeeDepartment: builder.mutation<BASE_RES, TEmployeeDepartment>({
       query: (body) => ({
@@ -141,7 +151,7 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
-      invalidatesTags: [OtherEnum.EMPLOYEE_DEPARTMENT],
+      invalidatesTags: [TagsEnum.EMPLOYEE_ROLE],
     }),
     updateEmployeeRole: builder.mutation<BASE_RES, TEmployeeRole>({
       query: (body) => ({
@@ -149,7 +159,9 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
-      invalidatesTags: [OtherEnum.EMPLOYEE_ROLE],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.EMPLOYEE_ROLE as const, id: arg.id! },
+      ],
     }),
     updateEmployeeDepartment: builder.mutation<BASE_RES, TEmployeeDepartment>({
       query: (body) => ({
@@ -157,7 +169,9 @@ export const otherApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
-      invalidatesTags: [OtherEnum.EMPLOYEE_DEPARTMENT],
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.EMPLOYEE_DEPARTMENT as const, id: arg.id! },
+      ],
     }),
   }),
 });

@@ -88,7 +88,7 @@ function CustomerUnValidationCreateEdit() {
     await verifyCustomer({
       ...values,
       uuid: values?.uuid ? values.uuid : newUUID?.toString(),
-      info_primary: 0,
+      info_primary: values.info_primary ? 1 : 0,
       customer_province: provinceId,
       status: 1,
       gender: +(values?.gender ?? 1),
