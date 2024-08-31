@@ -10,7 +10,7 @@ import {
   Radar,
   Scatter,
 } from "react-chartjs-2";
-import * as chartjsdata from "../chartjschart/chartjsdata";
+import * as chartjsdata from "./chartjsdata";
 
 interface ChartjschartsProps {}
 
