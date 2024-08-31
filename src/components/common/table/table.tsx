@@ -1,5 +1,7 @@
 import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { Card, Col, Dropdown, Pagination, Row } from "react-bootstrap";
+import Loading from "../../../assets/images/apps/loading.gif";
+import Empty from "../../../assets/images/apps/empty.jpg";
 
 type THeader<T> = {
   key: string;
@@ -210,11 +212,8 @@ const AppTable = <T extends DataItem>({
                 )}
               </tr>
             </thead>
-            {isLoading ? (
-              <div className="d-flex w-100 align-items-center justify-content-center">
-                <p className=" text-sm">Loading....</p>
-              </div>
-            ) : (
+
+            {!isLoading && (
               <tbody>
                 {pagingData.map((item, index) => (
                   <tr key={index} className="text-center">
@@ -227,12 +226,22 @@ const AppTable = <T extends DataItem>({
               </tbody>
             )}
           </table>
+          {isLoading && (
+            <div className="d-flex w-100 align-items-center justify-content-center">
+              <img src={Loading} className="w-25" />
+            </div>
+          )}
+          {!isLoading && pagingData.length === 0 && (
+            <div className="d-flex w-100 align-items-center justify-content-center">
+              <img src={Empty} className="w-25" />
+            </div>
+          )}
         </div>
       </Card.Body>
       <Card.Footer>
         <div className="d-flex flex-sm-row gap-2 flex-column align-items-center">
           <div className="text-black">
-            Tổng cộng {externalSearch ? filterData.length : maxPage} items{" "}
+            Tổng cộng {externalSearch ? filterData.length : maxPage ?? 0} items{" "}
             <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
           </div>
           <div className="ms-auto">
