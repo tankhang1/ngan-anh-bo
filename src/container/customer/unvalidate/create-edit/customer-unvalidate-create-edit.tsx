@@ -278,7 +278,7 @@ function CustomerUnValidationCreateEdit() {
                             <button
                               type="button"
                               onClick={() => {
-                                if (errors) {
+                                if (!errors) {
                                   toast.showToast(
                                     "Vui lòng điền đầy đủ thông tin bắc buộc"
                                   );
@@ -477,7 +477,7 @@ function CustomerUnValidationCreateEdit() {
                           type="text"
                           id="phone_validate"
                           placeholder="Nhập số điện thoại"
-                          name="phone"
+                          name="text"
                           value={values.phone}
                           className="input-placeholder"
                           onChange={handleChange}
@@ -490,11 +490,11 @@ function CustomerUnValidationCreateEdit() {
                       </Form.Group>
                       <Form.Group className="mb-2">
                         <Form.Label className="text-black">
-                          Địa chỉ email <span style={{ color: "red" }}>*</span>
+                          Địa chỉ email
                         </Form.Label>
                         <Form.Control
                           required
-                          type="email"
+                          type="text"
                           className="input-placeholder"
                           placeholder="Nhập địa chỉ chi tiết"
                           name="email"
@@ -772,49 +772,6 @@ function CustomerUnValidationCreateEdit() {
                           {errors.sign_board}
                         </Form.Control.Feedback>
                       </Form.Group>
-
-                      <Row>
-                        <Form.Group as={Col} md={6}>
-                          <Form.Label className="text-black">
-                            Số CCKD
-                          </Form.Label>
-                          <Form.Control
-                            required
-                            type="text"
-                            placeholder="Số CCKD"
-                            className="input-placeholder"
-                            name="citizen_number"
-                            value={values.citizen_number}
-                            onChange={handleChange}
-                            disabled={isCreate === "false" && isEdit === false}
-                            isInvalid={
-                              touched.citizen_number && !!errors.citizen_number
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.citizen_number}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group as={Col} md={6}>
-                          <Form.Label className="text-black">
-                            Ngày cấp
-                          </Form.Label>
-                          <Form.Control
-                            required
-                            type="date"
-                            placeholder="Ngày cấp"
-                            name="citizen_day"
-                            className="input-placeholder"
-                            value={values.citizen_day}
-                            disabled={isCreate === "false" && isEdit === false}
-                            lang="vi"
-                            onChange={handleChange}
-                            isInvalid={
-                              touched.citizen_day && !!errors.citizen_day
-                            }
-                          />
-                        </Form.Group>
-                      </Row>
 
                       <Form.Group as={Col} md={6}>
                         <Form.Label className="text-black">

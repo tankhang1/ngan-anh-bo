@@ -34,7 +34,7 @@ const customerSchema = Yup.object().shape({
 
   birthday: Yup.date().nullable().required("Ngày sinh là bắt buộc"),
 
-  email: Yup.string().email("Email không hợp lệ").required("Email là bắt buộc"),
+  email: Yup.string().email("Email không hợp lệ"),
 
   citizen_number: Yup.string().nullable(),
 

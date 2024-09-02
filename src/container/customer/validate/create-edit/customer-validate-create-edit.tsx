@@ -394,7 +394,7 @@ function CustomerValidationCreateEdit() {
                       </Form.Group>
                       <Form.Group className="mb-2">
                         <Form.Label className="text-black">
-                          Địa chỉ email <span style={{ color: "red" }}>*</span>
+                          Địa chỉ email
                         </Form.Label>
                         <Form.Control
                           required
@@ -676,49 +676,6 @@ function CustomerValidationCreateEdit() {
                           {errors.sign_board}
                         </Form.Control.Feedback>
                       </Form.Group>
-
-                      <Row>
-                        <Form.Group as={Col} md={6}>
-                          <Form.Label className="text-black">
-                            Số CCKD
-                          </Form.Label>
-                          <Form.Control
-                            required
-                            type="text"
-                            placeholder="Số CCKD"
-                            name="citizen_number"
-                            value={values.citizen_number}
-                            onChange={handleChange}
-                            className="input-placeholder"
-                            isInvalid={
-                              touched.citizen_number && !!errors.citizen_number
-                            }
-                            disabled={isCreate === "false" && isEdit === false}
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {errors.citizen_number}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group as={Col} md={6}>
-                          <Form.Label className="text-black">
-                            Ngày cấp
-                          </Form.Label>
-                          <Form.Control
-                            required
-                            type="date"
-                            placeholder="Ngày cấp"
-                            name="citizen_day"
-                            value={values.citizen_day}
-                            lang="vi"
-                            className="input-placeholder"
-                            onChange={handleChange}
-                            isInvalid={
-                              touched.citizen_day && !!errors.citizen_day
-                            }
-                            disabled={isCreate === "false" && isEdit === false}
-                          />
-                        </Form.Group>
-                      </Row>
 
                       <Form.Group as={Col} md={6}>
                         <Form.Label className="text-black">

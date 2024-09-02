@@ -299,6 +299,28 @@ export const manageApi = createApi({
         sms: result.sms,
       }),
     }),
+    getReportDashboardDayByDay: builder.query<TReportDashboardMap[], BaseQuery>(
+      {
+        query: (params) => ({
+          url: "/api/report/dashboard/day-by-day",
+          method: HTTPS_METHOD.GET,
+          params,
+        }),
+        transformResponse: (result: TReportDashboard[]) =>
+          result?.map((item) => ({
+            id: item.id,
+            day: item.day,
+            topup: item.topup,
+            brandname: item.brandname,
+            agent: item.retailer2,
+            agent_none: item.retailer2_none,
+            farmer: item.farmer,
+            farmer_none: item.farmer_none,
+            qrcode: item.qrcode,
+            sms: item.sms,
+          })),
+      }
+    ),
 
     getListCustomerRegister: builder.query<TCustomerRes[], BaseQuery>({
       query: (params) => ({
@@ -453,6 +475,7 @@ export const {
   useGetRolePermissionListQuery,
   useGetListAgencyC1Query,
   useGetReportDashboardByDayQuery,
+  useGetReportDashboardDayByDayQuery,
   useGetListCustomerRegisterQuery,
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,

@@ -58,8 +58,9 @@ const fNumber = (value: number) => {
   return new Intl.NumberFormat().format(value);
 };
 
-const fDate = (date?: number | string) => {
-  const stringDate = date?.toString() || format(new Date(), "yyyyMMdd");
+const fDate = (date?: number | string, localFormat?: string) => {
+  const stringDate =
+    date?.toString() || format(new Date(), localFormat ?? "yyyyMMdd");
   return `${stringDate.slice(0, 4)}-${stringDate.slice(
     4,
     6

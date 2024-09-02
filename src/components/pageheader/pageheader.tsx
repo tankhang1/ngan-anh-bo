@@ -3,7 +3,7 @@ import { Breadcrumb } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
 const MapLabel = new Map([
-  ["dashboards", "Thống kê theo ngày"],
+  ["dashboards", "Thống kê 7 ngày qua"],
   ["ecommerce", "Dashboard"],
   ["agent", "Đại lý"],
   ["farmer", "Nông dân"],

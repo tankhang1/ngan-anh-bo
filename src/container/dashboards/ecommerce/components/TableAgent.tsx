@@ -2,25 +2,31 @@ import React from "react";
 import AppTable from "../../../../components/common/table/table";
 import { TAgent } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
-import { useGetListAgentsQuery } from "../../../../redux/api/manage/manage.api";
+import {
+  useGetListAgentsQuery,
+  useGetListCustomerQuery,
+} from "../../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 
 function TableAgent() {
-  const { data: agents, isLoading: isLoadingAgent } = useGetListAgentsQuery(
-    {
-      st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-    },
-    {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data: agentRegisters, isLoading: isLoadingAgentRegister } =
+    useGetListCustomerQuery(
+      {
+        st: +(format(new Date(), "yyyyMMdd") + "0000"),
+        ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+        t: "RETAILER2",
+        s: 1,
+      },
+      {
+        skipPollingIfUnfocused: true,
+        pollingInterval: 300000,
+        refetchOnMountOrArgChange: true,
+      }
+    );
 
   return (
     <AppTable
-      title="Thông tin đại lý"
+      title="Thông tin đại lý đã xác thực trong ngày"
       headers={[
         {
           key: "id",
@@ -79,13 +85,8 @@ function TableAgent() {
           ),
         },
       ]}
-      data={
-        ([
-          ...(agents?.listUnValidateAgents ?? []),
-          ...(agents?.listValidateAgents ?? []),
-        ] || []) as any
-      }
-      isLoading={isLoadingAgent}
+      data={agentRegisters || ([] as any)}
+      isLoading={isLoadingAgentRegister}
       filters={[
         {
           key: "status",

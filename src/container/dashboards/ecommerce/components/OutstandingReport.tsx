@@ -1,12 +1,16 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useGetReportDashboardByDayQuery } from "../../../../redux/api/manage/manage.api";
+import {
+  useGetReportDashboardByDayQuery,
+  useGetReportDashboardDayByDayQuery,
+} from "../../../../redux/api/manage/manage.api";
 import { format, subDays } from "date-fns";
 
 function OutstandingReport() {
-  const { data: reportCurrentDay } = useGetReportDashboardByDayQuery(
+  const { data: report7days } = useGetReportDashboardDayByDayQuery(
     {
-      day: +format(new Date(), "yyyyMMdd"),
+      st: +format(subDays(new Date(), 7), "yyyyMMdd"),
+      ed: +format(new Date(), "yyyyMMdd"),
     },
     {
       skipPollingIfUnfocused: true,
@@ -14,42 +18,62 @@ function OutstandingReport() {
       refetchOnMountOrArgChange: true,
     }
   );
-  const { data: reportPreviousDay } = useGetReportDashboardByDayQuery({
-    day: +format(subDays(new Date(), 1), "yyyyMMdd"),
+  const { data: reportPrevious7days } = useGetReportDashboardDayByDayQuery({
+    st: +format(subDays(new Date(), 14), "yyyyMMdd"),
+    ed: +format(subDays(new Date(), 7), "yyyyMMdd"),
   });
-  console.log("report", reportCurrentDay, reportPreviousDay);
-  const mapReportCurrentDay = useMemo(
-    () =>
-      reportCurrentDay || {
-        id: 15,
-        day: +format(new Date(), "yyyyMMdd"),
-        topup: 0,
-        brandname: 0,
-        agent: 0,
-        agent_none: 0,
-        farmer: 0,
-        farmer_none: 0,
-        qrcode: 0,
-        sms: 0,
-      },
-    [reportCurrentDay]
-  );
-  const mapReportPreviousDay = useMemo(
-    () =>
-      reportPreviousDay || {
-        id: 15,
-        day: +format(subDays(new Date(), 1), "yyyyMMdd"),
-        topup: 0,
-        brandname: 0,
-        agent: 0,
-        agent_none: 0,
-        farmer: 0,
-        farmer_none: 0,
-        qrcode: 0,
-        sms: 0,
-      },
-    [reportCurrentDay]
-  );
+  const mapReportCurrentDay = useMemo(() => {
+    let tmp = {
+      topup: 0,
+      brandname: 0,
+      agent: 0,
+      agent_none: 0,
+      farmer: 0,
+      farmer_none: 0,
+      qrcode: 0,
+      sms: 0,
+    };
+    report7days?.forEach((item) => {
+      tmp = {
+        topup: item.topup + tmp.topup,
+        brandname: item.brandname + tmp.brandname,
+        agent: item.agent + tmp.agent,
+        agent_none: item.agent_none + tmp.agent_none,
+        farmer: item.farmer + tmp.farmer,
+        farmer_none: item.farmer_none + tmp.farmer_none,
+        qrcode: item.qrcode + tmp.qrcode,
+        sms: item.sms + tmp.sms,
+      };
+    });
+
+    return tmp;
+  }, [report7days]);
+  const mapReportPreviousDay = useMemo(() => {
+    let tmp = {
+      topup: 0,
+      brandname: 0,
+      agent: 0,
+      agent_none: 0,
+      farmer: 0,
+      farmer_none: 0,
+      qrcode: 0,
+      sms: 0,
+    };
+    reportPrevious7days?.forEach((item) => {
+      tmp = {
+        topup: item.topup + tmp.topup,
+        brandname: item.brandname + tmp.brandname,
+        agent: item.agent + tmp.agent,
+        agent_none: item.agent_none + tmp.agent_none,
+        farmer: item.farmer + tmp.farmer,
+        farmer_none: item.farmer_none + tmp.farmer_none,
+        qrcode: item.qrcode + tmp.qrcode,
+        sms: item.sms + tmp.sms,
+      };
+    });
+
+    return tmp;
+  }, [reportPrevious7days]);
 
   return (
     <div className="row row-cols-sm-2 row-cols-xxl-4 g-0 ecommerce-cards">
@@ -69,9 +93,11 @@ function OutstandingReport() {
             {mapReportCurrentDay.agent > mapReportPreviousDay.agent ? (
               <span className="ms-2 fs-13 text-secondary">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.agent / mapReportCurrentDay?.agent +
-                  mapReportPreviousDay.agent) *
-                  100}
+                {(
+                  (mapReportCurrentDay.agent / mapReportCurrentDay?.agent +
+                    mapReportPreviousDay.agent) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
@@ -106,23 +132,27 @@ function OutstandingReport() {
             mapReportPreviousDay.agent_none ? (
               <span className="ms-2 fs-13 text-secondary">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.agent_none /
-                  mapReportCurrentDay?.agent_none +
-                  mapReportPreviousDay.agent_none) *
-                  100}
+                {(
+                  (mapReportCurrentDay.agent_none /
+                    mapReportCurrentDay?.agent_none +
+                    mapReportPreviousDay.agent_none) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
               <span className="ms-2 fs-13 text-secondary">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.agent_none /
-                  (mapReportCurrentDay?.agent_none +
-                    mapReportPreviousDay.agent_none ===
-                  0
-                    ? 1
-                    : mapReportCurrentDay?.agent_none +
-                      mapReportPreviousDay.agent_none)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.agent_none /
+                    (mapReportCurrentDay?.agent_none +
+                      mapReportPreviousDay.agent_none ===
+                    0
+                      ? 1
+                      : mapReportCurrentDay?.agent_none +
+                        mapReportPreviousDay.agent_none)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}
@@ -146,21 +176,26 @@ function OutstandingReport() {
             {mapReportCurrentDay.farmer > mapReportPreviousDay.farmer ? (
               <span className="ms-2 fs-13 text-info">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.farmer / mapReportCurrentDay?.farmer +
-                  mapReportPreviousDay.farmer) *
-                  100}
+                {(
+                  (mapReportCurrentDay.farmer / mapReportCurrentDay?.farmer +
+                    mapReportPreviousDay.farmer) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
               <span className="ms-2 fs-13 text-info">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.farmer /
-                  (mapReportCurrentDay?.farmer + mapReportPreviousDay.farmer ===
-                  0
-                    ? 1
-                    : mapReportCurrentDay?.farmer +
-                      mapReportPreviousDay.farmer)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.farmer /
+                    (mapReportCurrentDay?.farmer +
+                      mapReportPreviousDay.farmer ===
+                    0
+                      ? 1
+                      : mapReportCurrentDay?.farmer +
+                        mapReportPreviousDay.farmer)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}
@@ -184,23 +219,27 @@ function OutstandingReport() {
             mapReportPreviousDay.farmer_none ? (
               <span className="ms-2 fs-13 text-info">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.farmer_none /
-                  mapReportCurrentDay?.farmer_none +
-                  mapReportPreviousDay.farmer_none) *
-                  100}
+                {(
+                  (mapReportCurrentDay.farmer_none /
+                    mapReportCurrentDay?.farmer_none +
+                    mapReportPreviousDay.farmer_none) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
               <span className="ms-2 fs-13 text-info">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.farmer_none /
-                  (mapReportCurrentDay?.farmer_none +
-                    mapReportPreviousDay.farmer_none ===
-                  0
-                    ? 1
-                    : mapReportCurrentDay?.farmer_none +
-                      mapReportPreviousDay.farmer_none)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.farmer_none /
+                    (mapReportCurrentDay?.farmer_none +
+                      mapReportPreviousDay.farmer_none ===
+                    0
+                      ? 1
+                      : mapReportCurrentDay?.farmer_none +
+                        mapReportPreviousDay.farmer_none)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}
@@ -224,21 +263,26 @@ function OutstandingReport() {
             {mapReportCurrentDay.qrcode > mapReportPreviousDay.qrcode ? (
               <span className="ms-2 fs-13 text-warning">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.qrcode / mapReportCurrentDay?.qrcode +
-                  mapReportPreviousDay.qrcode) *
-                  100}
+                {(
+                  (mapReportCurrentDay.qrcode / mapReportCurrentDay?.qrcode +
+                    mapReportPreviousDay.qrcode) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
               <span className="ms-2 fs-13 text-warning">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.qrcode /
-                  (mapReportCurrentDay?.qrcode + mapReportPreviousDay.qrcode ===
-                  0
-                    ? 1
-                    : mapReportCurrentDay?.qrcode +
-                      mapReportPreviousDay.qrcode)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.qrcode /
+                    (mapReportCurrentDay?.qrcode +
+                      mapReportPreviousDay.qrcode ===
+                    0
+                      ? 1
+                      : mapReportCurrentDay?.qrcode +
+                        mapReportPreviousDay.qrcode)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}
@@ -262,19 +306,23 @@ function OutstandingReport() {
             {mapReportCurrentDay.sms > mapReportPreviousDay.sms ? (
               <span className="ms-2 fs-13 text-success">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.sms / mapReportCurrentDay?.sms +
-                  mapReportPreviousDay.sms) *
-                  100}
+                {(
+                  (mapReportCurrentDay.sms / mapReportCurrentDay?.sms +
+                    mapReportPreviousDay.sms) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
               <span className="ms-2 fs-13 text-success">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.sms /
-                  (mapReportCurrentDay?.sms + mapReportPreviousDay.sms === 0
-                    ? 1
-                    : mapReportCurrentDay?.sms + mapReportPreviousDay.sms)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.sms /
+                    (mapReportCurrentDay?.sms + mapReportPreviousDay.sms === 0
+                      ? 1
+                      : mapReportCurrentDay?.sms + mapReportPreviousDay.sms)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}
@@ -298,23 +346,27 @@ function OutstandingReport() {
             {mapReportCurrentDay.brandname > mapReportPreviousDay.brandname ? (
               <span className="ms-2 fs-13 text-dark">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.brandname /
-                  mapReportCurrentDay?.brandname +
-                  mapReportPreviousDay.brandname) *
-                  100}
+                {(
+                  (mapReportCurrentDay.brandname /
+                    mapReportCurrentDay?.brandname +
+                    mapReportPreviousDay.brandname) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
               <span className="ms-2 fs-13 text-dark">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.brandname /
-                  (mapReportCurrentDay?.brandname +
-                    mapReportPreviousDay.brandname ===
-                  0
-                    ? 1
-                    : mapReportCurrentDay?.brandname +
-                      mapReportPreviousDay.brandname)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.brandname /
+                    (mapReportCurrentDay?.brandname +
+                      mapReportPreviousDay.brandname ===
+                    0
+                      ? 1
+                      : mapReportCurrentDay?.brandname +
+                        mapReportPreviousDay.brandname)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}
@@ -337,20 +389,25 @@ function OutstandingReport() {
             {mapReportCurrentDay.topup > mapReportPreviousDay.topup ? (
               <span className="ms-2 fs-13 text-primary">
                 <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.topup / mapReportCurrentDay?.topup +
-                  mapReportPreviousDay.topup) *
-                  100}
+                {(
+                  (mapReportCurrentDay.topup / mapReportCurrentDay?.topup +
+                    mapReportPreviousDay.topup) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             ) : (
               <span className="ms-2 fs-13 text-primary">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.topup /
-                  (mapReportCurrentDay?.topup + mapReportPreviousDay.topup === 0
-                    ? 1
-                    : mapReportCurrentDay?.topup +
-                      mapReportPreviousDay.topup)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.topup /
+                    (mapReportCurrentDay?.topup + mapReportPreviousDay.topup ===
+                    0
+                      ? 1
+                      : mapReportCurrentDay?.topup +
+                        mapReportPreviousDay.topup)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}

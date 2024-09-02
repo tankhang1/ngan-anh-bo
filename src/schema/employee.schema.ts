@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 const employeeSchema = Yup.object().shape({
-  code: Yup.string().required("Trường bắt buộc"),
+  code: Yup.string(),
   name: Yup.string().required("Trường bắt buộc"),
   province: Yup.mixed()
     .test(
@@ -11,7 +11,7 @@ const employeeSchema = Yup.object().shape({
     .required("Trường bắt buộc"),
   phone: Yup.string()
     .trim()
-    .matches(/^84\d{9}$/, "Số điện thoại không đúng theo mẫu 84xxxxxxxxx")
+    .matches(/^[0-9]{10,11}$/, "Số điện thoại không đúng theo mẫu 84xxxxxxxxx")
     .required("Trường bắt buộc"),
   email: Yup.string().email().required("Trường bắt buộc"),
   gender: Yup.number().required("Trường bắt buộc"),
@@ -19,14 +19,7 @@ const employeeSchema = Yup.object().shape({
   citizen_day: Yup.string(),
   note: Yup.string(),
   avatar: Yup.string(),
-  areas: Yup.array()
-    .min(1, "Trường bắt buộc") // Ensure at least one area is selected
-    .of(
-      Yup.object({
-        label: Yup.string().required(),
-        value: Yup.string().required(),
-      })
-    ),
+  areas: Yup.array(),
   provinces: Yup.array()
     .min(1, "Trường bắt buộc") // Ensure at least 1 object is selected
     .of(Yup.object().required()) // Ensure the items in the array are objects

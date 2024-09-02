@@ -2,25 +2,31 @@ import React from "react";
 import AppTable from "../../../../components/common/table/table";
 import { TAgent } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
-import { useGetListFarmersQuery } from "../../../../redux/api/manage/manage.api";
+import {
+  useGetListCustomerQuery,
+  useGetListFarmersQuery,
+} from "../../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 
 function TableFarmer() {
-  const { data: farmers, isLoading: isLoadingFarmer } = useGetListFarmersQuery(
-    {
-      st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-    },
-    {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data: customerUnRegister, isLoading: isLoadingCustomerUnRegister } =
+    useGetListCustomerQuery(
+      {
+        st: +(format(new Date(), "yyyyMMdd") + "0000"),
+        ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+        t: "ANONYMOUS",
+        s: 0,
+      },
+      {
+        skipPollingIfUnfocused: true,
+        pollingInterval: 300000,
+        refetchOnMountOrArgChange: true,
+      }
+    );
 
   return (
     <AppTable
-      title="Thông tin nông dân"
+      title="Thông tin khách hàng chưa xác thực trong ngày"
       headers={[
         {
           key: "id",
@@ -79,13 +85,8 @@ function TableFarmer() {
           ),
         },
       ]}
-      data={
-        ([
-          ...(farmers?.listValidateFarmers ?? []),
-          ...(farmers?.listUnValidateFarmers ?? []),
-        ] || []) as any
-      }
-      isLoading={isLoadingFarmer}
+      data={(customerUnRegister || []) as any}
+      isLoading={isLoadingCustomerUnRegister}
       filters={[
         {
           key: "status",

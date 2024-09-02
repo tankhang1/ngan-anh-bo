@@ -341,28 +341,28 @@ function EmployeeCreateEdit() {
                             </Form.Control.Feedback>
                           </Form.Group>
                           <Stack as={Col} md={8}>
-                            <Form.Group>
-                              <Form.Label className="text-black">
-                                Mã nhân viên{" "}
-                                <span style={{ color: "red" }}>*</span>
-                              </Form.Label>
-                              <Form.Control
-                                required
-                                type="text"
-                                placeholder="Mã nhân viên"
-                                name="code"
-                                defaultValue={values.code}
-                                onChange={handleChange}
-                                isInvalid={touched.code && !!errors.code}
-                                className="input-placeholder"
-                                disabled={
-                                  isCreate === "false" && isEdit === false
-                                }
-                              />
-                              <Form.Control.Feedback type="invalid">
-                                {errors.code}
-                              </Form.Control.Feedback>
-                            </Form.Group>
+                            {isCreate !== "true" && (
+                              <Form.Group>
+                                <Form.Label className="text-black">
+                                  Mã nhân viên{" "}
+                                  <span style={{ color: "red" }}>*</span>
+                                </Form.Label>
+                                <Form.Control
+                                  required
+                                  type="text"
+                                  placeholder="Mã nhân viên"
+                                  name="code"
+                                  defaultValue={values.code}
+                                  onChange={handleChange}
+                                  isInvalid={touched.code && !!errors.code}
+                                  className="input-placeholder"
+                                  disabled={false}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                  {errors.code}
+                                </Form.Control.Feedback>
+                              </Form.Group>
+                            )}
                             <Form.Group>
                               <Form.Label className="text-black">
                                 Tên nhân viên{" "}
@@ -542,7 +542,7 @@ function EmployeeCreateEdit() {
                                   }))
                                 : []
                             }
-                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
+                            className="basic-multi-select custom-multi mb-3 input-placeholder"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
                             isSearchable
@@ -610,7 +610,7 @@ function EmployeeCreateEdit() {
                                 value: `${item.code}-${item.name}`,
                               })) as any
                             }
-                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
+                            className="basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
@@ -666,7 +666,7 @@ function EmployeeCreateEdit() {
                                 value: `${item.id}-${item.name}`,
                               })) as any
                             }
-                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
+                            className="basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
@@ -709,7 +709,6 @@ function EmployeeCreateEdit() {
                         <Form.Group>
                           <Form.Label className="text-black">
                             Vùng kinh doanh{" "}
-                            <span style={{ color: "red" }}>*</span>
                           </Form.Label>
                           <Select
                             isMulti
@@ -720,7 +719,7 @@ function EmployeeCreateEdit() {
                                 value: item,
                               })) as any
                             }
-                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
+                            className="basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"
@@ -773,7 +772,7 @@ function EmployeeCreateEdit() {
                                   }))
                                 : []
                             }
-                            className="default basic-multi-select custom-multi mb-3 input-placeholder"
+                            className="basic-multi-select custom-multi mb-3 input-placeholder"
                             id="choices-multiple-default"
                             menuPlacement="auto"
                             classNamePrefix="Select2"

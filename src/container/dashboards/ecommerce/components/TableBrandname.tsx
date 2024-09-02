@@ -1,14 +1,8 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
-import {
-  TBrandname,
-  TGetListBrandnamesRes,
-  TTopupTableDashboard,
-} from "../../../../assets/types";
+import { TBrandname } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
 import { format } from "date-fns";
-import { fNumber } from "../../../../hooks";
-import { useGetReportProgramTopupByTimeQuery } from "../../../../redux/api/report/report.api";
 import { useGetListBrandnamesQuery } from "../../../../redux/api/manage/manage.api";
 
 function TableBrandname() {
