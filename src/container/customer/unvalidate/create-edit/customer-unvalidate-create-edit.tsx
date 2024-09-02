@@ -44,6 +44,7 @@ function CustomerUnValidationCreateEdit() {
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
   const navigate = useNavigate();
@@ -157,8 +158,8 @@ function CustomerUnValidationCreateEdit() {
           console.log("create agent fail", e.message);
         });
     } else {
-      setIsEdit(!isEdit);
-      if (isEdit === true)
+      setIsEdit(false);
+      if (isEdit === true) {
         await updateCustomer({
           ...values,
           uuid: values?.uuid ? values.uuid : newUUID?.toString(),
@@ -193,6 +194,7 @@ function CustomerUnValidationCreateEdit() {
           .catch((e) => {
             console.log("create agent fail", e.message);
           });
+      }
     }
   };
 
@@ -262,59 +264,74 @@ function CustomerUnValidationCreateEdit() {
                     >
                       Trở lại
                     </button>
-                    {permission.verifyUnvalidateCustomer &&
-                      isCreate !== "true" && (
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip">
-                              Xác thực người dùng
-                            </Tooltip>
-                          }
-                        >
-                          <button
-                            onClick={() => {
-                              onValidateCustomer(values);
-                            }}
-                            className={`btn btn-teal-light justify-content-center align-items-center ${
-                              isLoadingVerify && "btn-loader "
-                            }`}
+                    {isEdit && isCreate !== "true" && (
+                      <div className="d-flex gap-2">
+                        {permission.verifyUnvalidateCustomer && (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                Xác thực người dùng
+                              </Tooltip>
+                            }
                           >
-                            <span>Xác thực</span>
-                            {isLoadingVerify && (
-                              <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
-                              </span>
-                            )}
-                          </button>
-                        </OverlayTrigger>
-                      )}
-
-                    {isCreate === "true" ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (errors) {
+                                  toast.showToast(
+                                    "Vui lòng điền đầy đủ thông tin bắc buộc"
+                                  );
+                                } else onValidateCustomer(values);
+                              }}
+                              className={`btn btn-teal-light justify-content-center align-items-center ${
+                                isLoadingVerify && "btn-loader "
+                              }`}
+                            >
+                              <span>Xác thực</span>
+                              {isLoadingVerify && (
+                                <span className="loading">
+                                  <i className="ri-loader-2-fill fs-19"></i>
+                                </span>
+                              )}
+                            </button>
+                          </OverlayTrigger>
+                        )}
+                        <button
+                          className={`btn  btn-purple-light justify-content-center align-items-center ${
+                            isLoadingUpdate && "btn-loader "
+                          }`}
+                          type={"submit"}
+                        >
+                          <span>
+                            {!isLoadingUpdate && !isEdit ? "Chỉnh sửa" : "Lưu"}
+                          </span>
+                          {isLoadingUpdate && (
+                            <span className="loading">
+                              <i className="ri-loader-2-fill fs-19"></i>
+                            </span>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                    {!isEdit && isCreate !== "true" && (
                       <button
-                        className={`btn  btn-purple-light justify-content-center align-items-center ${
+                        className={`btn btn-purple-light justify-content-center align-items-center
+                          `}
+                        onClick={() => setIsEdit(true)}
+                      >
+                        <span>Chỉnh sửa</span>
+                      </button>
+                    )}
+                    {isCreate === "true" && (
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
                           isLoadingCreate && "btn-loader "
                         }`}
                         type="submit"
                       >
                         <span>Thêm mới</span>
                         {isLoadingCreate && (
-                          <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
-                          </span>
-                        )}
-                      </button>
-                    ) : (
-                      <button
-                        className={`btn  btn-purple-light justify-content-center align-items-center ${
-                          isLoadingUpdate && "btn-loader "
-                        }`}
-                        type="submit"
-                      >
-                        <span>
-                          {!isLoadingUpdate && !isEdit ? "Chỉnh sửa" : "Lưu"}
-                        </span>
-                        {isLoadingUpdate && (
                           <span className="loading">
                             <i className="ri-loader-2-fill fs-19"></i>
                           </span>

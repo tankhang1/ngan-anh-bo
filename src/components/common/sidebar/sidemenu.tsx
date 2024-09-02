@@ -207,7 +207,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Báo cáo xuất kho",
+        title: "Báo cáo xuất kho trong ngày",
         key: MENU_KEY.WAREHOUSES_REPORT_EXPORT,
       },
       {

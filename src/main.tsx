@@ -45,6 +45,7 @@ import WarehouseImport from "./container/warehouse/import/warehouseImport.tsx";
 import SearchWarehouseImport from "./container/warehouse/import/searchWarehouseImport.tsx";
 import CustomerReport from "./container/report/CustomerReport/index.tsx";
 import { PageLoading } from "./redux/middlewares/pageLoading.tsx";
+import WarehouseReportExport from "./container/warehouse/export/warehouseReportExport.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -83,6 +84,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }warehouse/export/search-warehouse-export`}
                 element={<SearchWarehouseExport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}warehouse/report/export`}
+                element={<WarehouseReportExport />}
               />
               <Route
                 path={`${
@@ -152,18 +157,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 }program/topup/ce/:isCreate/:id`}
                 element={<TopupCreateEdit />}
               />
-              {/* <Route
-                path={`${import.meta.env.BASE_URL}report`}
-                element={<ReportPage />}
-              /> */}
-              {/* <Route
-                path={`${import.meta.env.BASE_URL}report/agent`}
-                element={<AgentReport />}
-              />
-              <Route
-                path={`${import.meta.env.BASE_URL}report/farmer`}
-                element={<FarmerReport />}
-              /> */}
+
               <Route
                 path={`${import.meta.env.BASE_URL}report/customer`}
                 element={<CustomerReport />}
