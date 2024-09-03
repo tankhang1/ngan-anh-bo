@@ -12,6 +12,7 @@ function TableBrandname() {
         st: +(format(new Date(), "yyyyMMdd") + "0000"),
         ed: +(format(new Date(), "yyyyMMdd") + "2399"),
         sz: 99999,
+        nu: 0,
       },
       {
         skipPollingIfUnfocused: true,
@@ -21,7 +22,7 @@ function TableBrandname() {
     );
   return (
     <AppTable
-      title="Brandname"
+      title="Danh sách brandname hôm nay"
       headers={[
         {
           key: "transactionid",
@@ -61,7 +62,6 @@ function TableBrandname() {
         },
       ]}
       data={(brandnames || []) as any}
-      filters={[]}
       isLoading={isLoadingBrandname}
     />
   );

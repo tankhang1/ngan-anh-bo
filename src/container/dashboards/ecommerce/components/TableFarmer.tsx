@@ -26,7 +26,7 @@ function TableFarmer() {
 
   return (
     <AppTable
-      title="Thông tin khách hàng chưa xác thực trong ngày"
+      title="Thông tin khách hàng chưa xác thực hôm nay"
       headers={[
         {
           key: "id",

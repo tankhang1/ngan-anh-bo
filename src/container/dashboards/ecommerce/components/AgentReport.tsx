@@ -1,13 +1,8 @@
-import React, { useMemo, useState } from "react";
-import { Card, Col, Dropdown, Row } from "react-bootstrap";
+import React, { useMemo } from "react";
+import { Card, Col } from "react-bootstrap";
 import { Basicolumn } from "../../../charts/apexcharts/columnchart/columnchartdata";
-import {
-  useGetListAgentsQuery,
-  useGetListCustomerQuery,
-  useGetReportDashboardDayByDayQuery,
-} from "../../../../redux/api/manage/manage.api";
-import { endOfWeek, format, startOfWeek, subDays, subWeeks } from "date-fns";
-import lodash from "lodash";
+import { useGetReportDashboardDayByDayQuery } from "../../../../redux/api/manage/manage.api";
+import { format, subDays } from "date-fns";
 import { fDate } from "../../../../hooks";
 export const getDaysArray = function (
   start: string | Date,

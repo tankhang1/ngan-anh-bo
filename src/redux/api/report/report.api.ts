@@ -52,6 +52,22 @@ export const reportApi = createApi({
         params: params,
       }),
     }),
+    getReportProgramPointDetailToday: builder.query<
+      TProgramPointDetail[],
+      void
+    >({
+      query: () => ({
+        url: "/api/program/point/detail/today",
+        method: HTTPS_METHOD.GET,
+      }),
+    }),
+    getReportProgramPointDetailCounter: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/program/point/detail/counter",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
   }),
 });
 
@@ -59,4 +75,6 @@ export const {
   useGetReportProgramPointByTimeQuery,
   useGetReportProgramTopupByTimeQuery,
   useGetReportProgramPointDetailByTimeQuery,
+  useGetReportProgramPointDetailCounterQuery,
+  useGetReportProgramPointDetailTodayQuery,
 } = reportApi;

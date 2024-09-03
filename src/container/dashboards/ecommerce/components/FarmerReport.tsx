@@ -1,11 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Card, Col, Dropdown, Row } from "react-bootstrap";
 import { Basicolumn } from "../../../charts/apexcharts/columnchart/columnchartdata";
-import {
-  useGetListAgentsQuery,
-  useGetListFarmersQuery,
-  useGetReportDashboardDayByDayQuery,
-} from "../../../../redux/api/manage/manage.api";
+import { useGetReportDashboardDayByDayQuery } from "../../../../redux/api/manage/manage.api";
 import { endOfWeek, format, startOfWeek, subDays, subWeeks } from "date-fns";
 import lodash from "lodash";
 import { getDaysArray } from "./AgentReport";

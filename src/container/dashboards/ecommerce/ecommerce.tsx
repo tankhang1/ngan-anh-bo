@@ -1,6 +1,7 @@
 import React, { FC, Fragment, lazy } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { PageLoading } from "../../../redux/middlewares/pageLoading";
+import { MixedChart } from "../../charts/mixedchart/MixedChart";
 
 //IMAGES
 

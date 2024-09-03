@@ -22,7 +22,7 @@ function TableTopup() {
     );
   return (
     <AppTable
-      title="Topup"
+      title="Danh sách topup hôm nay"
       headers={[
         {
           key: "program_uuid",

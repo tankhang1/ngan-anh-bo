@@ -26,7 +26,7 @@ function TableAgent() {
 
   return (
     <AppTable
-      title="Thông tin đại lý đã xác thực trong ngày"
+      title="Danh sách đại lý đã xác thực hôm nay"
       headers={[
         {
           key: "id",

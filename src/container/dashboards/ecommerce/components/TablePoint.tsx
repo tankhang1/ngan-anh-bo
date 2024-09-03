@@ -1,44 +1,46 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
-import { TPointTableDashboard } from "../../../../assets/types";
+import { TProgramPointDetail } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
-import { format } from "date-fns";
-import { useGetReportProgramPointByTimeQuery } from "../../../../redux/api/report/report.api";
+import { useGetReportProgramPointDetailTodayQuery } from "../../../../redux/api/report/report.api";
 import { fNumber } from "../../../../hooks";
 
 function TablePoint() {
   const { data: points, isLoading: isLoadingPoint } =
-    useGetReportProgramPointByTimeQuery(
-      {
-        st: +(format(new Date(), "yyyyMMdd") + "0000"),
-        ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-        sz: 99999,
-      },
-      {
-        skipPollingIfUnfocused: true,
-        pollingInterval: 300000,
-        refetchOnMountOrArgChange: true,
-      }
-    );
+    useGetReportProgramPointDetailTodayQuery(undefined, {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
+    });
+
   return (
     <AppTable
-      title="Tích điểm"
+      title="Danh sách tích điểm hôm nay"
       headers={[
         {
-          key: "program_uuid",
-          label: "Mã chương trình",
-          render: (value: TPointTableDashboard) => (
+          key: "program_name",
+          label: "Tên chương trình",
+          render: (value: TProgramPointDetail) => (
             <td>
-              <AppId id={value.program_uuid} />
+              <span className="fw-semibold"> {value.program_name}</span>
             </td>
           ),
         },
         {
-          key: "program_name",
-          label: "Tên chương trình",
-          render: (value: TPointTableDashboard) => (
+          key: "agent_name",
+          label: "Tên đại lý",
+          render: (value) => (
             <td>
-              <span className="fw-semibold"> {value.program_name}</span>
+              <span className="fw-semibold">{value.agent_name}</span>
+            </td>
+          ),
+        },
+        {
+          key: "customer_uuid",
+          label: "Mã khách hàng",
+          render: (value) => (
+            <td>
+              <AppId id={value.customer_uuid} />
             </td>
           ),
         },
@@ -52,11 +54,20 @@ function TablePoint() {
           ),
         },
         {
-          key: "province",
+          key: "phone",
+          label: "Số điện thoại",
+          render: (value) => (
+            <td>
+              <span className="fw-semibold">{value.phone}</span>
+            </td>
+          ),
+        },
+        {
+          key: "province_name",
           label: "Tỉnh thành",
           render: (value) => (
             <td>
-              <span className="fw-semibold">{value.province}</span>
+              <span className="fw-semibold">{value.province_name}</span>
             </td>
           ),
         },
@@ -66,24 +77,14 @@ function TablePoint() {
           render: (value) => <td>{value.code}</td>,
         },
         {
-          key: "product_code",
-          label: "Mã sản phẩm",
-          render: (value) => <td>{value.product_code}</td>,
-        },
-        {
           key: "product_name",
           label: "Tên sản phẩm",
           render: (value) => <td>{value.product_name}</td>,
         },
         {
-          key: "c1_price_vnd",
-          label: "Giá tiền 1",
-          render: (value) => <td>{fNumber(value.c1_price_vnd ?? 0)}</td>,
-        },
-        {
-          key: "c2_price_vnd",
-          label: "Giá tiền 2",
-          render: (value) => <td>{fNumber(value.c2_price_vnd ?? 0)}</td>,
+          key: "point",
+          label: "Số điểm",
+          render: (value) => <td>{fNumber(value.point ?? 0)}</td>,
         },
         {
           key: "time_earn",

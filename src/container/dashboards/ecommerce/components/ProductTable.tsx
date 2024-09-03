@@ -10,10 +10,13 @@ import {
 import { format } from "date-fns";
 
 function ProductTable() {
-  const { data: bins } = useGetBinsQuery(
+  // type use
+  const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
       ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+      nu: 0,
+      sz: 9999,
     },
     {
       skipPollingIfUnfocused: true,
@@ -21,10 +24,12 @@ function ProductTable() {
       refetchOnMountOrArgChange: true,
     }
   );
-  const { data: packets } = useGetPacketsQuery(
+  const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
       ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+      nu: 0,
+      sz: 9999,
     },
     {
       skipPollingIfUnfocused: true,
@@ -36,6 +41,7 @@ function ProductTable() {
       <Col xl={6}>
         <AppTable
           title="SMS"
+          isLoading={isLoadingBin || isLoadingPacket}
           headers={[
             {
               key: "id",
@@ -61,9 +67,9 @@ function ProductTable() {
               render: (value) => <td>{value.bin_seri}</td>,
             },
             {
-              key: "product_name",
-              label: "Tên sản phẩm",
-              render: (value) => <td>{value.product_name}</td>,
+              key: "product_code",
+              label: "Mã sản phẩm",
+              render: (value) => <td>{value.product_code}</td>,
             },
             {
               key: "time_use",
@@ -77,6 +83,7 @@ function ProductTable() {
       <Col xl={6}>
         <AppTable
           title="QrCode"
+          isLoading={isLoadingBin || isLoadingPacket}
           headers={[
             {
               key: "id",
@@ -102,9 +109,9 @@ function ProductTable() {
               render: (value) => <td>{value.bin_seri}</td>,
             },
             {
-              key: "product_name",
-              label: "Tên sản phẩm",
-              render: (value) => <td>{value.product_name}</td>,
+              key: "product_code",
+              label: "Mã sản phẩm",
+              render: (value) => <td>{value.product_code}</td>,
             },
             {
               key: "time_use",

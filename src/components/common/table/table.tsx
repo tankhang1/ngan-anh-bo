@@ -130,6 +130,9 @@ const AppTable = <T extends DataItem>({
   useEffect(() => {
     setExternalPage?.(page);
   }, [page]);
+  useEffect(() => {
+    if (headers) setSearchBy(headers[0]);
+  }, [headers]);
   return (
     <Card className="custom-card ">
       {isHeader && (
@@ -241,8 +244,9 @@ const AppTable = <T extends DataItem>({
       <Card.Footer>
         <div className="d-flex flex-sm-row gap-2 flex-column align-items-center">
           <div className="text-black">
-            Tổng cộng {externalSearch ? filterData.length : maxPage ?? 0} items{" "}
-            <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
+            Tổng cộng{" "}
+            {externalSearch ? filterData.length : maxPage ?? filterData.length}{" "}
+            items <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
           </div>
           <div className="ms-auto">
             <nav aria-label="Page navigation" className="pagination-style-4">

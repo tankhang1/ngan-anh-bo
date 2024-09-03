@@ -308,13 +308,12 @@ export type TTopupTableDashboard = {
 };
 
 export type TProgramPointDetail = {
-  id: string;
-  program_uuid: string;
+  id: number;
   program_name: string;
-  customer_code: string;
-  customer_name: string;
-  province_name: string;
-  area: string;
+  customer_code: string | null;
+  customer_name: string | null;
+  province_name: string | null;
+  area: string | null;
   phone: string;
   point: number;
   point_coefficient: number;
@@ -323,6 +322,8 @@ export type TProgramPointDetail = {
   code_hash: string;
   product_name: string;
   time_earn: string;
+  customer_uuid: string;
+  zalo_device_id: string;
 };
 export type TProgramTopupDetail = {
   id: string;
