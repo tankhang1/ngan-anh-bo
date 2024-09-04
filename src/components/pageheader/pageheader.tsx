@@ -30,6 +30,9 @@ const MapLabel = new Map([
   ["search-warehouse-import", "Tìm kiếm thông tin nhập kho"],
   ["sms", "SMS"],
   ["customer", "Báo cáo khách hàng"],
+  ["search-customer-today", "Khách hàng tham gia trong ngày"],
+  ["search-topup-today", "Topup tham gia trong ngày"],
+  ["search-customer-unvalidate-today", "Danh sách khách hàng chưa xác thực"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

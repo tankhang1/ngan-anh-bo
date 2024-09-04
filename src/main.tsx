@@ -47,6 +47,9 @@ import CustomerReport from "./container/report/CustomerReport/index.tsx";
 import { PageLoading } from "./redux/middlewares/pageLoading.tsx";
 import WarehouseReportExport from "./container/warehouse/export/warehouseReportExport.tsx";
 import SMSReport from "./container/report/components/SMSReport.tsx";
+import CustomerToday from "./container/operator/customer-today/index.tsx";
+import TopupToday from "./container/operator/topup-today/index.tsx";
+import CustomerUnValidateToday from "./container/operator/customer-unvalidate-today/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -141,6 +144,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}operator/search-product-code`}
                 element={<SearchProductCode />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }operator/search-customer-unvalidate-today`}
+                element={<CustomerUnValidateToday />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }operator/search-customer-today`}
+                element={<CustomerToday />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/search-topup-today`}
+                element={<TopupToday />}
               />
               <Route
                 path={`${

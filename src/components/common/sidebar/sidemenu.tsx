@@ -107,16 +107,15 @@ export const MENUITEMS = [
         title: "Tra cứu mã sản phẩm",
         key: MENU_KEY.OPERATORS_SEARCH_PRODUCT,
       },
-      {
-        path: `${import.meta.env.BASE_URL}operator/search-customer-today`,
-        type: "link",
-        active: false,
-        selected: false,
-        dirchange: false,
-        title: "Khách hàng tham gia trong ngày",
-        key: MENU_KEY.OPERATORS_SEARCH_CUSTOMER_TODAY,
-      },
-
+      // {
+      //   path: `${import.meta.env.BASE_URL}operator/search-customer-today`,
+      //   type: "link",
+      //   active: false,
+      //   selected: false,
+      //   dirchange: false,
+      //   title: "Khách hàng tham gia trong ngày",
+      //   key: MENU_KEY.OPERATORS_SEARCH_CUSTOMER_TODAY,
+      // },
       {
         path: `${import.meta.env.BASE_URL}operator/search-topup-today`,
         type: "link",
@@ -127,9 +126,7 @@ export const MENUITEMS = [
         key: MENU_KEY.OPERATORS_SEARCH_TOPUP_TODAY,
       },
       {
-        path: `${
-          import.meta.env.BASE_URL
-        }operator/search-customer-validate-today`,
+        path: `${import.meta.env.BASE_URL}operator/search-customer-today`,
         type: "link",
         active: false,
         selected: false,
