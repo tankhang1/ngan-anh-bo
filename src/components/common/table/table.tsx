@@ -2,6 +2,7 @@ import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { Card, Dropdown, Pagination } from "react-bootstrap";
 import Loading from "../../../assets/images/apps/loading.gif";
 import Empty from "../../../assets/images/apps/empty.jpg";
+import { useMediaQuery } from "@mui/material";
 
 type THeader<T> = {
   key: string;
@@ -46,6 +47,7 @@ const AppTable = <T extends DataItem>({
   setExternalPage,
   isChange,
 }: TAppTable<T>) => {
+  const isSmallScreen = useMediaQuery("(max-width:425px)");
   const [page, setPage] = useState(1);
   const [filterOption, setFilterOption] = useState(filters?.[0]);
   const [searchBy, setSearchBy] = useState(headers[0]);
@@ -106,7 +108,6 @@ const AppTable = <T extends DataItem>({
       ? maxPage ?? filterData.length
       : filterData.length ?? 0) / PAGE_SIZE
   );
-
   const listButtonPaging = useMemo(() => {
     if (MAX_PAGE < 5)
       return Array.from({ length: MAX_PAGE }).map((_, index) => {
@@ -122,10 +123,10 @@ const AppTable = <T extends DataItem>({
     });
   }, [data.length, page, MAX_PAGE]);
   useEffect(() => {
-    if (page !== 1) {
+    if (page !== 1 && !setExternalPage) {
       setPage(1);
     }
-  }, [isChange, searchBy, searchByExternal, externalSearch]);
+  }, [isChange, searchBy, searchByExternal, externalSearch, setExternalPage]);
 
   useEffect(() => {
     setExternalPage?.(page);
@@ -248,9 +249,26 @@ const AppTable = <T extends DataItem>({
             {externalSearch ? filterData.length : maxPage ?? filterData.length}{" "}
             items <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
           </div>
-          <div className="ms-auto">
+          <div className={`ms-auto ${isSmallScreen && "mx-auto"}`}>
             <nav aria-label="Page navigation" className="pagination-style-4">
-              <Pagination as="ul" className="pagination mb-0 gap-1">
+              <Pagination
+                as="ul"
+                className={`pagination ${
+                  isSmallScreen &&
+                  "flex-column justify-content-center align-items-center"
+                } mb-0 gap-1`}
+              >
+                <Pagination.Item
+                  disabled={page > 1 ? false : true}
+                  href="#"
+                  onClick={() => {
+                    if (page > 1) {
+                      setPage(1);
+                    }
+                  }}
+                >
+                  Đầu tiên
+                </Pagination.Item>
                 <Pagination.Item
                   disabled={page > 1 ? false : true}
                   href="#"
@@ -263,18 +281,21 @@ const AppTable = <T extends DataItem>({
                   Trước
                 </Pagination.Item>
 
-                {listButtonPaging.map(
-                  (item, index) =>
-                    item !== null && (
-                      <Pagination.Item
-                        key={index}
-                        active={page === item}
-                        onClick={() => setPage(item)}
-                      >
-                        {item}
-                      </Pagination.Item>
-                    )
-                )}
+                <div className="d-flex">
+                  {" "}
+                  {listButtonPaging.map(
+                    (item, index) =>
+                      item !== null && (
+                        <Pagination.Item
+                          key={index}
+                          active={page === item}
+                          onClick={() => setPage(item)}
+                        >
+                          {item}
+                        </Pagination.Item>
+                      )
+                  )}
+                </div>
                 <Pagination.Item
                   disabled={page < MAX_PAGE ? false : true}
                   className="text-primary"
@@ -285,6 +306,15 @@ const AppTable = <T extends DataItem>({
                   }}
                 >
                   Sau
+                </Pagination.Item>
+                <Pagination.Item
+                  disabled={page < MAX_PAGE ? false : true}
+                  href="#"
+                  onClick={() => {
+                    setPage(MAX_PAGE);
+                  }}
+                >
+                  Cuối cùng
                 </Pagination.Item>
               </Pagination>
             </nav>

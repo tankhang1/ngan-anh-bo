@@ -1,20 +1,27 @@
 import React, { useMemo, useState } from "react";
-import { Card, InputGroup, Stack } from "react-bootstrap";
+import { Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
+import { Doughnut } from "react-chartjs-2";
 import DatePicker from "react-datepicker";
+import * as Chartjscharts from "../../charts/chartjschart/chartjsdata";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
-import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
+import { format, isBefore } from "date-fns";
+import {
+  useGetBinsQuery,
+  useGetPacketsQuery,
+  useGetReportDashboardDayByDayQuery,
+} from "../../../redux/api/manage/manage.api";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { exportMultipleSheet, fNumber } from "../../../hooks";
-import { useGetReportProgramTopupDetailByTimeQuery } from "../../../redux/api/report/report.api";
+import { exportMultipleSheet, fDate } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
-import { TProgramTopupDetail } from "../../../assets/types";
-function TopupReport() {
+import AppId from "../../../components/common/app-id";
+import { TProductDashboardTable } from "../../../assets/types";
+function SMSReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +(format(new Date(), "yyyyMMdd") + "0000"),
-    ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+    st: +format(new Date(), "yyyyMMdd"),
+    ed: +format(new Date(), "yyyyMMdd"),
   });
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
     st: new Date(),
@@ -22,37 +29,66 @@ function TopupReport() {
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
 
-  const { data: topups, isLoading: isLoadingTopup } =
-    useGetReportProgramTopupDetailByTimeQuery(
-      {
-        ...rangDate,
-      },
-      {
-        skipPollingIfUnfocused: true,
-        pollingInterval: 300000,
-        refetchOnMountOrArgChange: true,
-      }
-    );
-
-  const mapProgram = useMemo(() => {
-    const topup = lodash.groupBy(
-      topups?.map((item) => ({
-        ...item,
-        time_topup: format(new Date(item?.time_topup), "dd-MM-yyyy"),
-      })),
-      "time_topup"
-    );
-    const data = listDays.map((item) => ({
-      date: item,
-      topup: topup?.[item]?.length ?? 0,
-    }));
+  const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
+    {
+      ...rangDate,
+      nu: 0,
+      sz: 99999,
+    },
+    {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
+    }
+  );
+  const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
+    {
+      st: +(rangDate.st.toString() + "0000"),
+      ed: +(rangDate.ed.toString() + "2399"),
+      nu: 0,
+      sz: 9999,
+    },
+    {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
+    }
+  );
+  const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
+    {
+      st: +(rangDate.st.toString() + "0000"),
+      ed: +(rangDate.ed.toString() + "2399"),
+      nu: 0,
+      sz: 9999,
+    },
+    {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
+    }
+  );
+  const mapReport = useMemo(() => {
+    const data =
+      reportDayByDay?.map((date) => {
+        return {
+          date: fDate(date.day, "dd-MM-YYYY"),
+          topup: date.topup,
+          brandname: date.brandname,
+          agent: date.agent,
+          agent_none: date.agent_none,
+          farmer: date.farmer,
+          farmer_none: date.farmer_none,
+          qrcode: date.qrcode,
+          sms: date.sms,
+        };
+      }) || [];
     return data;
-  }, [topups, listDays]);
+  }, [reportDayByDay, listDays]);
   return (
     <Stack>
       <Card className="custom-card">
         <Card.Header>
-          <Card.Title>Chương trình topup</Card.Title>
+          <Card.Title>SMS</Card.Title>
           <div className="d-flex   align-items-center gap-2">
             <div className="form-group">
               <InputGroup className="">
@@ -95,8 +131,8 @@ function TopupReport() {
               onClick={() => {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
-                  st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
-                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2399"),
+                  st: +format(newRangeDate.st, "yyyyMMdd"),
+                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
                 });
                 setListDays(
                   getDaysArray(
@@ -129,99 +165,58 @@ function TopupReport() {
           <Basicolumn
             series={[
               {
-                name: "Topup",
-                data: mapProgram.map((item) => item.topup),
+                name: "SMS",
+                data: mapReport.map((item) => item.sms),
               },
             ]}
             categories={listDays}
-            colors={["#d12866", "#fd9300"]}
+            colors={["#d12866", "#fe6601"]}
           />
         </Card.Body>
       </Card>
+
       <AppTable
-        title="Danh sách topup"
+        title="SMS"
+        isLoading={isLoadingBin || isLoadingPacket}
         headers={[
           {
-            key: "program_name",
-            label: "Tên chương trình",
-            render: (value: TProgramTopupDetail) => (
+            key: "id",
+            label: "ID",
+            render: (value: TProductDashboardTable) => (
               <td>
-                <span className="fw-semibold"> {value.program_name}</span>
-              </td>
-            ),
-          },
-          {
-            key: "agent_name",
-            label: "Tên đại lý",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.agent_name}</span>
-              </td>
-            ),
-          },
-          {
-            key: "customer_name",
-            label: "Tên khách hàng",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.customer_name}</span>
-              </td>
-            ),
-          },
-          {
-            key: "phone",
-            label: "Số điện thoại",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.phone}</span>
-              </td>
-            ),
-          },
-          {
-            key: "area",
-            label: "Khu vực",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.area}</span>
-              </td>
-            ),
-          },
-          {
-            key: "province_name",
-            label: "Tỉnh thành",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.province_name}</span>
+                <AppId id={value.id} />
               </td>
             ),
           },
           {
             key: "code",
-            label: "Mã code",
-            render: (value) => <td>{value.code}</td>,
+            label: "Mã iQR",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.code}</span>
+              </td>
+            ),
           },
           {
-            key: "product_name",
-            label: "Tên sản phẩm",
-            render: (value) => <td>{value.product_name}</td>,
+            key: "bin_seri",
+            label: "Số seri thùng",
+            render: (value) => <td>{value.bin_seri}</td>,
           },
           {
-            key: "price",
-            label: "Số tiền",
-            render: (value) => <td>{fNumber(value.price ?? 0)}</td>,
+            key: "product_code",
+            label: "Mã sản phẩm",
+            render: (value) => <td>{value.product_code}</td>,
           },
           {
-            key: "time_topup",
-            label: "Thời gian tích điểm",
-            render: (value) => <td>{value.time_topup}</td>,
+            key: "time_use",
+            label: "Ngày sử dụng",
+            render: (value) => <td>{value.time_use}</td>,
           },
         ]}
-        data={(topups || []) as any}
-        filters={[]}
-        isLoading={isLoadingTopup}
+        data={[...(bins?.sms ?? []), ...(packets?.sms ?? [])]}
       />
     </Stack>
   );
 }
 
-export default TopupReport;
+export default SMSReport;

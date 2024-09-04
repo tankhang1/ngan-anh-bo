@@ -5,6 +5,8 @@ import { Formik } from "formik";
 import {
   useGetExportByDocumentCounterQuery,
   useGetExportByDocumentQuery,
+  useGetExportDetailCounterQuery,
+  useGetExportDetailQuery,
   useGetExportDocumentsQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
 import { BaseQuery, TWarehouseDocument } from "../../../assets/types";
@@ -37,16 +39,31 @@ const TypeBinExport: TSearchItem[] = [
 type TExportForm = {
   document_code: string;
   type: string;
-  start_date: string;
-  end_date: string;
 };
 const WarehouseReportExport = () => {
   const { permission } = useSelector((state: RootState) => state.auth);
-  const [search, setSearch] = useState("");
-  const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState<BaseQuery>({
+    st: +(format(new Date(), "yyyyMMdd") + "0000"),
+    ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+    type: "",
+  });
 
+  const { data: counterExports } = useGetExportDetailCounterQuery(
+    {
+      st: query?.st,
+      ed: query?.ed,
+      type: query?.type,
+    },
+    {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
+      skip: !query ? true : false,
+    }
+  );
   const {
     data: exports,
     isLoading: isLoadingExport,
@@ -60,44 +77,30 @@ const WarehouseReportExport = () => {
       sz: 10,
     },
     {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
       refetchOnMountOrArgChange: true,
       skip: !query ? true : false,
     }
   );
 
-  const { data: counterExports } = useGetExportByDocumentCounterQuery(
-    {
-      st: query?.st,
-      ed: query?.ed,
-      type: query?.type,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-      skip: !query ? true : false,
-    }
-  );
-  const { data: exportDetail, isLoading: loadingExportDetail } =
+  const { data: exportDetails, isLoading: isLoadingExportDetail } =
     useGetExportByDocumentQuery(
       {
         code: documentDetail!,
       },
       {
-        skip: documentDetail ? false : true,
+        skip: !documentDetail ? true : false,
       }
     );
+  console.log("page", page);
   const onSearch = (values: TExportForm) => {
     if (values.document_code !== search) setSearch(values.document_code);
 
-    if (
-      query?.st === +(format(values.start_date, "yyyyMMdd") + "0000") &&
-      query?.ed === +(format(values.end_date, "yyyyMMdd") + "2359") &&
-      query?.type === values?.type
-    )
-      return;
+    if (query?.type === values?.type) return;
     setTimeout(() => {
       setQuery({
-        st: +(format(values.start_date, "yyyyMMdd") + "0000"),
-        ed: +(format(values.end_date, "yyyyMMdd") + "2359"),
+        ...query,
         type: values?.type,
       });
       refetchExport();
@@ -186,8 +189,6 @@ const WarehouseReportExport = () => {
               initialValues={{
                 document_code: "",
                 type: "",
-                start_date: "",
-                end_date: "",
               }}
               onSubmit={onSearch}
             >
@@ -263,9 +264,7 @@ const WarehouseReportExport = () => {
                               }
                               isInvalid={touched.type && !!errors.type}
                             >
-                              <option value={""}>
-                                -- Chọn loại xuất kho --
-                              </option>
+                              <option value={""}>Chọn tất cả</option>
                               {TypeBinExport.map((item, index) => (
                                 <option value={item.value} key={index}>
                                   {item.label}
@@ -274,48 +273,6 @@ const WarehouseReportExport = () => {
                             </Form.Select>
                             <Form.Control.Feedback type="invalid">
                               {errors.type}
-                            </Form.Control.Feedback>
-                          </Form.Group>
-                        </Stack>
-                        <Stack gap={2}>
-                          <Form.Group className="d-flex gap-3 align-items-center">
-                            <Form.Label
-                              className="text-nowrap text-black"
-                              style={{ width: 100 }}
-                            >
-                              Ngày bắt đầu:{" "}
-                            </Form.Label>
-                            <Form.Control
-                              className="form-select"
-                              type="date"
-                              name="start_date"
-                              defaultValue={values.start_date}
-                              onChange={handleChange}
-                              isInvalid={
-                                touched.start_date && !!errors.start_date
-                              }
-                            ></Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                              {errors.start_date}
-                            </Form.Control.Feedback>
-                          </Form.Group>
-                          <Form.Group className="d-flex gap-3 align-items-center">
-                            <Form.Label
-                              className="text-nowrap text-black"
-                              style={{ width: 100 }}
-                            >
-                              Ngày kết thúc:{" "}
-                            </Form.Label>
-                            <Form.Control
-                              className="form-select"
-                              type="date"
-                              name="end_date"
-                              defaultValue={values.end_date}
-                              onChange={handleChange}
-                              isInvalid={touched.end_date && !!errors.end_date}
-                            ></Form.Control>
-                            <Form.Control.Feedback type="invalid">
-                              {errors.end_date}
                             </Form.Control.Feedback>
                           </Form.Group>
                         </Stack>
@@ -342,6 +299,7 @@ const WarehouseReportExport = () => {
             isLoading={isLoadingExport}
             maxPage={counterExports}
             setExternalPage={setPage}
+            isChange={query.type}
             headers={[
               {
                 key: "document_code",
@@ -358,6 +316,7 @@ const WarehouseReportExport = () => {
                 label: "Tên đại lý",
                 render: ({ agent_name }) => <td>{agent_name}</td>,
               },
+
               {
                 key: "goods_type",
                 label: "Loại hàng xuất",
@@ -379,7 +338,7 @@ const WarehouseReportExport = () => {
                 render: ({ receiver }) => <td>{receiver}</td>,
               },
               {
-                key: "time",
+                key: "time_export",
                 label: "Thời gian xuất kho",
                 render: ({ time_export }) => <td>{time_export}</td>,
               },
@@ -418,8 +377,8 @@ const WarehouseReportExport = () => {
           <AppTable
             isHeader={false}
             title="Thông tin xuất kho"
-            isLoading={loadingExportDetail}
-            maxPage={exportDetail?.length}
+            isLoading={isLoadingExportDetail}
+            maxPage={exportDetails?.length}
             headers={[
               {
                 key: "document_code",
@@ -479,7 +438,7 @@ const WarehouseReportExport = () => {
                 render: ({ time }) => <td>{time}</td>,
               },
             ]}
-            data={exportDetail || []}
+            data={exportDetails || []}
             searchByExternal="document_code"
             externalSearch=""
           />

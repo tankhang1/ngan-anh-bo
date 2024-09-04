@@ -1,17 +1,7 @@
-import React, { useMemo, useState } from "react";
-import { Card, Col, Dropdown, Row } from "react-bootstrap";
-import { Basicolumn } from "../../../charts/apexcharts/columnchart/columnchartdata";
-import {
-  useGetBinsQuery,
-  useGetListAgentsQuery,
-  useGetListBrandnamesQuery,
-  useGetListFarmersQuery,
-  useGetPacketsQuery,
-  useGetReportDashboardDayByDayQuery,
-  useGetTopupsQuery,
-} from "../../../../redux/api/manage/manage.api";
-import { endOfWeek, format, startOfWeek, subDays, subWeeks } from "date-fns";
-import lodash from "lodash";
+import React, { useMemo } from "react";
+import { Card, Col } from "react-bootstrap";
+import { useGetReportDashboardDayByDayQuery } from "../../../../redux/api/manage/manage.api";
+import { format, subDays } from "date-fns";
 import { getDaysArray } from "./AgentReport";
 import { Basicline } from "../../../charts/apexcharts/linechart/linechartdata";
 import { fDate } from "../../../../hooks";
@@ -56,7 +46,7 @@ function ServiceReport() {
             <Basicline
               series={[
                 {
-                  name: "QrCode",
+                  name: "QrCode / Zalo",
                   data: mapService.map((item) => item.qrcode),
                 },
                 {

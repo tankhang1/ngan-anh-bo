@@ -188,7 +188,7 @@ export const manageApi = createApi({
           : [TagsEnum.TOPUPS],
     }),
     getPackets: builder.query<
-      { qrCode: TPackage[]; sms: TPackage[] },
+      { qrCode: TPackage[]; sms: TPackage[]; zalo: TPackage[] },
       BaseQuery
     >({
       query: (params) => ({
@@ -199,27 +199,35 @@ export const manageApi = createApi({
       transformResponse: (packets: TPackage[]) => {
         const qrCode: TPackage[] = [];
         const sms: TPackage[] = [];
+        const zalo: TPackage[] = [];
         packets.forEach((packet) => {
           if (packet.type_use === 0) qrCode.push(packet);
           if (packet.type_use === 1) sms.push(packet);
+          if (packet.type_use === 2) zalo.push(packet);
         });
         return {
           qrCode,
           sms,
+          zalo,
         };
       },
       providesTags: (results) =>
         results
           ? [
-              ...[...results.qrCode, ...results.sms].map(({ id }) => ({
-                type: TagsEnum.PACKETS as const,
-                id,
-              })),
+              ...[...results.qrCode, ...results.sms, ...results.zalo].map(
+                ({ id }) => ({
+                  type: TagsEnum.PACKETS as const,
+                  id,
+                })
+              ),
               TagsEnum.PACKETS,
             ]
           : [TagsEnum.PACKETS],
     }),
-    getBins: builder.query<{ qrCode: TBin[]; sms: TBin[] }, BaseQuery>({
+    getBins: builder.query<
+      { qrCode: TBin[]; sms: TBin[]; zalo: TBin[] },
+      BaseQuery
+    >({
       query: (params) => ({
         url: "/api/report/bin",
         method: HTTPS_METHOD.GET,
@@ -228,22 +236,27 @@ export const manageApi = createApi({
       transformResponse: (bins: TBin[]) => {
         const qrCode: TBin[] = [];
         const sms: TBin[] = [];
+        const zalo: TBin[] = [];
         bins.forEach((bin) => {
           if (bin.type_use === 0) qrCode.push(bin);
           if (bin.type_use === 1) sms.push(bin);
+          if (bin.type_use === 2) zalo.push(bin);
         });
         return {
           qrCode,
           sms,
+          zalo,
         };
       },
       providesTags: (results) =>
         results
           ? [
-              ...[...results.qrCode, ...results.sms].map(({ id }) => ({
-                type: TagsEnum.BINS as const,
-                id,
-              })),
+              ...[...results.qrCode, ...results.sms, ...results.zalo].map(
+                ({ id }) => ({
+                  type: TagsEnum.BINS as const,
+                  id,
+                })
+              ),
               TagsEnum.BINS,
             ]
           : [TagsEnum.BINS],

@@ -39,11 +39,10 @@ function TopupReport() {
     const point = lodash.groupBy(
       points?.map((item) => ({
         ...item,
-        time: format(new Date(item?.time_earn), "ddy/MM/yyyy"),
+        time_earn: format(new Date(item?.time_earn), "dd-MM-yyyy"),
       })),
-      "time"
+      "time_earn"
     );
-
     const data = listDays.map((item) => ({
       date: item,
       point: point?.[item]?.length ?? 0,
@@ -154,20 +153,20 @@ function TopupReport() {
           title="Danh sách khách hàng tham gia"
           headers={[
             {
-              key: "program_uuid",
-              label: "Mã chương trình",
-              render: (value: TProgramPointDetail) => (
-                <td>
-                  <AppId id={value.program_uuid} />
-                </td>
-              ),
-            },
-            {
               key: "program_name",
               label: "Tên chương trình",
               render: (value: TProgramPointDetail) => (
                 <td>
                   <span className="fw-semibold"> {value.program_name}</span>
+                </td>
+              ),
+            },
+            {
+              key: "agent_name",
+              label: "Tên đại lý",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.agent_name}</span>
                 </td>
               ),
             },
@@ -181,11 +180,20 @@ function TopupReport() {
               ),
             },
             {
-              key: "agent_name",
-              label: "Tên đại lý cấp 1",
+              key: "phone",
+              label: "Số điện thoại",
               render: (value) => (
                 <td>
-                  <span className="fw-semibold">{value.agent_name}</span>
+                  <span className="fw-semibold">{value.phone}</span>
+                </td>
+              ),
+            },
+            {
+              key: "province_name",
+              label: "Tỉnh thành",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.province_name}</span>
                 </td>
               ),
             },
@@ -199,13 +207,11 @@ function TopupReport() {
               label: "Tên sản phẩm",
               render: (value) => <td>{value.product_name}</td>,
             },
-
             {
               key: "point",
               label: "Số điểm",
               render: (value) => <td>{fNumber(value.point ?? 0)}</td>,
             },
-
             {
               key: "time_earn",
               label: "Thời gian tích điểm",

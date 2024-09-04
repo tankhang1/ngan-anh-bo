@@ -34,6 +34,7 @@ function ProductTable() {
     {
       skipPollingIfUnfocused: true,
       pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
     }
   );
   return (
@@ -82,7 +83,7 @@ function ProductTable() {
       </Col>
       <Col xl={6}>
         <AppTable
-          title="QrCode"
+          title="QrCode / Zalo"
           isLoading={isLoadingBin || isLoadingPacket}
           headers={[
             {
@@ -119,7 +120,12 @@ function ProductTable() {
               render: (value) => <td>{value.time_use}</td>,
             },
           ]}
-          data={[...(bins?.qrCode ?? []), ...(packets?.qrCode ?? [])]}
+          data={[
+            ...(bins?.qrCode ?? []),
+            ...(packets?.qrCode ?? []),
+            ...(packets?.zalo ?? []),
+            ...(bins?.zalo ?? []),
+          ]}
         />
       </Col>
     </Row>

@@ -3,6 +3,7 @@ import {
   BaseQuery,
   TPointTableDashboard,
   TProgramPointDetail,
+  TProgramTopupDetail,
   TTopupTableDashboard,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -41,7 +42,32 @@ export const reportApi = createApi({
         params,
       }),
     }),
-
+    getReportProgramTopupDetailCounterByTime: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/program/topup/detail/counter",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
+    getReportProgramTopupDetailByTime: builder.query<
+      TProgramTopupDetail[],
+      BaseQuery
+    >({
+      query: (params) => ({
+        url: "/api/program/topup/detail",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
+    getReportProgramTopupDetailToday: builder.query<
+      TProgramTopupDetail[],
+      void
+    >({
+      query: () => ({
+        url: "/api/program/topup/detail/today",
+        method: HTTPS_METHOD.GET,
+      }),
+    }),
     getReportProgramPointDetailByTime: builder.query<
       TProgramPointDetail[],
       BaseQuery
@@ -74,6 +100,9 @@ export const reportApi = createApi({
 export const {
   useGetReportProgramPointByTimeQuery,
   useGetReportProgramTopupByTimeQuery,
+  useGetReportProgramTopupDetailByTimeQuery,
+  useGetReportProgramTopupDetailCounterByTimeQuery,
+  useGetReportProgramTopupDetailTodayQuery,
   useGetReportProgramPointDetailByTimeQuery,
   useGetReportProgramPointDetailCounterQuery,
   useGetReportProgramPointDetailTodayQuery,

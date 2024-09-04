@@ -254,7 +254,7 @@ function OutstandingReport() {
           </div>
         </div>
         <div className="flex-1">
-          <p className="mb-0 text-muted">QrCode</p>
+          <p className="mb-0 text-muted">QrCode / Zalo</p>
           <div className="d-flex flex-wrap align-items-baseline">
             <span className="text-xl fw-semibold">
               {mapReportCurrentDay.qrcode}

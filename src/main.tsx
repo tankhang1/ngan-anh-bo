@@ -46,6 +46,7 @@ import SearchWarehouseImport from "./container/warehouse/import/searchWarehouseI
 import CustomerReport from "./container/report/CustomerReport/index.tsx";
 import { PageLoading } from "./redux/middlewares/pageLoading.tsx";
 import WarehouseReportExport from "./container/warehouse/export/warehouseReportExport.tsx";
+import SMSReport from "./container/report/components/SMSReport.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -165,6 +166,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}report/iQr`}
                 element={<IQrReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report/sms`}
+                element={<SMSReport />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}report/program-point`}

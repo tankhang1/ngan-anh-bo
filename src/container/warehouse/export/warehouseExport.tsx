@@ -55,7 +55,7 @@ const WarehouseExport = () => {
     {
       st: query?.st,
       ed: query?.ed,
-      type: query?.type,
+      type: query?.type ?? "undefined",
       nu: page - 1,
       sz: 10,
     },
@@ -69,7 +69,7 @@ const WarehouseExport = () => {
     {
       st: query?.st,
       ed: query?.ed,
-      type: query?.type,
+      type: query?.type ?? "undefined",
     },
     {
       refetchOnMountOrArgChange: true,
@@ -263,9 +263,7 @@ const WarehouseExport = () => {
                               }
                               isInvalid={touched.type && !!errors.type}
                             >
-                              <option value={""}>
-                                -- Chọn loại xuất kho --
-                              </option>
+                              <option value={""}>Tất cả</option>
                               {TypeBinExport.map((item, index) => (
                                 <option value={item.value} key={index}>
                                   {item.label}

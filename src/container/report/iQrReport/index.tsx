@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Stack } from "react-bootstrap";
-import Report from "../components/SMS_QR_Report";
+import Report from "../components/SMSQrCode";
 function IQrReport() {
   return (
     <Fragment>

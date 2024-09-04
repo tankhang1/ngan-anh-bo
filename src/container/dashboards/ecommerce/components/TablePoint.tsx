@@ -36,15 +36,6 @@ function TablePoint() {
           ),
         },
         {
-          key: "customer_uuid",
-          label: "Mã khách hàng",
-          render: (value) => (
-            <td>
-              <AppId id={value.customer_uuid} />
-            </td>
-          ),
-        },
-        {
           key: "customer_name",
           label: "Tên khách hàng",
           render: (value) => (

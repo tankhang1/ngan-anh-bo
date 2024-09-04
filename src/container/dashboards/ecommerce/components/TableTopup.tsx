@@ -1,44 +1,36 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
-import { TTopupTableDashboard } from "../../../../assets/types";
+import { TProgramTopupDetail } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
-import { format } from "date-fns";
 import { fNumber } from "../../../../hooks";
-import { useGetReportProgramTopupByTimeQuery } from "../../../../redux/api/report/report.api";
+import { useGetReportProgramTopupDetailTodayQuery } from "../../../../redux/api/report/report.api";
 
 function TableTopup() {
   const { data: topups, isLoading: isLoadingTopup } =
-    useGetReportProgramTopupByTimeQuery(
-      {
-        st: +(format(new Date(), "yyyyMMdd") + "0000"),
-        ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-        sz: 99999,
-      },
-      {
-        skipPollingIfUnfocused: true,
-        pollingInterval: 300000,
-        refetchOnMountOrArgChange: true,
-      }
-    );
+    useGetReportProgramTopupDetailTodayQuery(undefined, {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
+    });
   return (
     <AppTable
       title="Danh sách topup hôm nay"
       headers={[
         {
-          key: "program_uuid",
-          label: "Mã chương trình",
-          render: (value: TTopupTableDashboard) => (
+          key: "program_name",
+          label: "Tên chương trình",
+          render: (value: TProgramTopupDetail) => (
             <td>
-              <AppId id={value.program_uuid} />
+              <span className="fw-semibold"> {value.program_name}</span>
             </td>
           ),
         },
         {
-          key: "program_name",
-          label: "Tên chương trình",
-          render: (value: TTopupTableDashboard) => (
+          key: "agent_name",
+          label: "Tên đại lý",
+          render: (value) => (
             <td>
-              <span className="fw-semibold"> {value.program_name}</span>
+              <span className="fw-semibold">{value.agent_name}</span>
             </td>
           ),
         },
@@ -52,15 +44,6 @@ function TableTopup() {
           ),
         },
         {
-          key: "province",
-          label: "Tỉnh thành",
-          render: (value) => (
-            <td>
-              <span className="fw-semibold">{value.province}</span>
-            </td>
-          ),
-        },
-        {
           key: "phone",
           label: "Số điện thoại",
           render: (value) => (
@@ -70,14 +53,27 @@ function TableTopup() {
           ),
         },
         {
+          key: "area",
+          label: "Khu vực",
+          render: (value) => (
+            <td>
+              <span className="fw-semibold">{value.area}</span>
+            </td>
+          ),
+        },
+        {
+          key: "province_name",
+          label: "Tỉnh thành",
+          render: (value) => (
+            <td>
+              <span className="fw-semibold">{value.province_name}</span>
+            </td>
+          ),
+        },
+        {
           key: "code",
           label: "Mã code",
           render: (value) => <td>{value.code}</td>,
-        },
-        {
-          key: "product_code",
-          label: "Mã sản phẩm",
-          render: (value) => <td>{value.product_code}</td>,
         },
         {
           key: "product_name",
@@ -89,10 +85,9 @@ function TableTopup() {
           label: "Số tiền",
           render: (value) => <td>{fNumber(value.price ?? 0)}</td>,
         },
-
         {
           key: "time_topup",
-          label: "Thời gian",
+          label: "Thời gian tích điểm",
           render: (value) => <td>{value.time_topup}</td>,
         },
       ]}

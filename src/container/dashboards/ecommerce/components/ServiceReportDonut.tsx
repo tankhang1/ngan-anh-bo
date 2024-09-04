@@ -66,7 +66,7 @@ function ServiceReportDonut() {
                 mapService.brandname,
                 mapService.topup,
               ]}
-              categories={["QrCode", "SMS", "Brandname", "Topup"]}
+              categories={["QrCode / Zalo", "SMS", "Brandname", "Topup"]}
               colors={["#fffc35", "#fba01e", "#4682ff", "#e6bfff"]}
             />
           </div>

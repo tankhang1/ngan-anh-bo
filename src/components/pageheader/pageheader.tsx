@@ -28,6 +28,8 @@ const MapLabel = new Map([
   ["import", "Thông tin nhập kho"],
   ["search-warehouse-export", "Tìm kiếm thông tin xuất kho"],
   ["search-warehouse-import", "Tìm kiếm thông tin nhập kho"],
+  ["sms", "SMS"],
+  ["customer", "Báo cáo khách hàng"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

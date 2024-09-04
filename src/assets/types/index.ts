@@ -326,10 +326,12 @@ export type TProgramPointDetail = {
   zalo_device_id: string;
 };
 export type TProgramTopupDetail = {
-  id: string;
+  id: number;
   program_name: string;
+  customer_uuid: string;
+  zalo_device_id: string;
   customer_code: string;
-  customer_name: string;
+  customer_name: string | null;
   province_name: string;
   area: string;
   phone: string;
@@ -338,7 +340,7 @@ export type TProgramTopupDetail = {
   code: string;
   code_hash: string;
   product_name: string;
-  time_topup: string;
+  time_topup: string; // Consider using `Date` type if you want to handle date objects
 };
 export type TDevice = {
   id: number;
