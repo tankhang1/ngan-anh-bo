@@ -192,9 +192,7 @@ const WarehouseImport = () => {
                               }
                               isInvalid={touched.type && !!errors.type}
                             >
-                              <option value={""}>
-                                -- Chọn loại nhập kho --
-                              </option>
+                              <option value={""}>Chọn tất cả</option>
                               {TypeBinImport.map((item, index) => (
                                 <option value={item.value} key={index}>
                                   {item.label}
