@@ -151,9 +151,10 @@ function CustomerReport() {
             <Form.Check
               className="form-check-md d-flex align-items-center"
               type="checkbox"
-              defaultChecked
+              checked={isValidate}
               id="checkebox-lg"
               label="Đã xác thực?"
+              onClick={() => setIsValidate(!isValidate)}
             />
             <button
               className={`btn ${
