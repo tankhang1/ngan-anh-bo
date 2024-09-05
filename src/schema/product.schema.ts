@@ -75,9 +75,7 @@ const productSchema = Yup.object().shape({
 
   device_code: Yup.string().nullable(),
 
-  point: Yup.number()
-    .min(1, "Điểm phải lớn hơn hoặc bằng 1")
-    .required("Điểm là bắt buộc"),
+  point: Yup.number().required("Điểm là bắt buộc"),
 
   c1_price_vnd: Yup.string()
     .min(0, "Giá C1 phải lớn hơn hoặc bằng 0")

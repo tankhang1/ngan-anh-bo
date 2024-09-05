@@ -163,10 +163,6 @@ function ProductCreateEdit() {
     }
   };
 
-  console.log(
-    isCreate === "true" ? productId ?? "" : product?.code ?? "",
-    productId
-  );
   return (
     <Fragment>
       <Formik
