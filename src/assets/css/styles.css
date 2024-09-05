@@ -22295,21 +22295,24 @@ body {
 
 /* End::body */
 *::-webkit-scrollbar {
-  width: 0.25rem;
-  height: 0.25rem;
+  width: 12.5px;
+  height: 12.5px;
   transition: all ease 0.3s;
   background-color: var(--gray-1);
 }
 
 *::-webkit-scrollbar-thumb {
-  width: 0.25rem;
-  height: 0.25rem;
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 20px;
+  transition: all ease 0.3s;
   background-color: var(--gray-4);
 }
 
-*:hover::-webkit-scrollbar-thumb {
-  background: rgb(var(--light-rgb));
-}
+/* *:focus:-webkit-scrollbar-thumb {
+  background-color: rgb(var(--gray-5));
+} */
+
 
 /* Start::basic */
 .page {
