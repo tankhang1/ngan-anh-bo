@@ -158,43 +158,46 @@ function CustomerUnValidationCreateEdit() {
           console.log("create agent fail", e.message);
         });
     } else {
-      setIsEdit(false);
-      if (isEdit === true) {
-        await updateCustomer({
-          ...values,
-          uuid: values?.uuid ? values.uuid : newUUID?.toString(),
-          info_primary: 0,
-          customer_province: provinceId,
-          status: 0,
-          gender: +(values?.gender ?? 1),
-          birthday: values?.birthday
-            ? +format(values.birthday, "yyyyMMdd")
-            : null,
-          area_size: values?.area_size ? +values.area_size : null,
-          citizen_number: values?.citizen_number
-            ? +values.citizen_number
-            : values.citizen_number,
-          citizen_day: values?.citizen_day
-            ? +format(values.citizen_day, "yyyyMMdd")
-            : values?.citizen_day,
+      onValidateCustomer(values);
+    }
+  };
+  const handleUpdateAgent = async (values: TCustomerRes) => {
+    setIsEdit(false);
+    if (isEdit === true) {
+      await updateCustomer({
+        ...values,
+        uuid: values?.uuid ? values.uuid : newUUID?.toString(),
+        info_primary: 0,
+        customer_province: provinceId,
+        status: 0,
+        gender: +(values?.gender ?? 1),
+        birthday: values?.birthday
+          ? +format(values.birthday, "yyyyMMdd")
+          : null,
+        area_size: values?.area_size ? +values.area_size : null,
+        citizen_number: values?.citizen_number
+          ? +values.citizen_number
+          : values.citizen_number,
+        citizen_day: values?.citizen_day
+          ? +format(values.citizen_day, "yyyyMMdd")
+          : values?.citizen_day,
+      })
+        .unwrap()
+        .then((value) => {
+          console.log("create agent success", value);
+          if (value?.status === -2) {
+            toast.showToast("Đại lý đã tồn tại");
+            return;
+          }
+          if (value?.status === 0) {
+            toast.showToast("Cập nhật đại lý thành công");
+            return;
+          }
+          toast.showToast("Cập nhật thất bại");
         })
-          .unwrap()
-          .then((value) => {
-            console.log("create agent success", value);
-            if (value?.status === -2) {
-              toast.showToast("Đại lý đã tồn tại");
-              return;
-            }
-            if (value?.status === 0) {
-              toast.showToast("Thêm đại lý thành công");
-              return;
-            }
-            toast.showToast("Cập nhật thất bại");
-          })
-          .catch((e) => {
-            console.log("create agent fail", e.message);
-          });
-      }
+        .catch((e) => {
+          console.log("create agent fail", e.message);
+        });
     }
   };
 
@@ -276,14 +279,7 @@ function CustomerUnValidationCreateEdit() {
                             }
                           >
                             <button
-                              type="button"
-                              onClick={() => {
-                                if (!errors) {
-                                  toast.showToast(
-                                    "Vui lòng điền đầy đủ thông tin bắc buộc"
-                                  );
-                                } else onValidateCustomer(values);
-                              }}
+                              type={"submit"}
                               className={`btn btn-teal-light justify-content-center align-items-center ${
                                 isLoadingVerify && "btn-loader "
                               }`}
@@ -301,11 +297,11 @@ function CustomerUnValidationCreateEdit() {
                           className={`btn  btn-purple-light justify-content-center align-items-center ${
                             isLoadingUpdate && "btn-loader "
                           }`}
-                          type={"submit"}
+                          onClick={() => {
+                            handleUpdateAgent(values);
+                          }}
                         >
-                          <span>
-                            {!isLoadingUpdate && !isEdit ? "Chỉnh sửa" : "Lưu"}
-                          </span>
+                          <span>Lưu</span>
                           {isLoadingUpdate && (
                             <span className="loading">
                               <i className="ri-loader-2-fill fs-19"></i>
