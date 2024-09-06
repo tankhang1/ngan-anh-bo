@@ -86,6 +86,9 @@ function ProductEditInfo() {
         mop: +(values?.mop ?? 0),
         net_weight: +(values.net_weight ?? 0),
         type: +values.type,
+        c1_price_vnd: +values.c1_price_vnd,
+        c2_price_vnd: +values.c2_price_vnd,
+        point: +values.point,
       })
         .unwrap()
         .then(async (value) => {
