@@ -223,7 +223,7 @@ function ProductCreate() {
                             files={files1}
                             onupdatefiles={setFiles1}
                             labelIdle="Drag & Drop your file here or click "
-                            acceptedFileTypes={["image/jpg"]}
+                            acceptedFileTypes={["image/jpeg"]}
                           ></FilePond>
 
                           <Form.Control.Feedback type="invalid">
