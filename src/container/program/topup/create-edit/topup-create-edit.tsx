@@ -335,7 +335,7 @@ function TopupCreateEdit() {
         initialValues={{
           name: topupProgram?.name ?? "",
           products: mapCodeProduct(topupProgram?.products),
-          price: topupProgram?.price ?? 10,
+          price: topupProgram?.price ?? "",
           objectives: [{ label: "RETAILER2", value: "RETAILER2" }],
           time_end: topupProgram?.time_end
             ? format(new Date(topupProgram.time_end), "yyyy-MM-dd")
@@ -600,6 +600,7 @@ function TopupCreateEdit() {
                     required
                     disabled={isDisableAccess("price")}
                   >
+                    <option value={""} label="--Chọn giá trị--"></option>
                     <option value={10} label="10.000đ" />
                     <option value={20} label="20.000đ" />
                     <option value={30} label="30.000đ" />

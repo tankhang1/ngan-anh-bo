@@ -23,23 +23,18 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import Editor from "../../forms/formeditors/formeditordata";
-import {
-  useGetListBinsIdQuery,
-  useGetListProductsQuery,
-} from "../../../redux/api/info/info.api";
+import { useGetListBinsIdQuery } from "../../../redux/api/info/info.api";
 import {
   useCreateProductMutation,
   useGetListDevicesQuery,
   useGetListIngredientsQuery,
   useGetNewProductCodeQuery,
-  useUpdateProductMutation,
 } from "../../../redux/api/product/product.api";
 import { useUploadFileMutation } from "../../../redux/api/media/media.api";
 import { FilePondFile } from "filepond";
 import { ToastContext } from "../../../components/AppToast";
 import { fNumber } from "../../../hooks";
 import { NumericFormat } from "react-number-format";
-import productSchema from "../../../schema/product.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import productCreateSchema from "../../../schema/product.create.schema";
@@ -133,7 +128,7 @@ function ProductCreate() {
           certificate_of_origin: "",
           description: "",
           detail_url: "",
-          ingredient: `<p>""</p>`,
+          ingredient: `<p></p>`,
           ingredient_id: "",
           name_display_label: "",
           net_weight: 0,
@@ -148,7 +143,7 @@ function ProductCreate() {
           unit: "",
           mop: 0,
           device_code: "",
-          point: 1,
+          point: 0,
           c1_price_vnd: 0,
           c2_price_vnd: 0,
         }}

@@ -371,7 +371,7 @@ function Accounts() {
               username: "",
               password: "",
               password_recheck: "",
-              staff_code: employees?.[0].code,
+              staff_code: "",
               roles: "",
             }}
             validationSchema={accountSchema}
@@ -506,6 +506,7 @@ function Accounts() {
                         isInvalid={touched.staff_code && !!errors.staff_code}
                         required
                       >
+                        <option value="">-- Chọn nhân viên --</option>
                         {employees?.map((item) => (
                           <option value={item.code}>{item.name}</option>
                         ))}
