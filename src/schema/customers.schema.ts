@@ -10,17 +10,17 @@ const customerSchema = Yup.object().shape({
 
   province: Yup.string().nullable(),
 
-  info_primary: Yup.number().required("Thông tin chính là bắt buộc"),
+  info_primary: Yup.number(),
 
   phone: Yup.string()
     .required("Số điện thoại là bắt buộc")
     .matches(/^[0-9]{10,11}$/, "Số điện thoại không hợp lệ"),
 
-  sign_board: Yup.string().required("Biển hiệu là bắt buộc"),
+  sign_board: Yup.string(),
 
   customer_address: Yup.string().nullable(),
 
-  customer_district: Yup.string().required("Quận huyện khách hàng là bắt buộc"),
+  customer_district: Yup.string(),
 
   province_name: Yup.string().nullable(),
 
@@ -32,7 +32,7 @@ const customerSchema = Yup.object().shape({
     .oneOf([0, 1], "Giới tính không hợp lệ")
     .required("Giới tính là bắt buộc"),
 
-  birthday: Yup.date().nullable().required("Ngày sinh là bắt buộc"),
+  birthday: Yup.date().nullable(),
 
   email: Yup.string().email("Email không hợp lệ"),
 
@@ -40,7 +40,7 @@ const customerSchema = Yup.object().shape({
 
   citizen_day: Yup.date().nullable(),
 
-  business_document: Yup.string().required("Tài liệu doanh nghiệp là bắt buộc"),
+  business_document: Yup.string(),
 
   tags: Yup.string().nullable(),
 
@@ -52,8 +52,7 @@ const customerSchema = Yup.object().shape({
 
   avatar: Yup.string().nullable(),
 
-  sale_code: Yup.string().required("Mã nhân viên là bắt buộc"),
-
+  sale_code: Yup.string(),
   export_code: Yup.string().nullable(),
 
   export_address: Yup.string().nullable(),
