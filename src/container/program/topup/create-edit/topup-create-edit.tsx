@@ -235,7 +235,6 @@ function TopupCreateEdit() {
           toast.showToast("Thêm mới thất bại");
         });
     } else {
-      setIsEdit(!isEdit);
       if (isEdit === true) {
         await updateTopupProgram({
           ...values,
@@ -280,6 +279,7 @@ function TopupCreateEdit() {
         })
           .unwrap()
           .then((value) => {
+            setIsEdit(!isEdit);
             if (value.status === 0) {
               navigate(-1);
               toast.showToast("Cập nhật chương trình thành công");
@@ -296,6 +296,7 @@ function TopupCreateEdit() {
             toast.showToast(value.message);
           })
           .catch(() => {
+            setIsEdit(!isEdit);
             toast.showToast("Cập nhật thất bại");
           });
       }
@@ -361,307 +362,309 @@ function TopupCreateEdit() {
           touched,
           errors,
         }) => (
-          <form noValidate onSubmit={handleSubmit}>
-            <Card className="custom-card">
-              <Card.Header className="justify-content-between">
-                <div className="d-flex gap-2">
-                  <Card.Title>
-                    {!isEdit
-                      ? "Thông tin chương trình topup"
-                      : "Chỉnh sửa chương trình topup"}
-                  </Card.Title>
-                  {MapBadge()}
-                </div>
-                <div className="d-flex gap-2">
+          <Card className="custom-card">
+            <Card.Header className="justify-content-between">
+              <div className="d-flex gap-2">
+                <Card.Title>
+                  {!isEdit
+                    ? "Thông tin chương trình topup"
+                    : "Chỉnh sửa chương trình topup"}
+                </Card.Title>
+                {MapBadge()}
+              </div>
+              <div className="d-flex gap-2">
+                <button
+                  className="btn btn-danger-light"
+                  type={"button"}
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                >
+                  Trở lại
+                </button>
+                {isCreate === "true" ? (
                   <button
-                    className="btn btn-danger-light"
-                    type={"button"}
-                    onClick={() => {
-                      navigate(-1);
-                    }}
+                    className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                      isLoadingCreate && "btn-loader"
+                    }`}
+                    onClick={() => handleSubmit()}
                   >
-                    Trở lại
-                  </button>
-                  {isCreate === "true" ? (
-                    <button
-                      className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
-                        isLoadingCreate && "btn-loader"
-                      }`}
-                      type="submit"
-                    >
-                      <span>Thêm mới</span>
-                      {isLoadingCreate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
-                  ) : (
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingUpdate && "btn-loader"
-                      }`}
-                      type="submit"
-                    >
-                      <span>
-                        {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
+                    <span>Thêm mới</span>
+                    {isLoadingCreate && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
                       </span>
-                      {isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
-                  )}
-                </div>
-              </Card.Header>
-              <Card.Body>
-                <Stack className="d-flex gap-1">
-                  <p style={{ color: "red" }}>
-                    * Chỉ chương trình được tạm dừng hoặc chờ kích hoạt mới được
-                    chỉnh sửa thông tin
-                  </p>
-                  <Form.Group>
+                    )}
+                  </button>
+                ) : isEdit ? (
+                  <button
+                    className={`btn btn-purple-light justify-content-center align-items-center ${
+                      isLoadingUpdate && "btn-loader"
+                    }`}
+                    onClick={() => handleSubmit()}
+                  >
+                    <span>Lưu</span>
+                    {isLoadingUpdate && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
+                      </span>
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    className={`btn btn-purple-light justify-content-center align-items-center`}
+                    onClick={() => setIsEdit(true)}
+                  >
+                    <span>Chỉnh sửa</span>
+                  </button>
+                )}
+              </div>
+            </Card.Header>
+            <Card.Body>
+              <Stack className="d-flex gap-1">
+                <p style={{ color: "red" }}>
+                  * Chỉ chương trình được tạm dừng hoặc chờ kích hoạt mới được
+                  chỉnh sửa thông tin
+                </p>
+                <Form.Group>
+                  <Form.Label className="text-black">
+                    Mã chương trình <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    id="uuid_validate"
+                    placeholder="Mã chương trình"
+                    name="uuid"
+                    value={isCreate === "true" ? newUUID : values.uuid}
+                    onChange={handleChange}
+                    isInvalid={touched.uuid && !!errors.uuid}
+                    disabled
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.uuid}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className="text-black">
+                    Tên chương trình <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    id="name_validate"
+                    placeholder="Tên chương trình"
+                    className="input-placeholder"
+                    name="name"
+                    value={values.name}
+                    onChange={handleChange}
+                    isInvalid={touched.name && !!errors.name}
+                    disabled={isDisableAccess("name")}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.name}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Row>
+                  <Form.Group as={Col} md={6}>
                     <Form.Label className="text-black">
-                      Mã chương trình <span style={{ color: "red" }}>*</span>
+                      Ngày bắt đầu <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
-                      type="text"
-                      id="uuid_validate"
-                      placeholder="Mã chương trình"
-                      name="uuid"
-                      value={isCreate === "true" ? newUUID : values.uuid}
-                      onChange={handleChange}
-                      isInvalid={touched.uuid && !!errors.uuid}
-                      disabled
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.uuid}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="text-black">
-                      Tên chương trình <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Form.Control
-                      required
-                      type="text"
-                      id="name_validate"
-                      placeholder="Tên chương trình"
+                      type="date"
+                      id="time_start_validate"
+                      placeholder="Ngày bắt đầu"
                       className="input-placeholder"
-                      name="name"
-                      value={values.name}
+                      name="time_start"
+                      value={values.time_start}
+                      lang="vi"
                       onChange={handleChange}
-                      isInvalid={touched.name && !!errors.name}
-                      disabled={isDisableAccess("name")}
+                      isInvalid={touched.time_start && !!errors.time_start}
+                      disabled={isDisableAccess("time_start")}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.name}
+                      {errors.time_start?.toString()}
                     </Form.Control.Feedback>
                   </Form.Group>
 
-                  <Row>
-                    <Form.Group as={Col} md={6}>
-                      <Form.Label className="text-black">
-                        Ngày bắt đầu <span style={{ color: "red" }}>*</span>
-                      </Form.Label>
-                      <Form.Control
-                        required
-                        type="date"
-                        id="time_start_validate"
-                        placeholder="Ngày bắt đầu"
-                        className="input-placeholder"
-                        name="time_start"
-                        value={values.time_start}
-                        lang="vi"
-                        onChange={handleChange}
-                        isInvalid={touched.time_start && !!errors.time_start}
-                        disabled={isDisableAccess("time_start")}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.time_start?.toString()}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group className="mb-2" as={Col} md={6}>
-                      <Form.Label className="text-black">
-                        Ngày kết thúc <span style={{ color: "red" }}>*</span>
-                      </Form.Label>
-                      <Form.Control
-                        required
-                        type="date"
-                        id="time_end_validate"
-                        placeholder="Ngày kết thúc"
-                        className="input-placeholder"
-                        name="time_end"
-                        value={values.time_end}
-                        onChange={handleChange}
-                        isInvalid={touched.time_end && !!errors.time_end}
-                        min={
-                          isCreate === "true"
-                            ? format(new Date(), "yyyy-MM-dd")
-                            : values.time_end
-                        }
-                        disabled={isDisableAccess("time_end")}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.time_end?.toString()}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Row>
-                  <Form.Group>
+                  <Form.Group className="mb-2" as={Col} md={6}>
                     <Form.Label className="text-black">
-                      Chọn sản phẩm <span style={{ color: "red" }}>*</span>
+                      Ngày kết thúc <span style={{ color: "red" }}>*</span>
                     </Form.Label>
-
-                    <Select
-                      isMulti
-                      name="colors"
-                      options={
-                        values?.products?.[0]?.value === "all"
-                          ? []
-                          : values?.products?.length > 0
-                          ? ([...(mapProduct ?? [])] as any)
-                          : ([
-                              { value: "all", label: "Chọn tất cả" },
-                              ...(mapProduct ?? []),
-                            ] as any)
-                      }
-                      className=" basic-multi-select custom-multi mb-3 input-placeholder"
-                      id="choices-multiple-default"
-                      menuPlacement="auto"
-                      classNamePrefix="Select2"
-                      defaultValue={[mapProduct?.[0] as any]}
-                      placeholder="Chọn sản phẩm"
-                      isSearchable
-                      isClearable
-                      isLoading={isLoadingProducts}
-                      value={values.products}
-                      onChange={(value) => setFieldValue("products", value)}
-                      isDisabled={isDisableAccess("products")}
-                    />
-                    {errors.products && touched.products && (
-                      <p style={{ color: "red", fontSize: 12 }}>
-                        {errors.products.toString()}
-                      </p>
-                    )}
-                  </Form.Group>
-
-                  <Form.Group>
-                    <Form.Label className="text-black">
-                      Chọn đối tượng tham gia{" "}
-                      <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Select
-                      isMulti
-                      name="colors"
-                      options={
-                        [
-                          { value: "all", label: "Chọn tất cả" },
-                          ...(OBJECTIVES_SELECT || []),
-                        ] as any
-                      }
-                      className=" basic-multi-select custom-multi mb-3 input-placeholder"
-                      id="choices-multiple-default"
-                      menuPlacement="auto"
-                      classNamePrefix="Select2"
-                      isSearchable
-                      placeholder="Chọn đối tượng tham gia"
-                      defaultValue={[OBJECTIVES_SELECT?.[0] as any]}
-                      value={values.objectives}
-                      isClearable
-                      onChange={(value) => setFieldValue("objectives", value)}
-                      isDisabled={isDisableAccess("objectives")}
-                    />
-                    {errors.objectives && touched.objectives && (
-                      <p style={{ color: "red", fontSize: 12 }}>
-                        {errors.objectives.toString()}
-                      </p>
-                    )}
-                  </Form.Group>
-
-                  <Form.Group>
-                    <Form.Label className="text-black">
-                      Nhập số tiền thưởng{" "}
-                      <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-
-                    <Form.Select
-                      className="form-select input-placeholder"
-                      name="price"
-                      onChange={handleChange}
-                      value={values.price}
-                      isInvalid={touched.price && !!errors.price}
+                    <Form.Control
                       required
-                      disabled={isDisableAccess("price")}
-                    >
-                      <option value={10} label="10.000đ" />
-                      <option value={20} label="20.000đ" />
-                      <option value={30} label="30.000đ" />
-                      <option value={50} label="50.000đ" />
-                      <option value={100} label="100.000đ" />
-                      <option value={200} label="200.000đ" />
-                      <option value={300} label="300.000đ" />
-                      <option value={500} label="500.000đ" />
-                    </Form.Select>
+                      type="date"
+                      id="time_end_validate"
+                      placeholder="Ngày kết thúc"
+                      className="input-placeholder"
+                      name="time_end"
+                      value={values.time_end}
+                      onChange={handleChange}
+                      isInvalid={touched.time_end && !!errors.time_end}
+                      min={
+                        isCreate === "true"
+                          ? format(new Date(), "yyyy-MM-dd")
+                          : values.time_end
+                      }
+                      disabled={isDisableAccess("time_end")}
+                    />
                     <Form.Control.Feedback type="invalid">
-                      {errors.price}
+                      {errors.time_end?.toString()}
                     </Form.Control.Feedback>
                   </Form.Group>
+                </Row>
+                <Form.Group>
+                  <Form.Label className="text-black">
+                    Chọn sản phẩm <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
 
-                  <Form.Group>
-                    <Form.Label className="text-nowrap text-black">
-                      Loại hàng hóa: <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Select
-                      isMulti
-                      name="goods_type"
-                      options={[...(TypeBinExport || [])] as any}
-                      className="basic-multi-select custom-multi mb-3 input-placeholder"
-                      id="choices-multiple-default"
-                      menuPlacement="auto"
-                      classNamePrefix="Select2"
-                      isSearchable
-                      placeholder="Chọn loại hàng hóa"
-                      defaultValue={[TypeBinExport?.[0] as any]}
-                      value={values.goods_type}
-                      isClearable
-                      onChange={(value) => setFieldValue("goods_type", value)}
-                      isDisabled={isDisableAccess("goods_type")}
-                    />
+                  <Select
+                    isMulti
+                    name="colors"
+                    options={
+                      values?.products?.[0]?.value === "all"
+                        ? []
+                        : values?.products?.length > 0
+                        ? ([...(mapProduct ?? [])] as any)
+                        : ([
+                            { value: "all", label: "Chọn tất cả" },
+                            ...(mapProduct ?? []),
+                          ] as any)
+                    }
+                    className=" basic-multi-select custom-multi mb-3 input-placeholder"
+                    id="choices-multiple-default"
+                    menuPlacement="auto"
+                    classNamePrefix="Select2"
+                    defaultValue={[mapProduct?.[0] as any]}
+                    placeholder="Chọn sản phẩm"
+                    isSearchable
+                    isClearable
+                    isLoading={isLoadingProducts}
+                    value={values.products}
+                    onChange={(value) => setFieldValue("products", value)}
+                    isDisabled={isDisableAccess("products")}
+                  />
+                  {errors.products && touched.products && (
+                    <p style={{ color: "red", fontSize: 12 }}>
+                      {errors.products.toString()}
+                    </p>
+                  )}
+                </Form.Group>
 
-                    {errors.goods_type && touched.goods_type && (
-                      <p style={{ color: "red", fontSize: 12 }}>
-                        {errors.goods_type.toString()}
-                      </p>
-                    )}
-                  </Form.Group>
-                  <Form.Group controlId="status_validate">
-                    <Form.Label className="text-black">
-                      Tạm dừng chương trình
-                    </Form.Label>
-                    <Form.Check
-                      type="switch"
-                      className="form-check-lg form-switch input-placeholder"
-                      checked={values.status === 3 ? true : false}
-                      onChange={(value) => {
-                        setFieldValue("status", value.target.checked ? 3 : 1);
-                      }}
-                      required
-                      name="status"
-                      disabled={isDisableAccess("status")}
-                    />
-                    {errors.status && touched.status && (
-                      <p style={{ color: "red", fontSize: 12 }}>
-                        {errors.status.toString()}
-                      </p>
-                    )}
-                  </Form.Group>
-                </Stack>
-              </Card.Body>
-            </Card>
-          </form>
+                <Form.Group>
+                  <Form.Label className="text-black">
+                    Chọn đối tượng tham gia{" "}
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Select
+                    isMulti
+                    name="colors"
+                    options={
+                      [
+                        { value: "all", label: "Chọn tất cả" },
+                        ...(OBJECTIVES_SELECT || []),
+                      ] as any
+                    }
+                    className=" basic-multi-select custom-multi mb-3 input-placeholder"
+                    id="choices-multiple-default"
+                    menuPlacement="auto"
+                    classNamePrefix="Select2"
+                    isSearchable
+                    placeholder="Chọn đối tượng tham gia"
+                    defaultValue={[OBJECTIVES_SELECT?.[0] as any]}
+                    value={values.objectives}
+                    isClearable
+                    onChange={(value) => setFieldValue("objectives", value)}
+                    isDisabled={isDisableAccess("objectives")}
+                  />
+                  {errors.objectives && touched.objectives && (
+                    <p style={{ color: "red", fontSize: 12 }}>
+                      {errors.objectives.toString()}
+                    </p>
+                  )}
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label className="text-black">
+                    Nhập số tiền thưởng <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+
+                  <Form.Select
+                    className="form-select input-placeholder"
+                    name="price"
+                    onChange={handleChange}
+                    value={values.price}
+                    isInvalid={touched.price && !!errors.price}
+                    required
+                    disabled={isDisableAccess("price")}
+                  >
+                    <option value={10} label="10.000đ" />
+                    <option value={20} label="20.000đ" />
+                    <option value={30} label="30.000đ" />
+                    <option value={50} label="50.000đ" />
+                    <option value={100} label="100.000đ" />
+                    <option value={200} label="200.000đ" />
+                    <option value={300} label="300.000đ" />
+                    <option value={500} label="500.000đ" />
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.price}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label className="text-nowrap text-black">
+                    Loại hàng hóa: <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Select
+                    isMulti
+                    name="goods_type"
+                    options={[...(TypeBinExport || [])] as any}
+                    className="basic-multi-select custom-multi mb-3 input-placeholder"
+                    id="choices-multiple-default"
+                    menuPlacement="auto"
+                    classNamePrefix="Select2"
+                    isSearchable
+                    placeholder="Chọn loại hàng hóa"
+                    defaultValue={[TypeBinExport?.[0] as any]}
+                    value={values.goods_type}
+                    isClearable
+                    onChange={(value) => setFieldValue("goods_type", value)}
+                    isDisabled={isDisableAccess("goods_type")}
+                  />
+
+                  {errors.goods_type && touched.goods_type && (
+                    <p style={{ color: "red", fontSize: 12 }}>
+                      {errors.goods_type.toString()}
+                    </p>
+                  )}
+                </Form.Group>
+                <Form.Group controlId="status_validate">
+                  <Form.Label className="text-black">
+                    Tạm dừng chương trình
+                  </Form.Label>
+                  <Form.Check
+                    type="switch"
+                    className="form-check-lg form-switch input-placeholder"
+                    checked={values.status === 3 ? true : false}
+                    onChange={(value) => {
+                      setFieldValue("status", value.target.checked ? 3 : 1);
+                    }}
+                    required
+                    name="status"
+                    disabled={isDisableAccess("status")}
+                  />
+                  {errors.status && touched.status && (
+                    <p style={{ color: "red", fontSize: 12 }}>
+                      {errors.status.toString()}
+                    </p>
+                  )}
+                </Form.Group>
+              </Stack>
+            </Card.Body>
+          </Card>
         )}
       </Formik>
     </Fragment>
