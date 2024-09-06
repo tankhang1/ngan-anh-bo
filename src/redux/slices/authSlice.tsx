@@ -12,7 +12,8 @@ type TFeatureCode =
   | "EMPLOYEES_INFO"
   | "EMPLOYEES_ROLES"
   | "EMPLOYEES_DEPARTMENTS"
-  | "PRODUCTS"
+  | "PRODUCTS_INFO"
+  | "PRODUCTS_MANUFACTURE"
   | "PROGRAMS_POINTS"
   | "PROGRAMS_TOPUPS"
   | "PROGRAM_CHANCE"
@@ -80,11 +81,19 @@ const initialValue = {
     viewDepartment: 0,
     createDepartment: 0,
     editDepartment: 0,
-    viewProducts: 0,
-    viewListProducts: 0,
-    createProduct: 0,
-    exportProduct: 0,
-    editProduct: 0,
+
+    viewProductsInfo: 0,
+    viewListProductsInfo: 0,
+    createProductInfo: 0,
+    exportProductInfo: 0,
+    editProductInfo: 0,
+
+    viewProductsWarehouse: 0,
+    viewListProductsWarehouse: 0,
+    createProductWarehouse: 0,
+    exportProductWarehouse: 0,
+    editProductWarehouse: 0,
+
     viewProgramPoint: 0,
     viewListProgramPoint: 0,
     createProgramPoint: 0,
@@ -191,13 +200,22 @@ const onPermissionFeature = (permission: TPermit) => {
         editDepartment: permission.permit_edit,
       };
     }
-    case "PRODUCTS": {
+    case "PRODUCTS_INFO": {
       return {
-        viewProducts: permission.permit_view_detail,
-        viewListProducts: permission.permit_view_list,
-        createProduct: permission.permit_create,
-        exportProduct: permission.permit_export,
-        editProduct: permission.permit_edit,
+        viewProductsInfo: permission.permit_view_detail,
+        viewListProductsInfo: permission.permit_view_list,
+        createProductInfo: permission.permit_create,
+        exportProductInfo: permission.permit_export,
+        editProductInfo: permission.permit_edit,
+      };
+    }
+    case "PRODUCTS_MANUFACTURE": {
+      return {
+        viewProductsWarehouse: permission.permit_view_detail,
+        viewListProductsWarehouse: permission.permit_view_list,
+        createProductWarehouse: permission.permit_create,
+        exportProductWarehouse: permission.permit_export,
+        editProductWarehouse: permission.permit_edit,
       };
     }
     case "PROGRAMS_POINTS": {
@@ -376,11 +394,17 @@ const authSlice = createSlice({
         viewDepartment: 0,
         createDepartment: 0,
         editDepartment: 0,
-        viewProducts: 0,
-        viewListProducts: 0,
-        createProduct: 0,
-        exportProduct: 0,
-        editProduct: 0,
+        viewProductsInfo: 0,
+        viewListProductsInfo: 0,
+        createProductInfo: 0,
+        exportProductInfo: 0,
+        editProductInfo: 0,
+
+        viewProductsWarehouse: 0,
+        viewListProductsWarehouse: 0,
+        createProductWarehouse: 0,
+        exportProductWarehouse: 0,
+        editProductWarehouse: 0,
         viewProgramPoint: 0,
         viewListProgramPoint: 0,
         createProgramPoint: 0,

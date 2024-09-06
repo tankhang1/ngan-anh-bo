@@ -88,6 +88,26 @@ export const productApi = createApi({
         { type: TagsEnum.PRODUCTS as const, id: arg.id! },
       ],
     }),
+    updateProductByMarketing: builder.mutation<any, TProduct>({
+      query: (body) => ({
+        url: "/product/update/info",
+        method: HTTPS_METHOD.POST,
+        body: body,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.PRODUCTS as const, id: arg.id! },
+      ],
+    }),
+    updateProductByWarehouse: builder.mutation<any, TProduct>({
+      query: (body) => ({
+        url: "/product/update/manufacture",
+        method: HTTPS_METHOD.POST,
+        body: body,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: TagsEnum.PRODUCTS as const, id: arg.id! },
+      ],
+    }),
   }),
 });
 
@@ -97,4 +117,6 @@ export const {
   useGetListIngredientsQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
+  useUpdateProductByMarketingMutation,
+  useUpdateProductByWarehouseMutation,
 } = productApi;

@@ -18,6 +18,7 @@ interface EditorProps {
   placeholder: string;
   value: string;
   handOnChange: (value: string) => void;
+  disabled?: boolean;
 }
 
 interface EditorState {
@@ -90,6 +91,7 @@ class Editor extends Component<EditorProps, EditorState> {
           formats={Editor.formats}
           bounds={".app"}
           placeholder={this.props.placeholder}
+          readOnly={this.props.disabled}
         />
       </div>
     );

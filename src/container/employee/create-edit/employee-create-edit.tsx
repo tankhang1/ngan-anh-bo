@@ -327,7 +327,7 @@ function EmployeeCreateEdit() {
                                   files={files1}
                                   onupdatefiles={setFiles1}
                                   labelIdle="Kéo và bỏ ảnh tại đây"
-                                  acceptedFileTypes={["image/jpeg"]}
+                                  acceptedFileTypes={["image/jpg"]}
                                 ></FilePond>
 
                                 <Form.Control.Feedback type="invalid">

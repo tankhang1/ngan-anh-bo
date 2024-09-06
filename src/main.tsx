@@ -13,7 +13,6 @@ import Error500 from "./container/errors/error500/error500.tsx";
 import Login from "./firebase/login.tsx";
 import ScrollToTop from "./components/common/scrolltotop/scrolltotop.tsx";
 import "./index.scss";
-import ProductPage from "./container/product/index.tsx";
 import ProductCreateEdit from "./container/product/create-edit/product-create-edit.tsx";
 import PointProgram from "./container/program/point/point.tsx";
 import TopupProgram from "./container/program/topup/topup.tsx";
@@ -50,6 +49,11 @@ import SMSReport from "./container/report/components/SMSReport.tsx";
 import CustomerToday from "./container/operator/customer-today/index.tsx";
 import TopupToday from "./container/operator/topup-today/index.tsx";
 import CustomerUnValidateToday from "./container/operator/customer-unvalidate-today/index.tsx";
+import ProductEditInfo from "./container/product/product-info/edit-info/product-edit-info.tsx";
+import ProductEditWarehouse from "./container/product/product-warehouse/edit-warehouse/product-edit-warehouse.tsx";
+import ProductWarehousePage from "./container/product/product-warehouse/index.tsx";
+import ProductInfoPage from "./container/product/product-info/index.tsx";
+import ProductCreate from "./container/product/create-edit/product-create-edit.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -130,8 +134,28 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<Accounts />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}product`}
-                element={<ProductPage />}
+                path={`${import.meta.env.BASE_URL}product/info`}
+                element={<ProductInfoPage />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}product/warehouse`}
+                element={<ProductWarehousePage />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}product/warehouse/create`}
+                element={<ProductCreate />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}product/info/create`}
+                element={<ProductCreate />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}product/info/edit/:id`}
+                element={<ProductEditInfo />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}product/warehouse/edit/:id`}
+                element={<ProductEditWarehouse />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}product/ce/:isCreate/:id`}

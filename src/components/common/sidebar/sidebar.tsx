@@ -109,8 +109,10 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.viewListEmployee ||
             permission.viewRoles ||
             permission.viewDepartment ||
-            permission.viewProducts ||
-            permission.viewListProducts ||
+            permission.viewProductsInfo ||
+            permission.viewListProductsInfo ||
+            permission.viewProductsWarehouse ||
+            permission.viewListProductsWarehouse ||
             permission.warehouseSearchExport ||
             permission.warehouseSearchImport ||
             permission.warehouseListImport ||
@@ -198,7 +200,19 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.DEPARTMENTS:
           return permission.viewDepartment;
         case MENU_KEY.PRODUCTS:
-          return permission.viewProducts || permission.viewListProducts;
+          return (
+            permission.viewProductsInfo ||
+            permission.viewListProductsInfo ||
+            permission.viewProductsWarehouse ||
+            permission.viewListProductsWarehouse
+          );
+        case MENU_KEY.PRODUCTS_INFO:
+          return permission.viewListProductsInfo || permission.viewProductsInfo;
+        case MENU_KEY.PRODUCTS_WAREHOUSE:
+          return (
+            permission.viewListProductsWarehouse ||
+            permission.viewProductsWarehouse
+          );
         case MENU_KEY.MANAGE_PROGRAM:
           return (
             permission.viewProgramPoint ||

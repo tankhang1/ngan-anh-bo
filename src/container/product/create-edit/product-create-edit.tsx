@@ -40,6 +40,9 @@ import { ToastContext } from "../../../components/AppToast";
 import { fNumber } from "../../../hooks";
 import { NumericFormat } from "react-number-format";
 import productSchema from "../../../schema/product.schema";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import productCreateSchema from "../../../schema/product.create.schema";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -47,7 +50,8 @@ registerPlugin(
   FilePondPluginFileValidateType
 );
 
-function ProductCreateEdit() {
+function ProductCreate() {
+  const { roles } = useSelector((state: RootState) => state.auth);
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const [files1, setFiles1] = useState<FilePondFile[] | any>([]);
@@ -55,12 +59,6 @@ function ProductCreateEdit() {
   const { Formik } = formik;
   const navigate = useNavigate();
 
-  const { data: product } = useGetListProductsQuery(null, {
-    selectFromResult: ({ data }) => ({
-      data: data?.find((item) => item.code === id),
-    }),
-    skip: isCreate === "true",
-  });
   const { data: binIds } = useGetListBinsIdQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -72,133 +70,91 @@ function ProductCreateEdit() {
   });
   const { data: productId } = useGetNewProductCodeQuery(null, {
     refetchOnFocus: true,
-    skip: isCreate !== "true",
   });
 
-  const [updateProduct, { isLoading: isLoadingUpdate }] =
-    useUpdateProductMutation();
   const [uploadImage] = useUploadFileMutation();
   const [createProduct, { isLoading: isLoadingCreate }] =
     useCreateProductMutation();
 
   const onHandleSubmit = async (values: TProductForm) => {
-    if (isCreate === "true") {
-      if (productId)
-        await createProduct({
-          ...values,
-          qr_mapping: values.qr_mapping ? 1 : 0,
-          qr_printing: values.qr_printing ? 1 : 0,
-          sku_bin: +(values?.sku_bin ?? 0),
-          sku_box: +(values?.sku_box ?? 0),
-          bin_pallet: +(values?.bin_pallet ?? 0),
-          mop: +(values?.mop ?? 0),
-          net_weight: +(values.net_weight ?? 0),
-          type: +values.type,
-          code: productId,
-        })
-          .unwrap()
-          .then(async (value) => {
-            if (value?.status === 0) {
-              toast.showToast("Thêm mới sản phẩm thành công");
-              if (files1.length > 0) {
-                const formData = new FormData();
-                formData.append("files", files1[0].file);
-                console.log(formData);
-                try {
-                  await uploadImage({
-                    id: productId,
-                    body: formData,
-                  })
-                    .unwrap()
-                    .then(() => console.log("success"));
-                } catch (error) {
-                  console.error("Upload failed:", error);
-                }
+    if (productId)
+      await createProduct({
+        ...values,
+        qr_mapping: values.qr_mapping ? 1 : 0,
+        qr_printing: values.qr_printing ? 1 : 0,
+        sku_bin: +(values?.sku_bin ?? 0),
+        sku_box: +(values?.sku_box ?? 0),
+        bin_pallet: +(values?.bin_pallet ?? 0),
+        mop: +(values?.mop ?? 0),
+        net_weight: +(values.net_weight ?? 0),
+        type: +values.type,
+        code: productId,
+        c1_price_vnd: +values.c1_price_vnd,
+        c2_price_vnd: +values.c2_price_vnd,
+        point: +values.point,
+      })
+        .unwrap()
+        .then(async (value) => {
+          if (value?.status === 0) {
+            toast.showToast("Thêm mới sản phẩm thành công");
+            if (files1.length > 0) {
+              const formData = new FormData();
+              formData.append("files", files1[0].file);
+              console.log(formData);
+              try {
+                await uploadImage({
+                  id: productId,
+                  body: formData,
+                })
+                  .unwrap()
+                  .then(() => console.log("success"));
+              } catch (error) {
+                console.error("Upload failed:", error);
               }
-            } else toast.showToast("Thêm mới thất bại");
-          })
-          .catch(() => {
-            toast.showToast("Hết hạn token");
-          });
-    } else {
-      setIsEdit(!isEdit);
-      if (product && isEdit === true) {
-        await updateProduct({
-          ...product,
-          ...values,
-          qr_mapping: values.qr_mapping ? 1 : 0,
-          qr_printing: values.qr_printing ? 1 : 0,
-          sku_bin: +(values?.sku_bin ?? 0),
-          sku_box: +(values?.sku_box ?? 0),
-          bin_pallet: +(values?.bin_pallet ?? 0),
-          mop: +(values?.mop ?? 0),
-          net_weight: +(values.net_weight ?? 0),
-          type: +values.type,
+            }
+          } else toast.showToast("Thêm mới thất bại");
         })
-          .unwrap()
-          .then(async (value) => {
-            if (value?.status === 0) {
-              if (files1.length > 0 && product?.code) {
-                const formData = new FormData();
-                formData.append("files", files1[0].file);
-                try {
-                  await uploadImage({
-                    id: product?.code,
-                    body: formData,
-                  })
-                    .unwrap()
-                    .then(() => console.log("success"));
-                } catch (error) {
-                  console.error("Upload failed:", error);
-                }
-              }
-              console.log("chỉnh sửa sản phẩm thành công");
-              toast.showToast("Chỉnh sửa sản phẩm thành công");
-            } else toast.showToast("Chỉnh sửa sản phẩm thất bại");
-          })
-          .catch(() => {
-            toast.showToast("Chỉnh sửa sản phẩm thất bại");
-          });
-      }
-    }
+        .catch(() => {
+          toast.showToast("Hết hạn token");
+        });
   };
 
   return (
     <Fragment>
       <Formik
         initialValues={{
-          bin_pallet: product?.bin_pallet ?? 0,
-          code: isCreate === "true" ? productId ?? "" : product?.code ?? "",
-          code_bin: product?.code_bin ?? "",
-          brand_code: product?.brand_code ?? "",
-          brand_name: product?.brand_name ?? "",
-          category_code: product?.category_code ?? "",
-          category_name: product?.category_name ?? "",
-          certificate_of_origin: product?.certificate_of_origin ?? "",
-          description: product?.description ?? "",
-          detail_url: product?.detail_url ?? "",
-          ingredient: `<p>${product?.ingredient ?? ""}</p>`,
-          ingredient_id: product?.ingredient_id ?? "",
-          name_display_label: product?.name_display_label ?? "",
-          net_weight: product?.net_weight ?? 0,
-          pack_configuration: product?.pack_configuration ?? "",
-          product_name_detail: product?.product_name_detail ?? "",
-          qr_mapping: product?.qr_mapping === 1 ? true : false,
-          qr_printing: product?.qr_printing === 1 ? true : false,
-          short_info: product?.short_info ?? "",
-          sku_bin: product?.sku_bin ?? 0,
-          sku_box: product?.sku_box ?? 0,
-          type: product?.type.toString() ?? "",
-          unit: product?.unit ?? "",
-          mop: product?.mop ?? 0,
-          device_code: product?.device_code ?? "",
-          point: product?.point ?? 1,
-          c1_price_vnd: product?.c1_price_vnd ?? 0,
-          c2_price_vnd: product?.c2_price_vnd ?? 0,
+          bin_pallet: 0,
+          code: productId ?? "",
+          code_bin: "",
+          brand_code: "",
+          brand_name: "",
+          category_code: "",
+          category_name: "",
+          certificate_of_origin: "",
+          description: "",
+          detail_url: "",
+          ingredient: `<p>""</p>`,
+          ingredient_id: "",
+          name_display_label: "",
+          net_weight: 0,
+          pack_configuration: "",
+          product_name_detail: "",
+          qr_mapping: false,
+          qr_printing: false,
+          short_info: "",
+          sku_bin: 0,
+          sku_box: 0,
+          type: "",
+          unit: "",
+          mop: 0,
+          device_code: "",
+          point: 1,
+          c1_price_vnd: 0,
+          c2_price_vnd: 0,
         }}
         enableReinitialize
         onSubmit={onHandleSubmit}
-        validationSchema={productSchema}
+        validationSchema={productCreateSchema}
       >
         {({
           handleSubmit,
@@ -226,37 +182,19 @@ function ProductCreateEdit() {
                   >
                     Trở lại
                   </button>
-                  {isCreate === "true" ? (
-                    <button
-                      className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
-                        isLoadingCreate && "btn-loader"
-                      }`}
-                      type="submit"
-                    >
-                      <span>Thêm mới</span>
-                      {isLoadingCreate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
-                  ) : (
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingUpdate && "btn-loader"
-                      }`}
-                      type="submit"
-                    >
-                      <span>
-                        {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
+                  <button
+                    className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                      isLoadingCreate && "btn-loader"
+                    }`}
+                    type="submit"
+                  >
+                    <span>Thêm mới</span>
+                    {isLoadingCreate && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
                       </span>
-                      {isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
-                  )}
+                    )}
+                  </button>
                 </div>
               </Card.Header>
               <Card.Body>
@@ -279,14 +217,13 @@ function ProductCreateEdit() {
                       ) : (
                         <Form.Group>
                           <Form.Label className="text-black">
-                            {" "}
                             Hình ảnh sản phẩm
                           </Form.Label>
                           <FilePond
                             files={files1}
                             onupdatefiles={setFiles1}
                             labelIdle="Drag & Drop your file here or click "
-                            acceptedFileTypes={["image/jpeg"]}
+                            acceptedFileTypes={["image/jpg"]}
                           ></FilePond>
 
                           <Form.Control.Feedback type="invalid">
@@ -321,7 +258,7 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Tên sản phẩm <span style={{ color: "red" }}>*</span>
+                            Tên sản phẩm
                           </Form.Label>
                           <Form.Control
                             required
@@ -344,8 +281,7 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Tên sản phẩm (thu gọn){" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Tên sản phẩm (thu gọn)
                           </Form.Label>
                           <Form.Control
                             required
@@ -368,14 +304,13 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Mã thương hiệu{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Mã thương hiệu
                           </Form.Label>
                           <Form.Control
                             required
                             type="text"
                             id="brand_code_validate"
-                            placeholder="Tên sản phẩm"
+                            placeholder="Mã thương hiệu"
                             name="brand_code"
                             defaultValue={values.brand_code}
                             onChange={handleChange}
@@ -391,8 +326,7 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Tên thương hiệu{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Tên thương hiệu
                           </Form.Label>
                           <Form.Control
                             required
@@ -414,8 +348,7 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Mã nhóm sản phẩm{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Mã nhóm sản phẩm
                           </Form.Label>
                           <Form.Control
                             required
@@ -437,8 +370,7 @@ function ProductCreateEdit() {
                         </Form.Group>
                         <Form.Group>
                           <Form.Label className="text-black">
-                            Tên nhóm sản phẩm{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Tên nhóm sản phẩm
                           </Form.Label>
                           <Form.Control
                             required
@@ -464,7 +396,7 @@ function ProductCreateEdit() {
                   <Row>
                     <Form.Group as={Col} md={4}>
                       <Form.Label className="text-black">
-                        Số điểm thưởng <span style={{ color: "red" }}>*</span>
+                        Số điểm thưởng
                       </Form.Label>
 
                       <NumericFormat
@@ -491,7 +423,6 @@ function ProductCreateEdit() {
                       <NumericFormat
                         thousandSeparator="."
                         customInput={Form.Control as any}
-                        suffix=" VND"
                         min={0}
                         defaultValue={values.c1_price_vnd}
                         name="c1_price_vnd"
@@ -513,7 +444,6 @@ function ProductCreateEdit() {
                       <NumericFormat
                         thousandSeparator="."
                         customInput={Form.Control as any}
-                        suffix=" VND"
                         min={0}
                         defaultValue={values.c2_price_vnd}
                         name="c2_price_vnd"
@@ -607,8 +537,7 @@ function ProductCreateEdit() {
                   <Row>
                     <Form.Group as={Col} md={4}>
                       <Form.Label className="text-black">
-                        Quy cách đóng gói{" "}
-                        <span style={{ color: "red" }}>*</span>
+                        Quy cách đóng gói
                       </Form.Label>
                       <Form.Control
                         required
@@ -631,7 +560,7 @@ function ProductCreateEdit() {
                     </Form.Group>
                     <Form.Group as={Col} md={4}>
                       <Form.Label className="text-black">
-                        Trọng lượng <span style={{ color: "red" }}>*</span>
+                        Trọng lượng
                       </Form.Label>
                       <Form.Control
                         type="number"
@@ -651,7 +580,7 @@ function ProductCreateEdit() {
                     </Form.Group>
                     <Form.Group as={Col} md={4}>
                       <Form.Label className="text-black">
-                        Đơn vị tính <span style={{ color: "red" }}>*</span>
+                        Đơn vị tính
                       </Form.Label>
                       <Form.Select
                         className="form-select input-placeholder"
@@ -680,7 +609,7 @@ function ProductCreateEdit() {
                   </Row>
                   <Form.Group>
                     <Form.Label className="text-black">
-                      Mã nguyên liệu <span style={{ color: "red" }}>*</span>
+                      Mã nguyên liệu
                     </Form.Label>
                     <Form.Select
                       className="form-select input-placeholder"
@@ -814,9 +743,21 @@ function ProductCreateEdit() {
                     </Form.Group>
                   </Row>
                   <Form.Group as={Col} md={4}>
-                    <Form.Label className="text-black">Sản xuất</Form.Label>
-                    <Form.Check label="Đóng gói" />
-                    <Form.Check defaultChecked label="In trên bao bì" />
+                    <Form.Label className="text-black">Sản xuất </Form.Label>
+                    <Form.Check
+                      label="Đóng gói"
+                      onChange={(e) =>
+                        setFieldValue("qr_mapping", e.target.checked)
+                      }
+                      checked={values.qr_mapping}
+                    />
+                    <Form.Check
+                      label="In trên bao bì"
+                      onChange={(e) =>
+                        setFieldValue("qr_printing", e.target.checked)
+                      }
+                      checked={values.qr_printing}
+                    />
                   </Form.Group>
                   <Row>
                     <Form.Group as={Col} md={3}>
@@ -942,4 +883,4 @@ function ProductCreateEdit() {
   );
 }
 
-export default ProductCreateEdit;
+export default ProductCreate;

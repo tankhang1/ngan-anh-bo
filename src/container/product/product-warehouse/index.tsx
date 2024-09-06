@@ -15,15 +15,15 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import AppTable from "../../components/common/table/table";
+import AppTable from "../../../components/common/table/table";
 import { useNavigate } from "react-router-dom";
-import { TProduct } from "../../assets/types";
+import { TProduct } from "../../../assets/types";
 
-import { BASE_PORT, MAP_PRODUCT_TYPE } from "../../constants";
-import { useGetListProductsQuery } from "../../redux/api/info/info.api";
-import { exportExcelFile, fNumber } from "../../hooks";
+import { BASE_PORT, MAP_PRODUCT_TYPE } from "../../../constants";
+import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
+import { exportExcelFile, fNumber } from "../../../hooks";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 
 const PRODUCT_FILTERS = [
   {
@@ -40,6 +40,10 @@ const PRODUCT_FILTERS = [
   },
 ];
 const PRODUCT_TYPE = [
+  {
+    key: -1,
+    label: "Tất cả",
+  },
   {
     key: 0,
     label: "Gói",
@@ -61,7 +65,7 @@ const PRODUCT_TYPE = [
     label: "Thùng",
   },
 ];
-function ProductPage() {
+function ProductWarehousePage() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(PRODUCT_FILTERS[0].key);
@@ -76,7 +80,10 @@ function ProductPage() {
     });
 
   const filterProducts = useMemo(
-    () => products?.filter((item) => item.type === changeType) ?? [],
+    () =>
+      (changeType === -1
+        ? products
+        : products?.filter((item) => item.type === changeType)) ?? [],
     [products, changeType]
   );
 
@@ -170,7 +177,7 @@ function ProductPage() {
                       </Dropdown.Menu>
                     </Dropdown>
                   </OverlayTrigger>
-                  {permission.createProduct ? (
+                  {permission.createProductWarehouse ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -183,13 +190,13 @@ function ProductPage() {
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
-                        onClick={() => navigate(`ce/${true}/-1`)}
+                        onClick={() => navigate(`create`)}
                       >
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
                   ) : null}
-                  {permission.exportProduct ? (
+                  {permission.exportProductWarehouse ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -325,7 +332,7 @@ function ProductPage() {
                 label: "Quy cách đóng gói",
                 render: (value) => <td>{value.pack_configuration}</td>,
               },
-              permission.editProduct
+              permission.editProductWarehouse
                 ? {
                     key: "",
                     label: "Chức năng",
@@ -333,7 +340,7 @@ function ProductPage() {
                       <td>
                         <button
                           className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => navigate(`ce/${false}/${value.code}`)}
+                          onClick={() => navigate(`edit/${value.code}`)}
                         >
                           <i className="ti ti-edit"></i>
                         </button>
@@ -358,4 +365,4 @@ function ProductPage() {
   );
 }
 
-export default ProductPage;
+export default ProductWarehousePage;
