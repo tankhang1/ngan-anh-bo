@@ -1,20 +1,5 @@
-import React, {
-  Fragment,
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Dropdown,
-  Form,
-  InputGroup,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import React, { Fragment, useEffect, useState } from "react";
+import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
@@ -25,8 +10,6 @@ import {
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 
 const AGENT_FILTERS = [
   {
@@ -54,7 +37,6 @@ function CustomerToday() {
     groupObjectives?.[0].symbol || ""
   );
   const [page, setPage] = useState(1);
-  const navigate = useNavigate();
 
   const onChangeCustomerType = (type: string) => {
     if (type !== customerType) {
@@ -67,7 +49,6 @@ function CustomerToday() {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
       ed: +(format(new Date(), "yyyyMMdd") + "2359"),
       t: customerType,
-      s: 1,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -82,7 +63,6 @@ function CustomerToday() {
         nu: page - 1,
         sz: 10,
         t: customerType,
-        s: 1,
       },
       {
         refetchOnMountOrArgChange: true,
