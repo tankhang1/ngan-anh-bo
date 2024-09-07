@@ -403,13 +403,13 @@ function ProductEditWarehouse() {
 
                     <NumericFormat
                       thousandSeparator="."
+                      decimalSeparator=","
                       customInput={Form.Control as any}
                       min={0}
                       defaultValue={values.c1_price_vnd}
                       name="c1_price_vnd"
                       onChange={handleChange}
                       placeholder="Số tiền 1"
-                      decimalSeparator=","
                       className="input-placeholder"
                       disabled={true}
                     />
@@ -424,13 +424,13 @@ function ProductEditWarehouse() {
 
                     <NumericFormat
                       thousandSeparator="."
+                      decimalSeparator=","
                       customInput={Form.Control as any}
                       min={0}
                       defaultValue={values.c2_price_vnd}
                       name="c2_price_vnd"
                       onChange={handleChange}
                       placeholder="Số tiền 2"
-                      decimalSeparator=","
                       className="input-placeholder"
                       disabled={true}
                     />

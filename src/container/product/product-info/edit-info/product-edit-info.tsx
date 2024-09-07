@@ -32,7 +32,7 @@ import {
 import { useUploadFileMutation } from "../../../../redux/api/media/media.api";
 import { FilePondFile } from "filepond";
 import { ToastContext } from "../../../../components/AppToast";
-import { fNumber } from "../../../../hooks";
+import { fNumber, fParseNumber } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
 import productSchema from "../../../../schema/product.schema";
 import { useSelector } from "react-redux";
@@ -86,9 +86,9 @@ function ProductEditInfo() {
         mop: +(values?.mop ?? 0),
         net_weight: +(values.net_weight ?? 0),
         type: +values.type,
-        c1_price_vnd: +values.c1_price_vnd,
-        c2_price_vnd: +values.c2_price_vnd,
-        point: +values.point,
+        c1_price_vnd: fParseNumber(values.c1_price_vnd.toString()),
+        c2_price_vnd: fParseNumber(values.c2_price_vnd.toString()),
+        point: fParseNumber(values.point.toString()),
       })
         .unwrap()
         .then(async (value) => {
@@ -434,13 +434,13 @@ function ProductEditInfo() {
 
                     <NumericFormat
                       thousandSeparator="."
+                      decimalSeparator=","
                       customInput={Form.Control as any}
                       min={0}
                       defaultValue={values.c1_price_vnd}
                       name="c1_price_vnd"
                       onChange={handleChange}
                       placeholder="Số tiền 1"
-                      decimalSeparator=","
                       className="input-placeholder"
                       disabled={isEdit === false}
                     />
@@ -455,13 +455,13 @@ function ProductEditInfo() {
 
                     <NumericFormat
                       thousandSeparator="."
+                      decimalSeparator=","
                       customInput={Form.Control as any}
                       min={0}
                       defaultValue={values.c2_price_vnd}
                       name="c2_price_vnd"
                       onChange={handleChange}
                       placeholder="Số tiền 2"
-                      decimalSeparator=","
                       className="input-placeholder"
                       disabled={isEdit === false}
                     />

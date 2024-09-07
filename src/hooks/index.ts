@@ -58,6 +58,10 @@ const fNumber = (value: number) => {
   return new Intl.NumberFormat().format(value);
 };
 
+const fParseNumber = (value: string) => {
+  return parseFloat(value.replace(/\./g, ""));
+};
+
 const fDate = (date?: number | string, localFormat?: string) => {
   const stringDate =
     date?.toString() || format(new Date(), localFormat ?? "yyyyMMdd");
@@ -72,4 +76,5 @@ export {
   exportExcelFileWithHeader,
   fNumber,
   fDate,
+  fParseNumber,
 };

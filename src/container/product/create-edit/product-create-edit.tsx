@@ -33,7 +33,7 @@ import {
 import { useUploadFileMutation } from "../../../redux/api/media/media.api";
 import { FilePondFile } from "filepond";
 import { ToastContext } from "../../../components/AppToast";
-import { fNumber } from "../../../hooks";
+import { fNumber, fParseNumber } from "../../../hooks";
 import { NumericFormat } from "react-number-format";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -84,9 +84,9 @@ function ProductCreate() {
         net_weight: +(values.net_weight ?? 0),
         type: +values.type,
         code: productId,
-        c1_price_vnd: +values.c1_price_vnd,
-        c2_price_vnd: +values.c2_price_vnd,
-        point: +values.point,
+        c1_price_vnd: fParseNumber(values.c1_price_vnd.toString()),
+        c2_price_vnd: fParseNumber(values.c2_price_vnd.toString()),
+        point: fParseNumber(values.point.toString()),
       })
         .unwrap()
         .then(async (value) => {
@@ -401,7 +401,7 @@ function ProductCreate() {
                         defaultValue={values.point}
                         name="point"
                         onChange={handleChange}
-                        min={1}
+                        min={0}
                         placeholder="Số điểm thưởng"
                         className="input-placeholder"
                         disabled={isCreate === "false" && isEdit === false}
@@ -417,13 +417,13 @@ function ProductCreate() {
 
                       <NumericFormat
                         thousandSeparator="."
+                        decimalSeparator=","
                         customInput={Form.Control as any}
                         min={0}
                         defaultValue={values.c1_price_vnd}
                         name="c1_price_vnd"
                         onChange={handleChange}
                         placeholder="Số tiền 1"
-                        decimalSeparator=","
                         className="input-placeholder"
                         disabled={isCreate === "false" && isEdit === false}
                       />
@@ -438,13 +438,13 @@ function ProductCreate() {
 
                       <NumericFormat
                         thousandSeparator="."
+                        decimalSeparator=","
                         customInput={Form.Control as any}
                         min={0}
                         defaultValue={values.c2_price_vnd}
                         name="c2_price_vnd"
                         onChange={handleChange}
                         placeholder="Số tiền 2"
-                        decimalSeparator=","
                         className="input-placeholder"
                         disabled={isCreate === "false" && isEdit === false}
                       />

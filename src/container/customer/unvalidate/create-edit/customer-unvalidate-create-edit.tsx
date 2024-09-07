@@ -27,7 +27,7 @@ import {
 
 import { ToastContext } from "../../../../components/AppToast";
 import { format } from "date-fns";
-import { fDate } from "../../../../hooks";
+import { fDate, fParseNumber } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
 import {
   useCreateUpdateCustomerMutation,
@@ -135,7 +135,9 @@ function CustomerUnValidationCreateEdit() {
         birthday: values?.birthday
           ? +format(values.birthday, "yyyyMMdd")
           : null,
-        area_size: values?.area_size ? +values.area_size : null,
+        area_size: values?.area_size
+          ? fParseNumber(values.area_size.toString())
+          : null,
         citizen_number: values?.citizen_number
           ? +values.citizen_number
           : values.citizen_number,
@@ -175,7 +177,9 @@ function CustomerUnValidationCreateEdit() {
         birthday: values?.birthday
           ? +format(values.birthday, "yyyyMMdd")
           : null,
-        area_size: values?.area_size ? +values.area_size : null,
+        area_size: values?.area_size
+          ? fParseNumber(values.area_size.toString())
+          : null,
         citizen_number: values?.citizen_number
           ? +values.citizen_number
           : values.citizen_number,
