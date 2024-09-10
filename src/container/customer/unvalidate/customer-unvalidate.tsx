@@ -217,9 +217,9 @@ function CustomerUnValidation() {
                 ),
               },
               {
-                key: "customer_code",
-                label: "Mã khách hàng",
-                render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
+                key: "uuid",
+                label: "Mã đăng ký",
+                render: (value: TCustomerRes) => <td>{value.uuid}</td>,
               },
               {
                 key: "name",
@@ -230,28 +230,11 @@ function CustomerUnValidation() {
                   </td>
                 ),
               },
+
               {
-                key: "name",
-                label: "Họ và tên khách hàng",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.customer_name}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "sign_board",
-                label: "Tên cửa hàng",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.sign_board}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "province",
-                label: "Tỉnh",
-                render: (value) => <td>{value.customer_province_name}</td>,
+                key: "province_name",
+                label: "Tỉnh thành",
+                render: (value) => <td>{value.province_name}</td>,
               },
               {
                 key: "phone",
@@ -263,33 +246,13 @@ function CustomerUnValidation() {
                 label: "Thời gian đăng kí",
                 render: (value) => <td>{value.time}</td>,
               },
-              {
-                key: "time_verify",
-                label: "Thời gian xác thực",
-                render: (value) => <td>{value.time_verify}</td>,
-              },
+
               {
                 key: "source_channel_used",
                 label: "Nguồn đăng kí",
                 render: (value) => <td>{value.source_channel_used}</td>,
               },
-              {
-                key: "status",
-                label: "Trạng thái",
-                render: (value) => (
-                  <td>
-                    {value.status === 1 ? (
-                      <span className="bg-secondary bg-opacity-100 text-white badge ">
-                        Đã xác thực
-                      </span>
-                    ) : (
-                      <span className="bg-warning bg-opacity-100 text-white badge ">
-                        Chờ xác thực
-                      </span>
-                    )}
-                  </td>
-                ),
-              },
+
               permission.editUnValidateCustomer
                 ? {
                     key: "",

@@ -16,7 +16,7 @@ const customerSchema = Yup.object().shape({
     .required("Số điện thoại là bắt buộc")
     .matches(/^[0-9]{10,11}$/, "Số điện thoại không hợp lệ"),
 
-  sign_board: Yup.string(),
+  sign_board: Yup.string().min(1, "Tên biển hiệu là bắt buộc"),
 
   customer_address: Yup.string().nullable(),
 
@@ -28,9 +28,7 @@ const customerSchema = Yup.object().shape({
     .oneOf([0, 1], "Trạng thái không hợp lệ")
     .required("Trạng thái là bắt buộc"),
 
-  gender: Yup.number()
-    .oneOf([0, 1], "Giới tính không hợp lệ")
-    .required("Giới tính là bắt buộc"),
+  gender: Yup.number(),
 
   birthday: Yup.date().nullable(),
 

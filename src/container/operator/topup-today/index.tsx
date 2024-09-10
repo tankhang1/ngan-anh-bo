@@ -166,7 +166,7 @@ function TopupToday() {
               },
               {
                 key: "time_topup",
-                label: "Thời gian tích điểm",
+                label: "Thời gian topup",
                 render: (value) => <td>{value.time_topup}</td>,
               },
             ]}

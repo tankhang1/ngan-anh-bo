@@ -52,20 +52,14 @@ function TableFarmer() {
           render: (value) => <td>{value.phone}</td>,
         },
         {
-          key: "province",
+          key: "province_name",
           label: "Địa chỉ",
-          render: (value) => <td>{value.province}</td>,
+          render: (value) => <td>{value.province_name}</td>,
         },
         {
-          key: "time_verify",
-          label: "Thời gian xác thực",
-          render: (value) => (
-            <td>
-              {value?.time_verify
-                ? format(new Date(value.time_verify), "dd/MM/yyyy")
-                : ""}
-            </td>
-          ),
+          key: "time",
+          label: "Thời gian đăng ký",
+          render: (value) => <td>{value?.time ? value.time : ""}</td>,
         },
         {
           key: "status",

@@ -28,12 +28,12 @@ const AppToast = memo(
         setOpenToast(true);
         setConfig(message);
       });
-      const timeout = setTimeout(() => {
-        startTransition(() => {
-          setOpenToast(false);
-        });
-      }, 30000);
-      return clearTimeout(timeout);
+      // const timeout = setTimeout(() => {
+      //   startTransition(() => {
+      //     setOpenToast(false);
+      //   });
+      // }, 30000);
+      // return clearTimeout(timeout);
     };
     const closeToast = () => {
       startTransition(() => {
@@ -46,25 +46,31 @@ const AppToast = memo(
     }));
 
     return (
-      <ToastContainer className="toast-container position-fixed top-0 end-0 p-3">
+      <ToastContainer
+        className="toast-container position-fixed top-0 end-0 p-4"
+        style={{ zIndex: 9999 }}
+      >
         <Toast
           id="topright-Toast"
-          className="toast colored-toast bg-primary-transparent text-primary"
+          className="toast shadow-sm rounded-lg bg-light"
+          color="red"
           onClose={closeToast}
           show={openToast}
-          delay={1000}
+          delay={7000}
           autohide
         >
-          <Toast.Header className="toast-header bg-primary text-fixed-white">
+          <Toast.Header className="d-flex align-items-center bg-primary text-white">
             <img
-              className="bd-placeholder-img rounded me-2"
+              className="rounded me-3"
               src={ngan_anh_logo}
-              alt="..."
+              alt="Ngân Anh Logo"
+              style={{ width: "30px", height: "30px" }}
             />
-            <strong className="me-auto">Ngân anh</strong>
+            <strong className="me-auto">Ngân Anh</strong>
           </Toast.Header>
-          <Toast.Body className="toast-body text-default bg-white rounded-bottom">
-            {config}
+          <Toast.Body className="p-3 bg-white rounded-bottom">
+            <h6 className="text-dark mb-1">Thông báo</h6>
+            <p className="mb-0 text-muted">{config}</p>
           </Toast.Body>
         </Toast>
       </ToastContainer>

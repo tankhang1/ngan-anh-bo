@@ -231,7 +231,7 @@ function CustomerUnValidationCreateEdit() {
           province_name: customer?.province_name ?? "",
           status: customer?.status ?? 1,
           time: customer?.time ?? "",
-          gender: customer?.gender ?? 0,
+          gender: customer?.gender ?? -1,
           birthday: customer?.birthday ? fDate(customer.birthday) : undefined,
           email: customer?.email ?? "",
           citizen_number: customer?.citizen_number,
@@ -382,7 +382,7 @@ function CustomerUnValidationCreateEdit() {
                       </Form.Group>
                       <Form.Group as={Col} md={4}>
                         <Form.Label className="text-black">
-                          Giới tính <span style={{ color: "red" }}>*</span>
+                          Giới tính
                         </Form.Label>
                         <Form.Select
                           className="form-select input-placeholder"
@@ -395,6 +395,7 @@ function CustomerUnValidationCreateEdit() {
                           required
                           disabled={isCreate === "false" && isEdit === false}
                         >
+                          <option value={-1}>--Chọn giới tính--</option>
                           <option value={0}>Nữ</option>
                           <option value={1}>Nam</option>
                         </Form.Select>
@@ -752,7 +753,8 @@ function CustomerUnValidationCreateEdit() {
 
                     <Form.Group>
                       <Form.Label className="text-black">
-                        Nhập biển hiệu / Tên doanh nghiệp
+                        Nhập biển hiệu / Tên doanh nghiệp{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required

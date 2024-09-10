@@ -239,15 +239,7 @@ function CustomerValidation() {
                 label: "Mã khách hàng",
                 render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
               },
-              {
-                key: "name",
-                label: "Tên đăng kí",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.name}</span>
-                  </td>
-                ),
-              },
+
               {
                 key: "name",
                 label: "Họ và tên khách hàng",
@@ -267,8 +259,8 @@ function CustomerValidation() {
                 ),
               },
               {
-                key: "province",
-                label: "Tỉnh",
+                key: "customer_province_name",
+                label: "Tỉnh thành",
                 render: (value) => <td>{value.customer_province_name}</td>,
               },
               {
@@ -276,11 +268,7 @@ function CustomerValidation() {
                 label: "Số điện thoại",
                 render: (value) => <td>{value.phone}</td>,
               },
-              {
-                key: "time",
-                label: "Thời gian đăng kí",
-                render: (value) => <td>{value.time}</td>,
-              },
+
               {
                 key: "time_verify",
                 label: "Thời gian xác thực",

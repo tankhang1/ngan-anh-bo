@@ -304,7 +304,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Quản lý sản phẩm liên quan tới marketing",
+        title: "Thông tin marketing",
         key: MENU_KEY.PRODUCTS_INFO,
       },
       {
@@ -313,7 +313,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Quản lý sản phẩm liên quan tới sản xuất",
+        title: "Thông tin sản xuất",
         key: MENU_KEY.PRODUCTS_WAREHOUSE,
       },
     ],

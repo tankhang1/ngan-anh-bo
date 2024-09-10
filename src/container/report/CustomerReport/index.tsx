@@ -264,17 +264,17 @@ function CustomerReport() {
                 render: (value) => <td>{value.phone}</td>,
               },
               {
-                key: "province",
+                key: "province_name",
                 label: "Địa chỉ",
-                render: (value) => <td>{value.province}</td>,
+                render: (value) => <td>{value.province_name}</td>,
               },
               {
-                key: "time_verify",
-                label: "Thời gian xác thực",
+                key: "time",
+                label: "Thời gian đăng ký",
                 render: (value) => (
                   <td>
-                    {value?.time_verify
-                      ? format(new Date(value.time_verify), "dd/MM/yyyy")
+                    {value?.time
+                      ? format(new Date(value.time), "dd/MM/yyyy")
                       : ""}
                   </td>
                 ),
