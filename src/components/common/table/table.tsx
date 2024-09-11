@@ -1,4 +1,10 @@
-import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
+import React, {
+  memo,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Card, Dropdown, Pagination } from "react-bootstrap";
 import Loading from "../../../assets/images/apps/loading.gif";
 import Empty from "../../../assets/images/apps/empty.jpg";

@@ -1,5 +1,11 @@
 import { BASE_PORT, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
-import { BaseQuery, TProgramPoint, TProgramTopup } from "../../../assets/types";
+import {
+  BaseQuery,
+  TProgramPoint,
+  TProgramPointDetail,
+  TProgramTopup,
+  TProgramTopupDetail,
+} from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
 
@@ -145,6 +151,26 @@ export const programApi = createApi({
             ]
           : [TagsEnum.PROGRAM_TOPUP],
     }),
+    getListProgramPointDetail: builder.query<
+      TProgramPointDetail[],
+      { zl: string }
+    >({
+      query: (params) => ({
+        url: "/program/point/customer/identify",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
+    getListProgramTopupDetail: builder.query<
+      TProgramTopupDetail[],
+      { zl: string }
+    >({
+      query: (params) => ({
+        url: "/program/topup/customer/identify",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
   }),
 });
 
@@ -159,4 +185,6 @@ export const {
   useGetListProgramTopupStatusQuery,
   useGetCounterProgramPointByStatusQuery,
   useGetCounterProgramTopupByStatusQuery,
+  useGetListProgramPointDetailQuery,
+  useGetListProgramTopupDetailQuery,
 } = programApi;

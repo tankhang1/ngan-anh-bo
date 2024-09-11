@@ -753,13 +753,16 @@ function CustomerUnValidationCreateEdit() {
 
                     <Form.Group>
                       <Form.Label className="text-black">
-                        Nhập biển hiệu / Tên doanh nghiệp{" "}
-                        <span style={{ color: "red" }}>*</span>
+                        Nhập bamgr hiệu / Tên doanh nghiệp{" "}
+                        {(values.customer_type === "RETAILER1" ||
+                          values.customer_type === "RETAILER2") && (
+                          <span style={{ color: "red" }}>*</span>
+                        )}
                       </Form.Label>
                       <Form.Control
                         required
                         type="text"
-                        placeholder="Vui lòng nhập biển hiệu"
+                        placeholder="Vui lòng nhập bảng hiệu"
                         name="sign_board"
                         disabled={isCreate === "false" && isEdit === false}
                         value={values.sign_board}

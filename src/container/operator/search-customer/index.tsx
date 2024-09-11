@@ -14,15 +14,17 @@ import {
   useGetCustomerCounterQuery,
   useGetCustomerQuery,
 } from "../../../redux/api/info/info.api";
-import { fDate } from "../../../hooks";
+import { fDate, fNumber } from "../../../hooks";
 import { TCustomerRes } from "../../../assets/types";
+import { useGetListProgramPointDetailQuery } from "../../../redux/api/program/program.api";
+import { format } from "date-fns";
 
 function SearchCustomer() {
   const [searchValue, setSearchValue] = useState("");
   const deferSearchValue = useDeferredValue(searchValue);
   const [isPermitSearch, setIsPermitSearch] = useState(false);
   const [tabActive, setTabActive] = useState<
-    "UnRegister" | "Register" | "Program"
+    "UnRegister" | "Register" | "Point" | "Topup"
   >("UnRegister");
   const [page, setPage] = useState(1);
   const [openDetail, setOpenDetail] = useState(false);
@@ -50,6 +52,24 @@ function SearchCustomer() {
     }
   );
 
+  const { data: programPoint } = useGetListProgramPointDetailQuery(
+    {
+      zl: customerInfo?.zalo_device_id!,
+    },
+    {
+      skip: customerInfo?.zalo_device_id ? false : true,
+    }
+  );
+
+  const { data: programTopup } = useGetListProgramPointDetailQuery(
+    {
+      zl: customerInfo?.uuid!,
+    },
+    {
+      skip: customerInfo?.uuid ? false : true,
+    }
+  );
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -68,6 +88,7 @@ function SearchCustomer() {
                     placeholder="Nhập tên khách đăng ký / tên khách hàng xác thực / số điện thoại"
                     aria-describedby="search-contact-member"
                     onChange={(e) => {
+                      setPage(1);
                       if (e.target.value === "") {
                         setIsPermitSearch(true);
                       }
@@ -228,13 +249,25 @@ function SearchCustomer() {
                 {customerInfo?.info_primary === 1 && (
                   <button
                     className={`btn ${
-                      tabActive === "Program"
+                      tabActive === "Point"
                         ? "bg-purple-gradient"
                         : "bg-gray-200"
                     }`}
-                    onClick={() => setTabActive("Program")}
+                    onClick={() => setTabActive("Point")}
                   >
-                    Thông tin chương trình
+                    Tích lũy điểm
+                  </button>
+                )}
+                {customerInfo?.info_primary === 1 && (
+                  <button
+                    className={`btn ${
+                      tabActive === "Topup"
+                        ? "bg-purple-gradient"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => setTabActive("Topup")}
+                  >
+                    Quà tặng
                   </button>
                 )}
               </div>
@@ -428,6 +461,115 @@ function SearchCustomer() {
                         Ghi chú:
                       </p>
                       <p className="text-black text-md">{customerInfo?.note}</p>
+                    </div>
+                  </div>
+                )}
+
+                {tabActive === "Point" && (
+                  <div className="d-flex flex-column gap-4 w-100">
+                    <div
+                      className="d-flex flex-wrap gap-4 pb-4 overflow-y-scroll "
+                      style={{ maxHeight: 400 }}
+                    >
+                      {programPoint?.map((point, index) => (
+                        <div
+                          key={index}
+                          className="shadow px-3 rounded-2 py-3"
+                          style={{ flex: "0 1 calc(50% - 1rem)" }} // Adjust width for two columns
+                        >
+                          <div className="d-flex">
+                            <p
+                              className="text-black text-sm"
+                              style={{ width: 200 }}
+                            >
+                              Chương trình:
+                            </p>
+                            <p className="text-black text-sm">
+                              {point?.program_name}
+                            </p>
+                          </div>
+                          <div className="d-flex">
+                            <p
+                              className="text-black text-sm"
+                              style={{ width: 200 }}
+                            >
+                              Điểm tích lũy:
+                            </p>
+                            <p className="text-black text-sm">{point?.point}</p>
+                          </div>
+                          <div className="d-flex">
+                            <p
+                              className="text-black text-sm"
+                              style={{ width: 200 }}
+                            >
+                              Thời gian tích lũy điểm gần nhất:
+                            </p>
+                            <p className="text-black text-sm">
+                              {point?.time_update
+                                ? format(point?.time_update, "dd/MM/yyyy")
+                                : ""}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      {programPoint?.length === 0 && (
+                        <p className="text-md text-center w-100">
+                          Chưa có dữ liệu
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {tabActive === "Topup" && (
+                  <div className="d-flex flex-column gap-4 w-100">
+                    <div
+                      className="d-flex flex-wrap gap-4 pb-4 overflow-scroll"
+                      style={{ maxHeight: 400 }}
+                    >
+                      {programTopup?.map((topup, index) => (
+                        <div
+                          key={index}
+                          className="shadow px-4 py-3 rounded-2"
+                          style={{ flex: "0 1 calc(50% - 1rem)" }} // 50% width minus the gap for two columns
+                        >
+                          <div className="d-flex">
+                            <p
+                              className="text-black text-sm"
+                              style={{ width: 150 }}
+                            >
+                              Tên khách hàng:
+                            </p>
+                            <p className="text-black text-sm">
+                              {topup?.customer_name}
+                            </p>
+                          </div>
+                          <div className="d-flex">
+                            <p
+                              className="text-black text-sm"
+                              style={{ width: 150 }}
+                            >
+                              Số tiền:
+                            </p>
+                            <p className="text-black text-sm">
+                              {topup?.price ? fNumber(topup.price) : ""}
+                            </p>
+                          </div>
+                          <div className="d-flex">
+                            <p
+                              className="text-black text-sm"
+                              style={{ width: 150 }}
+                            >
+                              Số lần tham gia:
+                            </p>
+                            <p className="text-black text-sm">{topup.total}</p>
+                          </div>
+                        </div>
+                      ))}
+                      {programTopup?.length === 0 && (
+                        <p className="text-md text-center w-100">
+                          Chưa có dữ liệu
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}

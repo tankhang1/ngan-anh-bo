@@ -323,6 +323,7 @@ export type TProgramPointDetail = {
   product_name: string;
   time_earn: string;
   customer_uuid: string;
+  time_update: Date | null;
   zalo_device_id: string;
 };
 export type TProgramTopupDetail = {
@@ -534,6 +535,7 @@ export type TCustomerRes = {
   export_code?: string;
   export_address?: string;
   area_size?: number | null; // diện tích đất canh tác
+  zalo_device_id: string | null;
 };
 export type TGroupCustomer = {
   id?: number;
