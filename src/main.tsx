@@ -54,6 +54,7 @@ import ProductEditWarehouse from "./container/product/product-warehouse/edit-war
 import ProductWarehousePage from "./container/product/product-warehouse/index.tsx";
 import ProductInfoPage from "./container/product/product-info/index.tsx";
 import ProductCreate from "./container/product/create-edit/product-create-edit.tsx";
+import CustomerValidateToday from "./container/operator/customer-validate-today/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -174,6 +175,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }operator/search-customer-unvalidate-today`}
                 element={<CustomerUnValidateToday />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }operator/search-customer-validate-today`}
+                element={<CustomerValidateToday />}
               />
               <Route
                 path={`${

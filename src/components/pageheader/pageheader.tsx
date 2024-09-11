@@ -33,6 +33,7 @@ const MapLabel = new Map([
   ["search-customer-today", "Khách hàng tham gia trong ngày"],
   ["search-topup-today", "Topup tham gia trong ngày"],
   ["search-customer-unvalidate-today", "Danh sách khách hàng chưa xác thực"],
+  ["search-customer-validate-today", "Danh sách khách hàng xác thực"],
   ["info", "Danh sách sản phẩm liên quan tới marketing"],
   ["warehouse", "Danh sách sản phẩm liên quan tới sản xuất"],
   ["create", "Thêm mới sản phẩm"],

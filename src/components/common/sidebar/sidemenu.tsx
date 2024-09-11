@@ -129,7 +129,9 @@ export const MENUITEMS = [
         key: MENU_KEY.OPERATORS_SEARCH_TOPUP_TODAY,
       },
       {
-        path: `${import.meta.env.BASE_URL}operator/search-customer-today`,
+        path: `${
+          import.meta.env.BASE_URL
+        }operator/search-customer-validate-today`,
         type: "link",
         active: false,
         selected: false,
