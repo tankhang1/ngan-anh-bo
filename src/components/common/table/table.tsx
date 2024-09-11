@@ -60,7 +60,7 @@ const AppTable = <T extends DataItem>({
         ? data?.filter(
             (item) =>
               item[filterOption?.key] === filterOption?.value &&
-              item[searchByExternal ?? "id"]
+              (item[searchByExternal ?? "id"] ?? "")
                 .toString()
                 .toLowerCase()
                 .includes(externalSearch?.toString()?.toLowerCase())
@@ -68,20 +68,25 @@ const AppTable = <T extends DataItem>({
         : data?.filter(
             (item) =>
               item[filterOption.key] === filterOption?.value &&
-              item[searchBy?.key || "id"]
+              (item[searchBy?.key || "id"] ?? "")
                 .toString()
                 .toLowerCase()
                 .includes(deferSearchValue.toLowerCase())
           );
     return !isHeader
-      ? data?.filter((item) =>
-          item[searchByExternal ?? "id"]
+      ? data?.filter((item) => {
+          console.log(
+            item,
+            item[searchByExternal ?? "id"] ?? "",
+            externalSearch
+          );
+          return (item[searchByExternal ?? "id"] ?? "")
             ?.toString()
             .toLowerCase()
-            .includes(externalSearch?.toString().toLowerCase())
-        )
+            .includes(externalSearch?.toString().toLowerCase());
+        })
       : data?.filter((item) =>
-          item[searchBy?.key || "id"]
+          (item[searchBy?.key || "id"] ?? "")
             ?.toString()
             .toLowerCase()
             .includes(deferSearchValue.toLowerCase())
@@ -95,6 +100,7 @@ const AppTable = <T extends DataItem>({
     externalSearch,
     isHeader,
   ]);
+
   const pagingData = useMemo(() => {
     if (setExternalPage) {
       return filterData;

@@ -5,6 +5,9 @@ import {
   TBinPackage,
   TWarehouseExport,
   TAgent,
+  TCustomerRes,
+  BASE_RES,
+  BaseQuery,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
@@ -83,6 +86,20 @@ export const infoApi = createApi({
         params: params,
       }),
     }),
+    getCustomer: builder.query<TCustomerRes[], BaseQuery>({
+      query: (params) => ({
+        url: "/api/customer/search",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
+    getCustomerCounter: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/customer/search/counter",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
   }),
 });
 export const {
@@ -92,4 +109,6 @@ export const {
   useGetProductBySkuQuery,
   useGetWarehouseExportBinQuery,
   useGetCustomerByCodeQuery,
+  useGetCustomerQuery,
+  useGetCustomerCounterQuery,
 } = infoApi;

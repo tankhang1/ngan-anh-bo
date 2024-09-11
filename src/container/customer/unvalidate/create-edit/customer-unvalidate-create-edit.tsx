@@ -488,7 +488,7 @@ function CustomerUnValidationCreateEdit() {
                         className="input-placeholder"
                         onChange={handleChange}
                         isInvalid={touched.phone && !!errors.phone}
-                        disabled={isCreate === "false" && isEdit === false}
+                        disabled={isCreate === "false"}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.phone}

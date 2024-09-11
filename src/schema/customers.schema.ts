@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+
 const customerSchema = Yup.object().shape({
   customer_name: Yup.string().required("Tên khách hàng là bắt buộc"),
 
@@ -16,7 +17,15 @@ const customerSchema = Yup.object().shape({
     .required("Số điện thoại là bắt buộc")
     .matches(/^[0-9]{10,11}$/, "Số điện thoại không hợp lệ"),
 
-  sign_board: Yup.string().min(1, "Tên biển hiệu là bắt buộc"),
+  sign_board: Yup.string()
+    .nullable()
+    .when("customer_type", ([customer_type], schema) => {
+      //@ts-ignore
+      if (customer_type === "RETAILER1" || customer_type === "RETAILER2") {
+        return schema.required("Tên biển hiệu là bắt buộc cho nhà bán lẻ");
+      }
+      return schema;
+    }),
 
   customer_address: Yup.string().nullable(),
 

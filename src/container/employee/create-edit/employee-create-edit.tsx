@@ -449,9 +449,7 @@ function EmployeeCreateEdit() {
                               onChange={handleChange}
                               isInvalid={touched.phone && !!errors.phone}
                               className="input-placeholder"
-                              disabled={
-                                isCreate === "false" && isEdit === false
-                              }
+                              disabled={isCreate === "false"}
                             />
                             <Form.Control.Feedback type="invalid">
                               {errors.phone}

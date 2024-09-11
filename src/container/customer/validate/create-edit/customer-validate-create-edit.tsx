@@ -216,10 +216,14 @@ function CustomerValidationCreateEdit() {
 
                   {isCreate === "true" ? (
                     <button
+                      type="button"
                       className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
                         isLoadingCreate && "btn-loader"
                       }`}
-                      onClick={() => handleSubmit()}
+                      onClick={() => {
+                        console.log(values);
+                        handleSubmit();
+                      }}
                     >
                       <span>Thêm mới</span>
                       {isLoadingCreate && (
@@ -395,7 +399,7 @@ function CustomerValidationCreateEdit() {
                         value={values.phone}
                         onChange={handleChange}
                         isInvalid={touched.phone && !!errors.phone}
-                        disabled={isCreate === "false" && isEdit === false}
+                        disabled={isCreate === "false"}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.phone}
@@ -664,7 +668,10 @@ function CustomerValidationCreateEdit() {
                     <Form.Group>
                       <Form.Label className="text-black">
                         Nhập biển hiệu / Tên doanh nghiệp{" "}
-                        <span style={{ color: "red" }}>*</span>
+                        {(values.customer_type === "RETAILER1" ||
+                          values.customer_type === "RETAILER2") && (
+                          <span style={{ color: "red" }}>*</span>
+                        )}
                       </Form.Label>
                       <Form.Control
                         required

@@ -38,6 +38,7 @@ const MapLabel = new Map([
   ["warehouse", "Danh sách sản phẩm liên quan tới sản xuất"],
   ["create", "Thêm mới sản phẩm"],
   ["edit", "Chỉnh sửa sản phẩm"],
+  ["search-customer", "Tìm kiếm khách hàng"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();
