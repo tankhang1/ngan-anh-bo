@@ -18,6 +18,9 @@ import {
   TEmployeeRole,
   TEmployeeDepartment,
   TGroupRetailer,
+  TBrand,
+  TIndication,
+  TFormulation,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TPermit } from "../../slices/authSlice";
@@ -78,6 +81,9 @@ export const manageApi = createApi({
     TagsEnum.EMPLOYEE_DEPARTMENT,
     TagsEnum.ROLE_PERMISSION,
     TagsEnum.RETAILER_GROUP,
+    TagsEnum.BRAND,
+    TagsEnum.INDICATION,
+    TagsEnum.FORMULATION,
   ],
   endpoints: (builder) => ({
     getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
@@ -475,6 +481,54 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.RETAILER_GROUP],
     }),
+    getListBrand: builder.query<TBrand[], void>({
+      query: () => ({
+        url: "/api/product/brand/all",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.BRAND as const,
+                id,
+              })),
+              TagsEnum.BRAND,
+            ]
+          : [TagsEnum.BRAND],
+    }),
+    getListIndication: builder.query<TIndication[], void>({
+      query: () => ({
+        url: "/api/product/indication/all",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.INDICATION as const,
+                id,
+              })),
+              TagsEnum.INDICATION,
+            ]
+          : [TagsEnum.INDICATION],
+    }),
+    getListFormulation: builder.query<TFormulation[], void>({
+      query: () => ({
+        url: "/api/product/formulation/all",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.FORMULATION as const,
+                id,
+              })),
+              TagsEnum.FORMULATION,
+            ]
+          : [TagsEnum.FORMULATION],
+    }),
   }),
 });
 export const {
@@ -497,4 +551,7 @@ export const {
   useGetListEmployeeRoleQuery,
   useGetListEmployeeDepartmentQuery,
   useGetListGroupRetailerQuery,
+  useGetListBrandQuery,
+  useGetListFormulationQuery,
+  useGetListIndicationQuery,
 } = manageApi;

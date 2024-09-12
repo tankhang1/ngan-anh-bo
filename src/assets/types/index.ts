@@ -724,3 +724,21 @@ export type TWarehouseDocumentImport = {
   work_center_export_code: string;
   work_center_import_code: string;
 };
+
+export type TBrand = {
+  id: number;
+  code: string;
+  name: string;
+};
+
+export type TIndication = {
+  id: number;
+  code: string;
+  name: string;
+};
+
+export type TFormulation = {
+  id: number;
+  code: string;
+  name: string;
+};

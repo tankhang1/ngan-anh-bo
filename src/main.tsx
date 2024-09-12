@@ -56,6 +56,9 @@ import ProductInfoPage from "./container/product/product-info/index.tsx";
 import ProductCreate from "./container/product/create-edit/product-create-edit.tsx";
 import CustomerValidateToday from "./container/operator/customer-validate-today/index.tsx";
 import SearchCustomer from "./container/operator/search-customer/index.tsx";
+import SettingBrandPage from "./container/settings/brand/index.tsx";
+import SettingFormulationPage from "./container/settings/formulation/index.tsx";
+import SettingIndicationPage from "./container/settings/indication/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -245,6 +248,18 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}setting/group-retailer`}
                 element={<SettingGroupRetailer />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}setting/brand`}
+                element={<SettingBrandPage />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}setting/formulation`}
+                element={<SettingFormulationPage />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}setting/indication`}
+                element={<SettingIndicationPage />}
               />
 
               <Route
