@@ -10,17 +10,8 @@ import {
 } from "react-bootstrap";
 import * as formik from "formik";
 
-import {
-  TAgentForm,
-  TProductCreateForm,
-  TProductForm,
-} from "../../../assets/types";
-import {
-  BASE_PORT,
-  BASE_URL,
-  COUNTRIES,
-  ProductTypeEnum,
-} from "../../../constants";
+import { TProductCreateForm } from "../../../assets/types";
+import { BASE_PORT, ProductTypeEnum } from "../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";

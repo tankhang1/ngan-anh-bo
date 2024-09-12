@@ -243,6 +243,7 @@ const COUNTRIES = [
   { label: "Georgia (Georgia)", value: "Georgia (Georgia)" },
   { label: "Eritrea (Eritrea)", value: "Eritrea (Eritrea)" },
   { label: "Mongolia (Mông Cổ)", value: "Mongolia (Mông Cổ)" },
+  { label: "Italy (Ý)", value: "Italy (Ý)" },
   {
     label: "Bosnia and Herzegovina (Bosnia và Herzegovina)",
     value: "Bosnia and Herzegovina (Bosnia và Herzegovina)",

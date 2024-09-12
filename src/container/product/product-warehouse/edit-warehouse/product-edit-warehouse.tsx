@@ -731,6 +731,7 @@ function ProductEditWarehouse() {
                       disabled={true}
                     >
                       <option value={""}>-- Chọn xuất xứ --</option>
+                      <option value={"NONE"}>Không rõ xuất xứ</option>
                       {COUNTRIES.map((item, index) => (
                         <option value={item.value} key={index}>
                           {item.label}
