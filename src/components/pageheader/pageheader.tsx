@@ -42,6 +42,7 @@ const MapLabel = new Map([
   ["brand", "Quản lý nhãn hàng"],
   ["indication", "Quản lý nhóm thuốc"],
   ["formulation", "Quản lý dạng thuốc"],
+  ["search", "Tra cứu"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

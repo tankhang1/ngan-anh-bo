@@ -37,7 +37,7 @@ const Accounts = PageLoading(
   lazy(() => import("./container/accounts/accounts.tsx"))
 );
 import SettingGroupRetailer from "./container/settings/group-retailer/index.tsx";
-import SearchProductCode from "./container/operator/search-product-code/index.tsx";
+import SearchProductCode from "./container/product/search-product-code/index.tsx";
 import WarehouseExport from "./container/warehouse/export/warehouseExport.tsx";
 import SearchWarehouseExport from "./container/warehouse/export/searchWarehouseExport.tsx";
 import WarehouseImport from "./container/warehouse/import/warehouseImport.tsx";
@@ -55,7 +55,7 @@ import ProductWarehousePage from "./container/product/product-warehouse/index.ts
 import ProductInfoPage from "./container/product/product-info/index.tsx";
 import ProductCreate from "./container/product/create-edit/product-create-edit.tsx";
 import CustomerValidateToday from "./container/operator/customer-validate-today/index.tsx";
-import SearchCustomer from "./container/operator/search-customer/index.tsx";
+import SearchCustomer from "./container/customer/search-customer/index.tsx";
 import SettingBrandPage from "./container/settings/brand/index.tsx";
 import SettingFormulationPage from "./container/settings/formulation/index.tsx";
 import SettingIndicationPage from "./container/settings/indication/index.tsx";
@@ -171,7 +171,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<PointProgram />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}operator/search-product-code`}
+                path={`${import.meta.env.BASE_URL}product/search`}
                 element={<SearchProductCode />}
               />
               <Route
@@ -193,7 +193,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<CustomerToday />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}operator/search-customer`}
+                path={`${import.meta.env.BASE_URL}customer/search`}
                 element={<SearchCustomer />}
               />
               <Route

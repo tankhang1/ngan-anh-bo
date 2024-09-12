@@ -1,21 +1,11 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import {
-  Card,
-  Col,
-  Form,
-  OverlayTrigger,
-  Row,
-  Tooltip,
-  Stack,
-  Button,
-} from "react-bootstrap";
+import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetListCustomerQuery,
-  useGetListCustomerRegisterQuery,
   useGetListEmployeeQuery,
   useGetListGroupObjectiveQuery,
   useGetListGroupRetailerQuery,

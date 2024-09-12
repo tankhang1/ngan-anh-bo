@@ -117,7 +117,7 @@ function ProductEditInfo() {
         });
     }
   };
-
+  console.log(product);
   return (
     <Fragment>
       <Formik
