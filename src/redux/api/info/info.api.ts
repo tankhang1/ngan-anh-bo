@@ -47,7 +47,7 @@ export const infoApi = createApi({
       }),
       transformResponse: (response: TBin[]) => {
         return response.map((item) => ({
-          label: `${item.description} (${item.code})`,
+          label: `${item.description} (${item.name_display_root})`,
           value: item.code,
         }));
       },

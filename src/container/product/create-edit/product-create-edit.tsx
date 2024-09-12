@@ -148,6 +148,7 @@ function ProductCreate() {
           point: 0,
           c1_price_vnd: 0,
           c2_price_vnd: 0,
+          version: "",
         }}
         enableReinitialize
         onSubmit={onHandleSubmit}
@@ -377,6 +378,25 @@ function ProductCreate() {
                           </Form.Control.Feedback>
                         </Form.Group>
                       )}
+                      <Form.Group>
+                        <Form.Label className="text-black">
+                          Phiên bảng <span style={{ color: "red" }}>*</span>
+                        </Form.Label>
+                        <Form.Control
+                          required
+                          type="text"
+                          id="version"
+                          placeholder="Mã phiên bảng"
+                          name="version"
+                          defaultValue={values.version}
+                          onChange={handleChange}
+                          isInvalid={touched.version && !!errors.version}
+                          className="input-placeholder"
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.version}
+                        </Form.Control.Feedback>
+                      </Form.Group>
                     </Stack>
                   </Col>
                 </Row>

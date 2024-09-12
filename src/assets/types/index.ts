@@ -118,6 +118,7 @@ export type TBin = {
   code_hash: string;
   seri: string;
   bin_seri: string | undefined;
+  name_display_root?: string;
   agent_code: string | undefined;
   time_use: string;
   time_use_number: number;

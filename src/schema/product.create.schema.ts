@@ -10,6 +10,8 @@ const productCreateSchema = Yup.object().shape({
 
   name_display_root: Yup.string(),
 
+  version: Yup.string().required("Mã phiên bản là bắt buộc"),
+
   code_bin: Yup.string(),
 
   certificate_of_origin: Yup.string().nullable(),
