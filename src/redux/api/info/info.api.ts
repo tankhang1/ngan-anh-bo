@@ -40,20 +40,23 @@ export const infoApi = createApi({
             ]
           : [TagsEnum.PRODUCTS],
     }),
-    getListBinsId: builder.query<string[], void>({
+    getListBinsId: builder.query<{ label: string; value: string }[], void>({
       query: () => ({
         url: "/api/product/bin",
         method: HTTPS_METHOD.GET,
       }),
       transformResponse: (response: TBin[]) => {
-        return response.map((item) => item.code);
+        return response.map((item) => ({
+          label: `${item.description} (${item.code})`,
+          value: item.code,
+        }));
       },
       providesTags: (results) =>
         results
           ? [
-              ...results.map((item) => ({
+              ...results.map(({ value }) => ({
                 type: TagsEnum.BINS as const,
-                item,
+                value,
               })),
               TagsEnum.BINS,
             ]

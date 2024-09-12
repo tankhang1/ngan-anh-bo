@@ -103,12 +103,15 @@ function OutstandingReport() {
             ) : (
               <span className="ms-2 fs-13 text-secondary">
                 <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
-                {(mapReportCurrentDay.agent /
-                  (mapReportCurrentDay?.agent + mapReportPreviousDay.agent === 0
-                    ? 1
-                    : mapReportCurrentDay?.agent +
-                      mapReportPreviousDay.agent)) *
-                  100}
+                {(
+                  (mapReportCurrentDay.agent /
+                    (mapReportCurrentDay?.agent + mapReportPreviousDay.agent ===
+                    0
+                      ? 1
+                      : mapReportCurrentDay?.agent +
+                        mapReportPreviousDay.agent)) *
+                  100
+                ).toFixed(2)}
                 %
               </span>
             )}

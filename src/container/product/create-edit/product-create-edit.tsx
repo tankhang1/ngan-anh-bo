@@ -10,7 +10,11 @@ import {
 } from "react-bootstrap";
 import * as formik from "formik";
 
-import { TAgentForm, TProductForm } from "../../../assets/types";
+import {
+  TAgentForm,
+  TProductCreateForm,
+  TProductForm,
+} from "../../../assets/types";
 import {
   BASE_PORT,
   BASE_URL,
@@ -72,7 +76,7 @@ function ProductCreate() {
   const [createProduct, { isLoading: isLoadingCreate }] =
     useCreateProductMutation();
 
-  const onHandleSubmit = async (values: TProductForm) => {
+  const onHandleSubmit = async (values: TProductCreateForm) => {
     if (productId)
       await createProduct({
         ...values,
@@ -122,15 +126,12 @@ function ProductCreate() {
           bin_pallet: 0,
           code: productId ?? "",
           code_bin: "",
-          brand_code: "",
-          brand_name: "",
-          category_code: "",
-          category_name: "",
           certificate_of_origin: "",
           description: "",
           detail_url: "",
           ingredient: `<p></p>`,
           ingredient_id: "",
+          name_display_root: "",
           name_display_label: "",
           net_weight: 0,
           pack_configuration: "",
@@ -232,7 +233,8 @@ function ProductCreate() {
                     <Stack className="d-flex gap-2">
                       <Form.Group>
                         <Form.Label className="text-black">
-                          Mã sản phẩm <span style={{ color: "red" }}>*</span>
+                          Mã sản phẩm (Hệ thống)
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control
                           required
@@ -245,6 +247,29 @@ function ProductCreate() {
                           }
                           onChange={handleChange}
                           isInvalid={touched.code && !!errors.code}
+                          className="input-placeholder"
+                          disabled={true}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.code}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Label className="text-black">
+                          Mã sản phẩm (Công ty)
+                          <span style={{ color: "red" }}>*</span>
+                        </Form.Label>
+                        <Form.Control
+                          required
+                          type="text"
+                          id="code_validate"
+                          placeholder="Mã sản phẩm"
+                          name="name_display_root"
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.name_display_root &&
+                            !!errors.name_display_root
+                          }
                           className="input-placeholder"
                           disabled={isCreate === "false" && isEdit === false}
                         />
@@ -300,92 +325,73 @@ function ProductCreate() {
                       </Form.Group>
                       <Form.Group>
                         <Form.Label className="text-black">
-                          Mã thương hiệu
+                          Số điểm thưởng
                         </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          id="brand_code_validate"
-                          placeholder="Mã thương hiệu"
-                          name="brand_code"
-                          defaultValue={values.brand_code}
+
+                        <NumericFormat
+                          thousandSeparator="."
+                          decimalSeparator=","
+                          customInput={Form.Control as any}
+                          defaultValue={values.point}
+                          name="point"
                           onChange={handleChange}
-                          isInvalid={touched.brand_code && !!errors.brand_code}
+                          min={0}
+                          placeholder="Số điểm thưởng"
                           className="input-placeholder"
                           disabled={isCreate === "false" && isEdit === false}
                         />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.brand_code}
-                        </Form.Control.Feedback>
+                        {errors.point && touched.point && (
+                          <p style={{ color: "red", fontSize: 12 }}>
+                            {errors.point}
+                          </p>
+                        )}
                       </Form.Group>
                       <Form.Group>
-                        <Form.Label className="text-black">
-                          Tên thương hiệu
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          id="brand_name_validate"
-                          placeholder="Tên thương hiệu"
-                          name="brand_name"
-                          defaultValue={values.brand_name}
+                        <Form.Label className="text-black">Giá C1</Form.Label>
+
+                        <NumericFormat
+                          thousandSeparator="."
+                          decimalSeparator=","
+                          customInput={Form.Control as any}
+                          min={0}
+                          defaultValue={values.c1_price_vnd}
+                          name="c1_price_vnd"
                           onChange={handleChange}
-                          isInvalid={touched.brand_name && !!errors.brand_name}
+                          placeholder="Số tiền 1"
                           className="input-placeholder"
                           disabled={isCreate === "false" && isEdit === false}
                         />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.brand_name}
-                        </Form.Control.Feedback>
+                        {errors.c1_price_vnd && touched.c1_price_vnd && (
+                          <p style={{ color: "red", fontSize: 12 }}>
+                            {errors.c1_price_vnd}
+                          </p>
+                        )}
                       </Form.Group>
                       <Form.Group>
-                        <Form.Label className="text-black">
-                          Mã nhóm sản phẩm
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          id="category_code"
-                          placeholder="Mã nhóm sản phẩm"
-                          name="category_code"
-                          defaultValue={values.category_code}
+                        <Form.Label className="text-black">Giá C2</Form.Label>
+
+                        <NumericFormat
+                          thousandSeparator="."
+                          decimalSeparator=","
+                          customInput={Form.Control as any}
+                          min={0}
+                          defaultValue={values.c2_price_vnd}
+                          name="c2_price_vnd"
                           onChange={handleChange}
-                          isInvalid={
-                            touched.category_code && !!errors.category_code
-                          }
+                          placeholder="Số tiền 2"
                           className="input-placeholder"
                           disabled={isCreate === "false" && isEdit === false}
                         />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.category_code}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Label className="text-black">
-                          Tên nhóm sản phẩm
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          id="category_name"
-                          placeholder="Tên nhóm sản phẩm"
-                          name="category_name"
-                          defaultValue={values.category_name}
-                          onChange={handleChange}
-                          isInvalid={
-                            touched.category_name && !!errors.category_name
-                          }
-                          className="input-placeholder"
-                          disabled={isCreate === "false" && isEdit === false}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.category_name}
-                        </Form.Control.Feedback>
+                        {errors.c2_price_vnd && touched.c2_price_vnd && (
+                          <p style={{ color: "red", fontSize: 12 }}>
+                            {errors.c2_price_vnd}
+                          </p>
+                        )}
                       </Form.Group>
                     </Stack>
                   </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
                       Số điểm thưởng
@@ -451,9 +457,12 @@ function ProductCreate() {
                       </p>
                     )}
                   </Form.Group>
-                </Row>
+                </Row> */}
                 <Row>
-                  <Form.Group as={Col} md={6}>
+                  <Form.Group
+                    as={Col}
+                    md={values.type !== ProductTypeEnum.BIN.toString() ? 6 : 12}
+                  >
                     <Form.Label className="text-black">
                       Hình thức đóng gói <span style={{ color: "red" }}>*</span>
                     </Form.Label>
@@ -499,31 +508,33 @@ function ProductCreate() {
                       {errors.type}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md={6}>
-                    <Form.Label className="text-black">
-                      Mã thùng <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Form.Select
-                      className="form-select input-placeholder"
-                      id="code_bin_validate"
-                      name="code_bin"
-                      defaultValue={values.code_bin}
-                      onChange={handleChange}
-                      isInvalid={touched.code_bin && !!errors.code_bin}
-                      required
-                      disabled={isCreate === "false" && isEdit === false}
-                    >
-                      <option value={""}>-- Chọn mã thùng --</option>
-                      {binIds?.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.code_bin}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                  {values.type !== ProductTypeEnum.BIN.toString() && (
+                    <Form.Group as={Col} md={6}>
+                      <Form.Label className="text-black">
+                        Mã thùng <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <Form.Select
+                        className="form-select input-placeholder"
+                        id="code_bin_validate"
+                        name="code_bin"
+                        defaultValue={values.code_bin}
+                        onChange={handleChange}
+                        isInvalid={touched.code_bin && !!errors.code_bin}
+                        required
+                        disabled={isCreate === "false" && isEdit === false}
+                      >
+                        <option value={""}>-- Chọn mã thùng --</option>
+                        {binIds?.map((item, index) => (
+                          <option value={item.value} key={index}>
+                            {item.label}
+                          </option>
+                        ))}
+                      </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.code_bin}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  )}
                 </Row>
                 <Row>
                   <Form.Group as={Col} md={4}>
@@ -608,8 +619,8 @@ function ProductCreate() {
                   >
                     <option value={""}>-- Mã nguyên liệu --</option>
                     {ingredients?.map((item, index) => (
-                      <option value={item} key={index}>
-                        {item}
+                      <option value={item.value} key={index}>
+                        {item.label}
                       </option>
                     ))}
                   </Form.Select>

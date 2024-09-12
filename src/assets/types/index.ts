@@ -97,7 +97,19 @@ export type TProduct = {
 
 export type TProductForm = Omit<
   TProduct,
-  "id" | "uuid" | "code_box" | "name_display_root" | "version" | "name_display"
+  "id" | "uuid" | "code_box" | "version" | "name_display"
+>;
+export type TProductCreateForm = Omit<
+  TProduct,
+  | "id"
+  | "uuid"
+  | "code_box"
+  | "version"
+  | "name_display"
+  | "brand_code"
+  | "brand_name"
+  | "category_code"
+  | "category_name"
 >;
 export type TBin = {
   id: number;
@@ -112,6 +124,7 @@ export type TBin = {
   time_export: string | undefined;
   time_export_number: number;
   procedure_order_detail_item: number;
+  description?: string;
   product_code: string;
   product_name: string;
   product_sub_code: string | undefined;

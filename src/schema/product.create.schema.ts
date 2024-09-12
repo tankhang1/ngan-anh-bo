@@ -8,13 +8,10 @@ const productCreateSchema = Yup.object().shape({
 
   code: Yup.string().required("Mã sản phẩm là bắt buộc"),
 
+  name_display_root: Yup.string().required("Mã sản phẩm là bắt buộc"),
+
   code_bin: Yup.string(),
 
-  brand_code: Yup.string(),
-
-  brand_name: Yup.string(),
-  category_code: Yup.string(),
-  category_name: Yup.string(),
   certificate_of_origin: Yup.string().nullable(),
 
   description: Yup.string().nullable(),

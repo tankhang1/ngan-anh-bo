@@ -150,6 +150,7 @@ function ProductEditInfo() {
           point: product?.point ?? 1,
           c1_price_vnd: product?.c1_price_vnd ?? 0,
           c2_price_vnd: product?.c2_price_vnd ?? 0,
+          name_display_root: product?.name_display_root ?? "",
         }}
         enableReinitialize
         onSubmit={onHandleSubmit}
@@ -537,8 +538,8 @@ function ProductEditInfo() {
                     >
                       <option value={""}>-- Chọn mã thùng --</option>
                       {binIds?.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
+                        <option value={item.value} key={index}>
+                          {item.label}
                         </option>
                       ))}
                     </Form.Select>
@@ -580,7 +581,7 @@ function ProductEditInfo() {
                       id="net_weight_validate"
                       name="net_weight"
                       min={0}
-                      defaultValue={fNumber(values.net_weight)}
+                      defaultValue={fNumber(values.net_weight ?? 0)}
                       onChange={handleChange}
                       isInvalid={touched.net_weight && !!errors.net_weight}
                       required
@@ -636,8 +637,8 @@ function ProductEditInfo() {
                   >
                     <option value={""}>-- Mã nguyên liệu --</option>
                     {ingredients?.map((item, index) => (
-                      <option value={item} key={index}>
-                        {item}
+                      <option value={item.value} key={index}>
+                        {item.label}
                       </option>
                     ))}
                   </Form.Select>
@@ -759,7 +760,7 @@ function ProductEditInfo() {
                     onChange={(e) =>
                       setFieldValue("qr_mapping", e.target.checked)
                     }
-                    checked={values.qr_mapping}
+                    checked={!!values.qr_mapping}
                     disabled={true}
                   />
                   <Form.Check
@@ -768,7 +769,7 @@ function ProductEditInfo() {
                       setFieldValue("qr_printing", e.target.checked)
                     }
                     disabled={true}
-                    checked={values.qr_printing}
+                    checked={!!values.qr_printing}
                   />
                 </Form.Group>
                 <Row>

@@ -4,6 +4,7 @@ import {
   TProduct,
   TProductForm,
   TIngredient,
+  TProductCreateForm,
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
@@ -51,26 +52,31 @@ export const productApi = createApi({
             ]
           : [TagsEnum.DEVICES],
     }),
-    getListIngredients: builder.query<string[], void>({
-      query: () => ({
-        url: "/product/ingredients",
-        method: HTTPS_METHOD.GET,
-      }),
-      transformResponse: (response: TIngredient[]) => {
-        return response.map((value) => value.code);
-      },
-      providesTags: (results) =>
-        results
-          ? [
-              ...results.map((item) => ({
-                type: TagsEnum.INGREDIENTS as const,
-                item,
-              })),
-              TagsEnum.INGREDIENTS,
-            ]
-          : [TagsEnum.INGREDIENTS],
-    }),
-    createProduct: builder.mutation<any, TProductForm>({
+    getListIngredients: builder.query<{ label: string; value: string }[], void>(
+      {
+        query: () => ({
+          url: "/product/ingredients",
+          method: HTTPS_METHOD.GET,
+        }),
+        transformResponse: (response: TIngredient[]) => {
+          return response.map((value) => ({
+            label: `${value.description} (${value.code})`,
+            value: value.code,
+          }));
+        },
+        providesTags: (results) =>
+          results
+            ? [
+                ...results.map((item) => ({
+                  type: TagsEnum.INGREDIENTS as const,
+                  item,
+                })),
+                TagsEnum.INGREDIENTS,
+              ]
+            : [TagsEnum.INGREDIENTS],
+      }
+    ),
+    createProduct: builder.mutation<any, TProductCreateForm>({
       query: (body) => ({
         url: "/product/create",
         method: HTTPS_METHOD.POST,

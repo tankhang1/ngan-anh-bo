@@ -137,6 +137,7 @@ function ProductEditWarehouse() {
           point: product?.point ?? 1,
           c1_price_vnd: product?.c1_price_vnd ?? 0,
           c2_price_vnd: product?.c2_price_vnd ?? 0,
+          name_display_root: product?.name_display_root ?? "",
         }}
         enableReinitialize
         onSubmit={onHandleSubmit}
@@ -506,8 +507,8 @@ function ProductEditWarehouse() {
                     >
                       <option value={""}>-- Chọn mã thùng --</option>
                       {binIds?.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
+                        <option value={item.value} key={index}>
+                          {item.label}
                         </option>
                       ))}
                     </Form.Select>
@@ -605,8 +606,8 @@ function ProductEditWarehouse() {
                   >
                     <option value={""}>-- Mã nguyên liệu --</option>
                     {ingredients?.map((item, index) => (
-                      <option value={item} key={index}>
-                        {item}
+                      <option value={item.value} key={index}>
+                        {item.label}
                       </option>
                     ))}
                   </Form.Select>

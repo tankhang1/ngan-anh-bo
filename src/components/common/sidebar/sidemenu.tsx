@@ -346,15 +346,15 @@ export const MENUITEMS = [
     path: `${import.meta.env.BASE_URL}product`,
     key: MENU_KEY.PRODUCTS,
     children: [
-      {
-        path: `${import.meta.env.BASE_URL}product/create`,
-        type: "link",
-        active: false,
-        selected: false,
-        dirchange: false,
-        title: "Tạo mới sản phẩm",
-        key: MENU_KEY.CREATE_PRODUCT,
-      },
+      // {
+      //   path: `${import.meta.env.BASE_URL}product/create`,
+      //   type: "link",
+      //   active: false,
+      //   selected: false,
+      //   dirchange: false,
+      //   title: "Tạo mới sản phẩm",
+      //   key: MENU_KEY.CREATE_PRODUCT,
+      // },
       {
         path: `${import.meta.env.BASE_URL}product/info`,
         type: "link",
