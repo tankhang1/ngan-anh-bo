@@ -31,6 +31,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import accountSchema from "../../schema/accounts.schema";
+import AppWarning from "../../components/AppWarning";
 
 const ACCOUNT_FILTERS = [
   {
@@ -385,7 +386,7 @@ function Accounts() {
               touched,
               errors,
             }) => (
-              <form noValidate onSubmit={handleSubmit}>
+              <div>
                 <Modal.Body>
                   <Stack className="d-flex gap-1">
                     <Form.Group controlId="username_validate">
@@ -551,22 +552,23 @@ function Accounts() {
                     Đóng
                   </Button>
 
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    className={`btn justify-content-center align-items-center ${
-                      isLoadingSignUp && "btn-loader "
-                    }`}
-                  >
-                    <span>Xác nhận</span>
-                    {isLoadingSignUp && (
-                      <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
-                      </span>
-                    )}
-                  </Button>
+                  <AppWarning onAccept={() => handleSubmit()}>
+                    <Button
+                      variant="primary"
+                      className={`btn justify-content-center align-items-center ${
+                        isLoadingSignUp && "btn-loader "
+                      }`}
+                    >
+                      <span>Xác nhận</span>
+                      {isLoadingSignUp && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
+                    </Button>
+                  </AppWarning>
                 </Modal.Footer>
-              </form>
+              </div>
             )}
           </Formik>
         </Modal.Body>

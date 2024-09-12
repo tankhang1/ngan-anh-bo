@@ -34,6 +34,7 @@ import { useGetListProgramTopupStatusQuery } from "../../../../redux/api/program
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 import topupProgramSchema from "../../../../schema/topupProgram.schema";
+import AppWarning from "../../../../components/AppWarning";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -383,33 +384,35 @@ function TopupCreateEdit() {
                   Trở lại
                 </button>
                 {isCreate === "true" ? (
-                  <button
-                    className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
-                      isLoadingCreate && "btn-loader"
-                    }`}
-                    onClick={() => handleSubmit()}
-                  >
-                    <span>Thêm mới</span>
-                    {isLoadingCreate && (
-                      <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
-                      </span>
-                    )}
-                  </button>
+                  <AppWarning onAccept={() => handleSubmit()}>
+                    <button
+                      className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                        isLoadingCreate && "btn-loader"
+                      }`}
+                    >
+                      <span>Thêm mới</span>
+                      {isLoadingCreate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
+                    </button>
+                  </AppWarning>
                 ) : isEdit ? (
-                  <button
-                    className={`btn btn-purple-light justify-content-center align-items-center ${
-                      isLoadingUpdate && "btn-loader"
-                    }`}
-                    onClick={() => handleSubmit()}
-                  >
-                    <span>Lưu</span>
-                    {isLoadingUpdate && (
-                      <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
-                      </span>
-                    )}
-                  </button>
+                  <AppWarning onAccept={() => handleSubmit()}>
+                    <button
+                      className={`btn btn-purple-light justify-content-center align-items-center ${
+                        isLoadingUpdate && "btn-loader"
+                      }`}
+                    >
+                      <span>Lưu</span>
+                      {isLoadingUpdate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
+                    </button>
+                  </AppWarning>
                 ) : (
                   <button
                     className={`btn btn-purple-light justify-content-center align-items-center`}

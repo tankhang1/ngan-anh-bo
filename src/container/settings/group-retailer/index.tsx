@@ -20,6 +20,7 @@ import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useCreateGroupRetailerMutation } from "../../../redux/api/setting/setting.api";
+import AppWarning from "../../../components/AppWarning";
 
 function SettingGroupRetailer() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -167,7 +168,7 @@ function SettingGroupRetailer() {
           onSubmit={onCreateUpdateGroup}
         >
           {({ handleSubmit, handleChange, values, touched, errors }) => (
-            <form noValidate onSubmit={handleSubmit}>
+            <div>
               <Modal.Body>
                 <Stack className="d-flex gap-1">
                   <Form.Group>
@@ -228,22 +229,23 @@ function SettingGroupRetailer() {
                 >
                   Đóng
                 </Button>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className={`btn justify-content-center align-items-center ${
-                    isLoadingCreate && "btn-loader "
-                  }`}
-                >
-                  <span>Xác nhận</span>
-                  {isLoadingCreate && (
-                    <span className="loading">
-                      <i className="ri-loader-2-fill fs-19"></i>
-                    </span>
-                  )}
-                </Button>
+                <AppWarning onAccept={() => handleSubmit()}>
+                  <Button
+                    variant="primary"
+                    className={`btn justify-content-center align-items-center ${
+                      isLoadingCreate && "btn-loader "
+                    }`}
+                  >
+                    <span>Xác nhận</span>
+                    {isLoadingCreate && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
+                      </span>
+                    )}
+                  </Button>
+                </AppWarning>
               </Modal.Footer>
-            </form>
+            </div>
           )}
         </Formik>
       </Modal>

@@ -42,6 +42,7 @@ import { format } from "date-fns";
 import Select from "react-select";
 import lodash from "lodash";
 import employeeSchema from "../../../schema/employee.schema";
+import AppWarning from "../../../components/AppWarning";
 
 function EmployeeCreateEdit() {
   const { isCreate, id } = useParams();
@@ -260,33 +261,35 @@ function EmployeeCreateEdit() {
                   </button>
 
                   {isCreate === "true" ? (
-                    <button
-                      onClick={() => handleSubmit()}
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingCreate && "btn-loader "
-                      }`}
-                    >
-                      <span>Thêm mới</span>
-                      {isLoadingCreate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
+                    <AppWarning onAccept={() => handleSubmit()}>
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
+                          isLoadingCreate && "btn-loader "
+                        }`}
+                      >
+                        <span>Thêm mới</span>
+                        {isLoadingCreate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
+                      </button>
+                    </AppWarning>
                   ) : isEdit ? (
-                    <button
-                      onClick={() => handleSubmit()}
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingUpdate && "btn-loader "
-                      }`}
-                    >
-                      <span>Lưu</span>
-                      {isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
+                    <AppWarning onAccept={() => handleSubmit()}>
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
+                          isLoadingUpdate && "btn-loader "
+                        }`}
+                      >
+                        <span>Lưu</span>
+                        {isLoadingUpdate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
+                      </button>
+                    </AppWarning>
                   ) : (
                     <button
                       onClick={() => setIsEdit(true)}

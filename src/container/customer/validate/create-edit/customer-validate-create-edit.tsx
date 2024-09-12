@@ -24,6 +24,7 @@ import {
   useUpdateCustomerMutation,
 } from "../../../../redux/api/other/other.api";
 import customerSchema from "../../../../schema/customers.schema";
+import AppWarning from "../../../../components/AppWarning";
 
 function CustomerValidationCreateEdit() {
   const { isCreate, id } = useParams();
@@ -215,23 +216,25 @@ function CustomerValidationCreateEdit() {
                   </button>
 
                   {isCreate === "true" ? (
-                    <button
-                      type="button"
-                      className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
-                        isLoadingCreate && "btn-loader"
-                      }`}
-                      onClick={() => {
-                        console.log(values);
+                    <AppWarning
+                      onAccept={() => {
                         handleSubmit();
                       }}
                     >
-                      <span>Thêm mới</span>
-                      {isLoadingCreate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
+                      <button
+                        type="button"
+                        className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                          isLoadingCreate && "btn-loader"
+                        }`}
+                      >
+                        <span>Thêm mới</span>
+                        {isLoadingCreate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
+                      </button>
+                    </AppWarning>
                   ) : !isEdit ? (
                     <button
                       className={`btn btn-purple-light justify-content-center align-items-center`}
@@ -240,19 +243,20 @@ function CustomerValidationCreateEdit() {
                       <span>Chỉnh sửa</span>
                     </button>
                   ) : (
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingUpdate && "btn-loader"
-                      }`}
-                      onClick={() => handleSubmit()}
-                    >
-                      <span>Lưu</span>
-                      {isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
+                    <AppWarning onAccept={() => handleSubmit()}>
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
+                          isLoadingUpdate && "btn-loader"
+                        }`}
+                      >
+                        <span>Lưu</span>
+                        {isLoadingUpdate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
+                      </button>
+                    </AppWarning>
                   )}
                 </div>
               </Card.Header>
@@ -348,11 +352,15 @@ function CustomerValidationCreateEdit() {
                         disabled={isCreate === "false" && isEdit === false}
                       >
                         <option value="">-- Chọn nhóm khách hàng --</option>
-                        {groupObjectives?.map((item) => (
-                          <option key={item.id} value={item.symbol}>
-                            {item.name}
-                          </option>
-                        ))}
+                        {groupObjectives
+                          ?.filter(
+                            (objective) => objective.symbol !== "ANONYMOUS"
+                          )
+                          .map((item) => (
+                            <option key={item.id} value={item.symbol}>
+                              {item.name}
+                            </option>
+                          ))}
                       </Form.Select>
                       <Form.Control.Feedback type="invalid">
                         {errors.customer_type as any}

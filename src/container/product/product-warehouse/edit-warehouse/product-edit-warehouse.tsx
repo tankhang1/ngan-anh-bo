@@ -42,6 +42,7 @@ import { NumericFormat } from "react-number-format";
 import productSchema from "../../../../schema/product.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
+import AppWarning from "../../../../components/AppWarning";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -168,25 +169,26 @@ function ProductEditWarehouse() {
                 </button>
 
                 {isEdit ? (
-                  <button
-                    className={`btn btn-purple-light justify-content-center align-items-center ${
-                      isLoadingUpdate && "btn-loader"
-                    }`}
-                    onClick={() => {
+                  <AppWarning
+                    onAccept={() => {
                       if (!errors)
                         toast.showToast("Vui lòng điền đầy đủ thông tin");
                       else handleSubmit(values as any);
                     }}
                   >
-                    <span>
-                      {!isEdit && !isLoadingUpdate ? "Chỉnh sửa" : "Lưu"}
-                    </span>
-                    {isLoadingUpdate && (
-                      <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
-                      </span>
-                    )}
-                  </button>
+                    <button
+                      className={`btn btn-purple-light justify-content-center align-items-center ${
+                        isLoadingUpdate && "btn-loader"
+                      }`}
+                    >
+                      <span>Lưu</span>
+                      {isLoadingUpdate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
+                    </button>
+                  </AppWarning>
                 ) : (
                   <button
                     className={`btn btn-purple-light justify-content-center align-items-center}`}

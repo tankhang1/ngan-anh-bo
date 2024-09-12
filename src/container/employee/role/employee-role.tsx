@@ -31,6 +31,7 @@ import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import roleSchema from "../../../schema/role.schema";
+import AppWarning from "../../../components/AppWarning";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -286,7 +287,7 @@ function EmployeeRole() {
             touched,
             errors,
           }) => (
-            <form noValidate onSubmit={handleSubmit}>
+            <div>
               <Modal.Body>
                 {modalInfo?.id && (
                   <Form.Group controlId="id_validate">
@@ -345,23 +346,24 @@ function EmployeeRole() {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="danger">Hủy</Button>
-                <Button
-                  variant="primary"
-                  className={`btn justify-content-center align-items-center ${
-                    isLoadingCreate || (isLoadingUpdate && "btn-loader ")
-                  }`}
-                  type="submit"
-                >
-                  <span>Xác nhận</span>
-                  {isLoadingCreate ||
-                    (isLoadingUpdate && (
-                      <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
-                      </span>
-                    ))}
-                </Button>
+                <AppWarning onAccept={() => handleSubmit()}>
+                  <Button
+                    variant="primary"
+                    className={`btn justify-content-center align-items-center ${
+                      isLoadingCreate || (isLoadingUpdate && "btn-loader ")
+                    }`}
+                  >
+                    <span>Xác nhận</span>
+                    {isLoadingCreate ||
+                      (isLoadingUpdate && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      ))}
+                  </Button>
+                </AppWarning>
               </Modal.Footer>
-            </form>
+            </div>
           )}
         </Formik>
       </Modal>

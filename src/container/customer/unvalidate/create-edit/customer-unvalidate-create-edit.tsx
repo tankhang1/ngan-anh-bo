@@ -38,6 +38,7 @@ import {
 import customerSchema from "../../../../schema/customers.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
+import AppWarning from "../../../../components/AppWarning";
 
 function CustomerUnValidationCreateEdit() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -276,18 +277,8 @@ function CustomerUnValidationCreateEdit() {
                   {isEdit && isCreate !== "true" && (
                     <div className="d-flex gap-2">
                       {permission.verifyUnvalidateCustomer && (
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip className="tooltip">
-                              Xác thực người dùng
-                            </Tooltip>
-                          }
-                        >
+                        <AppWarning onAccept={() => handleSubmit()}>
                           <button
-                            onClick={() => {
-                              handleSubmit();
-                            }}
                             className={`btn btn-teal-light justify-content-center align-items-center ${
                               isLoadingVerify && "btn-loader "
                             }`}
@@ -299,25 +290,28 @@ function CustomerUnValidationCreateEdit() {
                               </span>
                             )}
                           </button>
-                        </OverlayTrigger>
+                        </AppWarning>
                       )}
-                      <button
-                        className={`btn  btn-purple-light justify-content-center align-items-center ${
-                          isLoadingUpdate && "btn-loader "
-                        }`}
-                        onClick={() => {
+                      <AppWarning
+                        onAccept={() => {
                           if (!errors)
                             toast.showToast("Vui lòng bổ sung thông tin");
                           else handleUpdateAgent(values);
                         }}
                       >
-                        <span>Lưu</span>
-                        {isLoadingUpdate && (
-                          <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
-                          </span>
-                        )}
-                      </button>
+                        <button
+                          className={`btn  btn-purple-light justify-content-center align-items-center ${
+                            isLoadingUpdate && "btn-loader "
+                          }`}
+                        >
+                          <span>Lưu</span>
+                          {isLoadingUpdate && (
+                            <span className="loading">
+                              <i className="ri-loader-2-fill fs-19"></i>
+                            </span>
+                          )}
+                        </button>
+                      </AppWarning>
                     </div>
                   )}
                   {!isEdit && isCreate !== "true" && (
@@ -330,19 +324,20 @@ function CustomerUnValidationCreateEdit() {
                     </button>
                   )}
                   {isCreate === "true" && (
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingCreate && "btn-loader "
-                      }`}
-                      type="submit"
-                    >
-                      <span>Thêm mới</span>
-                      {isLoadingCreate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
+                    <AppWarning onAccept={() => handleSubmit()}>
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center ${
+                          isLoadingCreate && "btn-loader "
+                        }`}
+                      >
+                        <span>Thêm mới</span>
+                        {isLoadingCreate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        )}
+                      </button>
+                    </AppWarning>
                   )}
                 </div>
               </Card.Header>
