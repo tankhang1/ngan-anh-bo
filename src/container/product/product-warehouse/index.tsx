@@ -177,7 +177,7 @@ function ProductWarehousePage() {
                       </Dropdown.Menu>
                     </Dropdown>
                   </OverlayTrigger>
-                  {permission.createProductWarehouse ? (
+                  {/* {permission.createProductWarehouse ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -195,7 +195,7 @@ function ProductWarehousePage() {
                         <i className="ri-add-line"></i>
                       </Button>
                     </OverlayTrigger>
-                  ) : null}
+                  ) : null} */}
                   {permission.exportProductWarehouse ? (
                     <OverlayTrigger
                       placement="top"

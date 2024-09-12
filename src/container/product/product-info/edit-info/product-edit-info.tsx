@@ -253,7 +253,8 @@ function ProductEditInfo() {
                     <Stack className="d-flex gap-2">
                       <Form.Group>
                         <Form.Label className="text-black">
-                          Mã sản phẩm <span style={{ color: "red" }}>*</span>
+                          Mã sản phẩm (Hệ thống)
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control
                           required
@@ -269,6 +270,30 @@ function ProductEditInfo() {
                         />
                         <Form.Control.Feedback type="invalid">
                           {errors.code}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Label className="text-black">
+                          Mã sản phẩm (Công ty)
+                          <span style={{ color: "red" }}>*</span>
+                        </Form.Label>
+                        <Form.Control
+                          required
+                          type="text"
+                          id="code_validate"
+                          placeholder="Mã sản phẩm"
+                          name="name_display_root"
+                          defaultValue={values.name_display_root}
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.name_display_root &&
+                            !!errors.name_display_root
+                          }
+                          className="input-placeholder"
+                          disabled={isEdit === false}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.name_display_root}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group>

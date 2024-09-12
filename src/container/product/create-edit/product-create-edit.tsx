@@ -256,29 +256,6 @@ function ProductCreate() {
                       </Form.Group>
                       <Form.Group>
                         <Form.Label className="text-black">
-                          Mã sản phẩm (Công ty)
-                          <span style={{ color: "red" }}>*</span>
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          id="code_validate"
-                          placeholder="Mã sản phẩm"
-                          name="name_display_root"
-                          onChange={handleChange}
-                          isInvalid={
-                            touched.name_display_root &&
-                            !!errors.name_display_root
-                          }
-                          className="input-placeholder"
-                          disabled={isCreate === "false" && isEdit === false}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.code}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Label className="text-black">
                           Tên sản phẩm
                         </Form.Label>
                         <Form.Control
@@ -325,73 +302,85 @@ function ProductCreate() {
                       </Form.Group>
                       <Form.Group>
                         <Form.Label className="text-black">
-                          Số điểm thưởng
+                          Hình thức đóng gói{" "}
+                          <span style={{ color: "red" }}>*</span>
                         </Form.Label>
-
-                        <NumericFormat
-                          thousandSeparator="."
-                          decimalSeparator=","
-                          customInput={Form.Control as any}
-                          defaultValue={values.point}
-                          name="point"
+                        <Form.Select
+                          className="form-select input-placeholder"
+                          id="type_validate"
+                          name="type"
+                          defaultValue={values.type}
                           onChange={handleChange}
-                          min={0}
-                          placeholder="Số điểm thưởng"
-                          className="input-placeholder"
+                          isInvalid={touched.type && !!errors.type}
+                          required
                           disabled={isCreate === "false" && isEdit === false}
-                        />
-                        {errors.point && touched.point && (
-                          <p style={{ color: "red", fontSize: 12 }}>
-                            {errors.point}
-                          </p>
-                        )}
+                        >
+                          {[
+                            {
+                              value: "",
+                              label: "-- Chọn hình thức đóng gói --",
+                            },
+                            {
+                              value: ProductTypeEnum.PACKET.toString(),
+                              label: "Gói",
+                            },
+                            {
+                              value: ProductTypeEnum.BAG.toString(),
+                              label: "Túi",
+                            },
+                            {
+                              value: ProductTypeEnum.BOTTLE.toString(),
+                              label: "Chai",
+                            },
+                            {
+                              value: ProductTypeEnum.BOX.toString(),
+                              label: "Hộp",
+                            },
+                            {
+                              value: ProductTypeEnum.BIN.toString(),
+                              label: "Thùng",
+                            },
+                          ].map((item, index) => (
+                            <option value={item.value} key={index}>
+                              {item.label}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.type}
+                        </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group>
-                        <Form.Label className="text-black">Giá C1</Form.Label>
-
-                        <NumericFormat
-                          thousandSeparator="."
-                          decimalSeparator=","
-                          customInput={Form.Control as any}
-                          min={0}
-                          defaultValue={values.c1_price_vnd}
-                          name="c1_price_vnd"
-                          onChange={handleChange}
-                          placeholder="Số tiền 1"
-                          className="input-placeholder"
-                          disabled={isCreate === "false" && isEdit === false}
-                        />
-                        {errors.c1_price_vnd && touched.c1_price_vnd && (
-                          <p style={{ color: "red", fontSize: 12 }}>
-                            {errors.c1_price_vnd}
-                          </p>
-                        )}
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Label className="text-black">Giá C2</Form.Label>
-
-                        <NumericFormat
-                          thousandSeparator="."
-                          decimalSeparator=","
-                          customInput={Form.Control as any}
-                          min={0}
-                          defaultValue={values.c2_price_vnd}
-                          name="c2_price_vnd"
-                          onChange={handleChange}
-                          placeholder="Số tiền 2"
-                          className="input-placeholder"
-                          disabled={isCreate === "false" && isEdit === false}
-                        />
-                        {errors.c2_price_vnd && touched.c2_price_vnd && (
-                          <p style={{ color: "red", fontSize: 12 }}>
-                            {errors.c2_price_vnd}
-                          </p>
-                        )}
-                      </Form.Group>
+                      {values.type !== ProductTypeEnum.BIN.toString() && (
+                        <Form.Group>
+                          <Form.Label className="text-black">
+                            Mã thùng <span style={{ color: "red" }}>*</span>
+                          </Form.Label>
+                          <Form.Select
+                            className="form-select input-placeholder"
+                            id="code_bin_validate"
+                            name="code_bin"
+                            defaultValue={values.code_bin}
+                            onChange={handleChange}
+                            isInvalid={touched.code_bin && !!errors.code_bin}
+                            required
+                            disabled={isCreate === "false" && isEdit === false}
+                          >
+                            <option value={""}>-- Chọn mã thùng --</option>
+                            {binIds?.map((item, index) => (
+                              <option value={item.value} key={index}>
+                                {item.label}
+                              </option>
+                            ))}
+                          </Form.Select>
+                          <Form.Control.Feedback type="invalid">
+                            {errors.code_bin}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      )}
                     </Stack>
                   </Col>
                 </Row>
-                {/* <Row>
+                <Row>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
                       Số điểm thưởng
@@ -457,8 +446,8 @@ function ProductCreate() {
                       </p>
                     )}
                   </Form.Group>
-                </Row> */}
-                <Row>
+                </Row>
+                {/* <Row>
                   <Form.Group
                     as={Col}
                     md={values.type !== ProductTypeEnum.BIN.toString() ? 6 : 12}
@@ -535,7 +524,7 @@ function ProductCreate() {
                       </Form.Control.Feedback>
                     </Form.Group>
                   )}
-                </Row>
+                </Row> */}
                 <Row>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
@@ -687,7 +676,7 @@ function ProductCreate() {
                 </Form.Group>
 
                 <Row>
-                  <Form.Group as={Col} md={6}>
+                  <Form.Group>
                     <Form.Label className="text-black">
                       Link sản phẩm
                     </Form.Label>
@@ -707,34 +696,8 @@ function ProductCreate() {
                       {errors.detail_url}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md={6}>
-                    <Form.Label className="text-black">Xuất xứ</Form.Label>
-                    <Form.Select
-                      className="form-select input-placeholder"
-                      id="certificate_of_origin_validate"
-                      name="certificate_of_origin"
-                      defaultValue={values.certificate_of_origin}
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.certificate_of_origin &&
-                        !!errors.certificate_of_origin
-                      }
-                      required
-                      disabled={isCreate === "false" && isEdit === false}
-                    >
-                      <option value={""}>-- Chọn xuất xứ --</option>
-                      {COUNTRIES.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.certificate_of_origin}
-                    </Form.Control.Feedback>
-                  </Form.Group>
                 </Row>
-                <Form.Group as={Col} md={4}>
+                {/* <Form.Group as={Col} md={4}>
                   <Form.Label className="text-black">Sản xuất </Form.Label>
                   <Form.Check
                     label="Đóng gói"
@@ -863,7 +826,7 @@ function ProductCreate() {
                   <Form.Control.Feedback type="invalid">
                     {errors.device_code}
                   </Form.Control.Feedback>
-                </Form.Group>
+                </Form.Group> */}
               </Stack>
             </Card.Body>
           </Card>
