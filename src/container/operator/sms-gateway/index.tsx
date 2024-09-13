@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TCustomerRes } from "../../../assets/types";
+import { TCustomerRes, TSMSGateway } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import {
@@ -110,7 +110,7 @@ function SMSGateway() {
               {
                 key: "id",
                 label: "ID",
-                render: (value: TCustomerRes) => (
+                render: (value: TSMSGateway) => (
                   <td>
                     <AppId id={value.id ?? ""} />
                   </td>
@@ -119,7 +119,7 @@ function SMSGateway() {
               {
                 key: "code",
                 label: "Mã iQR",
-                render: (value: TCustomerRes) => <td>{value.code}</td>,
+                render: (value: TSMSGateway) => <td>{value.code}</td>,
               },
               {
                 key: "product_name",
@@ -140,49 +140,42 @@ function SMSGateway() {
                 ),
               },
               {
-                key: "sign_board",
-                label: "Tên cửa hàng",
+                key: "customer_province_name",
+                label: "Tỉnh thành",
                 render: (value) => (
                   <td>
-                    <span className="fw-semibold">{value.sign_board}</span>
+                    <span className="fw-semibold">
+                      {value.customer_province_name}
+                    </span>
                   </td>
                 ),
               },
               {
-                key: "province",
-                label: "Tỉnh",
-                render: (value) => <td>{value.customer_province_name}</td>,
+                key: "customer_district_name",
+                label: "Quận huyện",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">
+                      {value.customer_district_name}
+                    </span>
+                  </td>
+                ),
               },
               {
-                key: "phone",
-                label: "Số điện thoại",
-                render: (value) => <td>{value.phone}</td>,
+                key: "customer_area",
+                label: "Khu vực",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.customer_area}</span>
+                  </td>
+                ),
               },
               {
                 key: "time",
-                label: "Thời gian đăng kí",
-                render: (value) => <td>{value.time}</td>,
-              },
-
-              {
-                key: "source_channel_used",
-                label: "Nguồn đăng kí",
-                render: (value) => <td>{value.source_channel_used}</td>,
-              },
-              {
-                key: "status",
-                label: "Trạng thái",
+                label: "Thời gian nhắn tin",
                 render: (value) => (
                   <td>
-                    {value.status === 1 ? (
-                      <span className="bg-success bg-opacity-100 text-white badge ">
-                        Đã xác thực
-                      </span>
-                    ) : (
-                      <span className="bg-warning bg-opacity-100 text-white badge ">
-                        Chờ xác thực
-                      </span>
-                    )}
+                    <span className="fw-semibold">{value.time}</span>
                   </td>
                 ),
               },

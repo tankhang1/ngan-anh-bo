@@ -2,18 +2,21 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type TFeatureCode =
   | "DASHBOARD"
   | "ACCOUNTS"
-  | "OPERATORS_SEARCH_PRODUCT"
-  | "OPERATORS_SEARCH_CUSTOMER_TODAY"
-  | "OPERATORS_SEARCH_TOPUP_TODAY"
-  | "OPERATORS_SEARCH_CUSTOMER_VALIDATE_TODAY"
-  | "OPERATORS_SEARCH_CUSTOMER_UNVALIDATE_TODAY"
+  | "OPERATORS_iQr_TODAY"
+  | "OPERATORS_CUSTOMER_UNVALIDATE_TODAY"
+  | "OPERATORS_CUSTOMER_VALIDATE_TODAY"
+  | "OPERATORS_TOPUP_TODAY"
+  | "OPERATORS_GIFT_TODAY"
+  | "OPERATORS_SMS_GATEWAY"
+  | "CUSTOMERS_SEARCH"
   | "CUSTOMERS_VALIDATE"
   | "CUSTOMERS_UNVALIDATE"
   | "EMPLOYEES_INFO"
   | "EMPLOYEES_ROLES"
   | "EMPLOYEES_DEPARTMENTS"
-  | "PRODUCTS_INFO"
-  | "PRODUCTS_MANUFACTURE"
+  | "PRODUCTS_SEARCH_PRODUCT"
+  | "PRODUCTS_MARKETING_INFO"
+  | "PRODUCTS_PRODUCTION_INFO"
   | "PROGRAMS_POINTS"
   | "PROGRAMS_TOPUPS"
   | "PROGRAM_CHANCE"
@@ -23,15 +26,29 @@ type TFeatureCode =
   | "REPORTS_TOPUP"
   | "REPORTS_CHANCE"
   | "REPORTS_SMS"
+  | "REPORTS_IQR_SKU"
+  | "REPORTS_IQR_BIN"
   | "SETTINGS_AREA"
   | "SETTINGS_GROUP_CUSTOMER"
-  | "SETTINGS_GROUP_AGENT"
+  | "SETTINGS_RETAILER_GROUP"
+  | "SETTINGS_BRAND"
+  | "SETTINGS_INDICATION"
+  | "SETTINGS_FORMULATION"
+  | "WAREHOUSES_CREATE_MATERIAL"
+  | "WAREHOUSES_SEARCH_BATCH_NUMBER"
+  | "WAREHOUSES_SEARCH_RETAILER_1"
+  | "WAREHOUSES_CREATE_MANUFACTURE_ORDER"
+  | "WAREHOUSES_PRODUCTION_INFO"
+  | "WAREHOUSES_REPORT_INVENTORY"
   | "WAREHOUSES_SEARCH_EXPORT"
   | "WAREHOUSES_SEARCH_IMPORT"
+  | "WAREHOUSES_SEARCH_TODAY"
   | "WAREHOUSES_LIST_IMPORT"
   | "WAREHOUSES_LIST_EXPORT"
   | "WAREHOUSES_REPORT_EXPORT"
-  | "WAREHOUSES_INVENTORY_INFO";
+  | "WAREHOUSES_REPORT_RETURN"
+  | "WAREHOUSES_REPORT_INGREDIENT";
+
 export type TPermit = {
   id: number;
   role_code?: string;
@@ -52,78 +69,145 @@ const initialValue = {
   roles: "",
   username: "",
   permission: {
+    //Dashboard
     viewDashboard: 0,
+    //Accounts
     viewAccounts: 0,
     viewListAccounts: 0,
     createAccount: 0,
     exportAccount: 0,
     editAccount: 0,
     deleteAccount: 0,
+    //Search Customer
+    viewSearchCustomer: 0,
+    //Customer Validate
     viewValidateCustomer: 0,
     viewListValidateCustomer: 0,
-    viewListUnValidateCustomer: 0,
     createValidateCustomer: 0,
-    verifyUnvalidateCustomer: 0,
     exportValidateCustomer: 0,
     editValidateCustomer: 0,
+    //Customer UnValidate
+    viewListUnValidateCustomer: 0,
+    verifyUnvalidateCustomer: 0,
     viewUnValidateCustomer: 0,
     createUnValidateCustomer: 0,
     exportUnValidateCustomer: 0,
     editUnValidateCustomer: 0,
+    //Employee
     viewEmployee: 0,
     viewListEmployee: 0,
     exportEmployee: 0,
     editEmployee: 0,
     createEmployee: 0,
+    //Role
     viewRoles: 0,
     createRole: 0,
     editRole: 0,
+    //Department
     viewDepartment: 0,
     createDepartment: 0,
     editDepartment: 0,
-
-    viewProductsInfo: 0,
-    viewListProductsInfo: 0,
-    createProductInfo: 0,
-    exportProductInfo: 0,
-    editProductInfo: 0,
-
+    //Product Search
+    viewSearchProduct: 0,
+    //Product Marketing
+    viewProductsMarketingInfo: 0,
+    viewListProductsMarketingInfo: 0,
+    createProductMarketingInfo: 0,
+    exportProductMarketingInfo: 0,
+    editProductMarketingInfo: 0,
+    //Product Production Info
+    viewProductsProductionInfo: 0,
+    viewListProductsProductionInfo: 0,
+    createProductProductionInfo: 0,
+    exportProductProductionInfo: 0,
+    editProductProductionInfo: 0,
+    //Warehouse
     viewProductsWarehouse: 0,
     viewListProductsWarehouse: 0,
     createProductWarehouse: 0,
     exportProductWarehouse: 0,
     editProductWarehouse: 0,
+    //Warehouse Material
+    viewMaterialWarehouse: 0,
+    viewListMaterialWarehouse: 0,
+    createMaterialWarehouse: 0,
+    editMaterialWarehouse: 0,
+    //Warehouse Search Batch Number
+    viewSearchBatchNumber: 0,
+    // Search Retailer 1
+    viewSearchRetailer1: 0,
+    //Warehouse Production Info
+    viewProductionInfoWarehouse: 0,
+    //Warehouse report inventory
+    viewWarehouseReportInventory: 0,
+    //Warehouse search export
+    viewWarehouseSearchExport: 0,
+    //Warehouse search import
+    viewWarehouseSearchImport: 0,
+    //Warehouse search today
+    viewWarehouseSearchToday: 0,
+    //Warehouse list export
+    viewWarehouseListExport: 0,
+    //Warehouse list import
+    viewWarehouseListImport: 0,
+    //Warehouse report export
+    viewWarehouseReportReturn: 0,
+    //Warehouse report turn
+    viewWarheouseReportReturn: 0,
+    //Warehoue report ingredient
+    viewWarehouseReportIngredient: 0,
+    //Create Manufacture order
+    viewCreateManufacturOrder: 0,
 
+    //Program Point
     viewProgramPoint: 0,
     viewListProgramPoint: 0,
     createProgramPoint: 0,
     editProgramPoint: 0,
+    //Program Topup
     viewProgramTopup: 0,
     viewListProgramTopup: 0,
     createProgramTopup: 0,
     editProgramTopup: 0,
+    //Program Change
     viewProgramChance: 0,
     viewListProgramChance: 0,
     createProgramChance: 0,
     editProgramChance: 0,
+    //Report
     reportCustomer: 0,
     reportIQR: 0,
     reportProgramPoint: 0,
     reportProgramTopup: 0,
     reportProgramChance: 0,
     reportSMS: 0,
+    //Setting Area
     settingArea: 0,
     createSettingArea: 0,
+    //Setting Group Customer
     settingGroupCustomer: 0,
     createSettingGroupCustomer: 0,
     editSettingGroupCustomer: 0,
+    //Setting Retailer Group
     viewRetailerGroup: 0,
     createRetailerGroup: 0,
-    viewOperatorSearchProduct: 0,
-    viewOperatorSearchCustomerToday: 0,
+    //Setting Brand
+    viewBrand: 0,
+    createBrand: 0,
+    //Setting Indication
+    viewIndication: 0,
+    createIndication: 0,
+    //Setting Formulation
+    viewFormulation: 0,
+    createFormulation: 0,
+    //Operator
+    viewOperatorGiftToday: 0,
+    viewOperatorSMSGateway: 0,
+    viewOperatorSearchIQRToday: 0,
     viewOperatorSearchTopupToday: 0,
     viewOperatorSearchCustomerValidateToday: 0,
     viewOperatorSearchCustomerUnValidateToday: 0,
+    //Warehouse
     warehouseSearchExport: 0,
     warehouseSearchImport: 0,
     warehouseListImport: 0,
@@ -151,28 +235,35 @@ const onPermissionFeature = (permission: TPermit) => {
         editAccount: permission.permit_edit,
       };
     }
-    case "OPERATORS_SEARCH_PRODUCT": {
+    case "OPERATORS_iQr_TODAY": {
       return {
-        viewOperatorSearchProduct: permission.permit_view_list,
+        viewOperatorSearchIQRToday:
+          permission.permit_view_detail || permission.permit_view_list,
       };
     }
-    case "OPERATORS_SEARCH_CUSTOMER_TODAY": {
+    case "OPERATORS_GIFT_TODAY": {
       return {
-        viewOperatorSearchCustomerToday: permission.permit_view_list,
+        viewOperatorGiftToday:
+          permission.permit_view_detail || permission.permit_view_list,
       };
     }
-
-    case "OPERATORS_SEARCH_TOPUP_TODAY": {
+    case "OPERATORS_SMS_GATEWAY": {
+      return {
+        viewOperatorSMSGateway:
+          permission.permit_view_detail || permission.permit_view_list,
+      };
+    }
+    case "OPERATORS_TOPUP_TODAY": {
       return {
         viewOperatorSearchTopupToday: permission.permit_view_list,
       };
     }
-    case "OPERATORS_SEARCH_CUSTOMER_VALIDATE_TODAY": {
+    case "OPERATORS_CUSTOMER_VALIDATE_TODAY": {
       return {
         viewOperatorSearchCustomerValidateToday: permission.permit_view_list,
       };
     }
-    case "OPERATORS_SEARCH_CUSTOMER_UNVALIDATE_TODAY": {
+    case "OPERATORS_CUSTOMER_UNVALIDATE_TODAY": {
       return {
         viewOperatorSearchCustomerUnValidateToday: permission.permit_view_list,
       };
@@ -200,7 +291,19 @@ const onPermissionFeature = (permission: TPermit) => {
         editDepartment: permission.permit_edit,
       };
     }
-    case "PRODUCTS_INFO": {
+    case "CUSTOMERS_SEARCH": {
+      return {
+        viewSearchCustomer:
+          permission.permit_view_list || permission.permit_view_detail,
+      };
+    }
+    case "PRODUCTS_SEARCH_PRODUCT": {
+      return {
+        viewSearchProduct:
+          permission.permit_view_list || permission.permit_view_detail,
+      };
+    }
+    case "PRODUCTS_MARKETING_INFO": {
       return {
         viewProductsInfo: permission.permit_view_detail,
         viewListProductsInfo: permission.permit_view_list,
@@ -209,7 +312,7 @@ const onPermissionFeature = (permission: TPermit) => {
         editProductInfo: permission.permit_edit,
       };
     }
-    case "PRODUCTS_MANUFACTURE": {
+    case "PRODUCTS_PRODUCTION_INFO": {
       return {
         viewProductsWarehouse: permission.permit_view_detail,
         viewListProductsWarehouse: permission.permit_view_list,
@@ -286,10 +389,30 @@ const onPermissionFeature = (permission: TPermit) => {
         editSettingGroupCustomer: permission.permit_edit,
       };
     }
-    case "SETTINGS_GROUP_AGENT": {
+    case "SETTINGS_RETAILER_GROUP": {
       return {
         viewRetailerGroup: permission.permit_view_list,
         createRetailerGroup: permission.permit_create,
+      };
+    }
+    case "SETTINGS_BRAND": {
+      return {
+        viewBrand: permission.permit_view_detail || permission.permit_view_list,
+        createBrand: permission.permit_create,
+      };
+    }
+    case "SETTINGS_FORMULATION": {
+      return {
+        viewFormulation:
+          permission.permit_view_detail || permission.permit_view_list,
+        createFormulation: permission.permit_create,
+      };
+    }
+    case "SETTINGS_INDICATION": {
+      return {
+        viewIndication:
+          permission.permit_view_detail || permission.permit_view_list,
+        createIndication: permission.permit_create,
       };
     }
     case "CUSTOMERS_VALIDATE": {
@@ -338,9 +461,59 @@ const onPermissionFeature = (permission: TPermit) => {
         warehouseReportExport: permission.permit_view_list,
       };
     }
-    case "WAREHOUSES_INVENTORY_INFO": {
+    case "WAREHOUSES_REPORT_INVENTORY": {
       return {
         warehouseInventoryInfo: permission.permit_view_list,
+      };
+    }
+    case "WAREHOUSES_CREATE_MATERIAL": {
+      return {
+        viewMaterialWarehouse: permission.permit_view_detail,
+        viewListMaterialWarehouse: permission.permit_view_list,
+        createMaterialWarehouse: permission.permit_create,
+        editMaterialWarehouse: permission.permit_edit,
+      };
+    }
+    case "WAREHOUSES_SEARCH_BATCH_NUMBER": {
+      return {
+        viewSearchBatchNumber:
+          permission.permit_view_list || permission.permit_view_detail,
+      };
+    }
+    case "WAREHOUSES_SEARCH_RETAILER_1": {
+      return {
+        viewSearchRetailer1:
+          permission.permit_view_list || permission.permit_view_detail,
+      };
+    }
+    case "WAREHOUSES_CREATE_MANUFACTURE_ORDER": {
+      return {
+        viewCreateManufacturOrder: permission.permit_create,
+      };
+    }
+    case "WAREHOUSES_PRODUCTION_INFO": {
+      return {
+        viewProductionInfoWarehouse:
+          permission.permit_view_detail || permission.permit_view_list,
+      };
+    }
+    case "WAREHOUSES_REPORT_INGREDIENT": {
+      return {
+        //Warehouse report export
+        viewWarehouseReportIngredient:
+          permission.permit_view_detail || permission.permit_view_list,
+      };
+    }
+    case "WAREHOUSES_REPORT_RETURN": {
+      return {
+        viewWarheouseReportReturn:
+          permission.permit_view_detail || permission.permit_view_list,
+      };
+    }
+    case "WAREHOUSES_SEARCH_TODAY": {
+      return {
+        viewWarehouseSearchToday:
+          permission.permit_view_detail || permission.permit_view_list,
       };
     }
     default:
@@ -365,76 +538,145 @@ const authSlice = createSlice({
       state.roles = action.payload.roles;
       state.username = action.payload.username;
       let permission = {
+        //Dashboard
         viewDashboard: 0,
+        //Accounts
         viewAccounts: 0,
         viewListAccounts: 0,
         createAccount: 0,
         exportAccount: 0,
         editAccount: 0,
         deleteAccount: 0,
+        //Search Customer
+        viewSearchCustomer: 0,
+        //Customer Validate
         viewValidateCustomer: 0,
         viewListValidateCustomer: 0,
-        viewListUnValidateCustomer: 0,
         createValidateCustomer: 0,
-        verifyUnvalidateCustomer: 0,
         exportValidateCustomer: 0,
         editValidateCustomer: 0,
+        //Customer UnValidate
+        viewListUnValidateCustomer: 0,
+        verifyUnvalidateCustomer: 0,
         viewUnValidateCustomer: 0,
         createUnValidateCustomer: 0,
         exportUnValidateCustomer: 0,
         editUnValidateCustomer: 0,
+        //Employee
         viewEmployee: 0,
         viewListEmployee: 0,
         exportEmployee: 0,
         editEmployee: 0,
         createEmployee: 0,
+        //Role
         viewRoles: 0,
         createRole: 0,
         editRole: 0,
+        //Department
         viewDepartment: 0,
         createDepartment: 0,
         editDepartment: 0,
-        viewProductsInfo: 0,
-        viewListProductsInfo: 0,
-        createProductInfo: 0,
-        exportProductInfo: 0,
-        editProductInfo: 0,
-
+        //Product Search
+        viewSearchProduct: 0,
+        //Product Marketing
+        viewProductsMarketingInfo: 0,
+        viewListProductsMarketingInfo: 0,
+        createProductMarketingInfo: 0,
+        exportProductMarketingInfo: 0,
+        editProductMarketingInfo: 0,
+        //Product Production Info
+        viewProductsProductionInfo: 0,
+        viewListProductsProductionInfo: 0,
+        createProductProductionInfo: 0,
+        exportProductProductionInfo: 0,
+        editProductProductionInfo: 0,
+        //Warehouse
         viewProductsWarehouse: 0,
         viewListProductsWarehouse: 0,
         createProductWarehouse: 0,
         exportProductWarehouse: 0,
         editProductWarehouse: 0,
+        //Warehouse Material
+        viewMaterialWarehouse: 0,
+        viewListMaterialWarehouse: 0,
+        createMaterialWarehouse: 0,
+        editMaterialWarehouse: 0,
+        //Warehouse Search Batch Number
+        viewSearchBatchNumber: 0,
+        // Search Retailer 1
+        viewSearchRetailer1: 0,
+        //Warehouse Production Info
+        viewProductionInfoWarehouse: 0,
+        //Warehouse report inventory
+        viewWarehouseReportInventory: 0,
+        //Warehouse search export
+        viewWarehouseSearchExport: 0,
+        //Warehouse search import
+        viewWarehouseSearchImport: 0,
+        //Warehouse search today
+        viewWarehouseSearchToday: 0,
+        //Warehouse list export
+        viewWarehouseListExport: 0,
+        //Warehouse list import
+        viewWarehouseListImport: 0,
+        //Warehouse report export
+        viewWarehouseReportReturn: 0,
+        //Warehouse report turn
+        viewWarheouseReportReturn: 0,
+        //Warehoue report ingredient
+        viewWarehouseReportIngredient: 0,
+        //Create Manufacture order
+        viewCreateManufacturOrder: 0,
+
+        //Program Point
         viewProgramPoint: 0,
         viewListProgramPoint: 0,
         createProgramPoint: 0,
         editProgramPoint: 0,
+        //Program Topup
         viewProgramTopup: 0,
         viewListProgramTopup: 0,
         createProgramTopup: 0,
         editProgramTopup: 0,
+        //Program Change
         viewProgramChance: 0,
         viewListProgramChance: 0,
         createProgramChance: 0,
         editProgramChance: 0,
+        //Report
         reportCustomer: 0,
         reportIQR: 0,
         reportProgramPoint: 0,
         reportProgramTopup: 0,
         reportProgramChance: 0,
         reportSMS: 0,
+        //Setting Area
         settingArea: 0,
         createSettingArea: 0,
+        //Setting Group Customer
         settingGroupCustomer: 0,
         createSettingGroupCustomer: 0,
         editSettingGroupCustomer: 0,
+        //Setting Retailer Group
         viewRetailerGroup: 0,
         createRetailerGroup: 0,
-        viewOperatorSearchProduct: 0,
-        viewOperatorSearchCustomerToday: 0,
+        //Setting Brand
+        viewBrand: 0,
+        createBrand: 0,
+        //Setting Indication
+        viewIndication: 0,
+        createIndication: 0,
+        //Setting Formulation
+        viewFormulation: 0,
+        createFormulation: 0,
+        //Operator
+        viewOperatorGiftToday: 0,
+        viewOperatorSMSGateway: 0,
+        viewOperatorSearchIQRToday: 0,
         viewOperatorSearchTopupToday: 0,
         viewOperatorSearchCustomerValidateToday: 0,
         viewOperatorSearchCustomerUnValidateToday: 0,
+        //Warehouse
         warehouseSearchExport: 0,
         warehouseSearchImport: 0,
         warehouseListImport: 0,

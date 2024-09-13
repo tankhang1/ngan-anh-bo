@@ -94,23 +94,43 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.viewDashboard;
         case MENU_KEY.MANAGE_TITLE:
           if (
+            //Accounts
             permission.viewAccounts ||
             permission.viewListAccounts ||
-            permission.viewOperatorSearchCustomerToday ||
+            //Operators
+            permission.viewOperatorGiftToday ||
+            permission.viewOperatorSMSGateway ||
+            permission.viewOperatorSearchIQRToday ||
+            permission.viewOperatorSearchTopupToday ||
             permission.viewOperatorSearchCustomerUnValidateToday ||
             permission.viewOperatorSearchCustomerValidateToday ||
-            permission.viewOperatorSearchProduct ||
-            permission.viewOperatorSearchTopupToday ||
+            // Customer
+            permission.viewSearchCustomer ||
             permission.viewValidateCustomer ||
             permission.viewListValidateCustomer ||
             permission.viewListUnValidateCustomer ||
             permission.viewListValidateCustomer ||
+            //employee
             permission.viewEmployee ||
             permission.viewListEmployee ||
+            //employee role & department
             permission.viewRoles ||
             permission.viewDepartment ||
-            permission.viewProductsInfo ||
-            permission.viewListProductsInfo ||
+            // products
+            permission.viewSearchProduct ||
+            permission.viewProductsMarketingInfo ||
+            permission.viewListProductsMarketingInfo ||
+            permission.viewProductsProductionInfo ||
+            permission.viewListProductsProductionInfo ||
+            // warehouse
+            permission.viewMaterialWarehouse ||
+            permission.viewListMaterialWarehouse ||
+            permission.viewSearchBatchNumber ||
+            permission.viewSearchCustomer ||
+            permission.viewSearchRetailer1 ||
+            permission.viewCreateManufacturOrder ||
+            permission.viewProductsProductionInfo ||
+            permission.viewListProductsProductionInfo ||
             permission.viewProductsWarehouse ||
             permission.viewListProductsWarehouse ||
             permission.warehouseSearchExport ||
@@ -119,6 +139,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.warehouseListExport ||
             permission.warehouseReportExport ||
             permission.warehouseInventoryInfo ||
+            // program
             permission.viewProgramPoint ||
             permission.viewProgramTopup ||
             permission.viewProgramChance ||
@@ -132,11 +153,12 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.viewAccounts || permission.viewListAccounts;
         case MENU_KEY.MANAGE_OPERATOR:
           return (
-            permission.viewOperatorSearchCustomerToday ||
+            permission.viewOperatorGiftToday ||
             permission.viewOperatorSearchCustomerUnValidateToday ||
             permission.viewOperatorSearchCustomerValidateToday ||
-            permission.viewOperatorSearchProduct ||
-            permission.viewOperatorSearchTopupToday
+            permission.viewOperatorSMSGateway ||
+            permission.viewOperatorSearchTopupToday ||
+            permission.viewOperatorSearchIQRToday
           );
         case MENU_KEY.MANAGE_WAREHOUSE:
           return (
@@ -145,37 +167,51 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.warehouseListExport ||
             permission.warehouseListImport ||
             permission.warehouseReportExport ||
-            permission.warehouseInventoryInfo
+            permission.warehouseInventoryInfo ||
+            permission.createMaterialWarehouse ||
+            permission.viewSearchBatchNumber ||
+            permission.viewSearchRetailer1 ||
+            permission.viewCreateManufacturOrder ||
+            permission.viewWarehouseSearchToday ||
+            permission.viewMaterialWarehouse
           );
-        case MENU_KEY.SEARCH_WAREHOUSE_EXPORT:
+        case MENU_KEY.WAREHOUSES_SEARCH_EXPORT:
           return permission.warehouseSearchExport;
-        case MENU_KEY.SEARCH_WAREHOUSE_IMPORT:
+        case MENU_KEY.WAREHOUSES_SEARCH_IMPORT:
           return permission.warehouseSearchImport;
-        case MENU_KEY.WARE_HOUSE_MANAGE_IMPORT:
+        case MENU_KEY.WAREHOUSES_LIST_IMPORT:
           return permission.warehouseListImport;
-        case MENU_KEY.WARE_HOUSE_MANAGE_EXPORT:
+        case MENU_KEY.WAREHOUSES_LIST_EXPORT:
           return permission.warehouseListExport;
         case MENU_KEY.WAREHOUSES_REPORT_EXPORT:
           return permission.warehouseReportExport;
-        case MENU_KEY.WAREHOUSES_INVENTORY_INFO:
+        case MENU_KEY.WAREHOUSES_REPORT_INVENTORY:
           return permission.warehouseInventoryInfo;
-        case MENU_KEY.OPERATORS_SEARCH_PRODUCT:
-          return permission.viewOperatorSearchProduct;
-        case MENU_KEY.OPERATORS_SEARCH_CUSTOMER_TODAY:
-          return permission.viewOperatorSearchCustomerToday;
-        case MENU_KEY.OPERATORS_SEARCH_TOPUP_TODAY:
+        //operator
+        case MENU_KEY.OPERATORS_TOPUP_TODAY:
           return permission.viewOperatorSearchTopupToday;
-        case MENU_KEY.OPERATORS_SEARCH_CUSTOMER_VALIDATE_TODAY:
+        case MENU_KEY.OPERATORS_CUSTOMER_VALIDATE_TODAY:
           return permission.viewOperatorSearchCustomerValidateToday;
-        case MENU_KEY.OPERATORS_SEARCH_CUSTOMER_UNVALIDATE_TODAY:
+        case MENU_KEY.OPERATORS_CUSTOMER_UNVALIDATE_TODAY:
           return permission.viewOperatorSearchCustomerUnValidateToday;
+        case MENU_KEY.OPERATORS_GIFT_TODAY:
+          return permission.viewOperatorGiftToday;
+        case MENU_KEY.OPERATORS_SMS_GATEWAY:
+          return permission.viewOperatorSMSGateway;
+        case MENU_KEY.OPERATORS_iQr_TODAY:
+          return permission.viewOperatorSearchIQRToday;
+
         case MENU_KEY.CUSTOMERS:
           return (
             permission.viewListValidateCustomer ||
             permission.viewValidateCustomer ||
             permission.viewUnValidateCustomer ||
-            permission.viewListUnValidateCustomer
+            permission.viewListUnValidateCustomer ||
+            permission.viewSearchCustomer
           );
+        case MENU_KEY.CUSTOMERS_SEARCH: {
+          return permission.viewSearchCustomer;
+        }
         case MENU_KEY.CUSTOMERS_VALIDATE:
           return (
             permission.viewValidateCustomer ||
@@ -193,26 +229,35 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.viewRoles ||
             permission.viewDepartment
           );
-        case MENU_KEY.EMPLOYEES:
+        case MENU_KEY.EMPLOYEES_INFO:
           return permission.viewEmployee || permission.viewListEmployee;
-        case MENU_KEY.ROLES:
+        case MENU_KEY.EMPLOYEES_ROLES:
           return permission.viewRoles;
-        case MENU_KEY.DEPARTMENTS:
+        case MENU_KEY.EMPLOYEES_DEPARTMENTS:
           return permission.viewDepartment;
         case MENU_KEY.PRODUCTS:
           return (
-            permission.viewProductsInfo ||
-            permission.viewListProductsInfo ||
+            permission.viewSearchProduct ||
+            permission.viewProductsMarketingInfo ||
+            permission.viewListProductsMarketingInfo ||
+            permission.viewProductionInfoWarehouse ||
+            permission.viewListProductsProductionInfo ||
             permission.viewProductsWarehouse ||
             permission.viewListProductsWarehouse
           );
-        case MENU_KEY.PRODUCTS_INFO:
-          return permission.viewListProductsInfo || permission.viewProductsInfo;
-        case MENU_KEY.PRODUCTS_WAREHOUSE:
+        case MENU_KEY.PRODUCTS_MARKETING_INFO:
           return (
-            permission.viewListProductsWarehouse ||
-            permission.viewProductsWarehouse
+            permission.viewListProductsMarketingInfo ||
+            permission.viewProductsMarketingInfo
           );
+        case MENU_KEY.PRODUCTS_PRODUCTION_INFO:
+          return (
+            permission.viewListProductsProductionInfo ||
+            permission.viewProductionInfoWarehouse
+          );
+
+        case MENU_KEY.PRODUCTS_SEARCH_PRODUCT:
+          return permission.viewSearchProduct;
         case MENU_KEY.MANAGE_PROGRAM:
           return (
             permission.viewProgramPoint ||
@@ -222,9 +267,9 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.viewListProgramPoint ||
             permission.viewListProgramTopup
           );
-        case MENU_KEY.PROGRRAM_POINT:
+        case MENU_KEY.PROGRAMS_POINTS:
           return permission.viewProgramPoint || permission.viewListProgramPoint;
-        case MENU_KEY.PROGRAM_TOPUP:
+        case MENU_KEY.PROGRAMS_TOPUPS:
           return permission.viewProgramTopup || permission.viewListProgramTopup;
         case MENU_KEY.PROGRAM_CHANCE:
           return (
@@ -241,24 +286,24 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           )
             return true;
           return false;
-        case MENU_KEY.REPORT_CUSTOMER:
+        case MENU_KEY.REPORTS_CUSTOMER:
           return permission.reportCustomer;
 
-        case MENU_KEY.REPORT_IQR:
+        case MENU_KEY.REPORTS_IQR:
           return permission.reportIQR;
-        case MENU_KEY.REPORT_PROGRAM_POINT:
+        case MENU_KEY.REPORTS_POINT:
           return permission.reportProgramPoint;
-        case MENU_KEY.REPORT_PROGRAM_TOPUP:
+        case MENU_KEY.REPORTS_TOPUP:
           return permission.reportProgramTopup;
-        case MENU_KEY.REPORT_CHANCE:
+        case MENU_KEY.REPORTS_CHANCE:
           return permission.reportProgramChance;
-        case MENU_KEY.REPORT_SMS:
+        case MENU_KEY.REPORTS_SMS:
           return permission.reportSMS;
-        case MENU_KEY.SETTING_AREA:
+        case MENU_KEY.SETTINGS_AREA:
           return permission.settingArea;
-        case MENU_KEY.SETTING_GROUP_CUSTOMER:
+        case MENU_KEY.SETTINGS_GROUP_CUSTOMER:
           return permission.settingGroupCustomer;
-        case MENU_KEY.SETTING_GROUP_RETAILER:
+        case MENU_KEY.SETTINGS_RETAILER_GROUP:
           return permission.viewRetailerGroup;
         case MENU_KEY.MANAGE_REPORT:
           return (
@@ -273,14 +318,25 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return (
             permission.settingArea ||
             permission.settingGroupCustomer ||
-            permission.viewRetailerGroup
+            permission.viewRetailerGroup ||
+            permission.viewBrand ||
+            permission.viewIndication ||
+            permission.viewFormulation
           );
-
+        case MENU_KEY.SETTINGS_BRAND:
+          return permission.viewBrand;
+        case MENU_KEY.SETTINGS_INDICATION:
+          return permission.viewIndication;
+        case MENU_KEY.SETTINGS_FORMULATION:
+          return permission.viewFormulation;
         case MENU_KEY.SETTING_TITLE:
           if (
             permission.settingArea ||
             permission.settingGroupCustomer ||
-            permission.viewRetailerGroup
+            permission.viewRetailerGroup ||
+            permission.viewBrand ||
+            permission.viewIndication ||
+            permission.viewFormulation
           )
             return true;
           return false;
