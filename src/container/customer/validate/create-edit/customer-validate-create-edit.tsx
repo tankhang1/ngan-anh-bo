@@ -25,8 +25,12 @@ import {
 } from "../../../../redux/api/other/other.api";
 import customerSchema from "../../../../schema/customers.schema";
 import AppWarning from "../../../../components/AppWarning";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
 
 function CustomerValidationCreateEdit() {
+  const { permission } = useSelector((state: RootState) => state.auth);
+
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
@@ -214,49 +218,53 @@ function CustomerValidationCreateEdit() {
                     Trở lại
                   </button>
 
-                  {isCreate === "true" ? (
-                    <AppWarning
-                      onAccept={() => {
-                        handleSubmit();
-                      }}
-                    >
-                      <button
-                        type="button"
-                        className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
-                          isLoadingCreate && "btn-loader"
-                        }`}
-                      >
-                        <span>Thêm mới</span>
-                        {isLoadingCreate && (
-                          <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
-                          </span>
-                        )}
-                      </button>
-                    </AppWarning>
-                  ) : !isEdit ? (
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center`}
-                      onClick={() => setIsEdit(true)}
-                    >
-                      <span>Chỉnh sửa</span>
-                    </button>
-                  ) : (
-                    <AppWarning onAccept={() => handleSubmit()}>
-                      <button
-                        className={`btn btn-purple-light justify-content-center align-items-center ${
-                          isLoadingUpdate && "btn-loader"
-                        }`}
-                      >
-                        <span>Lưu</span>
-                        {isLoadingUpdate && (
-                          <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
-                          </span>
-                        )}
-                      </button>
-                    </AppWarning>
-                  )}
+                  {isCreate === "true"
+                    ? permission.createValidateCustomer && (
+                        <AppWarning
+                          onAccept={() => {
+                            handleSubmit();
+                          }}
+                        >
+                          <button
+                            type="button"
+                            className={`btn  btn-purple-light ms-2 justify-content-center align-items-center ${
+                              isLoadingCreate && "btn-loader"
+                            }`}
+                          >
+                            <span>Thêm mới</span>
+                            {isLoadingCreate && (
+                              <span className="loading">
+                                <i className="ri-loader-2-fill fs-19"></i>
+                              </span>
+                            )}
+                          </button>
+                        </AppWarning>
+                      )
+                    : !isEdit
+                    ? permission.editValidateCustomer && (
+                        <button
+                          className={`btn btn-purple-light justify-content-center align-items-center`}
+                          onClick={() => setIsEdit(true)}
+                        >
+                          <span>Chỉnh sửa</span>
+                        </button>
+                      )
+                    : permission.editValidateCustomer && (
+                        <AppWarning onAccept={() => handleSubmit()}>
+                          <button
+                            className={`btn btn-purple-light justify-content-center align-items-center ${
+                              isLoadingUpdate && "btn-loader"
+                            }`}
+                          >
+                            <span>Lưu</span>
+                            {isLoadingUpdate && (
+                              <span className="loading">
+                                <i className="ri-loader-2-fill fs-19"></i>
+                              </span>
+                            )}
+                          </button>
+                        </AppWarning>
+                      )}
                 </div>
               </Card.Header>
             </Card>

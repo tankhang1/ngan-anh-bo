@@ -281,53 +281,58 @@ function CustomerUnValidationCreateEdit() {
                           </button>
                         </AppWarning>
                       )}
-                      <AppWarning
-                        onAccept={() => {
-                          if (!errors)
-                            toast.showToast("Vui lòng bổ sung thông tin");
-                          else handleUpdateAgent(values);
-                        }}
+                      {permission.editUnValidateCustomer && (
+                        <AppWarning
+                          onAccept={() => {
+                            if (!errors)
+                              toast.showToast("Vui lòng bổ sung thông tin");
+                            else handleUpdateAgent(values);
+                          }}
+                        >
+                          <button
+                            className={`btn  btn-purple-light justify-content-center align-items-center ${
+                              isLoadingUpdate && "btn-loader "
+                            }`}
+                          >
+                            <span>Lưu</span>
+                            {isLoadingUpdate && (
+                              <span className="loading">
+                                <i className="ri-loader-2-fill fs-19"></i>
+                              </span>
+                            )}
+                          </button>
+                        </AppWarning>
+                      )}
+                    </div>
+                  )}
+                  {permission.editUnValidateCustomer &&
+                    !isEdit &&
+                    isCreate !== "true" && (
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center
+                            `}
+                        onClick={() => setIsEdit(true)}
                       >
+                        <span>Chỉnh sửa</span>
+                      </button>
+                    )}
+                  {permission.createUnValidateCustomer &&
+                    isCreate === "true" && (
+                      <AppWarning onAccept={() => handleSubmit()}>
                         <button
-                          className={`btn  btn-purple-light justify-content-center align-items-center ${
-                            isLoadingUpdate && "btn-loader "
+                          className={`btn btn-purple-light justify-content-center align-items-center ${
+                            isLoadingCreate && "btn-loader "
                           }`}
                         >
-                          <span>Lưu</span>
-                          {isLoadingUpdate && (
+                          <span>Thêm mới</span>
+                          {isLoadingCreate && (
                             <span className="loading">
                               <i className="ri-loader-2-fill fs-19"></i>
                             </span>
                           )}
                         </button>
                       </AppWarning>
-                    </div>
-                  )}
-                  {!isEdit && isCreate !== "true" && (
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center
-                          `}
-                      onClick={() => setIsEdit(true)}
-                    >
-                      <span>Chỉnh sửa</span>
-                    </button>
-                  )}
-                  {isCreate === "true" && (
-                    <AppWarning onAccept={() => handleSubmit()}>
-                      <button
-                        className={`btn btn-purple-light justify-content-center align-items-center ${
-                          isLoadingCreate && "btn-loader "
-                        }`}
-                      >
-                        <span>Thêm mới</span>
-                        {isLoadingCreate && (
-                          <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
-                          </span>
-                        )}
-                      </button>
-                    </AppWarning>
-                  )}
+                    )}
                 </div>
               </Card.Header>
             </Card>

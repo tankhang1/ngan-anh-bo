@@ -84,7 +84,7 @@ function SettingIndicationPage() {
                     </Button>
                   </InputGroup>
 
-                  {permission.createSettingGroupCustomer && (
+                  {permission.createIndication && (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}

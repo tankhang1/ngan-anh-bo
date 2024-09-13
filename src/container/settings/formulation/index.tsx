@@ -93,7 +93,7 @@ function SettingFormulationPage() {
                     </Button>
                   </InputGroup>
 
-                  {permission.createSettingGroupCustomer && (
+                  {permission.createFormulation && (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}

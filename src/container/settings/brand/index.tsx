@@ -84,7 +84,7 @@ function SettingBrandPage() {
                     </Button>
                   </InputGroup>
 
-                  {permission.createSettingGroupCustomer && (
+                  {permission.createBrand && (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
