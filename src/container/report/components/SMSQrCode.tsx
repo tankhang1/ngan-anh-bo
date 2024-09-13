@@ -13,22 +13,24 @@ import {
 } from "../../../redux/api/manage/manage.api";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { exportMultipleSheet, fDate } from "../../../hooks";
+import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
 import AppId from "../../../components/common/app-id";
 import { TProductDashboardTable } from "../../../assets/types";
+import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
 function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +format(new Date(), "yyyyMMdd"),
     ed: +format(new Date(), "yyyyMMdd"),
   });
+
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
     st: new Date(),
     ed: new Date(),
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
-
+  const [exportExcel] = useExportSMSMutation();
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
     {
       ...rangDate,
@@ -67,6 +69,15 @@ function SMS_QR_Report() {
       refetchOnMountOrArgChange: true,
     }
   );
+  const handleExportExcel = async () => {
+    await exportExcel({
+      ...rangDate,
+    })
+      .unwrap()
+      .then(async (url) => {
+        if (url) await downloadLink(url);
+      });
+  };
   const mapReport = useMemo(() => {
     const data =
       reportDayByDay?.map((date) => {
@@ -148,7 +159,7 @@ function SMS_QR_Report() {
               className={`btn btn-bd-primary ${
                 isSmallScreen ? "btn-icon" : ""
               }`}
-              onClick={() => {}}
+              onClick={handleExportExcel}
             >
               {isSmallScreen ? (
                 <i className="ti ti-database-export "></i>

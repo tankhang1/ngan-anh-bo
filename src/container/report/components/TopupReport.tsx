@@ -6,10 +6,11 @@ import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { exportMultipleSheet, fNumber } from "../../../hooks";
+import { downloadLink, exportMultipleSheet, fNumber } from "../../../hooks";
 import { useGetReportProgramTopupDetailByTimeQuery } from "../../../redux/api/report/report.api";
 import AppTable from "../../../components/common/table/table";
 import { TProgramTopupDetail } from "../../../assets/types";
+import { useExportProgramTopupDetailMutation } from "../../../redux/api/excel/excel.api";
 function TopupReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
@@ -33,7 +34,16 @@ function TopupReport() {
         refetchOnMountOrArgChange: true,
       }
     );
-
+  const [exportExcel] = useExportProgramTopupDetailMutation();
+  const handleExportExcel = async () => {
+    await exportExcel({
+      ...rangDate,
+    })
+      .unwrap()
+      .then(async (url) => {
+        if (url) await downloadLink(url);
+      });
+  };
   const mapProgram = useMemo(() => {
     const topup = lodash.groupBy(
       topups?.map((item) => ({
@@ -112,7 +122,7 @@ function TopupReport() {
               className={`btn btn-bd-primary ${
                 isSmallScreen ? "btn-icon" : ""
               }`}
-              onClick={() => {}}
+              onClick={handleExportExcel}
             >
               {isSmallScreen ? (
                 <i className="ti ti-database-export "></i>

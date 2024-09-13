@@ -8,10 +8,15 @@ import {
   useGetExportDocumentsQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
 import { BaseQuery, TWarehouseDocument } from "../../../assets/types";
-import { exportExcelFile, exportExcelFileWithHeader } from "../../../hooks";
+import {
+  downloadLink,
+  exportExcelFile,
+  exportExcelFileWithHeader,
+} from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useExportWarehouseExportDetailMutation } from "../../../redux/api/excel/excel.api";
 type TSearchItem = {
   label: string;
   value: string;
@@ -46,7 +51,7 @@ const WarehouseExport = () => {
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
   const [page, setPage] = useState(1);
-
+  const [exportExcel] = useExportWarehouseExportDetailMutation();
   const {
     data: exports,
     isLoading: isLoadingExport,
@@ -103,78 +108,17 @@ const WarehouseExport = () => {
       refetchExport();
     }, 200);
   };
-  const handleExportExcel = () => {
+  const handleExportExcel = async () => {
+    console.log("log");
     if (exports)
-      exportExcelFileWithHeader(
-        exports,
-        [
-          {
-            key: "id",
-            label: "ID",
-          },
-          {
-            key: "agent_code",
-            label: "Mã-XK",
-          },
-          {
-            key: "agent_name",
-            label: "Tên Khách Hàng",
-          },
-          {
-            key: "time_export",
-            label: "Thời Gian Xuất Kho",
-          },
-          {
-            key: "address",
-            label: "Địa chỉ",
-          },
-          {
-            key: "note",
-            label: "Ghi Chú",
-          },
-          {
-            key: "total",
-            label: "Tổng số thùng",
-          },
-          {
-            key: "document_code",
-            label: "Số Phiếu Xuất Kho",
-          },
-          {
-            key: "document_code_detail",
-            label: "Chi Tiết Số Phiếu",
-          },
-          {
-            key: "goods_type",
-            label: "Loại Hàng",
-          },
-          {
-            key: "staff_import_code",
-            label: "Mã Nhân Viên NK",
-          },
-          {
-            key: "staff_import_name",
-            label: "Tên Nhân Viên NK",
-          },
-          {
-            key: "staff_export_code",
-            label: "Mã Nhân Viên XK",
-          },
-          {
-            key: "staff_export_name",
-            label: "Tên Nhân Viên XK",
-          },
-          {
-            key: "receiver",
-            label: "Tên Người Nhận",
-          },
-          {
-            key: "work_center_export_code",
-            label: "Nhà Xưởng",
-          },
-        ],
-        "Thông tin xuất kho"
-      );
+      await exportExcel({
+        st: query?.st,
+        ed: query?.ed,
+        type: query?.type ?? "ALL",
+      }).then(async (url) => {
+        // await downloadLink(url.data)
+        console.log(url);
+      });
   };
 
   return (

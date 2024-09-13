@@ -15,6 +15,7 @@ import { settingApi } from "./api/setting/setting.api";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import { warehouseApi } from "./api/warehouse/warehouse.api";
+import { excelApi } from "./api/excel/excel.api";
 
 const persistConfig = {
   key: "root",
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   [accountApi.reducerPath]: accountApi.reducer,
   [settingApi.reducerPath]: settingApi.reducer,
   [warehouseApi.reducerPath]: warehouseApi.reducer,
+  [excelApi.reducerPath]: excelApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -59,7 +61,8 @@ const store = configureStore({
       .concat(reportApi.middleware)
       .concat(accountApi.middleware)
       .concat(settingApi.middleware)
-      .concat(warehouseApi.middleware),
+      .concat(warehouseApi.middleware)
+      .concat(excelApi.middleware),
 });
 
 export default store;

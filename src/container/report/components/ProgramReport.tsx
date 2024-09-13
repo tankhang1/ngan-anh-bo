@@ -7,17 +7,19 @@ import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { exportMultipleSheet, fNumber } from "../../../hooks";
+import { downloadLink, exportMultipleSheet, fNumber } from "../../../hooks";
 import { useGetReportProgramPointDetailByTimeQuery } from "../../../redux/api/report/report.api";
 import AppTable from "../../../components/common/table/table";
 import { TProgramPointDetail } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
+import { useExportProgramPointDetailMutation } from "../../../redux/api/excel/excel.api";
 function TopupReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +(format(new Date(), "yyyyMMdd") + "0000"),
     ed: +(format(new Date(), "yyyyMMdd") + "2399"),
   });
+  const [exportExcel] = useExportProgramPointDetailMutation();
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
     st: new Date(),
     ed: new Date(),
@@ -34,7 +36,15 @@ function TopupReport() {
       refetchOnMountOrArgChange: true,
     }
   );
-
+  const handleExportExcel = async () => {
+    await exportExcel({
+      ...rangDate,
+    })
+      .unwrap()
+      .then(async (url) => {
+        if (url) await downloadLink(url);
+      });
+  };
   const mapProgram = useMemo(() => {
     const point = lodash.groupBy(
       points?.map((item) => ({
@@ -113,16 +123,7 @@ function TopupReport() {
               className={`btn btn-bd-primary ${
                 isSmallScreen ? "btn-icon" : ""
               }`}
-              onClick={() => {
-                if (points && points.length > 0) {
-                  exportMultipleSheet([
-                    {
-                      sheetName: "Chương trình điểm",
-                      data: points ?? [],
-                    },
-                  ]);
-                }
-              }}
+              onClick={handleExportExcel}
             >
               {isSmallScreen ? (
                 <i className="ti ti-database-export "></i>

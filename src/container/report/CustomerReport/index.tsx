@@ -13,8 +13,9 @@ import AppTable from "../../../components/common/table/table";
 import { TAgent } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useMediaQuery } from "@mui/material";
-import { exportMultipleSheet, fDate } from "../../../hooks";
+import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import Select from "react-select";
+import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 
 function CustomerReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
@@ -36,6 +37,7 @@ function CustomerReport() {
     ed: new Date(),
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
+  const [exportExcel] = useExportCustomerDataMutation();
   const { data: customer, isFetching } = useGetListCustomerQuery(
     {
       st: +(rangDate.st.toString() + "0000"),
@@ -78,6 +80,16 @@ function CustomerReport() {
       }) || [];
     return data;
   }, [reportDayByDay, listDays]);
+
+  const handleExportExcel = async () => {
+    if (customer) {
+      await exportExcel({ ...rangDate })
+        .unwrap()
+        .then(async (url) => {
+          if (url) await downloadLink(url);
+        });
+    }
+  };
 
   useEffect(() => {
     if (groupObjectives) {
@@ -222,7 +234,7 @@ function CustomerReport() {
               className={`btn btn-bd-primary ${
                 isSmallScreen ? "btn-icon" : ""
               }`}
-              onClick={() => {}}
+              onClick={handleExportExcel}
             >
               {isSmallScreen ? (
                 <i className="ti ti-database-export "></i>

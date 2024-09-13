@@ -16,10 +16,11 @@ import {
   TWarehouseDocumentImport,
   TWarehouseExport,
 } from "../../../assets/types";
-import { exportExcelFile, fDate } from "../../../hooks";
+import { downloadLink, exportExcelFile, fDate } from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useExportWarehouseImportDetailMutation } from "../../../redux/api/excel/excel.api";
 type TSearchItem = {
   label: string;
   value: string;
@@ -46,7 +47,7 @@ const WarehouseImport = () => {
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
   const [page, setPage] = useState(1);
-
+  const [exportExcel] = useExportWarehouseImportDetailMutation();
   const {
     data: imports,
     isLoading: loadingImport,
@@ -102,8 +103,17 @@ const WarehouseImport = () => {
       refetchImport();
     }, 200);
   };
-  const handleExportExcel = () => {
-    if (imports) exportExcelFile(imports, "Thông tin nhập kho");
+  const handleExportExcel = async () => {
+    if (imports)
+      await exportExcel({
+        st: query?.st,
+        ed: query?.ed,
+        type: query?.type ?? "ALL",
+      })
+        .unwrap()
+        .then(async (url) => {
+          if (url) await downloadLink(url);
+        });
   };
 
   return (
