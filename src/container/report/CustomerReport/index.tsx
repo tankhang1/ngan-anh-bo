@@ -41,7 +41,6 @@ function CustomerReport() {
       st: +(rangDate.st.toString() + "0000"),
       ed: +(rangDate.ed.toString() + "2399"),
       t: customerType,
-      s: isValidate ? 1 : 0,
     },
     {
       skipPollingIfUnfocused: true,

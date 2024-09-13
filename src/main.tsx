@@ -59,6 +59,7 @@ import SearchCustomer from "./container/customer/search-customer/index.tsx";
 import SettingBrandPage from "./container/settings/brand/index.tsx";
 import SettingFormulationPage from "./container/settings/formulation/index.tsx";
 import SettingIndicationPage from "./container/settings/indication/index.tsx";
+import SMSGateway from "./container/operator/sms-gateway/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -199,6 +200,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}operator/search-topup-today`}
                 element={<TopupToday />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/sms-gateway`}
+                element={<SMSGateway />}
               />
               <Route
                 path={`${

@@ -47,7 +47,7 @@ export const MENU_KEY = {
   OPERATORS_SEARCH_CUSTOMER_UNVALIDATE_TODAY:
     "OPERATORS_SEARCH_CUSTOMER_UNVALIDATE_TODAY",
   OPERATORS_CUSTOMER_SMS_6088: "OPERATORS_CUSTOMER_SMS_6088",
-  OPERATORS_CUSTOMER_SEND_6088: "OPERATORS_CUSTOMER_SEND_6088",
+  SMS_GATEWAY: "SMS_GATEWAY",
   OPERATORS_LIST_ACHIEVE_TOPUP: "OPERATORS_LIST_ACHIEVE_TOPUP",
   REPORT_PROGRAM_POINT: "REPORT_PROGRAM_POINT",
   REPORT_PROGRAM_TOPUP: "REPORT_PROGRAM_TOPUP",
@@ -184,7 +184,7 @@ export const MENUITEMS = [
       //   key: MENU_KEY.OPERATORS_CUSTOMER_SMS_6088,
       // },
       {
-        path: `${import.meta.env.BASE_URL}operator/customer-achieve-topup`,
+        path: `${import.meta.env.BASE_URL}operator/topup/list`,
         type: "link",
         active: false,
         selected: false,
@@ -193,13 +193,13 @@ export const MENUITEMS = [
         key: MENU_KEY.OPERATORS_LIST_ACHIEVE_TOPUP,
       },
       {
-        path: `${import.meta.env.BASE_URL}operator/customer-send-6068`,
+        path: `${import.meta.env.BASE_URL}operator/sms-gateway`,
         type: "link",
         active: false,
         selected: false,
         dirchange: false,
         title: "SMS Gateway",
-        key: MENU_KEY.OPERATORS_CUSTOMER_SEND_6088,
+        key: MENU_KEY.SMS_GATEWAY,
       },
     ],
   },

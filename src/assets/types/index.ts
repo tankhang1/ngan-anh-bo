@@ -756,3 +756,24 @@ export type TFormulation = {
   code: string;
   name: string;
 };
+
+export type TSMSGateway = {
+  id: number;
+  info: string;
+  phone: string;
+  request_id: string;
+  response: string | null;
+  status: number;
+  time: string;
+  service_id: string;
+  smsc: string;
+  customer_code: string;
+  customer_name: string | null;
+  customer_province_name: string;
+  customer_district_name: string;
+  customer_area: string;
+  code: string;
+  code_hash: string;
+  code_bin_package_item: number;
+  product_name: string;
+};

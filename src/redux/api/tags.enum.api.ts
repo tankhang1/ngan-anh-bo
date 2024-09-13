@@ -27,4 +27,5 @@ export enum TagsEnum {
   BRAND = "BRAND",
   INDICATION = "INDICATION",
   FORMULATION = "FORMULATION",
+  SMS = "SMS",
 }

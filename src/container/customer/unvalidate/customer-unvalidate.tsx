@@ -65,8 +65,7 @@ function CustomerUnValidation() {
       {
         nu: page - 1,
         sz: 10,
-        t: customerType,
-        s: 0,
+        t: "ANONYMOUS",
       },
       {
         refetchOnMountOrArgChange: true,

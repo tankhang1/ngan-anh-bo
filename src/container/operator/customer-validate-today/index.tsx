@@ -65,7 +65,6 @@ function CustomerValidateToday() {
         nu: page - 1,
         sz: 10,
         t: customerType,
-        s: 1,
       },
       {
         refetchOnMountOrArgChange: true,

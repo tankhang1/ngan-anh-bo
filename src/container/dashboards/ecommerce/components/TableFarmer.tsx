@@ -15,7 +15,6 @@ function TableFarmer() {
         st: +(format(new Date(), "yyyyMMdd") + "0000"),
         ed: +(format(new Date(), "yyyyMMdd") + "2399"),
         t: "ANONYMOUS",
-        s: 0,
       },
       {
         skipPollingIfUnfocused: true,

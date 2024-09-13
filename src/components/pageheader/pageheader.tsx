@@ -43,6 +43,7 @@ const MapLabel = new Map([
   ["indication", "Quản lý nhóm thuốc"],
   ["formulation", "Quản lý dạng thuốc"],
   ["search", "Tra cứu"],
+  ["sms-gateway", "SMS Gateway"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

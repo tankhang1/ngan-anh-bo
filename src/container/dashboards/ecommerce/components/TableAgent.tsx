@@ -15,7 +15,6 @@ function TableAgent() {
         st: +(format(new Date(), "yyyyMMdd") + "0000"),
         ed: +(format(new Date(), "yyyyMMdd") + "2399"),
         t: "RETAILER2",
-        s: 1,
       },
       {
         skipPollingIfUnfocused: true,

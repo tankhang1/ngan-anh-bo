@@ -21,6 +21,7 @@ import {
   TBrand,
   TIndication,
   TFormulation,
+  TSMSGateway,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TPermit } from "../../slices/authSlice";
@@ -84,6 +85,7 @@ export const manageApi = createApi({
     TagsEnum.BRAND,
     TagsEnum.INDICATION,
     TagsEnum.FORMULATION,
+    TagsEnum.SMS,
   ],
   endpoints: (builder) => ({
     getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
@@ -529,6 +531,22 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.FORMULATION],
     }),
+    getListSMSGateway: builder.query<TSMSGateway[], void>({
+      query: () => ({
+        url: "/api/report/sms/today",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.SMS as const,
+                id,
+              })),
+              TagsEnum.SMS,
+            ]
+          : [TagsEnum.SMS],
+    }),
   }),
 });
 export const {
@@ -554,4 +572,5 @@ export const {
   useGetListBrandQuery,
   useGetListFormulationQuery,
   useGetListIndicationQuery,
+  useGetListSMSGatewayQuery,
 } = manageApi;

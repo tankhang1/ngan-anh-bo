@@ -64,7 +64,7 @@ function CustomerUnValidateToday() {
         ed: +(format(new Date(), "yyyyMMdd") + "2359"),
         nu: page - 1,
         sz: 10,
-        t: customerType,
+        t: "ANONYMOUS",
         s: 0,
       },
       {

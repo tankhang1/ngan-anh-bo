@@ -44,7 +44,6 @@ function CustomerValidationCreateEdit() {
       t: id?.split("_")[1],
       nu: +(id?.split("_")[2] ?? 0),
       sz: 10,
-      s: 1,
     },
     {
       selectFromResult: ({ data }) => ({
