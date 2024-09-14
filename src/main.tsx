@@ -184,6 +184,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${
                   import.meta.env.BASE_URL
+                }operator/search-customer-unvalidate-today`}
+                element={<CustomerUnValidateToday />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
                 }operator/search-customer-validate-today`}
                 element={<CustomerValidateToday />}
               />

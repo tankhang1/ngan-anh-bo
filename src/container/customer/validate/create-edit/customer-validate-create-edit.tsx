@@ -597,9 +597,7 @@ function CustomerValidationCreateEdit() {
                     </Form.Group>
 
                     <Form.Group className="mb-2">
-                      <Form.Label className="text-black">
-                        Giấy phép <span style={{ color: "red" }}>*</span>
-                      </Form.Label>
+                      <Form.Label className="text-black">Giấy phép</Form.Label>
                       <Form.Control
                         required
                         type="text"
