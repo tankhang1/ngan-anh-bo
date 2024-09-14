@@ -140,6 +140,15 @@ function SMSGateway() {
                 ),
               },
               {
+                key: "phone",
+                label: "Số điện thoại",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.phone}</span>
+                  </td>
+                ),
+              },
+              {
                 key: "customer_province_name",
                 label: "Tỉnh thành",
                 render: (value) => (

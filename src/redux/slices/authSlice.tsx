@@ -688,6 +688,7 @@ const authSlice = createSlice({
       };
       action.payload.roles_permission.forEach((item) => {
         const parseValue = onPermissionFeature(item);
+
         if (parseValue) {
           //@ts-ignore
           permission = {

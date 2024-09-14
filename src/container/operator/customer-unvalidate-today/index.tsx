@@ -10,6 +10,7 @@ import {
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
+import { useVerifyCustomerMutation } from "../../../redux/api/other/other.api";
 
 const AGENT_FILTERS = [
   {
@@ -37,6 +38,7 @@ function CustomerUnValidateToday() {
     groupObjectives?.[0].symbol || ""
   );
   const [page, setPage] = useState(1);
+
   const navigate = useNavigate();
 
   const onChangeCustomerType = (type: string) => {
