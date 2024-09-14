@@ -305,11 +305,11 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "PRODUCTS_MARKETING_INFO": {
       return {
-        viewProductsInfo: permission.permit_view_detail,
-        viewListProductsInfo: permission.permit_view_list,
-        createProductInfo: permission.permit_create,
-        exportProductInfo: permission.permit_export,
-        editProductInfo: permission.permit_edit,
+        viewProductsMarketingInfo: permission.permit_view_detail,
+        viewListProductsMarketingInfo: permission.permit_view_list,
+        createProductMarketingInfo: permission.permit_create,
+        exportProductMarketingInfo: permission.permit_export,
+        editProductMarketingInfo: permission.permit_edit,
       };
     }
     case "PRODUCTS_PRODUCTION_INFO": {

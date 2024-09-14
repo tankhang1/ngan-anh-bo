@@ -174,7 +174,7 @@ function ProductInfoPage() {
                       </Dropdown.Menu>
                     </Dropdown>
                   </OverlayTrigger>
-                  {permission.createProductInfo ? (
+                  {permission.createProductMarketingInfo ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
@@ -193,7 +193,7 @@ function ProductInfoPage() {
                       </Button>
                     </OverlayTrigger>
                   ) : null}
-                  {permission.exportProductInfo ? (
+                  {permission.exportProductMarketingInfo ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -329,7 +329,7 @@ function ProductInfoPage() {
                 label: "Quy cách đóng gói",
                 render: (value) => <td>{value.pack_configuration}</td>,
               },
-              permission.editProductInfo
+              permission.editProductMarketingInfo
                 ? {
                     key: "",
                     label: "Chức năng",
