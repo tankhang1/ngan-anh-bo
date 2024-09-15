@@ -5,6 +5,8 @@ import {
   TProductForm,
   TIngredient,
   TProductCreateForm,
+  BASE_RES,
+  TIngredientPacking,
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
@@ -19,7 +21,12 @@ export enum ProductEnum {
 export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: baseQueryWithReauth,
-  tagTypes: [TagsEnum.PRODUCTS, TagsEnum.DEVICES, TagsEnum.INGREDIENTS],
+  tagTypes: [
+    TagsEnum.PRODUCTS,
+    TagsEnum.DEVICES,
+    TagsEnum.INGREDIENTS,
+    TagsEnum.INGREDIENTS_PACKING,
+  ],
   endpoints: (builder) => ({
     getNewProductCode: builder.query<string, void | null>({
       query: () => ({
@@ -105,6 +112,50 @@ export const productApi = createApi({
         { type: TagsEnum.PRODUCTS as const, id: arg.id! },
       ],
     }),
+    createIngredient: builder.mutation<
+      BASE_RES,
+      Omit<
+        TIngredient,
+        | "id"
+        | "code"
+        | "code_old"
+        | "product_line"
+        | "product_line_name"
+        | "brand_name"
+      >
+    >({
+      query: (body) => ({
+        url: "/product/ingredient/create",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.INGREDIENTS],
+    }),
+    updateIngredientByCode: builder.mutation<
+      BASE_RES,
+      Omit<
+        TIngredient,
+        "id" | "code_old" | "product_line" | "product_line_name" | "brand_name"
+      >
+    >({
+      query: (body) => ({
+        url: "/product/ingredient/create",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.INGREDIENTS],
+    }),
+    importIngredientPacking: builder.mutation<
+      BASE_RES,
+      Omit<TIngredientPacking, "id">
+    >({
+      query: (body) => ({
+        url: "/product/ingredient-package/import",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.INGREDIENTS_PACKING],
+    }),
   }),
 });
 
@@ -115,4 +166,7 @@ export const {
   useCreateProductMutation,
   useUpdateProductByMarketingMutation,
   useUpdateProductByWarehouseMutation,
+  useCreateIngredientMutation,
+  useImportIngredientPackingMutation,
+  useUpdateIngredientByCodeMutation,
 } = productApi;

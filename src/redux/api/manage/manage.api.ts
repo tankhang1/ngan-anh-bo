@@ -22,44 +22,13 @@ import {
   TIndication,
   TFormulation,
   TSMSGateway,
+  TIngredient,
+  TMaterial,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TPermit } from "../../slices/authSlice";
 import { TagsEnum } from "../tags.enum.api";
-export enum ManageEnum {
-  AGENTS = "AGENTS",
-  AGENTS_STATUS = "AGENTS_STATUS",
-  FARMERS = "FARMERS",
-  FARMERS_STATUS = "FARMER_STATUS",
-  BRANDNAMES = "BRANDNAMES",
-  COUNTER_BRANDNAME = "COUNTER_BRANDNAME",
-  COUNTER_BIN = "COUNTER_BIN",
-  COUNTER_TOPUP = "COUNTER_TOPUP",
-  COUNTER_FARMER = "COUNTER_FARMER",
-  COUNTER_FARMER_STATUS = "COUNTER_FARMER_STATUS",
-  COUNTER_AGENT_STATUS = "COUNTER_AGENT_STATUS",
-  COUNTER_BIN_GATEWAY = "COUNTER_BIN_GATEWAY",
-  COUNTER_PACKET_GATEWAY = "COUNTER_PACKET_GATEWAY",
-  COUNTER_AGENT = "COUNTER_AGENT",
-  COUNTER_PACKET = "COUNTER_PACKET",
-  BINS = "BINS",
-  BIN = "BIN",
-  PACKETS = "PACKETS",
-  TOPUPS = "TOPUPS",
-  LIST_AGENCY_C1 = "LIST_AGENCY_C1",
-  REPORT_DASHBOARD_DAY = "REPORT_DASHBOARD_DAY",
-  REPORT_DASHBOARD_DAY_BY_DAY = "REPORT_DASHBOARD_DAY_BY_DAY",
-  CUSTOMER_REGISTER = "CUSTOMER_REGISTER",
-  CUSTOMER = "CUSTOMER",
-  COUNTER_CUSTOMER_REGISTER = "COUNTER_CUSTOMER_REGISTER",
-  COUNTER_CUSTOMER = "COUNTER_CUSTOMER",
-  LIST_GROUP_OBJECTIVE = "LIST_GROUP_OBJECTIVE",
-  EMPLOYEE = "EMPLOYEE",
-  EMPLOYEE_ROLE = "EMPLOYEE_ROLE",
-  ROLE_PERMISSION = "ROLE_PERMISSION",
-  EMPLOYEE_DEPARTMENT = "EMPLOYEE_DEPARTMENT",
-  GROUP_RETAILER = "GROUP_RETAILER",
-}
+
 export const manageApi = createApi({
   reducerPath: "manageApi",
   baseQuery: fetchBaseQuery({
@@ -86,6 +55,7 @@ export const manageApi = createApi({
     TagsEnum.INDICATION,
     TagsEnum.FORMULATION,
     TagsEnum.SMS,
+    TagsEnum.MATERIAL,
   ],
   endpoints: (builder) => ({
     getListBrandnames: builder.query<TGetListBrandnamesRes, BaseQuery>({
@@ -457,6 +427,22 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.SMS],
     }),
+    getListMaterial: builder.query<TMaterial[], void>({
+      query: () => ({
+        url: "/api/product/material/all",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.MATERIAL as const,
+                id,
+              })),
+              TagsEnum.MATERIAL,
+            ]
+          : [TagsEnum.MATERIAL],
+    }),
   }),
 });
 export const {
@@ -479,4 +465,5 @@ export const {
   useGetListFormulationQuery,
   useGetListIndicationQuery,
   useGetListSMSGatewayQuery,
+  useGetListMaterialQuery,
 } = manageApi;

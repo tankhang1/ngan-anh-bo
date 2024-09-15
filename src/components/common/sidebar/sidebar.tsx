@@ -340,6 +340,12 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           )
             return true;
           return false;
+        case MENU_KEY.WAREHOUSES_MATERIAL:
+          return (
+            permission.viewWarehouseReportIngredient ||
+            permission.viewMaterialWarehouse ||
+            permission.viewListMaterialWarehouse
+          );
         default:
           return true;
       }

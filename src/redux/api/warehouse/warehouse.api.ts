@@ -1,15 +1,16 @@
 import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
 import {
   BaseQuery,
+  TIngredient,
+  TIngredientPacking,
   TWarehouseDocument,
   TWarehouseDocumentImport,
   TWarehouseExport,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import store from "../../store";
-export enum WarehouseEnum {
-  EXPORT_DETAIL = "EXPORT_DETAIL",
-}
+import { TagsEnum } from "../tags.enum.api";
+
 export const warehouseApi = createApi({
   reducerPath: "warehouseApi",
   baseQuery: fetchBaseQuery({
@@ -22,7 +23,7 @@ export const warehouseApi = createApi({
       return;
     },
   }),
-  tagTypes: [WarehouseEnum.EXPORT_DETAIL],
+  tagTypes: [TagsEnum.INGREDIENTS, TagsEnum.INGREDIENTS_PACKING],
   endpoints: (builder) => ({
     getExportDetail: builder.query<TWarehouseExport[], BaseQuery>({
       query: (params) => ({
@@ -88,6 +89,74 @@ export const warehouseApi = createApi({
         params: params,
       }),
     }),
+    getListIngredientAll: builder.query<TIngredient[], void>({
+      query: () => ({
+        url: "/warehouse/ingredient/all",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.INGREDIENTS as const,
+                id,
+              })),
+              TagsEnum.INGREDIENTS,
+            ]
+          : [TagsEnum.INGREDIENTS],
+    }),
+    getListIngredientPacking: builder.query<TIngredientPacking[], void>({
+      query: () => ({
+        url: "/warehouse/ingredient-packing/all",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.INGREDIENTS_PACKING as const,
+                id,
+              })),
+              TagsEnum.INGREDIENTS_PACKING,
+            ]
+          : [TagsEnum.INGREDIENTS_PACKING],
+    }),
+    getIngredientByCode: builder.query<TIngredient, { code: string }>({
+      query: (params) => ({
+        url: "/warehouse/ingredient/detail",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (result, error, arg) => [
+        { type: TagsEnum.INGREDIENTS as const, id: result?.id },
+      ],
+    }),
+    getIngredientPackingByShipmentCode: builder.query<
+      TIngredient,
+      { code: string }
+    >({
+      query: (params) => ({
+        url: "/warehouse/ingredient-packing/detail",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (result, error, arg) => [
+        { type: TagsEnum.INGREDIENTS as const, id: result?.id },
+      ],
+    }),
+    getIngredientPackingByIngredientCode: builder.query<
+      TIngredient,
+      { code: string }
+    >({
+      query: (params) => ({
+        url: "/warehouse/ingredient-packing/ingredient",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (result, error, arg) => [
+        { type: TagsEnum.INGREDIENTS as const, id: result?.id },
+      ],
+    }),
   }),
 });
 
@@ -101,4 +170,9 @@ export const {
   useGetImportByDocumentQuery,
   useGetExportDocumentsQuery,
   useGetImportDocumentsQuery,
+  useGetIngredientByCodeQuery,
+  useGetListIngredientAllQuery,
+  useGetIngredientPackingByIngredientCodeQuery,
+  useGetIngredientPackingByShipmentCodeQuery,
+  useGetListIngredientPackingQuery,
 } = warehouseApi;

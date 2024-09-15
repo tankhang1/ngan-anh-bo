@@ -383,6 +383,23 @@ export type TIngredient = {
   brand_name: string;
   ingredient: string;
   certificate_of_origin: string;
+  material: string;
+  product_indication: string;
+};
+export type TIngredientPacking = {
+  id: number;
+  shipment_code: string;
+  ingredient_code: string;
+  ingredient_name: string;
+  packing: string;
+  weight: number;
+  unit: string;
+  manufacture_date: number; // YYYYMMDD format
+  expiration_date: number; // YYYYMMDD format
+  expiry: number; // In months
+  orgin: string; // "origin" might be a typo in your data, correct if needed
+  import_date: string; // YYYYMMDD format
+  note: string | null;
 };
 export type TProvince = {
   id: string;
@@ -744,6 +761,12 @@ export type TWarehouseDocumentImport = {
 };
 
 export type TBrand = {
+  id: number;
+  code: string;
+  name: string;
+};
+
+export type TMaterial = {
   id: number;
   code: string;
   name: string;

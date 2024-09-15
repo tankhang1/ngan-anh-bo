@@ -45,6 +45,7 @@ const MapLabel = new Map([
   ["search", "Tra cứu"],
   ["sms-gateway", "SMS Gateway"],
   ["iqr-today", "iQr hôm nay"],
+  ["material-create", "Thêm mới mã vật tư"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

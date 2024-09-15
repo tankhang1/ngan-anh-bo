@@ -61,6 +61,7 @@ import SettingFormulationPage from "./container/settings/formulation/index.tsx";
 import SettingIndicationPage from "./container/settings/indication/index.tsx";
 import SMSGateway from "./container/operator/sms-gateway/index.tsx";
 import IQRToday from "./container/operator/iqr/index.tsx";
+import CreateMaterialWarehouse from "./container/warehouse/material/create/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -109,6 +110,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }warehouse/import/search-warehouse-import`}
                 element={<SearchWarehouseImport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}warehouse/material-create`}
+                element={<CreateMaterialWarehouse />}
               />
               <Route
                 path={`${
