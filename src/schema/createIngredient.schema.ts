@@ -16,7 +16,6 @@ const createIngredientSchema = Yup.object().shape({
     "Vui lòng nhập giấy chứng nhận xuất xứ"
   ), // Required string
   material: Yup.string().required("Vui lòng nhập mã vật liệu"), // Required string for material code
-  unit: Yup.string().required("Vui lòng nhập đơn vị (lít/kg)"), // Required string for unit
 });
 
 export default createIngredientSchema;

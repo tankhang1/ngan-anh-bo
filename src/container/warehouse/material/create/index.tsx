@@ -61,7 +61,6 @@ const CreateMaterialWarehouse = () => {
           ingredient: "",
           certificate_of_origin: "",
           material: "", // material code
-          unit: "", // Đơn vị : lít/ kg
         }}
         onSubmit={onHandleCreateIngredient}
         enableReinitialize
@@ -284,34 +283,7 @@ const CreateMaterialWarehouse = () => {
                       {errors.packing}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="text-black">
-                      Đơn vị tính
-                      <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <Form.Select
-                      className="form-select input-placeholder"
-                      id="unit_validate"
-                      name="unit"
-                      defaultValue={values.unit}
-                      onChange={handleChange}
-                      isInvalid={touched.unit && !!errors.unit}
-                      required
-                    >
-                      {[
-                        { value: "", label: "Chọn đơn vị tính" },
-                        { value: "Kg", label: "Kilogram" },
-                        { value: "Lt", label: "Lit" },
-                      ].map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.unit}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+
                   <Form.Group>
                     <Form.Label className="text-black">
                       Khối lượng (kg/lt)

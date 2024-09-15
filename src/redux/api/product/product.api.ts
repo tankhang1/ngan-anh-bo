@@ -139,7 +139,7 @@ export const productApi = createApi({
       >
     >({
       query: (body) => ({
-        url: "/product/ingredient/create",
+        url: "/product/ingredient/update",
         method: HTTPS_METHOD.POST,
         body,
       }),

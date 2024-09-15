@@ -346,6 +346,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.viewMaterialWarehouse ||
             permission.viewListMaterialWarehouse
           );
+        case MENU_KEY.WAREHOUSES_REPORT_INGREDIENT:
+          return permission.viewWarehouseReportIngredient;
         default:
           return true;
       }

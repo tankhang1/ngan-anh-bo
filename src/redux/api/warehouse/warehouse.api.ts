@@ -91,7 +91,7 @@ export const warehouseApi = createApi({
     }),
     getListIngredientAll: builder.query<TIngredient[], void>({
       query: () => ({
-        url: "/warehouse/ingredient/all",
+        url: "/ingredient/all",
         method: HTTPS_METHOD.GET,
       }),
       providesTags: (results) =>
@@ -107,7 +107,7 @@ export const warehouseApi = createApi({
     }),
     getListIngredientPacking: builder.query<TIngredientPacking[], void>({
       query: () => ({
-        url: "/warehouse/ingredient-packing/all",
+        url: "/ingredient-packing/all",
         method: HTTPS_METHOD.GET,
       }),
       providesTags: (results) =>
@@ -123,7 +123,7 @@ export const warehouseApi = createApi({
     }),
     getIngredientByCode: builder.query<TIngredient, { code: string }>({
       query: (params) => ({
-        url: "/warehouse/ingredient/detail",
+        url: "/ingredient/detail",
         method: HTTPS_METHOD.GET,
         params,
       }),
@@ -136,7 +136,7 @@ export const warehouseApi = createApi({
       { code: string }
     >({
       query: (params) => ({
-        url: "/warehouse/ingredient-packing/detail",
+        url: "/ingredient-packing/detail",
         method: HTTPS_METHOD.GET,
         params,
       }),
@@ -149,7 +149,7 @@ export const warehouseApi = createApi({
       { code: string }
     >({
       query: (params) => ({
-        url: "/warehouse/ingredient-packing/ingredient",
+        url: "/ingredient-packing/ingredient",
         method: HTTPS_METHOD.GET,
         params,
       }),

@@ -76,6 +76,7 @@ export const MENU_KEY = {
   WAREHOUSES_REPORT_EXPORT: "WAREHOUSES_REPORT_EXPORT",
   WAREHOUSES_REPORT_RETURN: "WAREHOUSES_REPORT_RETURN",
   WAREHOUSES_REPORT_INGREDIENT: "WAREHOUSES_REPORT_INGREDIENT",
+  WAREHOUSES_REPORT_INGREDIENT_PACKING: "WAREHOUSES_REPORT_INGREDIENT_PACKING",
 };
 
 export const MENUITEMS = [
@@ -385,8 +386,19 @@ export const MENUITEMS = [
             active: false,
             selected: false,
             dirchange: false,
-            title: "Báo cáo nguyên liệu",
+            title: "Danh sách vật tư",
             key: MENU_KEY.WAREHOUSES_REPORT_INGREDIENT,
+          },
+          {
+            path: `${
+              import.meta.env.BASE_URL
+            }warehouse/report-material-packing`,
+            type: "link",
+            active: false,
+            selected: false,
+            dirchange: false,
+            title: "Danh sách nguyên vật liệu",
+            key: MENU_KEY.WAREHOUSES_REPORT_INGREDIENT_PACKING,
           },
         ],
       },

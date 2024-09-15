@@ -63,6 +63,9 @@ import SMSGateway from "./container/operator/sms-gateway/index.tsx";
 import IQRToday from "./container/operator/iqr/index.tsx";
 import CreateMaterialWarehouse from "./container/warehouse/material/create/index.tsx";
 import FillMaterialWarehouse from "./container/warehouse/material/fill/index.tsx";
+import ManageMaterial from "./container/warehouse/material/manage/manage-material.tsx";
+import ManageMaterialUpdate from "./container/warehouse/material/manage/update/manage-material-update.tsx";
+import ManageMaterialPacking from "./container/warehouse/material/manage/mange-material-packing.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -119,6 +122,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}warehouse/material-fill`}
                 element={<FillMaterialWarehouse />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}warehouse/report-material`}
+                element={<ManageMaterial />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/report-material-packing`}
+                element={<ManageMaterialPacking />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/report-material/update/:code`}
+                element={<ManageMaterialUpdate />}
               />
               <Route
                 path={`${

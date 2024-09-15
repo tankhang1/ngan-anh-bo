@@ -47,6 +47,8 @@ const MapLabel = new Map([
   ["iqr-today", "iQr hôm nay"],
   ["material-create", "Thêm mới mã vật tư"],
   ["material-fill", "Nhập nguyên vật liệu"],
+  ["report-material", "Danh sách vật tư"],
+  ["report-material-packing", "Danh sách nguyên vật liệu"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();
