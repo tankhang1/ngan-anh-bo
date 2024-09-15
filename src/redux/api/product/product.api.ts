@@ -147,7 +147,7 @@ export const productApi = createApi({
     }),
     importIngredientPacking: builder.mutation<
       BASE_RES,
-      Omit<TIngredientPacking, "id">
+      Omit<TIngredientPacking, "id" | "ingredient_name">
     >({
       query: (body) => ({
         url: "/product/ingredient-package/import",

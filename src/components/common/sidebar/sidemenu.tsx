@@ -61,6 +61,7 @@ export const MENU_KEY = {
   SETTINGS_INDICATION: "SETTINGS_INDICATION",
   SETTINGS_FORMULATION: "SETTINGS_FORMULATION",
   WAREHOUSES_CREATE_MATERIAL: "WAREHOUSES_CREATE_MATERIAL",
+  WAREHOUSES_FILL_MATERIAL: "WAREHOUSES_FILL_MATERIAL",
   WAREHOUSES_MATERIAL: "WAREHOUSES_MATERIAL",
   WAREHOUSES_SEARCH_BATCH_NUMBER: "WAREHOUSES_SEARCH_BATCH_NUMBER",
   WAREHOUSES_SEARCH_RETAILER_1: "WAREHOUSES_SEARCH_RETAILER_1",
@@ -368,6 +369,15 @@ export const MENUITEMS = [
             dirchange: false,
             title: "Tạo mã",
             key: MENU_KEY.WAREHOUSES_CREATE_MATERIAL,
+          },
+          {
+            path: `${import.meta.env.BASE_URL}warehouse/material-fill`,
+            type: "link",
+            active: false,
+            selected: false,
+            dirchange: false,
+            title: "Nhập nguyên vật liệu",
+            key: MENU_KEY.WAREHOUSES_FILL_MATERIAL,
           },
           {
             path: `${import.meta.env.BASE_URL}warehouse/report-material`,

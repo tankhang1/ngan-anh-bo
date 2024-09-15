@@ -124,7 +124,7 @@ const CreateMaterialWarehouse = () => {
                     >
                       <option value={""}>Chọn loại vật tư</option>
                       {listMaterial?.map((material) => (
-                        <option value={material.code}>
+                        <option value={material.code} key={material.code}>
                           {material.name} ({material.code})
                         </option>
                       ))}
@@ -183,7 +183,7 @@ const CreateMaterialWarehouse = () => {
                     >
                       <option value={""}>Chọn tên thương hiệu</option>
                       {listBrand?.map((brand) => (
-                        <option value={brand.code}>
+                        <option value={brand.code} key={brand.code}>
                           {brand.name} ({brand.code})
                         </option>
                       ))}
@@ -211,7 +211,7 @@ const CreateMaterialWarehouse = () => {
                     >
                       <option value={""}>Chọn nhóm thuốc </option>
                       {listIndication?.map((indication) => (
-                        <option value={indication.code}>
+                        <option value={indication.code} key={indication.code}>
                           {indication.name} ({indication.code})
                         </option>
                       ))}
@@ -236,7 +236,7 @@ const CreateMaterialWarehouse = () => {
                     >
                       <option value={""}>Chọn dạng thuốc</option>
                       {listFormulation?.map((formulation) => (
-                        <option value={formulation.code}>
+                        <option value={formulation.code} key={formulation.code}>
                           {formulation.name} ({formulation.code})
                         </option>
                       ))}
@@ -320,6 +320,7 @@ const CreateMaterialWarehouse = () => {
                     <Form.Control
                       required
                       type="number"
+                      min={0}
                       name="weight"
                       defaultValue={values.weight}
                       onChange={handleChange}
@@ -338,7 +339,7 @@ const CreateMaterialWarehouse = () => {
                     </Form.Label>
                     <Form.Select
                       className="form-select input-placeholder"
-                      name="formulation"
+                      name="certificate_of_origin"
                       defaultValue={values.certificate_of_origin}
                       onChange={(e) =>
                         setFieldValue("certificate_of_origin", e.target.value)
