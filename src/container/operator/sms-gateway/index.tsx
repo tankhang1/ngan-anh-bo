@@ -1,5 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Form,
+  InputGroup,
+} from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes, TSMSGateway } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
@@ -117,6 +125,15 @@ function SMSGateway() {
                 ),
               },
               {
+                key: "info",
+                label: "Nội dung tin nhắn",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.info}</span>
+                  </td>
+                ),
+              },
+              {
                 key: "code",
                 label: "Mã iQR",
                 render: (value: TSMSGateway) => <td>{value.code}</td>,
@@ -136,6 +153,19 @@ function SMSGateway() {
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.customer_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "customer_code",
+                label: "Trạng thái",
+                render: (value) => (
+                  <td>
+                    {!!value.customer_code ? (
+                      <Badge bg="success">Đã xác thực</Badge>
+                    ) : (
+                      <Badge bg="warning">Chờ xác thực </Badge>
+                    )}
                   </td>
                 ),
               },
@@ -179,6 +209,7 @@ function SMSGateway() {
                   </td>
                 ),
               },
+
               {
                 key: "time",
                 label: "Thời gian nhắn tin",
