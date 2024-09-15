@@ -23,14 +23,9 @@ import {
 } from "../../../../redux/api/other/other.api";
 import {
   useGetListAgencyC1Query,
-  useGetListAgentsQuery,
-  useGetListCustomerQuery,
   useGetListGroupRetailerQuery,
 } from "../../../../redux/api/manage/manage.api";
-import {
-  useGetListProgramPointByTimeQuery,
-  useGetListProgramPointStatusQuery,
-} from "../../../../redux/api/program/program.api";
+import { useGetListProgramPointStatusQuery } from "../../../../redux/api/program/program.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 import pointProgramSchema from "../../../../schema/pointProgram.schema";

@@ -14,39 +14,29 @@ const baseQueryWithReauth: BaseQueryFn<
 
   if (result.error && result.error.status === 403) {
     // Token expired or unauthorized, attempt to refresh the token
-    const refreshResult = await baseQuery(
-      {
-        url: "/admin/refresh-token",
-        method: HTTPS_METHOD.POST,
-      },
-      api,
-      extraOptions
-    );
-    console.log(
-      "rebase auth",
-      refreshResult,
-      {
-        url: "/admin/refresh-token",
-        method: HTTPS_METHOD.POST,
-        headers: {
-          Authorization: `Bearer ${store.getState().auth.token}`, // Correct syntax for the Authorization header
+    try {
+      const refreshResult = await baseQuery(
+        {
+          url: "/admin/refresh-token",
+          method: HTTPS_METHOD.POST,
         },
-      },
-      args,
-      api,
-      extraOptions
-    );
-    if (refreshResult.data) {
-      // Assuming the API response contains the new token
-      const newToken = (refreshResult.data as { data: string }).data;
+        api,
+        extraOptions
+      );
+      if (refreshResult.data) {
+        // Assuming the API response contains the new token
+        const newToken = (refreshResult.data as { data: string }).data;
 
-      // Store the new token
-      api.dispatch(resetToken({ token: newToken }));
+        // Store the new token
+        api.dispatch(resetToken({ token: newToken }));
 
-      // Retry the original query with the new token
-      result = await baseQuery(args, api, extraOptions);
-    } else {
-      // Refresh failed, log out the user
+        // Retry the original query with the new token
+        result = await baseQuery(args, api, extraOptions);
+      } else {
+        // Refresh failed, log out the user
+        api.dispatch(resetAccountInfo());
+      }
+    } catch (error) {
       api.dispatch(resetAccountInfo());
     }
   }

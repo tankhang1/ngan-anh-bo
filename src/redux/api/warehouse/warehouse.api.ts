@@ -73,13 +73,7 @@ export const warehouseApi = createApi({
         params: params,
       }),
     }),
-    getImportDetailCounter: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/export/time/document",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-    }),
+
     getExportDocuments: builder.query<TWarehouseDocument[], BaseQuery>({
       query: (params) => ({
         url: "/export/time/document",
@@ -100,7 +94,6 @@ export const warehouseApi = createApi({
 export const {
   useGetExportDetailQuery,
   useGetExportDetailCounterQuery,
-  useGetImportDetailCounterQuery,
   useGetImportDetailQuery,
   useGetExportByDocumentQuery,
   useGetImportByDocumentCounterQuery,

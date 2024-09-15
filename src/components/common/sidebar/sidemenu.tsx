@@ -116,7 +116,7 @@ export const MENUITEMS = [
     key: MENU_KEY.MANAGE_OPERATOR,
     children: [
       {
-        path: `${import.meta.env.BASE_URL}operator/search-customer-today`,
+        path: `${import.meta.env.BASE_URL}operator/iqr-today`,
         type: "link",
         active: false,
         selected: false,

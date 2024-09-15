@@ -32,7 +32,7 @@ const MapLabel = new Map([
   ["customer", "Báo cáo khách hàng"],
   ["search-customer-today", "Khách hàng tham gia trong ngày"],
   ["search-topup-today", "Topup tham gia trong ngày"],
-  ["search-customer-unvalidate-today", "Danh sách khách hàng chưa xác thực"],
+  ["search-customer-unvalidate-today", "Danh sách khách hàng chờ xác thực"],
   ["search-customer-validate-today", "Danh sách khách hàng xác thực"],
   ["info", "Danh sách sản phẩm liên quan tới marketing"],
   ["warehouse", "Danh sách sản phẩm liên quan tới sản xuất"],
@@ -44,6 +44,7 @@ const MapLabel = new Map([
   ["formulation", "Quản lý dạng thuốc"],
   ["search", "Tra cứu"],
   ["sms-gateway", "SMS Gateway"],
+  ["iqr-today", "iQr hôm nay"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

@@ -23,23 +23,9 @@ export const programApi = createApi({
   }),
   tagTypes: [TagsEnum.PROGRAM_TOPUP, TagsEnum.PROGRAM_POINT],
   endpoints: (builder) => ({
-    getCounterProgramTopup: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/program/topup/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-    }),
     getCounterProgramTopupByStatus: builder.query<number, BaseQuery>({
       query: (params) => ({
         url: "/program/topup/status/counter",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-    }),
-    getCounterProgramPoint: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/program/point/counter",
         method: HTTPS_METHOD.GET,
         params: params,
       }),
@@ -51,40 +37,7 @@ export const programApi = createApi({
         params: params,
       }),
     }),
-    getListProgramTopup: builder.query<TProgramTopup[], BaseQuery>({
-      query: (params) => ({
-        url: "/program/topup",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: (response) =>
-        response
-          ? [
-              ...response.map(({ uuid }) => ({
-                type: TagsEnum.PROGRAM_TOPUP as const,
-                uuid,
-              })),
-              TagsEnum.PROGRAM_TOPUP,
-            ]
-          : [TagsEnum.PROGRAM_TOPUP],
-    }),
-    getListProgramPoint: builder.query<TProgramPoint[], BaseQuery>({
-      query: (params) => ({
-        url: "/program/point",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      providesTags: (response) =>
-        response
-          ? [
-              ...response.map(({ uuid }) => ({
-                type: TagsEnum.PROGRAM_POINT as const,
-                uuid,
-              })),
-              TagsEnum.PROGRAM_POINT,
-            ]
-          : [TagsEnum.PROGRAM_POINT],
-    }),
+
     getListProgramPointStatus: builder.query<TProgramPoint[], BaseQuery>({
       query: (params) => ({
         url: "/program/point/status",
@@ -102,38 +55,7 @@ export const programApi = createApi({
             ]
           : [TagsEnum.PROGRAM_POINT],
     }),
-    getListProgramPointByTime: builder.query<TProgramPoint[], void | null>({
-      query: () => ({
-        url: "/program/point",
-        method: HTTPS_METHOD.GET,
-      }),
-      providesTags: (response) =>
-        response
-          ? [
-              ...response.map(({ uuid }) => ({
-                type: TagsEnum.PROGRAM_POINT as const,
-                uuid,
-              })),
-              TagsEnum.PROGRAM_POINT,
-            ]
-          : [TagsEnum.PROGRAM_POINT],
-    }),
-    getListProgramTopupByTime: builder.query<TProgramTopup[], void | null>({
-      query: () => ({
-        url: "/program/topup",
-        method: HTTPS_METHOD.GET,
-      }),
-      providesTags: (response) =>
-        response
-          ? [
-              ...response.map(({ uuid }) => ({
-                type: TagsEnum.PROGRAM_TOPUP as const,
-                uuid,
-              })),
-              TagsEnum.PROGRAM_TOPUP,
-            ]
-          : [TagsEnum.PROGRAM_TOPUP],
-    }),
+
     getListProgramTopupStatus: builder.query<TProgramTopup[], BaseQuery>({
       query: (params) => ({
         url: "/program/topup/status",
@@ -175,12 +97,6 @@ export const programApi = createApi({
 });
 
 export const {
-  useGetCounterProgramTopupQuery,
-  useGetCounterProgramPointQuery,
-  useGetListProgramPointQuery,
-  useGetListProgramTopupQuery,
-  useGetListProgramPointByTimeQuery,
-  useGetListProgramTopupByTimeQuery,
   useGetListProgramPointStatusQuery,
   useGetListProgramTopupStatusQuery,
   useGetCounterProgramPointByStatusQuery,

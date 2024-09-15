@@ -17,10 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
 import {
   useGetCounterProgramPointByStatusQuery,
-  useGetCounterProgramPointQuery,
   useGetListProgramPointStatusQuery,
 } from "../../../redux/api/program/program.api";
-import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 

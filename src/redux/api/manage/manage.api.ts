@@ -88,72 +88,6 @@ export const manageApi = createApi({
     TagsEnum.SMS,
   ],
   endpoints: (builder) => ({
-    getListAgents: builder.query<TGetListAgentsRes, BaseQuery | null>({
-      query: (params) => {
-        if (params === null)
-          return {
-            url: "/api/register/agent/list",
-            method: HTTPS_METHOD.GET,
-          };
-        return {
-          url: "/api/register/agent/list",
-          method: HTTPS_METHOD.GET,
-          params: params,
-        };
-      },
-      transformResponse: (agents: TAgent[], meta, arg) => {
-        const listValidateAgents: TAgent[] = [];
-        const listUnValidateAgents: TAgent[] = [];
-        agents.forEach((agent) => {
-          if (agent.status === 1) listValidateAgents.push(agent);
-          if (agent.status === 0) listUnValidateAgents.push(agent);
-        });
-        return {
-          listValidateAgents,
-          listUnValidateAgents,
-        };
-      },
-      providesTags: (results) =>
-        results
-          ? [
-              ...[
-                ...results.listUnValidateAgents,
-                ...results.listValidateAgents,
-              ].map(({ id }) => ({ type: TagsEnum.AGENTS as const, id })),
-              TagsEnum.AGENTS,
-            ]
-          : [TagsEnum.AGENTS],
-    }),
-
-    getListFarmers: builder.query<TGetListFarmersRes, BaseQuery>({
-      query: (params) => ({
-        url: "/api/register/farmer/list",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
-      transformResponse: (farmers: TFarmer[], meta, arg) => {
-        const listValidateFarmers: TFarmer[] = [];
-        const listUnValidateFarmers: TFarmer[] = [];
-        farmers.forEach((farmer) => {
-          if (farmer.status === 1) listValidateFarmers.push(farmer);
-          if (farmer.status === 0) listUnValidateFarmers.push(farmer);
-        });
-        return {
-          listUnValidateFarmers,
-          listValidateFarmers,
-        };
-      },
-      providesTags: (results) =>
-        results
-          ? [
-              ...[
-                ...results.listUnValidateFarmers,
-                ...results.listValidateFarmers,
-              ].map(({ id }) => ({ type: TagsEnum.FARMERS as const, id })),
-              TagsEnum.FARMERS,
-            ]
-          : [TagsEnum.FARMERS],
-    }),
     getListBrandnames: builder.query<TGetListBrandnamesRes, BaseQuery>({
       query: (params) => ({
         url: "/api/report/brandname",
@@ -170,13 +104,6 @@ export const manageApi = createApi({
               TagsEnum.BRANDNAMES,
             ]
           : [TagsEnum.BRANDNAMES],
-    }),
-    getBin: builder.query<TBin, { val: string }>({
-      query: (params) => ({
-        url: "/api/bin/code",
-        method: HTTPS_METHOD.GET,
-        params: params,
-      }),
     }),
     getTopups: builder.query<TTopup[], BaseQuery>({
       query: (params) => ({
@@ -343,23 +270,6 @@ export const manageApi = createApi({
       }
     ),
 
-    getListCustomerRegister: builder.query<TCustomerRes[], BaseQuery>({
-      query: (params) => ({
-        url: "/api/customer/register/list",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
-      providesTags: (results) =>
-        results
-          ? [
-              ...results.map(({ id }) => ({
-                type: TagsEnum.CUSTOMER_REGISTER as const,
-                id,
-              })),
-              TagsEnum.CUSTOMER_REGISTER,
-            ]
-          : [TagsEnum.CUSTOMER_REGISTER],
-    }),
     getCounterCustomer: builder.query<number, BaseQuery>({
       query: (params) => ({
         url: "/api/customer/counter",
@@ -550,10 +460,7 @@ export const manageApi = createApi({
   }),
 });
 export const {
-  useGetListAgentsQuery,
-  useGetListFarmersQuery,
   useGetListBrandnamesQuery,
-  useGetBinQuery,
   useGetBinsQuery,
   useGetTopupsQuery,
   useGetPacketsQuery,
@@ -561,7 +468,6 @@ export const {
   useGetListAgencyC1Query,
   useGetReportDashboardByDayQuery,
   useGetReportDashboardDayByDayQuery,
-  useGetListCustomerRegisterQuery,
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
   useGetListGroupObjectiveQuery,

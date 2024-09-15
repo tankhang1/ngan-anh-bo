@@ -3,19 +3,11 @@ import { Button, Card, Col, Form, Modal, Stack } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
 import {
-  useGetExportDetailCounterQuery,
-  useGetExportDetailQuery,
   useGetImportByDocumentCounterQuery,
   useGetImportByDocumentQuery,
-  useGetImportDetailCounterQuery,
-  useGetImportDetailQuery,
   useGetImportDocumentsQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
-import {
-  BaseQuery,
-  TWarehouseDocumentImport,
-  TWarehouseExport,
-} from "../../../assets/types";
+import { BaseQuery } from "../../../assets/types";
 import { downloadLink, exportExcelFile, fDate } from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";

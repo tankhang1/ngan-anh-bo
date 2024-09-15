@@ -22,33 +22,6 @@ export const reportApi = createApi({
   }),
 
   endpoints: (builder) => ({
-    getReportProgramPointByTime: builder.query<
-      TPointTableDashboard[],
-      BaseQuery
-    >({
-      query: (params) => ({
-        url: "/api/program/point",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
-    }),
-    getReportProgramTopupByTime: builder.query<
-      TTopupTableDashboard[],
-      BaseQuery
-    >({
-      query: (params) => ({
-        url: "/api/program/topup",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
-    }),
-    getReportProgramTopupDetailCounterByTime: builder.query<number, BaseQuery>({
-      query: (params) => ({
-        url: "/api/program/topup/detail/counter",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
-    }),
     getReportProgramTopupDetailByTime: builder.query<
       TProgramTopupDetail[],
       BaseQuery
@@ -94,16 +67,21 @@ export const reportApi = createApi({
         params: params,
       }),
     }),
+    getReportProgramTopupDetailCounter: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/program/topup/detail/counter",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
   }),
 });
 
 export const {
-  useGetReportProgramPointByTimeQuery,
-  useGetReportProgramTopupByTimeQuery,
   useGetReportProgramTopupDetailByTimeQuery,
-  useGetReportProgramTopupDetailCounterByTimeQuery,
   useGetReportProgramTopupDetailTodayQuery,
   useGetReportProgramPointDetailByTimeQuery,
   useGetReportProgramPointDetailCounterQuery,
   useGetReportProgramPointDetailTodayQuery,
+  useGetReportProgramTopupDetailCounterQuery,
 } = reportApi;

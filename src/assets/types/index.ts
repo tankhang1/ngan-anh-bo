@@ -141,6 +141,8 @@ export type TBin = {
   expiration_date: number;
   customer_code: string;
   customer_name: string | undefined;
+  customer_province_name?: string;
+  customer_province?: string;
   type_use: number; // 0 : Qr Code, 1 : SMS
 };
 export type TProductDashboardTable = Pick<
@@ -431,6 +433,8 @@ export type TPackage = {
   expiration_date: number;
   customer_code: string;
   customer_name: string | undefined;
+  customer_province_name?: string;
+  customer_province?: string;
   type_use: number;
 };
 

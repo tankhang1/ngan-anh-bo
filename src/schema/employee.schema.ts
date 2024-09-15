@@ -9,10 +9,7 @@ const employeeSchema = Yup.object().shape({
       (value) => value && typeof value === "object" && value.value !== undefined
     )
     .required("Trường bắt buộc"),
-  phone: Yup.string()
-    .trim()
-    .matches(/^[0-9]{10,11}$/, "Số điện thoại không đúng theo mẫu 84xxxxxxxxx")
-    .required("Trường bắt buộc"),
+  phone: Yup.string().trim().required("Trường bắt buộc"),
   email: Yup.string().email().required("Trường bắt buộc"),
   gender: Yup.number().required("Trường bắt buộc"),
   citizen_number: Yup.string(),

@@ -2,10 +2,7 @@ import React from "react";
 import AppTable from "../../../../components/common/table/table";
 import { TAgent } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
-import {
-  useGetListCustomerQuery,
-  useGetListFarmersQuery,
-} from "../../../../redux/api/manage/manage.api";
+import { useGetListCustomerQuery } from "../../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 
 function TableFarmer() {

@@ -2,15 +2,11 @@ import React, { useMemo, useState } from "react";
 import { Card, InputGroup } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
-import {
-  useGetListBrandnamesQuery,
-  useGetTopupsQuery,
-} from "../../../redux/api/manage/manage.api";
+import { useGetListBrandnamesQuery } from "../../../redux/api/manage/manage.api";
 import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { useGetListProgramPointQuery } from "../../../redux/api/program/program.api";
 import { exportMultipleSheet } from "../../../hooks";
 function BrandnameReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");

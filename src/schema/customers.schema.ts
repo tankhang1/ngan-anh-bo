@@ -13,10 +13,7 @@ const customerSchema = Yup.object().shape({
 
   info_primary: Yup.number(),
 
-  phone: Yup.string()
-    .required("Số điện thoại là bắt buộc")
-    .matches(/^[0-9]{10,11}$/, "Số điện thoại không hợp lệ"),
-
+  phone: Yup.string().trim().required("Số điện thoại là bắt buộc"),
   sign_board: Yup.string()
     .nullable()
     .when("customer_type", ([customer_type], schema) => {
