@@ -32,6 +32,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import accountSchema from "../../schema/accounts.schema";
 import AppWarning from "../../components/AppWarning";
+import AppSelect from "../../components/AppSelect";
 
 const ACCOUNT_FILTERS = [
   {
@@ -47,7 +48,13 @@ const ACCOUNT_FILTERS = [
     label: "Số điện thoại",
   },
 ];
-
+const MapAccountLabel = new Map([
+  ["[ROLE_MARKETING]", "Marketing"],
+  ["[ROLE_AGENT]", "Hỗ trợ tổng đài"],
+  ["[ROLE_WAREHOUSE]", "Sản xuất và kho"],
+  ["[ROLE_FINANCE]", "Kế toán"],
+  ["[ROLE_DIRECTOR]", "Ban giám đốc"],
+]);
 function Accounts() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
@@ -225,14 +232,21 @@ function Accounts() {
             maxPage={accounts?.length}
             headers={[
               {
-                key: "id",
-                label: "ID",
-                render: (value: TAccount) => (
+                key: "role_list",
+                label: "Vai trò",
+                render: (value) => (
                   <td>
-                    <AppId id={value.id ?? ""} />
+                    <span className="fw-semibold">
+                      {
+                        (value.role_list
+                          ? MapAccountLabel.get(value.role_list as any)
+                          : "") as any
+                      }
+                    </span>
                   </td>
                 ),
               },
+
               {
                 key: "staff_code",
                 label: "Mã nhân viên",
@@ -266,17 +280,7 @@ function Accounts() {
                   </td>
                 ),
               },
-              {
-                key: "role_list",
-                label: "Vai trò",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {value.role_list as any}
-                    </span>
-                  </td>
-                ),
-              },
+
               {
                 key: "created",
                 label: "Thời gian tạo",
@@ -497,22 +501,17 @@ function Accounts() {
                       <Form.Label className="text-black form-required">
                         Tên nhân viên <span style={{ color: "red" }}>*</span>
                       </Form.Label>
-                      <Form.Select
-                        className="form-select"
-                        name="staff_code"
-                        value={values.staff_code}
-                        onChange={(e) =>
-                          setFieldValue("staff_code", e.target.value)
-                        }
-                        isInvalid={touched.staff_code && !!errors.staff_code}
-                        required
-                      >
-                        <option value="">-- Chọn nhân viên --</option>
-                        {employees?.map((item) => (
-                          <option value={item.code}>{item.name}</option>
-                        ))}
-                      </Form.Select>
 
+                      <AppSelect
+                        onChange={(value) => setFieldValue("staff_code", value)}
+                        data={
+                          employees?.map((item) => ({
+                            label: item.name ?? "",
+                            value: item.code ?? "",
+                          })) ?? []
+                        }
+                        placeholder="Chọn nhân viên"
+                      />
                       {!!errors.staff_code && touched.staff_code && (
                         <Form.Control.Feedback type="invalid">
                           {errors.staff_code}
@@ -524,23 +523,22 @@ function Accounts() {
                         Vai trò <span style={{ color: "red" }}>*</span>
                       </Form.Label>
 
-                      <Form.Select
-                        className="form-select"
-                        name="retailer_group"
-                        onChange={(e) => setFieldValue("roles", e.target.value)}
-                        isInvalid={touched.roles && !!errors.roles}
-                        required
-                      >
-                        <option value="">-- Chọn vai trò --</option>
-                        {roles?.map((item) => (
-                          <option key={item.id} value={item.code}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                      <Form.Control.Feedback type="invalid">
-                        {errors.roles as any}
-                      </Form.Control.Feedback>
+                      <AppSelect
+                        onChange={(value) => setFieldValue("roles", value)}
+                        data={
+                          roles?.map((item) => ({
+                            label: item.name ?? "",
+                            value: item.code ?? "",
+                          })) ?? []
+                        }
+                        placeholder="Chọn vai trò"
+                        isInValid={!!errors.roles && touched.roles}
+                      />
+                      {!!errors.roles && touched.roles && (
+                        <Form.Control.Feedback type="invalid">
+                          {errors.roles as any}
+                        </Form.Control.Feedback>
+                      )}
                     </Form.Group>
                   </Stack>
                 </Modal.Body>

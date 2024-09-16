@@ -19,6 +19,8 @@ import {
 } from "../../../redux/api/manage/manage.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { format } from "date-fns";
+import { MapCustomerType } from "../../../constants";
 
 const AGENT_FILTERS = [
   {
@@ -44,7 +46,7 @@ const CUSTOMER_TYPE = [
 function CustomerUnValidation() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
+  const [searchBy, setSearchBy] = useState("phone");
   const deferSearchValue = useDeferredValue(search);
   const [customerType, setCustomerType] = useState(CUSTOMER_TYPE[0].key);
   const [page, setPage] = useState(1);
@@ -90,7 +92,7 @@ function CustomerUnValidation() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Tìm kiếm thông tin"
+                      placeholder="Nhập số điện thoại"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -121,29 +123,6 @@ function CustomerUnValidation() {
                           active={item.key === searchBy}
                           key={index}
                           onClick={() => setSearchBy(item.key)}
-                        >
-                          {item.label}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Dropdown className="ms-2">
-                    <Dropdown.Toggle
-                      variant=""
-                      aria-label="button"
-                      className="btn btn-icon btn-info-light btn-wave no-caret"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i className="ti ti-exchange"></i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {CUSTOMER_TYPE?.map((item, index) => (
-                        <Dropdown.Item
-                          active={item.key === customerType}
-                          key={index}
-                          onClick={() => onChangeCustomerType(item.key)}
                         >
                           {item.label}
                         </Dropdown.Item>
@@ -207,18 +186,9 @@ function CustomerUnValidation() {
             isChange={customerType}
             headers={[
               {
-                key: "id",
-                label: "ID",
-                render: (value: TCustomerRes) => (
-                  <td>
-                    <AppId id={value.id ?? ""} />
-                  </td>
-                ),
-              },
-              {
-                key: "uuid",
-                label: "Mã đăng ký",
-                render: (value: TCustomerRes) => <td>{value.uuid}</td>,
+                key: "customer_code",
+                label: "Mã khách hàng",
+                render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
               },
               {
                 key: "name",
@@ -229,11 +199,28 @@ function CustomerUnValidation() {
                   </td>
                 ),
               },
-
               {
-                key: "province_name",
+                key: "name",
+                label: "Họ và tên",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.customer_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "sign_board",
+                label: "Tên cửa hàng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.sign_board}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "province",
                 label: "Tỉnh thành",
-                render: (value) => <td>{value.province_name}</td>,
+                render: (value) => <td>{value.customer_province_name}</td>,
               },
               {
                 key: "phone",
@@ -241,15 +228,58 @@ function CustomerUnValidation() {
                 render: (value) => <td>{value.phone}</td>,
               },
               {
-                key: "time",
-                label: "Thời gian đăng kí",
-                render: (value) => <td>{value.time}</td>,
+                key: "customer_type",
+                label: "Nhóm khách hàng",
+                render: (value) => (
+                  <td>
+                    {value?.customer_type
+                      ? MapCustomerType.get(value.customer_type)
+                      : ""}
+                  </td>
+                ),
               },
-
               {
                 key: "source_channel_used",
                 label: "Nguồn đăng kí",
                 render: (value) => <td>{value.source_channel_used}</td>,
+              },
+              {
+                key: "time",
+                label: "Thời gian đăng kí",
+                render: (value) => <td>{value.time}</td>,
+              },
+              {
+                key: "time_verify",
+                label: "Thời gian xác thực",
+                render: (value) => (
+                  <td>
+                    {value?.time_verify
+                      ? format(new Date(value.time_verify), "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
+              },
+              {
+                key: "source_channel_used",
+                label: "Nguồn đăng kí",
+                render: (value) => <td>{value.source_channel_used}</td>,
+              },
+              {
+                key: "status",
+                label: "Trạng thái",
+                render: (value) => (
+                  <td>
+                    {value.status === 1 ? (
+                      <span className="bg-success bg-opacity-100 text-white badge ">
+                        Đã xác thực
+                      </span>
+                    ) : (
+                      <span className="bg-warning bg-opacity-100 text-white badge ">
+                        Chờ xác thực
+                      </span>
+                    )}
+                  </td>
+                ),
               },
 
               permission.editUnValidateCustomer

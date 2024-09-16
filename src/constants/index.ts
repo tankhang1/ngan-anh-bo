@@ -76,6 +76,13 @@ const PROVINCES = [
   { label: "Vĩnh Phúc", value: "VPC" },
   { label: "Yên Bái", value: "YBI" },
 ];
+export const MapCustomerType = new Map([
+  ["RETAILER1", "Đại lý cấp 1"],
+  ["RETAILER2", "Đại lý cấp 2"],
+  ["DISTRIBUTOR", "Nhà phân phối"],
+  ["CTV", "Cộng tác viên"],
+  ["FARMER", "Nông dân"],
+]);
 const MAP_PRODUCT_TYPE = new Map([
   [0, "Gói"],
   [1, "Túi"],

@@ -242,7 +242,7 @@ export const manageApi = createApi({
 
     getCounterCustomer: builder.query<number, BaseQuery>({
       query: (params) => ({
-        url: "/api/customer/counter",
+        url: "/api/customer/list/counter",
         method: HTTPS_METHOD.GET,
         params,
       }),

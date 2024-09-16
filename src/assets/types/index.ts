@@ -144,6 +144,7 @@ export type TBin = {
   customer_province_name?: string;
   customer_province?: string;
   type_use: number; // 0 : Qr Code, 1 : SMS
+  point: number;
 };
 export type TProductDashboardTable = Pick<
   TBin,
@@ -453,6 +454,7 @@ export type TPackage = {
   customer_province_name?: string;
   customer_province?: string;
   type_use: number;
+  point: number;
 };
 
 export type TGetListAgentsRes = {
@@ -542,6 +544,7 @@ export type TCustomerRes = {
   source_channel_used?: string;
   source_campaign_code?: string; // ko cần
   retailer_group?: string;
+  retailer_group_name?: string;
   code_hash?: string; // ko cần
   code?: string; // ko cần
   code_item?: number; // ko cần

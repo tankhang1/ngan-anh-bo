@@ -11,6 +11,8 @@ import {
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { useVerifyCustomerMutation } from "../../../redux/api/other/other.api";
+import { MapCustomerType } from "../../../constants";
+import { Checkbox } from "@mui/material";
 
 const AGENT_FILTERS = [
   {
@@ -51,12 +53,10 @@ function CustomerUnValidateToday() {
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
       ed: +(format(new Date(), "yyyyMMdd") + "2359"),
-      t: customerType,
-      s: 0,
+      t: "ANONYMOUS",
     },
     {
       refetchOnMountOrArgChange: true,
-      skip: customerType ? false : true,
     }
   );
   const { data: customers, isLoading: isLoadingCustomer } =
@@ -67,11 +67,9 @@ function CustomerUnValidateToday() {
         nu: page - 1,
         sz: 10,
         t: "ANONYMOUS",
-        s: 0,
       },
       {
         refetchOnMountOrArgChange: true,
-        skip: customerType ? false : true,
       }
     );
 
@@ -131,32 +129,6 @@ function CustomerUnValidateToday() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  <Dropdown className="ms-2">
-                    <Dropdown.Toggle
-                      variant=""
-                      aria-label="button"
-                      className="btn btn-icon btn-info-light btn-wave no-caret"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i className="ti ti-exchange"></i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {groupObjectives?.map((item, index) => (
-                        <Dropdown.Item
-                          active={item.symbol === customerType}
-                          key={index}
-                          onClick={() => {
-                            setSearch("");
-                            onChangeCustomerType(item.symbol);
-                          }}
-                        >
-                          {item.name}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
                 </div>
               </div>
             </div>
@@ -175,15 +147,6 @@ function CustomerUnValidateToday() {
             isChange={customerType}
             headers={[
               {
-                key: "id",
-                label: "ID",
-                render: (value: TCustomerRes) => (
-                  <td>
-                    <AppId id={value.id ?? ""} />
-                  </td>
-                ),
-              },
-              {
                 key: "customer_code",
                 label: "Mã khách hàng",
                 render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
@@ -199,7 +162,7 @@ function CustomerUnValidateToday() {
               },
               {
                 key: "name",
-                label: "Họ và tên khách hàng",
+                label: "Họ và tên",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.customer_name}</span>
@@ -217,13 +180,29 @@ function CustomerUnValidateToday() {
               },
               {
                 key: "province",
-                label: "Tỉnh",
+                label: "Tỉnh thành",
                 render: (value) => <td>{value.customer_province_name}</td>,
               },
               {
                 key: "phone",
                 label: "Số điện thoại",
                 render: (value) => <td>{value.phone}</td>,
+              },
+              {
+                key: "customer_type",
+                label: "Nhóm khách hàng",
+                render: (value) => (
+                  <td>
+                    {value?.customer_type
+                      ? MapCustomerType.get(value.customer_type)
+                      : ""}
+                  </td>
+                ),
+              },
+              {
+                key: "source_channel_used",
+                label: "Nguồn đăng kí",
+                render: (value) => <td>{value.source_channel_used}</td>,
               },
               {
                 key: "time",
@@ -246,6 +225,7 @@ function CustomerUnValidateToday() {
                 label: "Nguồn đăng kí",
                 render: (value) => <td>{value.source_channel_used}</td>,
               },
+
               {
                 key: "status",
                 label: "Trạng thái",

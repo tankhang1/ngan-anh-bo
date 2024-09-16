@@ -483,6 +483,29 @@ function CustomerUnValidationCreateEdit() {
                         {errors.phone}
                       </Form.Control.Feedback>
                     </Form.Group>
+                    <Form.Group as={Col} md={6}>
+                      <Form.Label className="text-black">
+                        Số điện thoại tham gia tích điểm{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <Form.Check
+                        type="switch"
+                        className="form-check-md mb-2 input-placeholder"
+                        disabled={isCreate === "false" && isEdit === false}
+                        checked={values.info_primary === 1 ? true : false}
+                        onChange={(value) =>
+                          setFieldValue(
+                            "info_primary",
+                            value.target.checked ? 1 : 0
+                          )
+                        }
+                        required
+                        name="info_primary"
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.info_primary}
+                      </Form.Control.Feedback>
+                    </Form.Group>
                     <Form.Group className="mb-2">
                       <Form.Label className="text-black">
                         Địa chỉ email
@@ -761,30 +784,6 @@ function CustomerUnValidationCreateEdit() {
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.sign_board}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-
-                    <Form.Group as={Col} md={6}>
-                      <Form.Label className="text-black">
-                        Có tham gia tích điểm không{" "}
-                        <span style={{ color: "red" }}>*</span>
-                      </Form.Label>
-                      <Form.Check
-                        type="switch"
-                        className="input-placeholder"
-                        disabled={isCreate === "false" && isEdit === false}
-                        checked={values.info_primary === 1 ? true : false}
-                        onChange={(value) =>
-                          setFieldValue(
-                            "info_primary",
-                            value.target.checked ? 1 : 0
-                          )
-                        }
-                        required
-                        name="info_primary"
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.info_primary}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Card.Body>

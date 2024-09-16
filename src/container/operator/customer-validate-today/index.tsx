@@ -10,6 +10,8 @@ import {
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
+import { MapCustomerType } from "../../../constants";
+import { Checkbox } from "@mui/material";
 
 const AGENT_FILTERS = [
   {
@@ -33,28 +35,17 @@ function CustomerValidateToday() {
 
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
-  const [customerType, setCustomerType] = useState<string>(
-    groupObjectives?.[0].symbol || ""
-  );
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
-  const onChangeCustomerType = (type: string) => {
-    if (type !== customerType) {
-      setSearch("");
-      setCustomerType(type);
-    }
-  };
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
       ed: +(format(new Date(), "yyyyMMdd") + "2359"),
-      t: customerType,
       s: 1,
     },
     {
       refetchOnMountOrArgChange: true,
-      skip: customerType ? false : true,
     }
   );
   const { data: customers, isLoading: isLoadingCustomer } =
@@ -64,19 +55,13 @@ function CustomerValidateToday() {
         ed: +(format(new Date(), "yyyyMMdd") + "2359"),
         nu: page - 1,
         sz: 10,
-        t: customerType,
+        s: 1,
       },
       {
         refetchOnMountOrArgChange: true,
-        skip: customerType ? false : true,
       }
     );
 
-  useEffect(() => {
-    if (groupObjectives) {
-      setCustomerType(groupObjectives?.[0].symbol);
-    }
-  }, [groupObjectives]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -128,32 +113,6 @@ function CustomerValidateToday() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
-                  <Dropdown className="ms-2">
-                    <Dropdown.Toggle
-                      variant=""
-                      aria-label="button"
-                      className="btn btn-icon btn-info-light btn-wave no-caret"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i className="ti ti-exchange"></i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {groupObjectives?.map((item, index) => (
-                        <Dropdown.Item
-                          active={item.symbol === customerType}
-                          key={index}
-                          onClick={() => {
-                            setSearch("");
-                            onChangeCustomerType(item.symbol);
-                          }}
-                        >
-                          {item.name}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
                 </div>
               </div>
             </div>
@@ -169,17 +128,7 @@ function CustomerValidateToday() {
             isLoading={isLoadingCustomer}
             setExternalPage={setPage}
             maxPage={counterCustomer}
-            isChange={customerType}
             headers={[
-              {
-                key: "id",
-                label: "ID",
-                render: (value: TCustomerRes) => (
-                  <td>
-                    <AppId id={value.id ?? ""} />
-                  </td>
-                ),
-              },
               {
                 key: "customer_code",
                 label: "Mã khách hàng",
@@ -196,7 +145,7 @@ function CustomerValidateToday() {
               },
               {
                 key: "name",
-                label: "Họ và tên khách hàng",
+                label: "Họ và tên",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.customer_name}</span>
@@ -214,7 +163,7 @@ function CustomerValidateToday() {
               },
               {
                 key: "province",
-                label: "Tỉnh",
+                label: "Tỉnh thành",
                 render: (value) => <td>{value.customer_province_name}</td>,
               },
               {
@@ -222,6 +171,18 @@ function CustomerValidateToday() {
                 label: "Số điện thoại",
                 render: (value) => <td>{value.phone}</td>,
               },
+              {
+                key: "customer_type",
+                label: "Nhóm khách hàng",
+                render: (value) => (
+                  <td>
+                    {value?.customer_type
+                      ? MapCustomerType.get(value.customer_type)
+                      : ""}
+                  </td>
+                ),
+              },
+
               {
                 key: "time",
                 label: "Thời gian đăng kí",

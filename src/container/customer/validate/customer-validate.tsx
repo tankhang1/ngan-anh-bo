@@ -27,6 +27,8 @@ import {
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { MapCustomerType } from "../../../constants";
+import { Checkbox } from "@mui/material";
 
 const AGENT_FILTERS = [
   {
@@ -50,10 +52,8 @@ function CustomerValidation() {
   });
 
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
-  const [customerType, setCustomerType] = useState<string>(
-    groupObjectives?.[0].symbol || ""
-  );
+  const [searchBy, setSearchBy] = useState("phone");
+  const [customerType, setCustomerType] = useState<string>("ALL");
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
@@ -79,6 +79,7 @@ function CustomerValidation() {
         nu: page - 1,
         sz: 10,
         t: customerType,
+        s: 1,
       },
       {
         refetchOnMountOrArgChange: true,
@@ -86,11 +87,6 @@ function CustomerValidation() {
       }
     );
 
-  useEffect(() => {
-    if (groupObjectives) {
-      setCustomerType(groupObjectives?.[0].symbol);
-    }
-  }, [groupObjectives]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -104,7 +100,7 @@ function CustomerValidation() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Tìm kiếm thông tin"
+                      placeholder="Nhập số điện thoại"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                       value={search}
@@ -119,7 +115,7 @@ function CustomerValidation() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -141,7 +137,7 @@ function CustomerValidation() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
@@ -154,7 +150,12 @@ function CustomerValidation() {
                       <i className="ti ti-exchange"></i>
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {groupObjectives?.map((item, index) => (
+                      {[
+                        { symbol: "ALL", name: "Tất cả" },
+                        ...(groupObjectives?.filter(
+                          (item) => item.symbol !== "ANONYMOUS"
+                        ) ?? []),
+                      ]?.map((item, index) => (
                         <Dropdown.Item
                           active={item.symbol === customerType}
                           key={index}
@@ -267,7 +268,31 @@ function CustomerValidation() {
                 label: "Số điện thoại",
                 render: (value) => <td>{value.phone}</td>,
               },
-
+              {
+                key: "customer_type",
+                label: "Nhóm khách hàng",
+                render: (value) => (
+                  <td>
+                    {value?.customer_type
+                      ? MapCustomerType.get(value.customer_type)
+                      : ""}
+                  </td>
+                ),
+              },
+              {
+                key: "retailer_group_name",
+                label: "Nhóm đại lý",
+                render: (value) => <td>{value?.retailer_group_name ?? ""}</td>,
+              },
+              {
+                key: "info_primary",
+                label: "Tham gia tích điểm",
+                render: (value) => (
+                  <td>
+                    <Checkbox checked={value.info_primary ? true : false} />
+                  </td>
+                ),
+              },
               {
                 key: "time_verify",
                 label: "Thời gian xác thực",

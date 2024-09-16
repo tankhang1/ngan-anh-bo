@@ -66,6 +66,7 @@ import FillMaterialWarehouse from "./container/warehouse/material/fill/index.tsx
 import ManageMaterial from "./container/warehouse/material/manage/manage-material.tsx";
 import ManageMaterialUpdate from "./container/warehouse/material/manage/update/manage-material-update.tsx";
 import ManageMaterialPacking from "./container/warehouse/material/manage/mange-material-packing.tsx";
+import VerifyCustomer from "./container/operator/iqr/verify/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -226,6 +227,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}operator/iqr-today`}
                 element={<IQRToday />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }operator/verify-customer/:phone`}
+                element={<VerifyCustomer />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}customer/search`}

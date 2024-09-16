@@ -96,6 +96,23 @@ function TopupToday() {
             maxPage={topups?.length}
             headers={[
               {
+                key: "code",
+                label: "Mã code",
+                render: (value) => <td>{value.code}</td>,
+              },
+              {
+                key: "product_name",
+                label: "Tên sản phẩm",
+                render: (value) => <td>{value.product_name}</td>,
+              },
+              {
+                key: "price",
+                label: "Số tiền",
+                render: (value) => (
+                  <td>{fNumber((value.price ?? 0) * 1000)}</td>
+                ),
+              },
+              {
                 key: "program_name",
                 label: "Tên chương trình",
                 render: (value: TProgramTopupDetail) => (
@@ -149,21 +166,7 @@ function TopupToday() {
                   </td>
                 ),
               },
-              {
-                key: "code",
-                label: "Mã code",
-                render: (value) => <td>{value.code}</td>,
-              },
-              {
-                key: "product_name",
-                label: "Tên sản phẩm",
-                render: (value) => <td>{value.product_name}</td>,
-              },
-              {
-                key: "price",
-                label: "Số tiền",
-                render: (value) => <td>{fNumber(value.price ?? 0)}</td>,
-              },
+
               {
                 key: "time_topup",
                 label: "Thời gian topup",

@@ -1,5 +1,13 @@
 import React, { Fragment, useState } from "react";
-import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Form,
+  InputGroup,
+  Badge,
+} from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes, TProductDashboardTable } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
@@ -9,6 +17,7 @@ import {
   useGetPacketsQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const AGENT_FILTERS = [
   {
@@ -29,26 +38,14 @@ function IQRToday() {
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
-
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
-  const [customerType, setCustomerType] = useState<string>(
-    groupObjectives?.[0].symbol || ""
-  );
-  const [page, setPage] = useState(1);
 
-  const onChangeCustomerType = (type: string) => {
-    if (type !== customerType) {
-      setSearch("");
-      setCustomerType(type);
-    }
-  };
   const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
     {
-      //   st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      //   ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-      st: 202402260000,
-      ed: 202409260000,
+      st: +(format(new Date(), "yyyyMMdd") + "0000"),
+      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
       nu: 0,
       sz: 9999,
     },
@@ -60,10 +57,9 @@ function IQRToday() {
   );
   const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
     {
-      //   st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      //   ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-      st: 202402260000,
-      ed: 202409260000,
+      st: +(format(new Date(), "yyyyMMdd") + "0000"),
+      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+
       nu: 0,
       sz: 9999,
     },
@@ -140,13 +136,14 @@ function IQRToday() {
             isLoading={isLoadingBin || isLoadingPacket}
             headers={[
               {
-                key: "id",
-                label: "ID",
-                render: (value: TProductDashboardTable) => (
-                  <td>
-                    <AppId id={value.id} />
-                  </td>
-                ),
+                key: "bin_seri",
+                label: "Số seri thùng",
+                render: (value) => <td>{value.bin_seri}</td>,
+              },
+              {
+                key: "seri",
+                label: "Số seri",
+                render: (value) => <td>{value.seri}</td>,
               },
               {
                 key: "code",
@@ -158,6 +155,16 @@ function IQRToday() {
                 ),
               },
               {
+                key: "product_name",
+                label: "Tên sản phẩm",
+                render: (value) => <td>{value.product_name}</td>,
+              },
+              {
+                key: "point",
+                label: "Số điểm",
+                render: (value) => <td>{value.point}</td>,
+              },
+              {
                 key: "register_phone",
                 label: "Số điện thoại đăng ký",
                 render: (value) => (
@@ -167,40 +174,96 @@ function IQRToday() {
                 ),
               },
               {
+                key: "register_name",
+                label: "Tên đăng ký",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.register_name}</span>
+                  </td>
+                ),
+              },
+              {
                 key: "customer_name",
                 label: "Tên khách hàng",
                 render: (value) => (
                   <td>
+                    <span className="fw-semibold">{value.customer_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "register_province",
+                label: "Tỉnh đăng ký",
+                render: (value) => (
+                  <td>
                     <span className="fw-semibold">
-                      {value.customer_code
-                        ? value.customer_name
-                        : value.register_name}
+                      {value.register_province}
                     </span>
                   </td>
                 ),
               },
               {
                 key: "register_province",
-                label: "Tỉnh thành",
+                label: "Tỉnh xác thực",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">
-                      {value.customer_code
-                        ? value.customer_province_name
-                        : value.register_province}
+                      {value.customer_province_name}
                     </span>
                   </td>
                 ),
               },
+
               {
-                key: "bin_seri",
-                label: "Số seri thùng",
-                render: (value) => <td>{value.bin_seri}</td>,
+                key: "customer_code",
+                label: "Trạng thái",
+                render: (value) => (
+                  <td>
+                    {!!value.customer_code ? (
+                      <Badge bg="success">Đã xác thực</Badge>
+                    ) : (
+                      <Badge bg="warning">Chờ xác thực </Badge>
+                    )}
+                  </td>
+                ),
               },
               {
-                key: "product_code",
-                label: "Mã sản phẩm",
-                render: (value) => <td>{value.product_code}</td>,
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() =>
+                        navigate(
+                          `${
+                            import.meta.env.BASE_URL
+                          }operator/verify-customer/${value.register_phone}`
+                        )
+                      }
+                    >
+                      <i className="ti ti-circle-check"></i>
+                    </button>
+                  </td>
+                ),
+              },
+              {
+                key: "source_channel_used",
+                label: "Nguồn tham gia",
+                render: (value) => <td>{value.source_channel_used}</td>,
+              },
+              {
+                key: "type_use",
+                label: "Cách tham gia",
+                render: (value) => (
+                  <td>
+                    {value.type_use === 0
+                      ? "QR Code"
+                      : value.type_use === 1
+                      ? "SMS"
+                      : "Zalo"}
+                  </td>
+                ),
               },
               {
                 key: "time_use",
@@ -213,6 +276,8 @@ function IQRToday() {
               ...(packets?.qrCode ?? []),
               ...(packets?.zalo ?? []),
               ...(bins?.zalo ?? []),
+              ...(bins?.sms ?? []),
+              ...(packets?.sms ?? []),
             ]}
           />
         </Card>
