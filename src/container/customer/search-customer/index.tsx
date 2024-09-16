@@ -78,8 +78,7 @@ function SearchCustomer() {
             <div className="contact-header">
               <div className="d-flex flex-column gap-2">
                 <div className="h6 fw-semibold mb-0">
-                  Nhập tên khách đăng ký / tên khách hàng xác thực / số điện
-                  thoại
+                  Nhập thông tin tra cứu
                 </div>
                 <InputGroup className="d-flex gap-2">
                   <Form.Control

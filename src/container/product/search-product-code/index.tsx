@@ -126,7 +126,7 @@ function SearchProductCode() {
                       <img
                         style={{
                           width: "100%",
-                          height: "100%",
+                          maxHeight: 300,
                           objectFit: "fill",
                           borderRadius: 10,
                         }}
@@ -140,13 +140,17 @@ function SearchProductCode() {
                     <Col md={6}>
                       <Stack gap={1}>
                         <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Mã iQr :{" "}
+                          <span className="fw-normal">{searchValue}</span>
+                        </span>
+                        <span className="text-black fs-17 fw-smibold">
                           &#x2022; Mã sản phẩm :{" "}
                           <span className="fw-normal">{product?.code}</span>
                         </span>
                         <span className="text-black fs-17 fw-smibold">
                           &#x2022; Tên sản phẩm :{" "}
                           <span className="fw-normal">
-                            {product?.product_name_detail}
+                            {product?.description}
                           </span>
                         </span>
                         <span className="text-black fs-17 fw-smibold">
@@ -154,10 +158,6 @@ function SearchProductCode() {
                           <span className="fw-normal">
                             {product?.category_name}
                           </span>
-                        </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          &#x2022; Mã nhắn tin / QR :{" "}
-                          <span className="fw-normal">{searchValue}</span>
                         </span>
 
                         <span className="text-black fs-17 fw-smibold">
@@ -211,7 +211,7 @@ function SearchProductCode() {
                 ) : (
                   <Stack gap={1}>
                     <span className="text-black fs-17 fw-smibold">
-                      - Mã thùng :{" "}
+                      - Mã seri :{" "}
                       <span className="fw-normal">{binPackage?.seri}</span>
                     </span>
 

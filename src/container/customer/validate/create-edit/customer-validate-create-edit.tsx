@@ -324,7 +324,7 @@ function CustomerValidationCreateEdit() {
                       </Form.Group>
                       <Form.Group as={Col} md={4}>
                         <Form.Label className="text-black">
-                          Ngày sinh <span style={{ color: "red" }}>*</span>
+                          Ngày sinh
                         </Form.Label>
                         <Form.Control
                           className="input-placeholder"
