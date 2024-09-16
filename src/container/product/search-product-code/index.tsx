@@ -40,7 +40,11 @@ function SearchProductCode() {
     }
   );
   const { data: warehouseExport } = useGetWarehouseExportBinQuery(
-    binPackage?.seri || "",
+    {
+      seri: binPackage?.seri.startsWith("B")
+        ? binPackage?.seri
+        : binPackage?.bin_seri || "",
+    },
     {
       skip: !binPackage?.seri,
     }

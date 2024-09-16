@@ -76,10 +76,11 @@ export const infoApi = createApi({
         params: params,
       }),
     }),
-    getWarehouseExportBin: builder.query<TWarehouseExport, string>({
+    getWarehouseExportBin: builder.query<TWarehouseExport, { seri: string }>({
       query: (params) => ({
-        url: `/warehouse/export/bin-seri/${params}`,
+        url: `/warehouse/export/bin-seri`,
         method: HTTPS_METHOD.GET,
+        params,
       }),
     }),
     getCustomerByCode: builder.query<TAgent, { c: string }>({
