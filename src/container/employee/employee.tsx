@@ -148,13 +148,9 @@ function Employee() {
             isLoading={isLoadingEmployee}
             headers={[
               {
-                key: "id",
-                label: "ID",
-                render: (value: TEmployee) => (
-                  <td>
-                    <AppId id={value.id ?? ""} />
-                  </td>
-                ),
+                key: "code",
+                label: "Mã nhân viên",
+                render: (value: TEmployee) => <td>{value.code}</td>,
               },
               {
                 key: "avatar",
@@ -185,15 +181,27 @@ function Employee() {
                 ),
               },
 
+              // {
+              //   key: "birthday",
+              //   label: "Ngày sinh",
+              //   render: (value) => (
+              //     <td>
+              //       <span className="fw-semibold">
+              //         {value?.birthday
+              //           ? format(fDate(value.birthday), "dd/MM/yyyy")
+              //           : ""}
+              //       </span>
+              //     </td>
+              //   ),
+              // },
+
               {
-                key: "birthday",
-                label: "Ngày sinh",
+                key: "gender",
+                label: "Giới tính",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">
-                      {value?.birthday
-                        ? format(fDate(value.birthday), "dd/MM/yyyy")
-                        : ""}
+                      {value.gender ? "Nam" : "Nữ"}
                     </span>
                   </td>
                 ),
@@ -207,22 +215,11 @@ function Employee() {
                   </td>
                 ),
               },
-              {
-                key: "gender",
-                label: "Giới tính",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {value.gender ? "Nam" : "Nữ"}
-                    </span>
-                  </td>
-                ),
-              },
-              {
-                key: "citizen_number",
-                label: "CCCD",
-                render: (value) => <td>{value.citizen_number}</td>,
-              },
+              // {
+              //   key: "citizen_number",
+              //   label: "CCCD",
+              //   render: (value) => <td>{value.citizen_number}</td>,
+              // },
               {
                 key: "email",
                 label: "Email",
@@ -230,7 +227,7 @@ function Employee() {
               },
               {
                 key: "province_name",
-                label: "Tỉnh",
+                label: "Tỉnh thành",
                 render: (value) => <td>{value.province_name}</td>,
               },
               {

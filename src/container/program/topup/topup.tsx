@@ -231,7 +231,7 @@ function TopupProgram() {
               {
                 key: "price",
                 label: "Số tiền",
-                render: (value) => <td>{fNumber(value.price)}</td>,
+                render: (value) => <td>{fNumber(value.price * 1000)}</td>,
               },
               {
                 key: "status",
@@ -291,7 +291,7 @@ function TopupProgram() {
 
               {
                 key: "objectives",
-                label: "Đối tượng áp dụng",
+                label: "Nhóm khách hàng",
                 render: (value) => (
                   <td>
                     <span className="d-flex gap-1 flex-wrap">

@@ -306,53 +306,53 @@ function PointProgram() {
                   </td>
                 ),
               },
-              {
-                key: "locations",
-                label: "Tỉnh áp dụng",
-                render: (value) => {
-                  const locations = value.locations?.split(",");
-                  return (
-                    <td>
-                      <span className="d-flex gap-1 flex-wrap">
-                        {locations.length > 5
-                          ? value.locations
-                              ?.split(",")
-                              .slice(0, 5)
-                              .map((item, index) => (
-                                <Badge
-                                  bg="secondary-transparent"
-                                  className="round-pill"
-                                  key={index}
-                                >
-                                  {item}
-                                </Badge>
-                              ))
-                          : locations.map((item, index) => (
-                              <Badge
-                                bg="secondary-transparent"
-                                className="round-pill"
-                                key={index}
-                              >
-                                {item}
-                              </Badge>
-                            ))}
-                        {locations.length > 5 && (
-                          <Badge
-                            bg="secondary-transparent"
-                            className="round-pill"
-                            key={"..."}
-                          >
-                            ...
-                          </Badge>
-                        )}
-                      </span>
-                    </td>
-                  );
-                },
-              },
+              // {
+              //   key: "locations",
+              //   label: "Tỉnh áp dụng",
+              //   render: (value) => {
+              //     const locations = value.locations?.split(",");
+              //     return (
+              //       <td>
+              //         <span className="d-flex gap-1 flex-wrap">
+              //           {locations.length > 5
+              //             ? value.locations
+              //                 ?.split(",")
+              //                 .slice(0, 5)
+              //                 .map((item, index) => (
+              //                   <Badge
+              //                     bg="secondary-transparent"
+              //                     className="round-pill"
+              //                     key={index}
+              //                   >
+              //                     {item}
+              //                   </Badge>
+              //                 ))
+              //             : locations.map((item, index) => (
+              //                 <Badge
+              //                   bg="secondary-transparent"
+              //                   className="round-pill"
+              //                   key={index}
+              //                 >
+              //                   {item}
+              //                 </Badge>
+              //               ))}
+              //           {locations.length > 5 && (
+              //             <Badge
+              //               bg="secondary-transparent"
+              //               className="round-pill"
+              //               key={"..."}
+              //             >
+              //               ...
+              //             </Badge>
+              //           )}
+              //         </span>
+              //       </td>
+              //     );
+              //   },
+              // },
               {
                 key: "objectives",
-                label: "Đối tượng",
+                label: "Nhóm khách hàng",
                 render: (value) => (
                   <td>
                     <span className="d-flex gap-1 flex-wrap">
@@ -369,7 +369,11 @@ function PointProgram() {
                   </td>
                 ),
               },
-
+              {
+                key: "retailer_group",
+                label: "Nhóm đại lý",
+                render: (value) => <td>{value.retailer_group}</td>,
+              },
               permission.editProgramPoint
                 ? {
                     key: "",

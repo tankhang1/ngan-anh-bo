@@ -225,7 +225,7 @@ export type TProgramPoint = {
   agents: string;
   locations: string;
   objectives: string;
-
+  retailer_group: string;
   goods_type: string;
 };
 export type TProgramTopup = {
