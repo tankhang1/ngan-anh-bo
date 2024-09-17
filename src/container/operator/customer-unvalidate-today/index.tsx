@@ -243,6 +243,26 @@ function CustomerUnValidateToday() {
                   </td>
                 ),
               },
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() =>
+                        navigate(
+                          `${
+                            import.meta.env.BASE_URL
+                          }operator/verify-customer/${value.phone}`
+                        )
+                      }
+                    >
+                      <i className="ti ti-circle-check"></i>
+                    </button>
+                  </td>
+                ),
+              },
             ]}
             data={customers || []}
             filters={[
