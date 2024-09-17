@@ -588,7 +588,7 @@ function VerifyCustomer() {
 
                     <Form.Group>
                       <Form.Label className="text-black">
-                        Nhập bamgr hiệu / Tên doanh nghiệp{" "}
+                        Nhập bảng hiệu / Tên doanh nghiệp{" "}
                         {(values.customer_type === "RETAILER1" ||
                           values.customer_type === "RETAILER2") && (
                           <span style={{ color: "red" }}>*</span>
