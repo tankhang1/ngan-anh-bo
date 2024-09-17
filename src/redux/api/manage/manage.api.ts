@@ -443,6 +443,12 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.MATERIAL],
     }),
+    getBinPackageToday: builder.query<TBin[], void>({
+      query: () => ({
+        url: "/api/report/iqr/today",
+        method: HTTPS_METHOD.GET,
+      }),
+    }),
   }),
 });
 export const {
@@ -466,4 +472,5 @@ export const {
   useGetListIndicationQuery,
   useGetListSMSGatewayQuery,
   useGetListMaterialQuery,
+  useGetBinPackageTodayQuery,
 } = manageApi;

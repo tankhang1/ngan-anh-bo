@@ -12,6 +12,7 @@ import AppTable from "../../../components/common/table/table";
 import { TCustomerRes, TProductDashboardTable } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import {
+  useGetBinPackageTodayQuery,
   useGetBinsQuery,
   useGetListGroupObjectiveQuery,
   useGetPacketsQuery,
@@ -42,33 +43,36 @@ function IQRToday() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
 
-  const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
-    {
-      st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-      nu: 0,
-      sz: 9999,
-    },
-    {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
-    {
-      st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+  // const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
+  //   {
+  //     st: +(format(new Date(), "yyyyMMdd") + "0000"),
+  //     ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+  //     nu: 0,
+  //     sz: 9999,
+  //   },
+  //   {
+  //     skipPollingIfUnfocused: true,
+  //     pollingInterval: 300000,
+  //     refetchOnMountOrArgChange: true,
+  //   }
+  // );
+  // const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
+  //   {
+  //     st: +(format(new Date(), "yyyyMMdd") + "0000"),
+  //     ed: +(format(new Date(), "yyyyMMdd") + "2399"),
 
-      nu: 0,
-      sz: 9999,
-    },
-    {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  //     nu: 0,
+  //     sz: 9999,
+  //   },
+  //   {
+  //     skipPollingIfUnfocused: true,
+  //     pollingInterval: 300000,
+  //     refetchOnMountOrArgChange: true,
+  //   }
+  // );
+
+  const { data: binPacket, isLoading: isLoadingBinPacket } =
+    useGetBinPackageTodayQuery();
 
   return (
     <Fragment>
@@ -133,7 +137,7 @@ function IQRToday() {
             isHeader={false}
             externalSearch={search}
             title="Thông tin đại lý"
-            isLoading={isLoadingBin || isLoadingPacket}
+            isLoading={isLoadingBinPacket}
             headers={[
               {
                 key: "bin_seri",
@@ -271,14 +275,7 @@ function IQRToday() {
                 render: (value) => <td>{value.time_use}</td>,
               },
             ]}
-            data={[
-              ...(bins?.qrCode ?? []),
-              ...(packets?.qrCode ?? []),
-              ...(packets?.zalo ?? []),
-              ...(bins?.zalo ?? []),
-              ...(bins?.sms ?? []),
-              ...(packets?.sms ?? []),
-            ]}
+            data={binPacket || []}
           />
         </Card>
       </Col>

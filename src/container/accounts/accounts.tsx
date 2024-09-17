@@ -511,12 +511,9 @@ function Accounts() {
                           })) ?? []
                         }
                         placeholder="Chọn nhân viên"
+                        isInValid={!!errors.staff_code && touched.staff_code}
+                        errorText={errors.staff_code}
                       />
-                      {!!errors.staff_code && touched.staff_code && (
-                        <Form.Control.Feedback type="invalid">
-                          {errors.staff_code}
-                        </Form.Control.Feedback>
-                      )}
                     </Form.Group>
                     <Form.Group>
                       <Form.Label className="text-black">
@@ -533,12 +530,8 @@ function Accounts() {
                         }
                         placeholder="Chọn vai trò"
                         isInValid={!!errors.roles && touched.roles}
+                        errorText={errors.roles}
                       />
-                      {!!errors.roles && touched.roles && (
-                        <Form.Control.Feedback type="invalid">
-                          {errors.roles as any}
-                        </Form.Control.Feedback>
-                      )}
                     </Form.Group>
                   </Stack>
                 </Modal.Body>

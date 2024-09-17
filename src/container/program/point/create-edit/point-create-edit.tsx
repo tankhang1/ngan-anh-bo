@@ -503,24 +503,6 @@ function PointCreateEdit() {
 
                 <Form.Group>
                   <Form.Label className="text-black">
-                    Mã chương trình <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Mã chương trình"
-                    name="uuid"
-                    value={isCreate === "true" ? newUUID : values.uuid}
-                    onChange={handleChange}
-                    isInvalid={touched.uuid && !!errors.uuid}
-                    disabled
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.uuid?.toString()}
-                  </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label className="text-black">
                     Tên chương trình <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                   <Form.Control

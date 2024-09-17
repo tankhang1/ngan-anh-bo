@@ -334,13 +334,7 @@ function CustomerValidation() {
                       <td className="d-flex justify-content-center align-item-center">
                         <button
                           className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() =>
-                            navigate(
-                              `ce/${false}/${value.uuid}_${customerType}_${
-                                page - 1
-                              }`
-                            )
-                          }
+                          onClick={() => navigate(`ce/${false}/${value.phone}`)}
                         >
                           <i className="ti ti-edit"></i>
                         </button>
