@@ -11,7 +11,7 @@ function TableAgent() {
       {
         st: +(format(new Date(), "yyyyMMdd") + "0000"),
         ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-        t: "RETAILER2",
+        s: 1,
       },
       {
         skipPollingIfUnfocused: true,
@@ -69,7 +69,7 @@ function TableAgent() {
           render: (value) => (
             <td>
               {value.status === 1 ? (
-                <span className="bg-secondary bg-opacity-100 text-white badge ">
+                <span className="bg-success bg-opacity-100 text-white badge ">
                   Đã xác thực
                 </span>
               ) : (

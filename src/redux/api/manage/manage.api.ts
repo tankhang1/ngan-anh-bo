@@ -24,6 +24,7 @@ import {
   TSMSGateway,
   TIngredient,
   TMaterial,
+  TBrandname,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TPermit } from "../../slices/authSlice";
@@ -449,6 +450,12 @@ export const manageApi = createApi({
         method: HTTPS_METHOD.GET,
       }),
     }),
+    getListBrandnameToday: builder.query<TBrandname[], void>({
+      query: () => ({
+        url: "/api/report/brandname/today",
+        method: HTTPS_METHOD.GET,
+      }),
+    }),
   }),
 });
 export const {
@@ -473,4 +480,5 @@ export const {
   useGetListSMSGatewayQuery,
   useGetListMaterialQuery,
   useGetBinPackageTodayQuery,
+  useGetListBrandnameTodayQuery,
 } = manageApi;

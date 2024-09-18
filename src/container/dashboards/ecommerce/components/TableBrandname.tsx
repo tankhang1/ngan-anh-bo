@@ -3,46 +3,26 @@ import AppTable from "../../../../components/common/table/table";
 import { TBrandname } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
 import { format } from "date-fns";
-import { useGetListBrandnamesQuery } from "../../../../redux/api/manage/manage.api";
+import {
+  useGetListBrandnamesQuery,
+  useGetListBrandnameTodayQuery,
+} from "../../../../redux/api/manage/manage.api";
 
 function TableBrandname() {
   const { data: brandnames, isLoading: isLoadingBrandname } =
-    useGetListBrandnamesQuery(
-      {
-        st: +(format(new Date(), "yyyyMMdd") + "0000"),
-        ed: +(format(new Date(), "yyyyMMdd") + "2399"),
-        sz: 99999,
-        nu: 0,
-      },
-      {
-        skipPollingIfUnfocused: true,
-        pollingInterval: 300000,
-        refetchOnMountOrArgChange: true,
-      }
-    );
+    useGetListBrandnameTodayQuery(undefined, {
+      skipPollingIfUnfocused: true,
+      pollingInterval: 300000,
+      refetchOnMountOrArgChange: true,
+    });
   return (
     <AppTable
       title="Danh sách brandname hôm nay"
       headers={[
         {
-          key: "transactionid",
-          label: "Mã giao dịch",
-          render: (value: TBrandname) => (
-            <td>
-              <AppId id={value.transactionid} />
-            </td>
-          ),
-        },
-
-        {
-          key: "code",
-          label: "Mã code",
-          render: (value) => <td>{value.code}</td>,
-        },
-        {
           key: "phone",
           label: "Số điện thoại",
-          render: (value) => (
+          render: (value: TBrandname) => (
             <td>
               <span className="fw-semibold">{value.phone}</span>
             </td>
@@ -59,6 +39,11 @@ function TableBrandname() {
           key: "content",
           label: "Nội dung",
           render: (value) => <td>{value.content}</td>,
+        },
+        {
+          key: "transactionid",
+          label: "Mã giao dịch",
+          render: (value) => <td>{value.transactionid}</td>,
         },
       ]}
       data={(brandnames || []) as any}

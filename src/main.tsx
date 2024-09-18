@@ -67,6 +67,7 @@ import ManageMaterial from "./container/warehouse/material/manage/manage-materia
 import ManageMaterialUpdate from "./container/warehouse/material/manage/update/manage-material-update.tsx";
 import ManageMaterialPacking from "./container/warehouse/material/manage/mange-material-packing.tsx";
 import VerifyCustomer from "./container/operator/iqr/verify/index.tsx";
+import BrandnameToday from "./container/operator/brandname-today/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -245,6 +246,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}operator/sms-gateway`}
                 element={<SMSGateway />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/brandname`}
+                element={<BrandnameToday />}
               />
               <Route
                 path={`${

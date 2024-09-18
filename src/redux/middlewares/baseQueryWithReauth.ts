@@ -17,7 +17,7 @@ const baseQueryWithReauth: BaseQueryFn<
     try {
       const refreshResult = await baseQuery(
         {
-          url: "/admin/refresh-token",
+          url: "/refresh-token",
           method: HTTPS_METHOD.POST,
         },
         api,
