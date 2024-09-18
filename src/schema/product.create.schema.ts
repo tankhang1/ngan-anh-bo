@@ -12,7 +12,7 @@ const productCreateSchema = Yup.object().shape({
 
   version: Yup.string().required("Mã phiên bản là bắt buộc"),
 
-  code_bin: Yup.string(),
+  code_bin: Yup.string().required("Mã thùng là bắt buộc"),
 
   certificate_of_origin: Yup.string().nullable(),
 
@@ -22,7 +22,7 @@ const productCreateSchema = Yup.object().shape({
 
   ingredient: Yup.string().nullable(),
 
-  ingredient_id: Yup.string().required("Mã thành phần là bắt buộc"),
+  ingredient_id: Yup.string(),
 
   name_display_label: Yup.string(),
 

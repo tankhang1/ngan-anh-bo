@@ -665,7 +665,6 @@ function PointCreateEdit() {
                     classNamePrefix="Select2"
                     isSearchable
                     placeholder="Chọn đối tượng tham gia"
-                    defaultValue={[OBJECTIVES_SELECT?.[0] as any]}
                     value={values.objectives}
                     isClearable
                     onChange={(value) => setFieldValue("objectives", value)}

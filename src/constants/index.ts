@@ -443,8 +443,12 @@ const MAP_PROGRAM_STATUS = new Map([
 ]);
 const OBJECTIVES_SELECT = [
   {
+    label: "Đại lý cấp 1",
+    value: TObjectiveEnum.RETAILER1,
+  },
+  {
     label: "Đại lý cấp 2",
-    value: TObjectiveEnum.RETAILER,
+    value: TObjectiveEnum.RETAILER2,
   },
   { label: "Nông dân", value: TObjectiveEnum.FARMER },
   { label: "Chưa định danh", value: TObjectiveEnum.ANONYMOUS },

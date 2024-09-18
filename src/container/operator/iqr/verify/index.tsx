@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
 import { useGetCustomerQuery } from "../../../../redux/api/info/info.api";
+import AppSelect from "../../../../components/AppSelect";
 function VerifyCustomer() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const { phone } = useParams();
@@ -402,63 +403,48 @@ function VerifyCustomer() {
                       <Form.Label className="text-black">
                         Tỉnh thành <span style={{ color: "red" }}>*</span>
                       </Form.Label>
-                      <Form.Select
-                        className="form-select input-placeholder"
-                        name="customer_province"
-                        value={values.customer_province}
+                      <AppSelect
                         onChange={(value) => {
-                          setFieldValue(
-                            "customer_province",
-                            value.target.value
-                          );
-                          setProvinceId(value.target.value);
+                          setFieldValue("customer_province", value);
+                          setProvinceId(value);
                         }}
-                        isInvalid={
-                          touched.customer_province &&
-                          !!errors.customer_province
+                        data={
+                          provinces?.map((item) => ({
+                            label: item.name ?? "",
+                            value: item.code ?? "",
+                          })) ?? []
                         }
-                        required
-                      >
-                        <option value="">-- Chọn tỉnh thành --</option>
-
-                        {provinces?.map((item, index) => (
-                          <option value={item.code} key={index}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                      <Form.Control.Feedback type="invalid">
-                        {errors.customer_province}
-                      </Form.Control.Feedback>
+                        value={values?.customer_province}
+                        placeholder="Chọn tỉnh thành"
+                        isInValid={
+                          !!errors.customer_province &&
+                          touched.customer_province
+                        }
+                        errorText={errors.customer_province}
+                      />
                     </Form.Group>
                     <Form.Group className="mb-2">
                       <Form.Label className="text-black">
                         Chọn quận huyện <span style={{ color: "red" }}>*</span>
                       </Form.Label>
-                      <Form.Select
-                        className="form-select input-placeholder"
-                        name="customer_district"
-                        value={values.customer_district}
-                        onChange={(e) =>
-                          setFieldValue("customer_district", e.target.value)
+                      <AppSelect
+                        onChange={(value) => {
+                          setFieldValue("customer_district", value);
+                        }}
+                        data={
+                          districts?.map((item) => ({
+                            label: item.label ?? "",
+                            value: item.value ?? "",
+                          })) ?? []
                         }
-                        isInvalid={
-                          touched.customer_district &&
-                          !!errors.customer_district
+                        value={values?.customer_district}
+                        placeholder="Chọn quận huyện"
+                        isInValid={
+                          !!errors.customer_district &&
+                          touched.customer_district
                         }
-                        required
-                      >
-                        <option value="">-- Chọn quận huyện --</option>
-
-                        {districts?.map((item, index) => (
-                          <option value={item.value} key={index}>
-                            {item.label}
-                          </option>
-                        ))}
-                      </Form.Select>
-                      <Form.Control.Feedback type="invalid">
-                        {errors.customer_district}
-                      </Form.Control.Feedback>
+                        errorText={errors.customer_district}
+                      />
                     </Form.Group>
                     <Form.Group className="mb-2">
                       <Form.Label className="text-black">
@@ -485,27 +471,21 @@ function VerifyCustomer() {
                       <Form.Label className="text-black">
                         Nhân viên phụ trách
                       </Form.Label>
-                      <Form.Select
-                        className="form-select input-placeholder"
-                        name="sale_code"
-                        value={values.sale_code}
-                        onChange={(e) =>
-                          setFieldValue("sale_code", e.target.value)
+                      <AppSelect
+                        onChange={(value) => {
+                          setFieldValue("sale_code", value);
+                        }}
+                        data={
+                          employees?.map((item) => ({
+                            label: item.name ?? "",
+                            value: item.code ?? "",
+                          })) ?? []
                         }
-                        isInvalid={touched.sale_code && !!errors.sale_code}
-                        required
-                      >
-                        <option value="">-- Chọn nhân viên phụ trách --</option>
-
-                        {employees?.map((item) => (
-                          <option key={item.id} value={item.code}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                      <Form.Control.Feedback type="invalid">
-                        {errors.sale_code}
-                      </Form.Control.Feedback>
+                        value={values?.sale_code}
+                        placeholder="Chọn nhân viên phụ trách"
+                        isInValid={!!errors.sale_code && touched.sale_code}
+                        errorText={errors.sale_code}
+                      />
                     </Form.Group>
 
                     <Form.Group className="mb-2">

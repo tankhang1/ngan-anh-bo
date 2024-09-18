@@ -337,7 +337,7 @@ function TopupCreateEdit() {
           name: topupProgram?.name ?? "",
           products: mapCodeProduct(topupProgram?.products),
           price: topupProgram?.price ?? "",
-          objectives: [{ label: "RETAILER2", value: "RETAILER2" }],
+          objectives: [],
           time_end: topupProgram?.time_end
             ? format(new Date(topupProgram.time_end), "yyyy-MM-dd")
             : ("" as any),
@@ -576,7 +576,6 @@ function TopupCreateEdit() {
                     classNamePrefix="Select2"
                     isSearchable
                     placeholder="Chọn đối tượng tham gia"
-                    defaultValue={[OBJECTIVES_SELECT?.[0] as any]}
                     value={values.objectives}
                     isClearable
                     onChange={(value) => setFieldValue("objectives", value)}

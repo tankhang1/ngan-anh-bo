@@ -87,6 +87,7 @@ const AppSelect = ({
           onFocus={() => {
             setOpenDropdown(true);
           }}
+          className="input-placeholder"
           disabled={disabled}
           style={{ borderColor: isInValid ? "red" : "#ebedef" }}
         />

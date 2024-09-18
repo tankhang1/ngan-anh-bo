@@ -140,15 +140,16 @@ function IQRToday() {
             isLoading={isLoadingBinPacket}
             headers={[
               {
-                key: "bin_seri",
-                label: "Số seri thùng",
-                render: (value) => <td>{value.bin_seri}</td>,
-              },
-              {
                 key: "seri",
                 label: "Số seri",
                 render: (value) => <td>{value.seri}</td>,
               },
+              {
+                key: "bin_seri",
+                label: "Số seri thùng",
+                render: (value) => <td>{value.bin_seri}</td>,
+              },
+
               {
                 key: "code",
                 label: "Mã iQR",
@@ -177,15 +178,7 @@ function IQRToday() {
                   </td>
                 ),
               },
-              {
-                key: "register_name",
-                label: "Tên đăng ký",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.register_name}</span>
-                  </td>
-                ),
-              },
+
               {
                 key: "customer_name",
                 label: "Tên khách hàng",
@@ -195,17 +188,7 @@ function IQRToday() {
                   </td>
                 ),
               },
-              {
-                key: "register_province",
-                label: "Tỉnh đăng ký",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {value.register_province}
-                    </span>
-                  </td>
-                ),
-              },
+
               {
                 key: "register_province",
                 label: "Tỉnh xác thực",
@@ -231,23 +214,46 @@ function IQRToday() {
                   </td>
                 ),
               },
+
               {
                 key: "",
                 label: "Chức năng",
                 render: (value) => (
                   <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() =>
-                        navigate(
-                          `${
-                            import.meta.env.BASE_URL
-                          }operator/verify-customer/${value.register_phone}`
-                        )
-                      }
-                    >
-                      <i className="ti ti-circle-check"></i>
-                    </button>
+                    {!value.customer_code && (
+                      <button
+                        className="btn btn-icon btn-sm btn-primary-ghost"
+                        onClick={() =>
+                          navigate(
+                            `${
+                              import.meta.env.BASE_URL
+                            }operator/verify-customer/${value.register_phone}`
+                          )
+                        }
+                      >
+                        <i className="ti ti-circle-check"></i>
+                      </button>
+                    )}
+                  </td>
+                ),
+              },
+              {
+                key: "register_name",
+                label: "Tên đăng ký",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.register_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "register_province",
+                label: "Tỉnh đăng ký",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">
+                      {value.register_province}
+                    </span>
                   </td>
                 ),
               },

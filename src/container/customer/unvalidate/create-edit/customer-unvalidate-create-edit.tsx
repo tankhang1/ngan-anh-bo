@@ -606,9 +606,9 @@ function CustomerUnValidationCreateEdit() {
                           setFieldValue("customer_district", value);
                         }}
                         data={
-                          provinces?.map((item) => ({
-                            label: item.name ?? "",
-                            value: item.code ?? "",
+                          districts?.map((item) => ({
+                            label: item.label ?? "",
+                            value: item.value ?? "",
                           })) ?? []
                         }
                         value={values?.customer_district}

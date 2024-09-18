@@ -154,7 +154,7 @@ function EmployeeCreateEdit() {
           .unwrap()
           .then(async (value) => {
             setIsEdit(!isEdit);
-            console.log("create employee success", value);
+            console.log("uppdate employee success", value);
             if (value?.status === -2) {
               toast.showToast("Nhân viên đã tồn tại");
               return;
@@ -547,7 +547,9 @@ function EmployeeCreateEdit() {
                           name="province"
                           placeholder="Chọn tỉnh"
                           value={values.province}
-                          onChange={(value) => setFieldValue("province", value)}
+                          onChange={(value) => {
+                            setFieldValue("province", value);
+                          }}
                           isDisabled={isCreate === "false" && isEdit === false}
                         />
 

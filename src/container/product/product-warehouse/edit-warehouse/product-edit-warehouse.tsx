@@ -43,6 +43,7 @@ import productSchema from "../../../../schema/product.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
+import AppSelect from "../../../../components/AppSelect";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -516,26 +517,22 @@ function ProductEditWarehouse() {
                     <Form.Label className="text-black">
                       Mã thùng <span style={{ color: "red" }}>*</span>
                     </Form.Label>
-                    <Form.Select
-                      className="form-select input-placeholder"
-                      id="code_bin_validate"
-                      name="code_bin"
-                      defaultValue={values.code_bin}
-                      onChange={handleChange}
-                      isInvalid={touched.code_bin && !!errors.code_bin}
-                      required
-                      disabled={true}
-                    >
-                      <option value={""}>-- Chọn mã thùng --</option>
-                      {binIds?.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.code_bin}
-                    </Form.Control.Feedback>
+                    <AppSelect
+                      onChange={(value) => {
+                        setFieldValue("code_bin", value);
+                      }}
+                      data={
+                        binIds?.map((item) => ({
+                          label: item.label ?? "",
+                          value: item.value ?? "",
+                        })) ?? []
+                      }
+                      value={values?.code_bin}
+                      placeholder="Chọn mã thùng"
+                      isInValid={!!errors.code_bin && touched.code_bin}
+                      errorText={errors.code_bin}
+                      disabled={isEdit === false}
+                    />
                   </Form.Group>
                 </Row>
                 <Row>
@@ -615,26 +612,22 @@ function ProductEditWarehouse() {
                   <Form.Label className="text-black">
                     Mã nguyên liệu <span style={{ color: "red" }}>*</span>
                   </Form.Label>
-                  <Form.Select
-                    className="form-select input-placeholder"
-                    required
-                    id="ingredient_id_validate"
-                    name="ingredient_id"
-                    defaultValue={values.ingredient_id}
-                    onChange={handleChange}
-                    isInvalid={touched.ingredient_id && !!errors.ingredient_id}
+                  <AppSelect
+                    onChange={(value) => {
+                      setFieldValue("ingredient_id", value);
+                    }}
+                    data={
+                      ingredients?.map((item) => ({
+                        label: item.label ?? "",
+                        value: item.value ?? "",
+                      })) ?? []
+                    }
+                    value={values?.ingredient_id}
+                    placeholder="Mã nguyên liệu"
+                    isInValid={!!errors.ingredient_id && touched.ingredient_id}
+                    errorText={errors.ingredient_id}
                     disabled={isEdit === false}
-                  >
-                    <option value={""}>-- Mã nguyên liệu --</option>
-                    {ingredients?.map((item, index) => (
-                      <option value={item.value} key={index}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.ingredient_id}
-                  </Form.Control.Feedback>
+                  />
                 </Form.Group>
                 <Row>
                   <Form.Group as={Col} md={6}>
@@ -717,30 +710,25 @@ function ProductEditWarehouse() {
                   </Form.Group>
                   <Form.Group as={Col} md={6}>
                     <Form.Label className="text-black">Xuất xứ</Form.Label>
-                    <Form.Select
-                      className="form-select input-placeholder"
-                      id="certificate_of_origin_validate"
-                      name="certificate_of_origin"
-                      defaultValue={values.certificate_of_origin}
-                      onChange={handleChange}
-                      isInvalid={
-                        touched.certificate_of_origin &&
-                        !!errors.certificate_of_origin
+                    <AppSelect
+                      onChange={(value) => {
+                        setFieldValue("certificate_of_origin", value);
+                      }}
+                      data={
+                        COUNTRIES?.map((item) => ({
+                          label: item.label ?? "",
+                          value: item.value ?? "",
+                        })) ?? []
                       }
-                      required
-                      disabled={true}
-                    >
-                      <option value={""}>-- Chọn xuất xứ --</option>
-                      <option value={"NONE"}>Không rõ xuất xứ</option>
-                      {COUNTRIES.map((item, index) => (
-                        <option value={item.value} key={index}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.certificate_of_origin}
-                    </Form.Control.Feedback>
+                      value={values?.certificate_of_origin}
+                      placeholder="Chọn xuất xứ"
+                      isInValid={
+                        !!errors.certificate_of_origin &&
+                        touched.certificate_of_origin
+                      }
+                      errorText={errors.certificate_of_origin}
+                      disabled={isEdit === false}
+                    />
                   </Form.Group>
                 </Row>
                 <Form.Group as={Col} md={4}>

@@ -294,19 +294,7 @@ function Accounts() {
                   </td>
                 ),
               },
-              {
-                key: "modified",
-                label: "Thời gian điều chỉnh",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {value?.modified
-                        ? format(value.modified, "dd/MM/yyyy hh:mm:ss")
-                        : ""}
-                    </span>
-                  </td>
-                ),
-              },
+
               permission.deleteAccount
                 ? {
                     key: "",

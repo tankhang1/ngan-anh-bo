@@ -34,6 +34,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import productCreateSchema from "../../../schema/product.create.schema";
 import AppWarning from "../../../components/AppWarning";
+import AppSelect from "../../../components/AppSelect";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -347,26 +348,23 @@ function ProductCreate() {
                           <Form.Label className="text-black">
                             Mã thùng <span style={{ color: "red" }}>*</span>
                           </Form.Label>
-                          <Form.Select
-                            className="form-select input-placeholder"
-                            id="code_bin_validate"
-                            name="code_bin"
-                            defaultValue={values.code_bin}
-                            onChange={handleChange}
-                            isInvalid={touched.code_bin && !!errors.code_bin}
-                            required
+
+                          <AppSelect
+                            onChange={(value) => {
+                              setFieldValue("code_bin", value);
+                            }}
+                            data={
+                              binIds?.map((item) => ({
+                                label: item.label ?? "",
+                                value: item.value ?? "",
+                              })) ?? []
+                            }
+                            value={values?.code_bin}
+                            placeholder="Chọn mã thùng"
+                            isInValid={!!errors.code_bin && touched.code_bin}
+                            errorText={errors.code_bin}
                             disabled={isCreate === "false" && isEdit === false}
-                          >
-                            <option value={""}>-- Chọn mã thùng --</option>
-                            {binIds?.map((item, index) => (
-                              <option value={item.value} key={index}>
-                                {item.label}
-                              </option>
-                            ))}
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            {errors.code_bin}
-                          </Form.Control.Feedback>
+                          />
                         </Form.Group>
                       )}
                       <Form.Group>
@@ -607,26 +605,23 @@ function ProductCreate() {
                 </Row>
                 <Form.Group>
                   <Form.Label className="text-black">Mã nguyên liệu</Form.Label>
-                  <Form.Select
-                    className="form-select input-placeholder"
-                    required
-                    id="ingredient_id_validate"
-                    name="ingredient_id"
-                    defaultValue={values.ingredient_id}
-                    onChange={handleChange}
-                    isInvalid={touched.ingredient_id && !!errors.ingredient_id}
+
+                  <AppSelect
+                    onChange={(value) => {
+                      setFieldValue("ingredient_id", value);
+                    }}
+                    data={
+                      ingredients?.map((item) => ({
+                        label: item.label ?? "",
+                        value: item.value ?? "",
+                      })) ?? []
+                    }
+                    value={values?.ingredient_id}
+                    placeholder="Mã nguyên liệu"
+                    isInValid={!!errors.ingredient_id && touched.ingredient_id}
+                    errorText={errors.ingredient_id}
                     disabled={isCreate === "false" && isEdit === false}
-                  >
-                    <option value={""}>-- Mã nguyên liệu --</option>
-                    {ingredients?.map((item, index) => (
-                      <option value={item.value} key={index}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.ingredient_id}
-                  </Form.Control.Feedback>
+                  />
                 </Form.Group>
                 <Row>
                   <Form.Group as={Col} md={6}>
