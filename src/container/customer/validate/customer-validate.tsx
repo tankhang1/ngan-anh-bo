@@ -342,6 +342,22 @@ function CustomerValidation() {
                     ),
                   }
                 : undefined,
+              {
+                key: "time",
+                label: "Thời gian đăng ký",
+                render: (value) => <td>{value.time}</td>,
+              },
+              {
+                key: "time_updated",
+                label: "Thời gian cập nhật",
+                render: (value) => (
+                  <td>
+                    {value.time_updated
+                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
+              },
             ]}
             data={customers || []}
             filters={[

@@ -21,9 +21,10 @@ import { TProduct } from "../../../assets/types";
 
 import { BASE_PORT, MAP_PRODUCT_TYPE } from "../../../constants";
 import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
-import { exportExcelFile, fNumber } from "../../../hooks";
+import { exportExcelFile, fDate, fNumber } from "../../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { format } from "date-fns";
 
 const PRODUCT_FILTERS = [
   {
@@ -251,6 +252,18 @@ function ProductWarehousePage() {
                 ),
               },
               {
+                key: "name_display_root",
+                label: "Mã sản phẩm",
+                render: (value) => <td>{value.name_display_root}</td>,
+              },
+
+              {
+                key: "description",
+                label: "Tên sản phẩm",
+                render: (value) => <td>{value.description}</td>,
+              },
+
+              {
                 key: "brand_name",
                 label: "Tên thương hiệu",
                 render: (value: TProduct) => <td>{value?.brand_name}</td>,
@@ -265,21 +278,6 @@ function ProductWarehousePage() {
                 ),
               },
               {
-                key: "name_display_root",
-                label: "Mã sản phẩm",
-                render: (value) => <td>{value.name_display_root}</td>,
-              },
-              {
-                key: "name_display_label",
-                label: "Tên sản phẩm (thu gọn)",
-                render: (value) => <td>{value.name_display_label}</td>,
-              },
-              {
-                key: "product_name_detail",
-                label: "Tên sản phẩm",
-                render: (value) => <td>{value.product_name_detail}</td>,
-              },
-              {
                 key: "point",
                 label: "Số điểm",
                 render: (value) => (
@@ -290,49 +288,13 @@ function ProductWarehousePage() {
                   </td>
                 ),
               },
-              {
-                key: "c1_price_vnd",
-                label: "Giá tiền 1",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {fNumber(value.c1_price_vnd)}
-                    </span>
-                  </td>
-                ),
-              },
-              {
-                key: "c2_price_vnd",
-                label: "Giá tiền 2",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {fNumber(value.c2_price_vnd)}
-                    </span>
-                  </td>
-                ),
-              },
-              {
-                key: "type",
-                label: "Loại",
-                render: (value) => <td>{MAP_PRODUCT_TYPE.get(+value.type)}</td>,
-              },
-              {
-                key: "unit",
-                label: "Đơn vị",
-                render: (value) => <td>{value.unit}</td>,
-              },
-              {
-                key: "net_weight",
-                label: "Trọng lượng",
-                render: (value) => <td>{fNumber(value.net_weight ?? 0)}</td>,
-              },
+
               {
                 key: "pack_configuration",
                 label: "Quy cách đóng gói",
                 render: (value) => <td>{value.pack_configuration}</td>,
               },
-              permission.editProductWarehouse
+              permission.editProductMarketingInfo
                 ? {
                     key: "",
                     label: "Chức năng",
@@ -348,6 +310,29 @@ function ProductWarehousePage() {
                     ),
                   }
                 : undefined,
+
+              {
+                key: "time_created",
+                label: "Thời gian tạo",
+                render: (value) => (
+                  <td>
+                    {value.time_created
+                      ? format(value.time_created, "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
+              },
+              {
+                key: "time_updated",
+                label: "Thời gian cập nhật",
+                render: (value) => (
+                  <td>
+                    {value.time_updated
+                      ? format(value.time_updated, "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
+              },
             ]}
             data={filterProducts || []}
             filters={[

@@ -21,6 +21,7 @@ import {
 } from "../../../redux/api/program/program.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { format } from "date-fns";
 
 const POINT_FILTERS = [
   {
@@ -399,6 +400,22 @@ function PointProgram() {
                     ),
                   }
                 : undefined,
+              {
+                key: "time_create",
+                label: "Thời gian tạo",
+                render: (value) => <td>{value.time_create}</td>,
+              },
+              {
+                key: "time_updated",
+                label: "Thời gian cập nhật",
+                render: (value) => (
+                  <td>
+                    {value.time_updated
+                      ? format(value.time_updated, "yyyy-MM-dd hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
+              },
             ]}
             data={programPoints || []}
             filters={[

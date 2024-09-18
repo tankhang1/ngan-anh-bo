@@ -18,29 +18,11 @@ function TablePoint() {
       title="Danh sách tích điểm hôm nay"
       headers={[
         {
-          key: "program_name",
-          label: "Tên chương trình",
-          render: (value: TProgramPointDetail) => (
-            <td>
-              <span className="fw-semibold"> {value.program_name}</span>
-            </td>
-          ),
-        },
-        {
           key: "agent_name",
           label: "Tên đại lý",
-          render: (value) => (
+          render: (value: TProgramPointDetail) => (
             <td>
               <span className="fw-semibold">{value.agent_name}</span>
-            </td>
-          ),
-        },
-        {
-          key: "customer_name",
-          label: "Tên khách hàng",
-          render: (value) => (
-            <td>
-              <span className="fw-semibold">{value.customer_name}</span>
             </td>
           ),
         },
@@ -50,15 +32,6 @@ function TablePoint() {
           render: (value) => (
             <td>
               <span className="fw-semibold">{value.phone}</span>
-            </td>
-          ),
-        },
-        {
-          key: "province_name",
-          label: "Tỉnh thành",
-          render: (value) => (
-            <td>
-              <span className="fw-semibold">{value.province_name}</span>
             </td>
           ),
         },
@@ -77,6 +50,36 @@ function TablePoint() {
           label: "Số điểm",
           render: (value) => <td>{fNumber(value.point ?? 0)}</td>,
         },
+        {
+          key: "program_name",
+          label: "Tên chương trình",
+          render: (value) => (
+            <td>
+              <span className="fw-semibold"> {value.program_name}</span>
+            </td>
+          ),
+        },
+
+        {
+          key: "customer_name",
+          label: "Tên khách hàng",
+          render: (value) => (
+            <td>
+              <span className="fw-semibold">{value.customer_name}</span>
+            </td>
+          ),
+        },
+
+        {
+          key: "province_name",
+          label: "Tỉnh thành",
+          render: (value) => (
+            <td>
+              <span className="fw-semibold">{value.province_name}</span>
+            </td>
+          ),
+        },
+
         {
           key: "time_earn",
           label: "Thời gian tích điểm",

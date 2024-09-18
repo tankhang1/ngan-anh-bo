@@ -35,6 +35,11 @@ function TableBrandname() {
         },
 
         {
+          key: "code",
+          label: "Mã code",
+          render: (value) => <td>{value.code}</td>,
+        },
+        {
           key: "phone",
           label: "Số điện thoại",
           render: (value) => (
@@ -42,11 +47,6 @@ function TableBrandname() {
               <span className="fw-semibold">{value.phone}</span>
             </td>
           ),
-        },
-        {
-          key: "code",
-          label: "Mã code",
-          render: (value) => <td>{value.code}</td>,
         },
         {
           key: "time",

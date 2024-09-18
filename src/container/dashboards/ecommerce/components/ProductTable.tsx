@@ -1,10 +1,11 @@
 import React from "react";
-import { Col, Row } from "react-bootstrap";
+import { Badge, Col, Row } from "react-bootstrap";
 import AppTable from "../../../../components/common/table/table";
-import { TProductDashboardTable } from "../../../../assets/types";
+import { TProductDashboardTable, TSMSGateway } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
 import {
   useGetBinsQuery,
+  useGetListSMSGatewayQuery,
   useGetPacketsQuery,
 } from "../../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
@@ -37,48 +38,111 @@ function ProductTable() {
       refetchOnMountOrArgChange: true,
     }
   );
+  const { data: listSMSGateway, isLoading: isLoadingSMSGateway } =
+    useGetListSMSGatewayQuery();
   return (
     <Row>
       <Col xl={6}>
         <AppTable
-          title="SMS"
-          isLoading={isLoadingBin || isLoadingPacket}
+          title="SMS Gateway"
+          isLoading={isLoadingSMSGateway}
           headers={[
-            {
-              key: "id",
-              label: "ID",
-              render: (value: TProductDashboardTable) => (
-                <td>
-                  <AppId id={value.id} />
-                </td>
-              ),
-            },
             {
               key: "code",
               label: "Mã iQR",
-              render: (value) => (
+              render: (value: TSMSGateway) => <td>{value.code}</td>,
+            },
+            {
+              key: "id",
+              label: "ID",
+              render: (value: TSMSGateway) => (
                 <td>
-                  <span className="fw-semibold">{value.code}</span>
+                  <AppId id={value.id ?? ""} />
                 </td>
               ),
             },
             {
-              key: "bin_seri",
-              label: "Số seri thùng",
-              render: (value) => <td>{value.bin_seri}</td>,
+              key: "info",
+              label: "Nội dung tin nhắn",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.info}</span>
+                </td>
+              ),
+            },
+
+            {
+              key: "product_name",
+              label: "Tên sản phẩm",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.product_name}</span>
+                </td>
+              ),
             },
             {
-              key: "product_code",
-              label: "Mã sản phẩm",
-              render: (value) => <td>{value.product_code}</td>,
+              key: "name",
+              label: "Họ và tên khách hàng",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.customer_name}</span>
+                </td>
+              ),
+            },
+
+            {
+              key: "phone",
+              label: "Số điện thoại",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.phone}</span>
+                </td>
+              ),
             },
             {
-              key: "time_use",
-              label: "Ngày sử dụng",
-              render: (value) => <td>{value.time_use}</td>,
+              key: "customer_province_name",
+              label: "Tỉnh thành",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">
+                    {value.customer_province_name}
+                  </span>
+                </td>
+              ),
+            },
+            {
+              key: "customer_district_name",
+              label: "Quận huyện",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">
+                    {value.customer_district_name}
+                  </span>
+                </td>
+              ),
+            },
+            {
+              key: "customer_area",
+              label: "Khu vực",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.customer_area}</span>
+                </td>
+              ),
+            },
+
+            {
+              key: "time",
+              label: "Thời gian nhắn tin",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.time}</span>
+                </td>
+              ),
             },
           ]}
-          data={[...(bins?.sms ?? []), ...(packets?.sms ?? [])]}
+          // data={[...(bins?.sms ?? []), ...(packets?.sms ?? [])]}
+          data={listSMSGateway ?? []}
         />
       </Col>
       <Col xl={6}>

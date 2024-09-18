@@ -243,11 +243,7 @@ function CustomerUnValidation() {
                 label: "Nguồn đăng kí",
                 render: (value) => <td>{value.source_channel_used}</td>,
               },
-              {
-                key: "time",
-                label: "Thời gian đăng kí",
-                render: (value) => <td>{value.time}</td>,
-              },
+
               {
                 key: "time_verify",
                 label: "Thời gian xác thực",
@@ -304,6 +300,22 @@ function CustomerUnValidation() {
                     ),
                   }
                 : undefined,
+              {
+                key: "time",
+                label: "Thời gian đăng ký",
+                render: (value) => <td>{value.time}</td>,
+              },
+              {
+                key: "time_updated",
+                label: "Thời gian cập nhật",
+                render: (value) => (
+                  <td>
+                    {value.time_updated
+                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
+              },
             ]}
             data={customers || []}
             filters={[

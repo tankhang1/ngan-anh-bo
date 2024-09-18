@@ -1,7 +1,6 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
 import { TProgramTopupDetail } from "../../../../assets/types";
-import AppId from "../../../../components/common/app-id";
 import { fNumber } from "../../../../hooks";
 import { useGetReportProgramTopupDetailTodayQuery } from "../../../../redux/api/report/report.api";
 
@@ -17,9 +16,29 @@ function TableTopup() {
       title="Danh sách topup hôm nay"
       headers={[
         {
+          key: "code",
+          label: "Mã code",
+          render: (value: TProgramTopupDetail) => <td>{value.code}</td>,
+        },
+        {
+          key: "product_name",
+          label: "Tên sản phẩm",
+          render: (value) => <td>{value.product_name}</td>,
+        },
+        {
+          key: "price",
+          label: "Số tiền",
+          render: (value) => <td>{fNumber(value.price * 1000)}</td>,
+        },
+        {
+          key: "time_topup",
+          label: "Thời gian topup",
+          render: (value) => <td>{value.time_topup}</td>,
+        },
+        {
           key: "program_name",
           label: "Tên chương trình",
-          render: (value: TProgramTopupDetail) => (
+          render: (value) => (
             <td>
               <span className="fw-semibold"> {value.program_name}</span>
             </td>
@@ -53,15 +72,6 @@ function TableTopup() {
           ),
         },
         {
-          key: "area",
-          label: "Khu vực",
-          render: (value) => (
-            <td>
-              <span className="fw-semibold">{value.area}</span>
-            </td>
-          ),
-        },
-        {
           key: "province_name",
           label: "Tỉnh thành",
           render: (value) => (
@@ -71,24 +81,13 @@ function TableTopup() {
           ),
         },
         {
-          key: "code",
-          label: "Mã code",
-          render: (value) => <td>{value.code}</td>,
-        },
-        {
-          key: "product_name",
-          label: "Tên sản phẩm",
-          render: (value) => <td>{value.product_name}</td>,
-        },
-        {
-          key: "price",
-          label: "Số tiền",
-          render: (value) => <td>{fNumber(value.price ?? 0)}</td>,
-        },
-        {
-          key: "time_topup",
-          label: "Thời gian topup",
-          render: (value) => <td>{value.time_topup}</td>,
+          key: "area",
+          label: "Khu vực",
+          render: (value) => (
+            <td>
+              <span className="fw-semibold">{value.area}</span>
+            </td>
+          ),
         },
       ]}
       data={(topups || []) as any}

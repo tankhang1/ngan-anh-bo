@@ -235,11 +235,6 @@ function Employee() {
                 label: "Khu vực",
                 render: (value) => <td>{value.area}</td>,
               },
-              {
-                key: "note",
-                label: "Ghi chú",
-                render: (value) => <td>{value.note}</td>,
-              },
 
               permission.editEmployee
                 ? {
@@ -257,6 +252,33 @@ function Employee() {
                     ),
                   }
                 : undefined,
+              {
+                key: "time_created",
+                label: "Thời gian tạo",
+                render: (value) => (
+                  <td>
+                    {value.time_created
+                      ? format(value.time_created, "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
+              },
+              {
+                key: "time_updated",
+                label: "Thời gian cập nhật",
+                render: (value) => (
+                  <td>
+                    {value.time_updated
+                      ? format(value.time_updated, "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
+              },
+              {
+                key: "note",
+                label: "Ghi chú",
+                render: (value) => <td>{value.note}</td>,
+              },
             ]}
             data={employees || []}
             filters={[

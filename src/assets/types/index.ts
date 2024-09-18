@@ -93,6 +93,8 @@ export type TProduct = {
   point: number;
   c1_price_vnd: number;
   c2_price_vnd: number;
+  time_created?: number;
+  time_updated?: number;
 };
 
 export type TProductForm = Omit<
@@ -220,6 +222,7 @@ export type TProgramPoint = {
   time_deactive_number: number;
   time_active: string;
   time_active_number: number;
+  time_updated?: number;
   status: number;
   point_coefficient: number;
   products: string;
@@ -251,6 +254,7 @@ export type TProgramTopup = {
   objectives: string;
 
   goods_type: string;
+  time_updated?: number;
 };
 
 export type TTopupCreateForm = {
@@ -575,6 +579,7 @@ export type TCustomerRes = {
   export_address?: string;
   area_size?: number | null; // diện tích đất canh tác
   zalo_device_id: string | null;
+  time_updated?: number;
 };
 export type TGroupCustomer = {
   id?: number;
@@ -608,6 +613,8 @@ export type TEmployee = {
   provinces?: string | string[] | { label: string; value: string }[];
   export_address?: string;
   export_code?: string;
+  time_created?: number;
+  time_updated?: number;
 };
 
 export type TEmployeeRole = {

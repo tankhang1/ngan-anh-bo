@@ -337,6 +337,23 @@ function TopupProgram() {
                     },
                   }
                 : undefined,
+
+              {
+                key: "time_create",
+                label: "Thời gian tạo",
+                render: (value) => <td>{value.time_create}</td>,
+              },
+              {
+                key: "time_updated",
+                label: "Thời gian cập nhật",
+                render: (value) => (
+                  <td>
+                    {value.time_updated
+                      ? format(value.time_updated, "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
+              },
             ]}
             data={programTopups || []}
             filters={[

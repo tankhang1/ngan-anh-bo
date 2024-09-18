@@ -4,18 +4,20 @@ import DatePicker from "react-datepicker";
 import { Dashed } from "../../charts/apexcharts/linechart/linechartdata";
 import { format, isBefore } from "date-fns";
 import {
+  useGetCounterCustomerQuery,
   useGetListCustomerQuery,
   useGetListGroupObjectiveQuery,
   useGetReportDashboardDayByDayQuery,
 } from "../../../redux/api/manage/manage.api";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
 import AppTable from "../../../components/common/table/table";
-import { TAgent } from "../../../assets/types";
+import { TAgent, TCustomerRes } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useMediaQuery } from "@mui/material";
 import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import Select from "react-select";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
+import { MapCustomerType } from "../../../constants";
 
 function CustomerReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
@@ -38,22 +40,36 @@ function CustomerReport() {
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
   const [exportExcel] = useExportCustomerDataMutation();
-  const { data: customer, isFetching } = useGetListCustomerQuery(
+  const [page, setPage] = useState(1);
+
+  const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2399"),
-      t: customerType,
+      st: +(format(new Date(), "yyyyMMdd") + "0000"),
+      ed: +(format(new Date(), "yyyyMMdd") + "2359"),
+      s: 1,
     },
     {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
       refetchOnMountOrArgChange: true,
     }
   );
+  const { data: customers, isLoading: isLoadingCustomer } =
+    useGetListCustomerQuery(
+      {
+        st: +(rangDate.st.toString() + "0000"),
+        ed: +(rangDate.ed.toString() + "2359"),
+        nu: page - 1,
+        sz: 10,
+        s: 1,
+      },
+      {
+        refetchOnMountOrArgChange: true,
+      }
+    );
 
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
     {
-      ...rangDate,
+      st: +(rangDate.st.toString() + "0000"),
+      ed: +(rangDate.ed.toString() + "2359"),
       nu: 0,
       sz: 99999,
     },
@@ -82,7 +98,7 @@ function CustomerReport() {
   }, [reportDayByDay, listDays]);
 
   const handleExportExcel = async () => {
-    if (customer) {
+    if (customers) {
       await exportExcel({ ...rangDate })
         .unwrap()
         .then(async (url) => {
@@ -143,30 +159,7 @@ function CustomerReport() {
                 />
               </InputGroup>
             </div>
-            <Select
-              isSearchable
-              name="colors"
-              placeholder="Chọn đối tượng"
-              options={groupObjectives?.map((item) => ({
-                label: item.name,
-                value: item.symbol,
-              }))}
-              className={`default basic-multi-select ${
-                isSmallestScreen ? "w-100" : "form-group"
-              }`}
-              id="choices-multiple-default"
-              menuPlacement="auto"
-              classNamePrefix="Select2"
-              onChange={(e) => e && setCustomerType(e?.value)}
-            />
-            <Form.Check
-              className="form-check-md d-flex align-items-center"
-              type="checkbox"
-              checked={isValidate}
-              id="checkebox-lg"
-              label="Đã xác thực?"
-              onClick={() => setIsValidate(!isValidate)}
-            />
+
             <button
               className={`btn ${
                 isSmallestScreen
@@ -227,7 +220,7 @@ function CustomerReport() {
       </Card>
       <Card className="custom-card">
         <Card.Header>
-          <Card.Title>Khách hàng</Card.Title>
+          <Card.Title>Khách hàng xác thực</Card.Title>
 
           <div className="d-flex align-items-center gap-2">
             <button
@@ -249,20 +242,20 @@ function CustomerReport() {
         </Card.Header>
         <Card.Body>
           <AppTable
-            title="Thông tin khách hàng chưa xác thực hôm nay"
+            isHeader={false}
+            title="Thông tin đại lý"
+            isLoading={isLoadingCustomer}
+            setExternalPage={setPage}
+            maxPage={counterCustomer}
             headers={[
               {
-                key: "id",
-                label: "ID",
-                render: (value: TAgent) => (
-                  <td>
-                    <AppId id={value.id} />
-                  </td>
-                ),
+                key: "customer_code",
+                label: "Mã khách hàng",
+                render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
               },
               {
                 key: "name",
-                label: "Tên",
+                label: "Tên đăng kí",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.name}</span>
@@ -270,25 +263,65 @@ function CustomerReport() {
                 ),
               },
               {
+                key: "name",
+                label: "Họ và tên",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.customer_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "sign_board",
+                label: "Tên cửa hàng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.sign_board}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "province",
+                label: "Tỉnh thành",
+                render: (value) => <td>{value.customer_province_name}</td>,
+              },
+              {
                 key: "phone",
                 label: "Số điện thoại",
                 render: (value) => <td>{value.phone}</td>,
               },
               {
-                key: "province_name",
-                label: "Địa chỉ",
-                render: (value) => <td>{value.province_name}</td>,
-              },
-              {
-                key: "time",
-                label: "Thời gian đăng ký",
+                key: "customer_type",
+                label: "Nhóm khách hàng",
                 render: (value) => (
                   <td>
-                    {value?.time
-                      ? format(new Date(value.time), "dd/MM/yyyy")
+                    {value?.customer_type
+                      ? MapCustomerType.get(value.customer_type)
                       : ""}
                   </td>
                 ),
+              },
+
+              {
+                key: "time",
+                label: "Thời gian đăng kí",
+                render: (value) => <td>{value.time}</td>,
+              },
+              {
+                key: "time_verify",
+                label: "Thời gian xác thực",
+                render: (value) => (
+                  <td>
+                    {value?.time_verify
+                      ? format(new Date(value.time_verify), "yyyy-MM-dd hh:mm")
+                      : ""}
+                  </td>
+                ),
+              },
+              {
+                key: "source_channel_used",
+                label: "Nguồn đăng kí",
+                render: (value) => <td>{value.source_channel_used}</td>,
               },
               {
                 key: "status",
@@ -296,7 +329,7 @@ function CustomerReport() {
                 render: (value) => (
                   <td>
                     {value.status === 1 ? (
-                      <span className="bg-secondary bg-opacity-100 text-white badge ">
+                      <span className="bg-success bg-opacity-100 text-white badge ">
                         Đã xác thực
                       </span>
                     ) : (
@@ -308,16 +341,8 @@ function CustomerReport() {
                 ),
               },
             ]}
-            data={(customer || []) as any}
-            isLoading={isFetching}
-            isHeader={false}
-            filters={[
-              {
-                key: "status",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
+            data={customers || []}
+            searchByExternal="id"
           />
         </Card.Body>
       </Card>
