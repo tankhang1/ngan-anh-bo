@@ -494,7 +494,7 @@ function Accounts() {
                         onChange={(value) => setFieldValue("staff_code", value)}
                         data={
                           employees?.map((item) => ({
-                            label: item.name ?? "",
+                            label: `${item.name} - ${item.code}`,
                             value: item.code ?? "",
                           })) ?? []
                         }

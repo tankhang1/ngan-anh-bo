@@ -1,6 +1,8 @@
 import * as Yup from "yup";
 const pointProgramSchema = Yup.object().shape({
-  name: Yup.string().required("Tên chương trình là bắt buộc"),
+  name: Yup.string()
+    .required("Tên chương trình là bắt buộc")
+    .max(40, "Tên chương trình không quá 40 ký tự"),
 
   products: Yup.array()
     .min(1, "Vui lòng chọn ít nhất một sản phẩm")
@@ -21,14 +23,7 @@ const pointProgramSchema = Yup.object().shape({
     .min(1, "Hệ số điểm phải lớn hơn hoặc bằng 1")
     .required("Hệ số điểm là bắt buộc"),
 
-  objectives: Yup.array()
-    .min(1, "Vui lòng chọn ít nhất một đối tượng")
-    .of(
-      Yup.object({
-        value: Yup.string().required("Mã mục tiêu là bắt buộc"),
-        label: Yup.string().required("Tên mục tiêu là bắt buộc"),
-      })
-    ),
+  objectives: Yup.array(),
 
   time_end: Yup.date()
     .nullable()
@@ -54,8 +49,7 @@ const pointProgramSchema = Yup.object().shape({
       })
     ),
 
-  status: Yup.number()
-  .required("Trạng thái là bắt buộc"),
+  status: Yup.number().required("Trạng thái là bắt buộc"),
 
   uuid: Yup.string().required("UUID là bắt buộc"),
 });

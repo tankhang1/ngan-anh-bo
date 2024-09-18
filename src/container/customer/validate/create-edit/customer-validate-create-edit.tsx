@@ -352,9 +352,11 @@ function CustomerValidationCreateEdit() {
                         className="form-select input-placeholder"
                         name="customer_type"
                         value={values.customer_type}
-                        onChange={(e) =>
-                          setFieldValue("customer_type", e.target.value)
-                        }
+                        onChange={(e) => {
+                          if (e.target.value === "FARMER")
+                            setFieldValue("info_primary", 1);
+                          setFieldValue("customer_type", e.target.value);
+                        }}
                         isInvalid={
                           touched.customer_type && !!errors.customer_type
                         }
@@ -376,33 +378,35 @@ function CustomerValidationCreateEdit() {
                         {errors.customer_type as any}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group>
-                      <Form.Label className="text-black">
-                        Nhóm đại lý
-                      </Form.Label>
-                      <Form.Select
-                        className="form-select input-placeholder"
-                        name="retailer_group"
-                        onChange={(e) =>
-                          setFieldValue("retailer_group", e.target.value)
-                        }
-                        isInvalid={
-                          touched.retailer_group && !!errors.retailer_group
-                        }
-                        required
-                        disabled={isCreate === "false" && isEdit === false}
-                      >
-                        <option value="">-- Chọn nhóm đại lý --</option>
-                        {groupRetailers?.map((item) => (
-                          <option key={item.id} value={item.code}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </Form.Select>
-                      <Form.Control.Feedback type="invalid">
-                        {errors.retailer_group as any}
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                    {values.customer_type === "RETAILER1" && (
+                      <Form.Group>
+                        <Form.Label className="text-black">
+                          Nhóm đại lý
+                        </Form.Label>
+                        <Form.Select
+                          className="form-select input-placeholder"
+                          name="retailer_group"
+                          onChange={(e) =>
+                            setFieldValue("retailer_group", e.target.value)
+                          }
+                          isInvalid={
+                            touched.retailer_group && !!errors.retailer_group
+                          }
+                          required
+                          disabled={isCreate === "false" && isEdit === false}
+                        >
+                          <option value="">-- Chọn nhóm đại lý --</option>
+                          {groupRetailers?.map((item) => (
+                            <option key={item.id} value={item.code}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          {errors.retailer_group as any}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    )}
                     <Form.Group className="mb-2">
                       <Form.Label className="text-black">
                         Số điện thoại <span style={{ color: "red" }}>*</span>
@@ -431,12 +435,15 @@ function CustomerValidationCreateEdit() {
                       <Form.Check
                         type="switch"
                         checked={values.info_primary === 1 ? true : false}
-                        onChange={(value) =>
-                          setFieldValue(
-                            "info_primary",
-                            value.target.checked ? 1 : 0
-                          )
-                        }
+                        onChange={(value) => {
+                          if (values.customer_type === "FARMER")
+                            setFieldValue("info_primary", 1);
+                          else
+                            setFieldValue(
+                              "info_primary",
+                              value.target.checked ? 1 : 0
+                            );
+                        }}
                         required
                         className="form-check-md mb-2 input-placeholder"
                         name="info_primary"
@@ -590,7 +597,7 @@ function CustomerValidationCreateEdit() {
                         }}
                         data={
                           employees?.map((item) => ({
-                            label: item.name ?? "",
+                            label: `${item.name} - ${item.code}`,
                             value: item.code ?? "",
                           })) ?? []
                         }
@@ -796,57 +803,60 @@ function CustomerValidationCreateEdit() {
                     </Stack>
                   </Card.Body>
                 </Card>
-                <Card className="custom-card">
-                  <Card.Header className="justify-content-between">
-                    <Card.Title>Thông tin xuất kho</Card.Title>
-                  </Card.Header>
-                  <Card.Body>
-                    <Stack>
-                      <Form.Group>
-                        <Form.Label className="text-black">
-                          Mã số KH-XK
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          placeholder="Mã số KH-XK"
-                          name="export_code"
-                          className="input-placeholder"
-                          value={values.export_code}
-                          onChange={handleChange}
-                          isInvalid={
-                            touched.export_code && !!errors.export_code
-                          }
-                          disabled={isCreate === "false" && isEdit === false}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.export_code}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                      <Form.Group>
-                        <Form.Label className="text-black">
-                          Ghi chú thông tin địa chỉ giao hàng
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          placeholder="Ghi chú thông tin địa chỉ giao hàng"
-                          className="input-placeholder"
-                          name="export_address"
-                          value={values.export_address}
-                          onChange={handleChange}
-                          isInvalid={
-                            touched.export_address && !!errors.export_address
-                          }
-                          disabled={isCreate === "false" && isEdit === false}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {errors.export_address}
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Stack>
-                  </Card.Body>
-                </Card>
+                {(values.customer_type === "RETAILER1" ||
+                  values.customer_type === "RETAILER2") && (
+                  <Card className="custom-card">
+                    <Card.Header className="justify-content-between">
+                      <Card.Title>Thông tin xuất kho</Card.Title>
+                    </Card.Header>
+                    <Card.Body>
+                      <Stack>
+                        <Form.Group>
+                          <Form.Label className="text-black">
+                            Mã số KH-XK
+                          </Form.Label>
+                          <Form.Control
+                            required
+                            type="text"
+                            placeholder="Mã số KH-XK"
+                            name="export_code"
+                            className="input-placeholder"
+                            value={values.export_code}
+                            onChange={handleChange}
+                            isInvalid={
+                              touched.export_code && !!errors.export_code
+                            }
+                            disabled={isCreate === "false" && isEdit === false}
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.export_code}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group>
+                          <Form.Label className="text-black">
+                            Ghi chú thông tin địa chỉ giao hàng
+                          </Form.Label>
+                          <Form.Control
+                            required
+                            type="text"
+                            placeholder="Ghi chú thông tin địa chỉ giao hàng"
+                            className="input-placeholder"
+                            name="export_address"
+                            value={values.export_address}
+                            onChange={handleChange}
+                            isInvalid={
+                              touched.export_address && !!errors.export_address
+                            }
+                            disabled={isCreate === "false" && isEdit === false}
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.export_address}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                      </Stack>
+                    </Card.Body>
+                  </Card>
+                )}
               </Stack>
             </Row>
           </Stack>

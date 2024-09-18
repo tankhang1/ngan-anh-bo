@@ -477,7 +477,7 @@ function VerifyCustomer() {
                         }}
                         data={
                           employees?.map((item) => ({
-                            label: item.name ?? "",
+                            label: `${item.name} - ${item.code}`,
                             value: item.code ?? "",
                           })) ?? []
                         }

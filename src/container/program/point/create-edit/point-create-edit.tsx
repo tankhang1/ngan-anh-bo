@@ -63,6 +63,7 @@ function PointCreateEdit() {
   const navigate = useNavigate();
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
+  const [type, setType] = useState<"RETAILER" | "FARMER">("RETAILER");
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
@@ -204,13 +205,17 @@ function PointCreateEdit() {
               ? "all"
               : values.agents.map((item) => item.value).join(",")
             : "",
+        // objectives:
+        //   typeof values.objectives !== "string"
+        //     ? values.objectives.length === 1 &&
+        //       values.objectives[0]?.value === "all"
+        //       ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
+        //       : values.objectives.map((item) => item.value).join(",")
+        //     : "",
         objectives:
-          typeof values.objectives !== "string"
-            ? values.objectives.length === 1 &&
-              values.objectives[0]?.value === "all"
-              ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
-              : values.objectives.map((item) => item.value).join(",")
-            : "",
+          type === "RETAILER"
+            ? "RETAILER1,RETAILER2,ANONYMOUS"
+            : "FARMER,ANONYMOUS",
         // locations:
         //   typeof values.locations !== "string"
         //     ? values.locations.length === 1 &&
@@ -274,13 +279,17 @@ function PointCreateEdit() {
                 ? "all"
                 : values.agents.map((item) => item.value).join(",")
               : "",
+          // objectives:
+          //   typeof values.objectives !== "string"
+          //     ? values.objectives.length === 1 &&
+          //       values.objectives[0]?.value === "all"
+          //       ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
+          //       : values.objectives.map((item) => item.value).join(",")
+          //     : "",
           objectives:
-            typeof values.objectives !== "string"
-              ? values.objectives.length === 1 &&
-                values.objectives[0]?.value === "all"
-                ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
-                : values.objectives.map((item) => item.value).join(",")
-              : "",
+            type === "RETAILER"
+              ? "RETAILER1,RETAILER2,ANONYMOUS"
+              : "FARMER,ANONYMOUS",
           // locations:
           //   typeof values.locations !== "string"
           //     ? values.locations.length === 1 &&
@@ -500,7 +509,40 @@ function PointCreateEdit() {
                   * Chỉ chương trình được tạm dừng hoặc chờ kích hoạt mới được
                   chỉnh sửa thông tin
                 </p>
-
+                {!isEdit && (
+                  <Form.Label className="text-black">
+                    Loại chương trình <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                )}
+                {!isEdit && (
+                  <div className="d-flex gap-2 mb-2">
+                    <button
+                      onClick={() => setType("RETAILER")}
+                      className={`btn ${
+                        type === "RETAILER"
+                          ? "btn-primary"
+                          : "btn-primary-light"
+                      }`}
+                    >
+                      Chương trình đại lý
+                    </button>
+                    <button
+                      onClick={() => setType("FARMER")}
+                      className={`btn ${
+                        type === "FARMER" ? "btn-primary" : "btn-primary-light"
+                      }`}
+                    >
+                      Chương trình nông dân
+                    </button>
+                  </div>
+                )}
+                {!isEdit && (
+                  <p className=" text-xs text-gray">
+                    {type === "RETAILER"
+                      ? "*Đối tượng tham gia: Đại lý cấp 1, Đại lý cấp 2, Chưa xác thực"
+                      : "*Đối tượng tham gia: Nông dân, Chưa xác thực"}
+                  </p>
+                )}
                 <Form.Group>
                   <Form.Label className="text-black">
                     Tên chương trình <span style={{ color: "red" }}>*</span>
@@ -641,7 +683,7 @@ function PointCreateEdit() {
                       </p>
                     )}
                   </Form.Group> */}
-                <Form.Group controlId="objectives_validate">
+                {/* <Form.Group controlId="objectives_validate">
                   <Form.Label className="text-black">
                     Chọn đối tượng tham gia{" "}
                     <span style={{ color: "red" }}>*</span>
@@ -670,7 +712,7 @@ function PointCreateEdit() {
                     onChange={(value) => setFieldValue("objectives", value)}
                     isDisabled={isDisableAccess("objectives")}
                   />
-                </Form.Group>
+                </Form.Group> */}
                 {errors.objectives && touched.objectives && (
                   <p style={{ color: "red", fontSize: 12 }}>
                     {errors.objectives.toString()}
