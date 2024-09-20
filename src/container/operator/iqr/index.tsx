@@ -201,7 +201,7 @@ function IQRToday() {
                 label: "Trạng thái",
                 render: (value) => (
                   <td>
-                    {!!value.customer_code? (
+                    {value.status===1? (
                       <Badge bg="success">Đã xác thực</Badge>
                     ) : (
                       <Badge bg="warning">Chờ xác thực </Badge>
