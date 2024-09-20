@@ -1,6 +1,7 @@
 import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
 import {
   BaseQuery,
+  TCustomerStaff,
   TIngredient,
   TIngredientPacking,
   TWarehouseDocument,
@@ -157,6 +158,12 @@ export const warehouseApi = createApi({
         { type: TagsEnum.INGREDIENTS as const, id: result?.id },
       ],
     }),
+    getCustomerStaff: builder.query<TCustomerStaff[],void>({
+      query:()=>({
+        url: "/consumer-staff",
+        method: HTTPS_METHOD.GET,
+      })
+    })
   }),
 });
 
@@ -175,4 +182,5 @@ export const {
   useGetIngredientPackingByIngredientCodeQuery,
   useGetIngredientPackingByShipmentCodeQuery,
   useGetListIngredientPackingQuery,
+  useGetCustomerStaffQuery
 } = warehouseApi;

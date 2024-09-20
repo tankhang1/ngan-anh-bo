@@ -815,3 +815,14 @@ export type TSMSGateway = {
   code_bin_package_item: number;
   product_name: string;
 };
+export type TCustomerStaff={
+  id: number;
+  code: string;
+  name: string;
+  export_code: string;
+  export_address: string | null;
+  sign_board: string;
+  province: string;
+  type: string;
+  sale_name: string;
+}

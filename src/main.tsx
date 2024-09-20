@@ -68,6 +68,7 @@ import ManageMaterialUpdate from "./container/warehouse/material/manage/update/m
 import ManageMaterialPacking from "./container/warehouse/material/manage/mange-material-packing.tsx";
 import VerifyCustomer from "./container/operator/iqr/verify/index.tsx";
 import BrandnameToday from "./container/operator/brandname-today/index.tsx";
+import SearchWarehouseCustomerExport from "./container/warehouse/export/searchWarehouseCustomerExport.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -106,6 +107,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }warehouse/export/search-warehouse-export`}
                 element={<SearchWarehouseExport />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/search/retailer1`}
+                element={<SearchWarehouseCustomerExport />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}warehouse/report/export`}

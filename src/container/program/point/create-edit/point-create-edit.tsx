@@ -112,7 +112,7 @@ function PointCreateEdit() {
       return products
         ?.map((product1) => ({
           value: product1.code,
-          label: `${product1.name_display}-${product1.code}`,
+          label: `${product1.description}-${product1.code}`,
         }))
         .filter((product2) =>
           checkListProduct.includes("," + product2.value + ",")
