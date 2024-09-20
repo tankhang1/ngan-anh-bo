@@ -94,7 +94,7 @@ export const infoApi = createApi({
       query: (params) => ({
         url: "/api/customer/search",
         method: HTTPS_METHOD.GET,
-        params,
+        params,        
       }),
     }),
     getCustomerCounter: builder.query<number, BaseQuery>({

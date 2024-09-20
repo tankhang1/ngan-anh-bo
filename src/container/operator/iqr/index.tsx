@@ -9,15 +9,10 @@ import {
   Badge,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TCustomerRes, TProductDashboardTable } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
 import {
   useGetBinPackageTodayQuery,
-  useGetBinsQuery,
   useGetListGroupObjectiveQuery,
-  useGetPacketsQuery,
 } from "../../../redux/api/manage/manage.api";
-import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const AGENT_FILTERS = [
@@ -206,7 +201,7 @@ function IQRToday() {
                 label: "Trạng thái",
                 render: (value) => (
                   <td>
-                    {!!value.customer_code ? (
+                    {value.status===1? (
                       <Badge bg="success">Đã xác thực</Badge>
                     ) : (
                       <Badge bg="warning">Chờ xác thực </Badge>
@@ -220,7 +215,6 @@ function IQRToday() {
                 label: "Chức năng",
                 render: (value) => (
                   <td>
-                    {!value.customer_code && (
                       <button
                         className="btn btn-icon btn-sm btn-primary-ghost"
                         onClick={() =>
@@ -231,9 +225,8 @@ function IQRToday() {
                           )
                         }
                       >
-                        <i className="ti ti-circle-check"></i>
+                        <i className="ti ti-eye"></i>
                       </button>
-                    )}
                   </td>
                 ),
               },

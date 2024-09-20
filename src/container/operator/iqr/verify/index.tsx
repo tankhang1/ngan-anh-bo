@@ -11,7 +11,6 @@ import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  useGetListCustomerQuery,
   useGetListEmployeeQuery,
   useGetListGroupObjectiveQuery,
   useGetListGroupRetailerQuery,
@@ -25,7 +24,7 @@ import { ToastContext } from "../../../../components/AppToast";
 import { format } from "date-fns";
 import { fDate, fParseNumber } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
-import { useVerifyCustomerMutation } from "../../../../redux/api/other/other.api";
+import { useUpdateCustomerMutation, useVerifyCustomerMutation } from "../../../../redux/api/other/other.api";
 import customerSchema from "../../../../schema/customers.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
@@ -45,10 +44,14 @@ function VerifyCustomer() {
   const { data: provinces } = useGetListProvinceQuery();
   const { data: customers } = useGetCustomerQuery({
     k: phone,
+  },{
+    refetchOnMountOrArgChange:true
   });
   const customer = useMemo(() => customers?.[0], [customers]);
   const [verifyCustomer, { isLoading: isLoadingVerify }] =
     useVerifyCustomerMutation();
+    const [updateCustomer, { isLoading: isLoadingUpdate }] =
+    useUpdateCustomerMutation();
   const { data: groupRetailers } = useGetListGroupRetailerQuery();
 
   const { data: districts } = useGetDistrictQuery(
@@ -96,7 +99,44 @@ function VerifyCustomer() {
         console.log("create agent fail", e.message);
       });
   };
-
+  const handleUpdateAgent = async (values: TCustomerRes) => {
+      await updateCustomer({
+        ...values,
+        uuid: values?.uuid,
+        customer_province: provinceId,
+        gender: +(values?.gender ?? 1),
+        birthday: values?.birthday
+          ? +format(values.birthday, "yyyyMMdd")
+          : null,
+        area_size: values?.area_size
+          ? fParseNumber(values.area_size.toString())
+          : null,
+        citizen_number: values?.citizen_number
+          ? +values.citizen_number
+          : values.citizen_number,
+        citizen_day: values?.citizen_day
+          ? +format(values.citizen_day, "yyyyMMdd")
+          : values?.citizen_day,
+      })
+        .unwrap()
+        .then((value) => {
+          setIsEdit(false);
+          console.log("create agent success", value);
+          if (value?.status === -2) {
+            toast.showToast("Đại lý đã tồn tại");
+            return;
+          }
+          if (value?.status === 0) {
+            toast.showToast("Cập nhật đại lý thành công");
+            return;
+          }
+          toast.showToast("Cập nhật thất bại");
+        })
+        .catch((e) => {
+          setIsEdit(false);
+          console.log("create agent fail", e.message);
+        });
+  };
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
   }, [customer]);
@@ -112,13 +152,13 @@ function VerifyCustomer() {
           customer_type: customer?.customer_type ?? "",
           name: customer?.name ?? "",
           province: customer?.province ?? "",
-          info_primary: customer?.info_primary ?? 1,
+          info_primary: customer?.info_primary ?? 0,
           phone: customer?.phone ?? "",
           sign_board: customer?.sign_board ?? "",
           customer_address: customer?.customer_address ?? "",
           customer_district: customer?.customer_district ?? "",
           province_name: customer?.province_name ?? "",
-          status: customer?.status ?? 1,
+          status: customer?.status ?? 0,
           time: customer?.time ?? "",
           gender: customer?.gender ?? -1,
           birthday: customer?.birthday ? fDate(customer.birthday) : undefined,
@@ -164,7 +204,7 @@ function VerifyCustomer() {
                   </button>
 
                   <div className="d-flex gap-2">
-                    <AppWarning onAccept={() => handleSubmit()}>
+                    {!customer?.customer_code&&<AppWarning onAccept={() => handleSubmit()}>
                       <button
                         className={`btn btn-teal-light justify-content-center align-items-center ${
                           isLoadingVerify && "btn-loader "
@@ -177,7 +217,28 @@ function VerifyCustomer() {
                           </span>
                         )}
                       </button>
-                    </AppWarning>
+                    </AppWarning>}
+                    <AppWarning
+                          onAccept={() => {
+                            console.log(values)
+                            if (!errors)
+                              toast.showToast("Vui lòng bổ sung thông tin");
+                            else handleUpdateAgent(values);
+                          }}
+                        >
+                          <button
+                            className={`btn  btn-purple-light justify-content-center align-items-center ${
+                              isLoadingUpdate && "btn-loader "
+                            }`}
+                          >
+                            <span>Lưu</span>
+                            {isLoadingUpdate && (
+                              <span className="loading">
+                                <i className="ri-loader-2-fill fs-19"></i>
+                              </span>
+                            )}
+                          </button>
+                        </AppWarning>
                   </div>
                 </div>
               </Card.Header>
