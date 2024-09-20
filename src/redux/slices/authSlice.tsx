@@ -612,6 +612,7 @@ const authSlice = createSlice({
         viewWarehouseFillMaterial:0,
         //Warehoue report ingredient
         viewWarehouseReportIngredient: 0,
+        updateWarehouseIngredient:0,
         //Warehouse report ingredient packing
         viewWarehouseReportIngredientPacking:0,
         //Warehouse Search Batch Number
