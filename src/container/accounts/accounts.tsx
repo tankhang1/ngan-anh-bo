@@ -13,7 +13,6 @@ import {
 } from "react-bootstrap";
 import AppTable from "../../components/common/table/table";
 import { TAccount } from "../../assets/types";
-import AppId from "../../components/common/app-id";
 
 import {
   useDeleteAccountMutation,
