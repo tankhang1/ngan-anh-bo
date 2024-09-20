@@ -211,7 +211,7 @@ export const MENUITEMS = [
     key: MENU_KEY.CUSTOMERS,
     children: [
       {
-        path: `${import.meta.env.BASE_URL}customer/search`,
+        path: `${import.meta.env.BASE_URL}customer/search-customer`,
         type: "link",
         active: false,
         selected: false,
@@ -287,7 +287,7 @@ export const MENUITEMS = [
     key: MENU_KEY.PRODUCTS,
     children: [
       {
-        path: `${import.meta.env.BASE_URL}product/search`,
+        path: `${import.meta.env.BASE_URL}product/search-product`,
         type: "link",
         active: false,
         selected: false,
@@ -485,7 +485,7 @@ export const MENUITEMS = [
             active: false,
             selected: false,
             dirchange: false,
-            title: "Tìm kiếm mã KH-XK",
+            title: "Tra cứu mã KH-XK",
             key: MENU_KEY.WAREHOUSES_SEARCH_RETAILER_1,
           },
 
@@ -574,7 +574,7 @@ export const MENUITEMS = [
         key: MENU_KEY.REPORTS_POINT,
       },
       {
-        path: `${import.meta.env.BASE_URL}report/topup`,
+        path: `${import.meta.env.BASE_URL}report/program-topup`,
         type: "link",
         active: false,
         selected: false,
@@ -601,7 +601,7 @@ export const MENUITEMS = [
         key: MENU_KEY.REPORTS_SMS,
       },
       {
-        path: `${import.meta.env.BASE_URL}report/sms-brandname`,
+        path: `${import.meta.env.BASE_URL}report/brandname`,
         type: "link",
         active: false,
         selected: false,

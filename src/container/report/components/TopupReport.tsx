@@ -22,7 +22,7 @@ function TopupReport() {
     ed: new Date(),
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
-
+  const [exportExcel]=useExportProgramTopupDetailMutation()
   const { data: topups, isLoading: isLoadingTopup } =
     useGetReportProgramTopupDetailByTimeQuery(
       {
@@ -34,16 +34,7 @@ function TopupReport() {
         refetchOnMountOrArgChange: true,
       }
     );
-  const [exportExcel] = useExportProgramTopupDetailMutation();
-  const handleExportExcel = async () => {
-    await exportExcel({
-      ...rangDate,
-    })
-      .unwrap()
-      .then(async (url) => {
-        if (url) await downloadLink(url);
-      });
-  };
+
   const mapProgram = useMemo(() => {
     const topup = lodash.groupBy(
       topups?.map((item) => ({
@@ -58,6 +49,15 @@ function TopupReport() {
     }));
     return data;
   }, [topups, listDays]);
+  const handleExportExcel = async () => {
+    await exportExcel({
+      ...rangDate,
+    })
+      .unwrap()
+      .then(async (url) => {
+        if (url) await downloadLink(url);
+      });
+  };
   return (
     <Stack>
       <Card className="custom-card">

@@ -1,13 +1,16 @@
 import React, { useMemo, useState } from "react";
-import { Card, InputGroup } from "react-bootstrap";
+import { Card, InputGroup, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
-import { useGetListBrandnamesQuery } from "../../../redux/api/manage/manage.api";
+import { useGetListBrandnamesQuery, useGetListBrandnameTodayQuery } from "../../../redux/api/manage/manage.api";
 import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { exportMultipleSheet } from "../../../hooks";
+import { downloadLink, exportMultipleSheet } from "../../../hooks";
+import AppTable from "../../../components/common/table/table";
+import { TBrandname } from "../../../assets/types";
+import { useExportBrandnameMutation } from "../../../redux/api/excel/excel.api";
 function BrandnameReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
@@ -19,8 +22,9 @@ function BrandnameReport() {
     ed: new Date(),
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
+  const [exportExcel] = useExportBrandnameMutation();
 
-  const { data: brandnames } = useGetListBrandnamesQuery(
+  const { data: brandnames,isLoading:isLoadingBrandname } = useGetListBrandnamesQuery(
     {
       ...rangDate,
     },
@@ -34,7 +38,7 @@ function BrandnameReport() {
     const brandname = lodash.groupBy(
       brandnames?.map((item) => ({
         ...item,
-        time: format(new Date(item?.time), "ddy/MM/yyyy"),
+        time: format(new Date(item?.time), "dd-MM-yyyy"),
       })),
       "time"
     );
@@ -44,11 +48,21 @@ function BrandnameReport() {
     }));
     return data;
   }, [brandnames, listDays]);
+  const handleExportExcel = async () => {
+    await exportExcel({
+      ...rangDate,
+    })
+      .unwrap()
+      .then(async (url) => {
+        if (url) await downloadLink(url);
+      });
+  };
   return (
-    <Card className="custom-card">
+    <Stack>
+      <Card className="custom-card">
       <Card.Header>
         <Card.Title>Brandname</Card.Title>
-        <div className="d-flex   align-items-center gap-2">
+        <div className="d-flex align-items-center gap-2">
           <div className="form-group">
             <InputGroup className="">
               <InputGroup.Text className="input-group-text text-muted">
@@ -105,16 +119,7 @@ function BrandnameReport() {
           </button>
           <button
             className={`btn btn-bd-primary ${isSmallScreen ? "btn-icon" : ""}`}
-            onClick={() => {
-              if (brandnames && brandnames.length > 0) {
-                exportMultipleSheet([
-                  {
-                    sheetName: "Brandname",
-                    data: brandnames ?? [],
-                  },
-                ]);
-              }
-            }}
+            onClick={handleExportExcel}
           >
             {isSmallScreen ? (
               <i className="ti ti-database-export "></i>
@@ -131,7 +136,7 @@ function BrandnameReport() {
         <Basicolumn
           series={[
             {
-              name: "Topup",
+              name: "Brandname",
               data: mapProgram.map((item) => item.brandname),
             },
           ]}
@@ -140,6 +145,40 @@ function BrandnameReport() {
         />
       </Card.Body>
     </Card>
+    <AppTable
+      title="Danh sách brandname"
+      headers={[
+        {
+          key: "phone",
+          label: "Số điện thoại",
+          render: (value: TBrandname) => (
+            <td>
+              <span className="fw-semibold">{value.phone}</span>
+            </td>
+          ),
+        },
+        {
+          key: "time",
+          label: "Thời gian",
+          render: (value) => (
+            <td>{value?.time ? format(value.time, "dd/MM/yyyy hh:mm") : ""}</td>
+          ),
+        },
+        {
+          key: "content",
+          label: "Nội dung",
+          render: (value) => <td>{value.content}</td>,
+        },
+        {
+          key: "transactionid",
+          label: "Mã giao dịch",
+          render: (value) => <td>{value.transactionid}</td>,
+        },
+      ]}
+      data={(brandnames || []) as any}
+      isLoading={isLoadingBrandname}
+    />
+    </Stack>
   );
 }
 

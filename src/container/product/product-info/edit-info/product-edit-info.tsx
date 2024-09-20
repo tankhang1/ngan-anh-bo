@@ -254,7 +254,7 @@ function ProductEditInfo() {
                   </Col>
                   <Col xl={6}>
                     <Stack className="d-flex gap-2">
-                      <Form.Group>
+                      {/* <Form.Group>
                         <Form.Label className="text-black">
                           Mã sản phẩm (Hệ thống)
                           <span style={{ color: "red" }}>*</span>
@@ -274,10 +274,10 @@ function ProductEditInfo() {
                         <Form.Control.Feedback type="invalid">
                           {errors.code}
                         </Form.Control.Feedback>
-                      </Form.Group>
+                      </Form.Group> */}
                       <Form.Group>
                         <Form.Label className="text-black">
-                          Mã sản phẩm (Công ty)
+                          Mã sản phẩm
                           <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <Form.Control

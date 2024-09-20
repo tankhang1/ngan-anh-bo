@@ -7,7 +7,6 @@ function TopupReport() {
     <Fragment>
       <Stack className="d-flex gap-1">
         <Report />
-        <BrandnameReport />
       </Stack>
     </Fragment>
   );

@@ -69,6 +69,7 @@ import ManageMaterialPacking from "./container/warehouse/material/manage/mange-m
 import VerifyCustomer from "./container/operator/iqr/verify/index.tsx";
 import BrandnameToday from "./container/operator/brandname-today/index.tsx";
 import SearchWarehouseCustomerExport from "./container/warehouse/export/searchWarehouseCustomerExport.tsx";
+import BrandnameReport from "./container/report/components/BrandnameReport.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -211,7 +212,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<PointProgram />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}product/search`}
+                path={`${import.meta.env.BASE_URL}product/search-product`}
                 element={<SearchProductCode />}
               />
               <Route
@@ -243,7 +244,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<VerifyCustomer />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}customer/search`}
+                path={`${import.meta.env.BASE_URL}customer/search-customer`}
                 element={<SearchCustomer />}
               />
               <Route
@@ -288,11 +289,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<SMSReport />}
               />
               <Route
+                path={`${import.meta.env.BASE_URL}report/brandname`}
+                element={<BrandnameReport />}
+              />
+              <Route
                 path={`${import.meta.env.BASE_URL}report/program-point`}
                 element={<ProgramReport />}
               />
               <Route
-                path={`${import.meta.env.BASE_URL}report/topup`}
+                path={`${import.meta.env.BASE_URL}report/program-topup`}
                 element={<TopupReport />}
               />
               <Route
