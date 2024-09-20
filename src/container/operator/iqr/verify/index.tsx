@@ -204,7 +204,7 @@ function VerifyCustomer() {
                   </button>
 
                   <div className="d-flex gap-2">
-                    {values.status===0&&<AppWarning onAccept={() => handleSubmit()}>
+                    {!values.customer_code&&<AppWarning onAccept={() => handleSubmit()}>
                       <button
                         className={`btn btn-teal-light justify-content-center align-items-center ${
                           isLoadingVerify && "btn-loader "
