@@ -253,7 +253,7 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "OPERATORS_SMS_BRANDNAME": {
       return {
-        viewOperatorSMSGateway:
+        viewOperatorSMSBrandname:
           permission.permit_view_detail || permission.permit_view_list,
       };
     }
@@ -318,11 +318,11 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "PRODUCTS_PRODUCTION_INFO": {
       return {
-        viewProductsWarehouse: permission.permit_view_detail,
-        viewListProductsWarehouse: permission.permit_view_list,
-        createProductWarehouse: permission.permit_create,
-        exportProductWarehouse: permission.permit_export,
-        editProductWarehouse: permission.permit_edit,
+        viewProductsProductionInfo: permission.permit_view_detail,
+        viewListProductsProductionInfo: permission.permit_view_list,
+        createProductProductionInfo: permission.permit_create,
+        exportProductProductionInfo: permission.permit_export,
+        editProductProductionInfo: permission.permit_edit,
       };
     }
     case "PROGRAMS_POINTS": {
