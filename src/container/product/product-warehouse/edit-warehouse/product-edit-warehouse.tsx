@@ -18,7 +18,7 @@ import {
   ProductTypeEnum,
 } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import { FilePond, registerPlugin } from "react-filepond";
+import { registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
@@ -28,13 +28,10 @@ import {
   useGetListProductsQuery,
 } from "../../../../redux/api/info/info.api";
 import {
-  useCreateProductMutation,
   useGetListDevicesQuery,
   useGetListIngredientsQuery,
   useUpdateProductByWarehouseMutation,
-  useUpdateProductMutation,
 } from "../../../../redux/api/product/product.api";
-import { useUploadFileMutation } from "../../../../redux/api/media/media.api";
 import { FilePondFile } from "filepond";
 import { ToastContext } from "../../../../components/AppToast";
 import { fNumber } from "../../../../hooks";
@@ -52,7 +49,7 @@ registerPlugin(
 );
 
 function ProductEditWarehouse() {
-  const { roles } = useSelector((state: RootState) => state.auth);
+  const { permission } = useSelector((state: RootState) => state.auth);
   const { id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const [files1, setFiles1] = useState<FilePondFile[] | any>([]);
@@ -172,28 +169,28 @@ function ProductEditWarehouse() {
                 </button>
 
                 {isEdit ? (
-                  <AppWarning
-                    onAccept={() => {
-                      if (!errors)
-                        toast.showToast("Vui lòng điền đầy đủ thông tin");
-                      else handleSubmit(values as any);
-                    }}
-                  >
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingUpdate && "btn-loader"
-                      }`}
-                    >
-                      <span>Lưu</span>
-                      {isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
-                  </AppWarning>
-                ) : (
+                  permission.editProductProductionInfo&&<AppWarning
+                  onAccept={() => {
+                    if (!errors)
+                      toast.showToast("Vui lòng điền đầy đủ thông tin");
+                    else handleSubmit(values as any);
+                  }}
+                >
                   <button
+                    className={`btn btn-purple-light justify-content-center align-items-center ${
+                      isLoadingUpdate && "btn-loader"
+                    }`}
+                  >
+                    <span>Lưu</span>
+                    {isLoadingUpdate && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
+                      </span>
+                    )}
+                  </button>
+                </AppWarning>
+                ) : (
+                 permission.editProductProductionInfo&& <button
                     className={`btn btn-purple-light justify-content-center align-items-center}`}
                     type={"button"}
                     onClick={() => setIsEdit(true)}

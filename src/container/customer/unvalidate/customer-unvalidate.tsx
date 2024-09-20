@@ -278,28 +278,26 @@ function CustomerUnValidation() {
                 ),
               },
 
-              permission.editUnValidateCustomer
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => (
-                      <td className="d-flex justify-content-center align-item-center">
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() =>
-                            navigate(
-                              `ce/${false}/${value.uuid}_${customerType}_${
-                                page - 1
-                              }`
-                            )
-                          }
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </td>
-                    ),
-                  }
-                : undefined,
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td className="d-flex justify-content-center align-item-center">
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() =>
+                        navigate(
+                          `ce/${false}/${value.uuid}_${customerType}_${
+                            page - 1
+                          }`
+                        )
+                      }
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
               {
                 key: "time",
                 label: "Thời gian đăng ký",

@@ -43,8 +43,11 @@ import Select from "react-select";
 import lodash from "lodash";
 import employeeSchema from "../../../schema/employee.schema";
 import AppWarning from "../../../components/AppWarning";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 function EmployeeCreateEdit() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
@@ -260,44 +263,48 @@ function EmployeeCreateEdit() {
                     Trở lại
                   </button>
 
-                  {isCreate === "true" ? (
-                    <AppWarning onAccept={() => handleSubmit()}>
-                      <button
-                        className={`btn btn-purple-light justify-content-center align-items-center ${
-                          isLoadingCreate && "btn-loader "
-                        }`}
-                      >
-                        <span>Thêm mới</span>
-                        {isLoadingCreate && (
-                          <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
-                          </span>
-                        )}
-                      </button>
-                    </AppWarning>
-                  ) : isEdit ? (
-                    <AppWarning onAccept={() => handleSubmit()}>
-                      <button
-                        className={`btn btn-purple-light justify-content-center align-items-center ${
-                          isLoadingUpdate && "btn-loader "
-                        }`}
-                      >
-                        <span>Lưu</span>
-                        {isLoadingUpdate && (
-                          <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
-                          </span>
-                        )}
-                      </button>
-                    </AppWarning>
-                  ) : (
-                    <button
-                      onClick={() => setIsEdit(true)}
-                      className={`btn btn-purple-light justify-content-center align-items-center`}
-                    >
-                      <span>Chỉnh sửa</span>
-                    </button>
-                  )}
+                  {isCreate === "true"
+                    ? permission.createEmployee && (
+                        <AppWarning onAccept={() => handleSubmit()}>
+                          <button
+                            className={`btn btn-purple-light justify-content-center align-items-center ${
+                              isLoadingCreate && "btn-loader "
+                            }`}
+                          >
+                            <span>Thêm mới</span>
+                            {isLoadingCreate && (
+                              <span className="loading">
+                                <i className="ri-loader-2-fill fs-19"></i>
+                              </span>
+                            )}
+                          </button>
+                        </AppWarning>
+                      )
+                    : isEdit
+                    ? permission.editEmployee && (
+                        <AppWarning onAccept={() => handleSubmit()}>
+                          <button
+                            className={`btn btn-purple-light justify-content-center align-items-center ${
+                              isLoadingUpdate && "btn-loader "
+                            }`}
+                          >
+                            <span>Lưu</span>
+                            {isLoadingUpdate && (
+                              <span className="loading">
+                                <i className="ri-loader-2-fill fs-19"></i>
+                              </span>
+                            )}
+                          </button>
+                        </AppWarning>
+                      )
+                    : permission.editEmployee && (
+                        <button
+                          onClick={() => setIsEdit(true)}
+                          className={`btn btn-purple-light justify-content-center align-items-center`}
+                        >
+                          <span>Chỉnh sửa</span>
+                        </button>
+                      )}
                 </div>
               </Card.Header>
             </Card>

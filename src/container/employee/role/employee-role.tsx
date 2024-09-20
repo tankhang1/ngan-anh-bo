@@ -230,8 +230,7 @@ function EmployeeRole() {
                 label: "Chú thích",
                 render: (value) => <td>{value.note}</td>,
               },
-              permission.editRole
-                ? {
+              {
                     key: "",
                     label: "Chức năng",
                     render: (value) => (
@@ -249,7 +248,7 @@ function EmployeeRole() {
                       </td>
                     ),
                   }
-                : undefined,
+              ,
             ]}
             data={roles || []}
             filters={[
@@ -346,7 +345,7 @@ function EmployeeRole() {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="danger">Hủy</Button>
-                <AppWarning onAccept={() => handleSubmit()}>
+                {(permission.createRole||permission.editRole) &&<AppWarning onAccept={() => handleSubmit()}>
                   <Button
                     variant="primary"
                     className={`btn justify-content-center align-items-center ${
@@ -361,7 +360,7 @@ function EmployeeRole() {
                         </span>
                       ))}
                   </Button>
-                </AppWarning>
+                </AppWarning>}
               </Modal.Footer>
             </div>
           )}

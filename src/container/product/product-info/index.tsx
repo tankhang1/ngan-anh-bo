@@ -291,23 +291,20 @@ function ProductInfoPage() {
                 label: "Quy cách đóng gói",
                 render: (value) => <td>{value.pack_configuration}</td>,
               },
-              permission.editProductMarketingInfo
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => (
-                      <td>
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => navigate(`edit/${value.code}`)}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </td>
-                    ),
-                  }
-                : undefined,
-
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() => navigate(`edit/${value.code}`)}
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
               {
                 key: "time_created",
                 label: "Thời gian tạo",

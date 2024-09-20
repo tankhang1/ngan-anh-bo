@@ -47,6 +47,7 @@ registerPlugin(
 );
 
 function ProductEditInfo() {
+  const { permission } = useSelector((state: RootState) => state.auth);
   const { roles } = useSelector((state: RootState) => state.auth);
   const { id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
@@ -184,28 +185,28 @@ function ProductEditInfo() {
                   Trở lại
                 </button>
                 {isEdit ? (
-                  <AppWarning
-                    onAccept={() => {
-                      console.log(errors);
-                      if (!errors)
-                        toast.showToast("Vui lòng điền đầy đủ thông tin");
-                      else handleSubmit(values as any);
-                    }}
+                  permission.editProductMarketingInfo&&<AppWarning
+                  onAccept={() => {
+                    console.log(errors);
+                    if (!errors)
+                      toast.showToast("Vui lòng điền đầy đủ thông tin");
+                    else handleSubmit(values as any);
+                  }}
+                >
+                  <button
+                    className={`btn btn-purple-light justify-content-center align-items-center ${
+                      isLoadingUpdate && "btn-loader"
+                    }`}
                   >
-                    <button
-                      className={`btn btn-purple-light justify-content-center align-items-center ${
-                        isLoadingUpdate && "btn-loader"
-                      }`}
-                    >
-                      <span>Lưu</span>
-                      {isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      )}
-                    </button>
-                  </AppWarning>
-                ) : (
+                    <span>Lưu</span>
+                    {isLoadingUpdate && (
+                      <span className="loading">
+                        <i className="ri-loader-2-fill fs-19"></i>
+                      </span>
+                    )}
+                  </button>
+                </AppWarning>
+                ) : permission.editProductMarketingInfo&&(
                   <button
                     className={`btn btn-purple-light justify-content-center align-items-center}`}
                     type={"button"}

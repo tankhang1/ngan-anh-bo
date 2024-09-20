@@ -8,6 +8,7 @@ type TFeatureCode =
   | "OPERATORS_TOPUP_TODAY"
   | "OPERATORS_GIFT_TODAY"
   | "OPERATORS_SMS_GATEWAY"
+  | "OPERATORS_SMS_BRANDNAME"
   | "CUSTOMERS_SEARCH"
   | "CUSTOMERS_VALIDATE"
   | "CUSTOMERS_UNVALIDATE"
@@ -26,6 +27,7 @@ type TFeatureCode =
   | "REPORTS_TOPUP"
   | "REPORTS_CHANCE"
   | "REPORTS_SMS"
+  | "REPORTS_SMS_BRANDNAME"
   | "REPORTS_IQR_SKU"
   | "REPORTS_IQR_BIN"
   | "SETTINGS_AREA"
@@ -35,9 +37,12 @@ type TFeatureCode =
   | "SETTINGS_INDICATION"
   | "SETTINGS_FORMULATION"
   | "WAREHOUSES_CREATE_MATERIAL"
+  | "WAREHOUSES_FILL_MATERIAL"
+  | "WAREHOUSES_REPORT_INGREDIENT"
+  | "WAREHOUSES_REPORT_INGREDIENT_PACKING"
   | "WAREHOUSES_SEARCH_BATCH_NUMBER"
-  | "WAREHOUSES_SEARCH_RETAILER_1"
   | "WAREHOUSES_CREATE_MANUFACTURE_ORDER"
+  | "WAREHOUSES_SEARCH_RETAILER_1"
   | "WAREHOUSES_PRODUCTION_INFO"
   | "WAREHOUSES_REPORT_INVENTORY"
   | "WAREHOUSES_SEARCH_EXPORT"
@@ -47,7 +52,6 @@ type TFeatureCode =
   | "WAREHOUSES_LIST_EXPORT"
   | "WAREHOUSES_REPORT_EXPORT"
   | "WAREHOUSES_REPORT_RETURN"
-  | "WAREHOUSES_REPORT_INGREDIENT";
 
 export type TPermit = {
   id: number;
@@ -121,43 +125,34 @@ const initialValue = {
     createProductProductionInfo: 0,
     exportProductProductionInfo: 0,
     editProductProductionInfo: 0,
-    //Warehouse
-    viewProductsWarehouse: 0,
-    viewListProductsWarehouse: 0,
-    createProductWarehouse: 0,
-    exportProductWarehouse: 0,
-    editProductWarehouse: 0,
-    //Warehouse Material
-    viewMaterialWarehouse: 0,
-    viewListMaterialWarehouse: 0,
-    createMaterialWarehouse: 0,
-    editMaterialWarehouse: 0,
+
+    //Warehouse create material
+    viewWarehouseCreateMaterial:0,
+    //Warehouse fill material
+    viewWarehouseFillMaterial:0,
+    //Warehoue report ingredient
+    viewWarehouseReportIngredient: 0,
+    updateWarehouseIngredient:0,
+    //Warehouse report ingredient packing
+    viewWarehouseReportIngredientPacking:0,
     //Warehouse Search Batch Number
     viewSearchBatchNumber: 0,
+    //Create Manufacture order
+    viewCreateManufacturOrder: 0,
+    //Warehouse search import
+    viewWarehouseSearchImport:0,
+    //Warehouse search export
+    viewWarehouseSearchExport:0,
     // Search Retailer 1
     viewSearchRetailer1: 0,
-    //Warehouse Production Info
-    viewProductionInfoWarehouse: 0,
-    //Warehouse report inventory
-    viewWarehouseReportInventory: 0,
-    //Warehouse search export
-    viewWarehouseSearchExport: 0,
-    //Warehouse search import
-    viewWarehouseSearchImport: 0,
-    //Warehouse search today
-    viewWarehouseSearchToday: 0,
     //Warehouse list export
     viewWarehouseListExport: 0,
     //Warehouse list import
     viewWarehouseListImport: 0,
-    //Warehouse report export
-    viewWarehouseReportReturn: 0,
-    //Warehouse report turn
-    viewWarheouseReportReturn: 0,
-    //Warehoue report ingredient
-    viewWarehouseReportIngredient: 0,
-    //Create Manufacture order
-    viewCreateManufacturOrder: 0,
+    //Warehouse search today
+    viewWarehouseSearchToday: 0,
+    //Warehouse report inventory
+    viewWarehouseReportInventory: 0,
 
     //Program Point
     viewProgramPoint: 0,
@@ -180,7 +175,9 @@ const initialValue = {
     reportProgramPoint: 0,
     reportProgramTopup: 0,
     reportProgramChance: 0,
-    reportSMS: 0,
+    reportSMSGateway: 0,
+    reportSMSBrandname: 0,
+
     //Setting Area
     settingArea: 0,
     createSettingArea: 0,
@@ -201,6 +198,7 @@ const initialValue = {
     viewFormulation: 0,
     createFormulation: 0,
     //Operator
+    viewOperatorSMSBrandname:0,
     viewOperatorGiftToday: 0,
     viewOperatorSMSGateway: 0,
     viewOperatorSearchIQRToday: 0,
@@ -223,7 +221,7 @@ const onPermissionFeature = (permission: TPermit) => {
   switch (permission.feature_code) {
     case "DASHBOARD":
       return {
-        viewDashboard: permission.permit_view_list,
+        viewDashboard: permission.permit_view_list || permission.permit_view_detail,
       };
     case "ACCOUNTS": {
       return {
@@ -253,19 +251,25 @@ const onPermissionFeature = (permission: TPermit) => {
           permission.permit_view_detail || permission.permit_view_list,
       };
     }
+    case "OPERATORS_SMS_BRANDNAME": {
+      return {
+        viewOperatorSMSGateway:
+          permission.permit_view_detail || permission.permit_view_list,
+      };
+    }
     case "OPERATORS_TOPUP_TODAY": {
       return {
-        viewOperatorSearchTopupToday: permission.permit_view_list,
+        viewOperatorSearchTopupToday: permission.permit_view_list|| permission.permit_view_detail,
       };
     }
     case "OPERATORS_CUSTOMER_VALIDATE_TODAY": {
       return {
-        viewOperatorSearchCustomerValidateToday: permission.permit_view_list,
+        viewOperatorSearchCustomerValidateToday: permission.permit_view_list||permission.permit_view_detail,
       };
     }
     case "OPERATORS_CUSTOMER_UNVALIDATE_TODAY": {
       return {
-        viewOperatorSearchCustomerUnValidateToday: permission.permit_view_list,
+        viewOperatorSearchCustomerUnValidateToday: permission.permit_view_list||permission.permit_view_list,
       };
     }
     case "EMPLOYEES_INFO": {
@@ -279,14 +283,14 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "EMPLOYEES_ROLES": {
       return {
-        viewRoles: permission.permit_view_list,
+        viewRoles: permission.permit_view_list|| permission.permit_view_detail,
         createRole: permission.permit_create,
         editRole: permission.permit_edit,
       };
     }
     case "EMPLOYEES_DEPARTMENTS": {
       return {
-        viewDepartment: permission.permit_view_list,
+        viewDepartment: permission.permit_view_list|| permission.permit_view_detail,
         createDepartment: permission.permit_create,
         editDepartment: permission.permit_edit,
       };
@@ -347,34 +351,39 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "REPORTS_CUSTOMER": {
       return {
-        reportCustomer: permission.permit_view_list,
+        reportCustomer: permission.permit_view_list||permission.permit_view_detail,
       };
     }
 
     case "REPORTS_IQR": {
       return {
-        reportIQR: permission.permit_view_list,
+        reportIQR: permission.permit_view_list||permission.permit_view_detail,
       };
     }
     case "REPORTS_POINT": {
       return {
-        reportProgramPoint: permission.permit_view_list,
+        reportProgramPoint: permission.permit_view_list||permission.permit_view_detail,
       };
     }
     case "REPORTS_TOPUP": {
       return {
-        reportProgramTopup: permission.permit_view_list,
+        reportProgramTopup: permission.permit_view_list||permission.permit_view_detail,
       };
     }
     case "REPORTS_CHANCE": {
       return {
-        reportProgramChance: permission.permit_view_list,
+        reportProgramChance: permission.permit_view_list || permission.permit_view_detail,
       };
     }
     case "REPORTS_SMS": {
       return {
-        reportSMS: permission.permit_view_list,
+        reportSMSGateway: permission.permit_view_list||permission.permit_view_detail,
       };
+    }
+    case "REPORTS_SMS_BRANDNAME":{
+      return {
+        reportSMSBrandname: permission.permit_view_detail|| permission.permit_view_list
+      }
     }
     case "SETTINGS_AREA": {
       return {
@@ -384,14 +393,14 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "SETTINGS_GROUP_CUSTOMER": {
       return {
-        settingGroupCustomer: permission.permit_view_list,
+        settingGroupCustomer: permission.permit_view_list||permission.permit_view_detail,
         createSettingGroupCustomer: permission.permit_create,
         editSettingGroupCustomer: permission.permit_edit,
       };
     }
     case "SETTINGS_RETAILER_GROUP": {
       return {
-        viewRetailerGroup: permission.permit_view_list,
+        viewRetailerGroup: permission.permit_view_list||permission.permit_view_detail,
         createRetailerGroup: permission.permit_create,
       };
     }
@@ -436,23 +445,23 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "WAREHOUSES_SEARCH_EXPORT": {
       return {
-        warehouseSearchExport: permission.permit_view_list,
+        warehouseSearchExport: permission.permit_view_list||permission.permit_view_detail,
       };
     }
     case "WAREHOUSES_SEARCH_IMPORT": {
       return {
-        warehouseSearchImport: permission.permit_view_list,
+        warehouseSearchImport: permission.permit_view_list||permission.permit_view_detail,
       };
     }
     case "WAREHOUSES_LIST_IMPORT": {
       return {
-        warehouseListImport: permission.permit_view_list,
+        warehouseListImport: permission.permit_view_list||permission.permit_view_detail,
         warehouseExportFileImport: permission.permit_export,
       };
     }
     case "WAREHOUSES_LIST_EXPORT": {
       return {
-        warehouseListExport: permission.permit_view_list,
+        warehouseListExport: permission.permit_view_list||permission.permit_view_detail,
         warehouseExportFileExport: permission.permit_export,
       };
     }
@@ -463,16 +472,22 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "WAREHOUSES_REPORT_INVENTORY": {
       return {
-        warehouseInventoryInfo: permission.permit_view_list,
+        warehouseInventoryInfo: permission.permit_view_list||permission.permit_view_detail,
       };
     }
     case "WAREHOUSES_CREATE_MATERIAL": {
       return {
-        viewMaterialWarehouse: permission.permit_view_detail,
-        viewListMaterialWarehouse: permission.permit_view_list,
-        createMaterialWarehouse: permission.permit_create,
-        editMaterialWarehouse: permission.permit_edit,
-      };
+        viewWarehouseCreateMaterial:permission.permit_view_detail|| permission.permit_view_list      };
+    }
+    case "WAREHOUSES_FILL_MATERIAL":{
+      return {
+        viewWarehouseFillMaterial: permission.permit_view_detail||permission.permit_view_list
+      }
+    }
+    case "WAREHOUSES_REPORT_INGREDIENT_PACKING":{
+      return {
+        viewWarehouseReportIngredientPacking: permission.permit_view_detail|| permission.permit_view_list
+      }
     }
     case "WAREHOUSES_SEARCH_BATCH_NUMBER": {
       return {
@@ -502,7 +517,7 @@ const onPermissionFeature = (permission: TPermit) => {
         //Warehouse report export
         viewWarehouseReportIngredient:
           permission.permit_view_detail || permission.permit_view_list,
-      };
+          };
     }
     case "WAREHOUSES_REPORT_RETURN": {
       return {
@@ -590,44 +605,34 @@ const authSlice = createSlice({
         createProductProductionInfo: 0,
         exportProductProductionInfo: 0,
         editProductProductionInfo: 0,
-        //Warehouse
-        viewProductsWarehouse: 0,
-        viewListProductsWarehouse: 0,
-        createProductWarehouse: 0,
-        exportProductWarehouse: 0,
-        editProductWarehouse: 0,
-        //Warehouse Material
-        viewMaterialWarehouse: 0,
-        viewListMaterialWarehouse: 0,
-        createMaterialWarehouse: 0,
-        editMaterialWarehouse: 0,
+    
+        //Warehouse create material
+        viewWarehouseCreateMaterial:0,
+        //Warehouse fill material
+        viewWarehouseFillMaterial:0,
+        //Warehoue report ingredient
+        viewWarehouseReportIngredient: 0,
+        //Warehouse report ingredient packing
+        viewWarehouseReportIngredientPacking:0,
         //Warehouse Search Batch Number
         viewSearchBatchNumber: 0,
+        //Create Manufacture order
+        viewCreateManufacturOrder: 0,
+        //Warehouse search import
+        viewWarehouseSearchImport:0,
+        //Warehouse search export
+        viewWarehouseSearchExport:0,
         // Search Retailer 1
         viewSearchRetailer1: 0,
-        //Warehouse Production Info
-        viewProductionInfoWarehouse: 0,
-        //Warehouse report inventory
-        viewWarehouseReportInventory: 0,
-        //Warehouse search export
-        viewWarehouseSearchExport: 0,
-        //Warehouse search import
-        viewWarehouseSearchImport: 0,
-        //Warehouse search today
-        viewWarehouseSearchToday: 0,
         //Warehouse list export
         viewWarehouseListExport: 0,
         //Warehouse list import
         viewWarehouseListImport: 0,
-        //Warehouse report export
-        viewWarehouseReportReturn: 0,
-        //Warehouse report turn
-        viewWarheouseReportReturn: 0,
-        //Warehoue report ingredient
-        viewWarehouseReportIngredient: 0,
-        //Create Manufacture order
-        viewCreateManufacturOrder: 0,
-
+        //Warehouse search today
+        viewWarehouseSearchToday: 0,
+        //Warehouse report inventory
+        viewWarehouseReportInventory: 0,
+    
         //Program Point
         viewProgramPoint: 0,
         viewListProgramPoint: 0,
@@ -649,7 +654,9 @@ const authSlice = createSlice({
         reportProgramPoint: 0,
         reportProgramTopup: 0,
         reportProgramChance: 0,
-        reportSMS: 0,
+        reportSMSGateway: 0,
+        reportSMSBrandname: 0,
+    
         //Setting Area
         settingArea: 0,
         createSettingArea: 0,
@@ -670,6 +677,7 @@ const authSlice = createSlice({
         viewFormulation: 0,
         createFormulation: 0,
         //Operator
+        viewOperatorSMSBrandname:0,
         viewOperatorGiftToday: 0,
         viewOperatorSMSGateway: 0,
         viewOperatorSearchIQRToday: 0,

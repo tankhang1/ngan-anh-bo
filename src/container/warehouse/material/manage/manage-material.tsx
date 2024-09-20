@@ -5,20 +5,13 @@ import {
   Col,
   Form,
   InputGroup,
-  Modal,
-  OverlayTrigger,
-  Stack,
-  Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../../components/common/table/table";
 
-import { Formik } from "formik";
 import { ToastContext } from "../../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
-import AppWarning from "../../../../components/AppWarning";
 import { useGetListIngredientAllQuery } from "../../../../redux/api/warehouse/warehouse.api";
-import { TIngredient } from "../../../../assets/types";
 import { useNavigate } from "react-router-dom";
 
 function ManageMaterial() {
@@ -27,10 +20,6 @@ function ManageMaterial() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("code");
   const deferSearchValue = useDeferredValue(search);
-  const [openAddPopup, setOpenAddPopup] = useState<Omit<
-    TIngredient,
-    "id"
-  > | null>(null);
   const navigate = useNavigate();
   const { data: ingredients, isLoading: isLoadingIngredient } =
     useGetListIngredientAllQuery(undefined, {

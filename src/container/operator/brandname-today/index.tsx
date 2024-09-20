@@ -9,17 +9,10 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TBrandname, TCustomerRes, TSMSGateway } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
+import { TBrandname} from "../../../assets/types";
 import {
-  useGetCounterCustomerQuery,
   useGetListBrandnameTodayQuery,
-  useGetListCustomerQuery,
-  useGetListGroupObjectiveQuery,
-  useGetListSMSGatewayQuery,
 } from "../../../redux/api/manage/manage.api";
-import { format } from "date-fns";
 
 const AGENT_FILTERS = [
   {

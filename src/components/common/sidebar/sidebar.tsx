@@ -100,6 +100,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             //Operators
             permission.viewOperatorGiftToday ||
             permission.viewOperatorSMSGateway ||
+            permission.viewOperatorSMSBrandname ||
             permission.viewOperatorSearchIQRToday ||
             permission.viewOperatorSearchTopupToday ||
             permission.viewOperatorSearchCustomerUnValidateToday ||
@@ -123,22 +124,24 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.viewProductsProductionInfo ||
             permission.viewListProductsProductionInfo ||
             // warehouse
-            permission.viewMaterialWarehouse ||
-            permission.viewListMaterialWarehouse ||
+            permission.viewWarehouseCreateMaterial ||
+            permission.viewWarehouseFillMaterial ||
             permission.viewSearchBatchNumber ||
             permission.viewSearchCustomer ||
             permission.viewSearchRetailer1 ||
             permission.viewCreateManufacturOrder ||
             permission.viewProductsProductionInfo ||
             permission.viewListProductsProductionInfo ||
-            permission.viewProductsWarehouse ||
-            permission.viewListProductsWarehouse ||
+            permission.viewWarehouseReportIngredient ||
+            permission.viewWarehouseReportIngredientPacking ||
             permission.warehouseSearchExport ||
             permission.warehouseSearchImport ||
             permission.warehouseListImport ||
             permission.warehouseListExport ||
             permission.warehouseReportExport ||
             permission.warehouseInventoryInfo ||
+            permission.viewWarehouseSearchToday ||
+            permission.viewWarehouseReportInventory ||
             // program
             permission.viewProgramPoint ||
             permission.viewProgramTopup ||
@@ -154,39 +157,13 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.MANAGE_OPERATOR:
           return (
             permission.viewOperatorGiftToday ||
-            permission.viewOperatorSearchCustomerUnValidateToday ||
-            permission.viewOperatorSearchCustomerValidateToday ||
             permission.viewOperatorSMSGateway ||
+            permission.viewOperatorSMSBrandname ||
+            permission.viewOperatorSearchIQRToday ||
             permission.viewOperatorSearchTopupToday ||
-            permission.viewOperatorSearchIQRToday
+            permission.viewOperatorSearchCustomerUnValidateToday ||
+            permission.viewOperatorSearchCustomerValidateToday
           );
-        case MENU_KEY.MANAGE_WAREHOUSE:
-          return (
-            permission.warehouseSearchExport ||
-            permission.warehouseSearchImport ||
-            permission.warehouseListExport ||
-            permission.warehouseListImport ||
-            permission.warehouseReportExport ||
-            permission.warehouseInventoryInfo ||
-            permission.createMaterialWarehouse ||
-            permission.viewSearchBatchNumber ||
-            permission.viewSearchRetailer1 ||
-            permission.viewCreateManufacturOrder ||
-            permission.viewWarehouseSearchToday ||
-            permission.viewMaterialWarehouse
-          );
-        case MENU_KEY.WAREHOUSES_SEARCH_EXPORT:
-          return permission.warehouseSearchExport;
-        case MENU_KEY.WAREHOUSES_SEARCH_IMPORT:
-          return permission.warehouseSearchImport;
-        case MENU_KEY.WAREHOUSES_LIST_IMPORT:
-          return permission.warehouseListImport;
-        case MENU_KEY.WAREHOUSES_LIST_EXPORT:
-          return permission.warehouseListExport;
-        case MENU_KEY.WAREHOUSES_REPORT_EXPORT:
-          return permission.warehouseReportExport;
-        case MENU_KEY.WAREHOUSES_REPORT_INVENTORY:
-          return permission.warehouseInventoryInfo;
         //operator
         case MENU_KEY.OPERATORS_TOPUP_TODAY:
           return permission.viewOperatorSearchTopupToday;
@@ -198,6 +175,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.viewOperatorGiftToday;
         case MENU_KEY.OPERATORS_SMS_GATEWAY:
           return permission.viewOperatorSMSGateway;
+        case MENU_KEY.OPERATORS_SMS_BRANDNAME:
+          return permission.viewOperatorSMSBrandname;
         case MENU_KEY.OPERATORS_iQr_TODAY:
           return permission.viewOperatorSearchIQRToday;
 
@@ -235,15 +214,14 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.viewRoles;
         case MENU_KEY.EMPLOYEES_DEPARTMENTS:
           return permission.viewDepartment;
+
         case MENU_KEY.PRODUCTS:
           return (
             permission.viewSearchProduct ||
             permission.viewProductsMarketingInfo ||
             permission.viewListProductsMarketingInfo ||
-            permission.viewProductionInfoWarehouse ||
-            permission.viewListProductsProductionInfo ||
-            permission.viewProductsWarehouse ||
-            permission.viewListProductsWarehouse
+            permission.viewProductsProductionInfo ||
+            permission.viewListProductsProductionInfo
           );
         case MENU_KEY.PRODUCTS_MARKETING_INFO:
           return (
@@ -253,7 +231,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.PRODUCTS_PRODUCTION_INFO:
           return (
             permission.viewListProductsProductionInfo ||
-            permission.viewProductionInfoWarehouse
+            permission.viewProductsProductionInfo
           );
 
         case MENU_KEY.PRODUCTS_SEARCH_PRODUCT:
@@ -275,6 +253,25 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return (
             permission.viewProgramChance || permission.viewListProgramChance
           );
+        case MENU_KEY.MANAGE_WAREHOUSE:
+          return (
+            permission.warehouseSearchExport ||
+            permission.warehouseSearchImport ||
+            permission.warehouseListExport ||
+            permission.warehouseListImport ||
+            permission.warehouseReportExport ||
+            permission.warehouseInventoryInfo ||
+            permission.viewCreateManufacturOrder ||
+            permission.viewSearchBatchNumber ||
+            permission.viewSearchRetailer1 ||
+            permission.viewCreateManufacturOrder ||
+            permission.viewWarehouseSearchToday ||
+            permission.viewWarehouseCreateMaterial ||
+            permission.viewWarehouseFillMaterial ||
+            permission.viewWarehouseReportIngredient ||
+            permission.viewWarehouseReportIngredientPacking
+          );
+        
         case MENU_KEY.REPORT_TITLE:
           if (
             permission.reportCustomer ||
@@ -282,7 +279,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
             permission.reportProgramChance ||
-            permission.reportSMS
+            permission.reportSMSBrandname||
+            permission.reportSMSBrandname
           )
             return true;
           return false;
@@ -298,7 +296,9 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.REPORTS_CHANCE:
           return permission.reportProgramChance;
         case MENU_KEY.REPORTS_SMS:
-          return permission.reportSMS;
+          return permission.reportSMSGateway;
+        case MENU_KEY.REPORTS_SMS_BRANDNAME:
+          return permission.reportSMSBrandname
         case MENU_KEY.SETTINGS_AREA:
           return permission.settingArea;
         case MENU_KEY.SETTINGS_GROUP_CUSTOMER:
@@ -312,7 +312,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
             permission.reportProgramChance ||
-            permission.reportSMS
+            permission.reportSMSGateway||
+            permission.reportSMSBrandname
           );
         case MENU_KEY.MANAGE_SETTING:
           return (
@@ -340,14 +341,49 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           )
             return true;
           return false;
+        case MENU_KEY.REPORTS_SMS:
+          return permission.reportSMSGateway
+        case MENU_KEY.REPORTS_SMS_BRANDNAME:
+          return permission.reportSMSBrandname
         case MENU_KEY.WAREHOUSES_MATERIAL:
           return (
-            permission.viewWarehouseReportIngredient ||
-            permission.viewMaterialWarehouse ||
-            permission.viewListMaterialWarehouse
+            permission.viewSearchBatchNumber ||
+            permission.viewCreateManufacturOrder
           );
+        case MENU_KEY.WAREHOUSES_SEARCH_BATCH_NUMBER: {
+          return permission.viewSearchBatchNumber;
+        }
+        case MENU_KEY.WAREHOUSES_CREATE_MANUFACTURE_ORDER: {
+          return permission.viewCreateManufacturOrder;
+        }
         case MENU_KEY.WAREHOUSES_REPORT_INGREDIENT:
           return permission.viewWarehouseReportIngredient;
+        case MENU_KEY.WAREHOUSES: {
+          return (
+            permission.viewWarehouseSearchImport ||
+            permission.viewWarehouseSearchExport ||
+            permission.viewSearchRetailer1 ||
+            permission.viewWarehouseListExport ||
+            permission.viewWarehouseListImport ||
+            permission.viewWarehouseSearchToday
+          );
+        }
+        case MENU_KEY.WAREHOUSES_SEARCH_EXPORT:
+          return permission.warehouseSearchExport;
+        case MENU_KEY.WAREHOUSES_SEARCH_IMPORT:
+          return permission.warehouseSearchImport;
+        case MENU_KEY.WAREHOUSES_LIST_IMPORT:
+          return permission.warehouseListImport;
+        case MENU_KEY.WAREHOUSES_LIST_EXPORT:
+          return permission.warehouseListExport;
+        case MENU_KEY.WAREHOUSES_REPORT_EXPORT:
+          return permission.warehouseReportExport;
+        case MENU_KEY.WAREHOUSES_REPORT_INVENTORY:
+          return permission.warehouseInventoryInfo;
+        case MENU_KEY.WAREHOUSES_SEARCH_RETAILER_1:
+          return permission.viewSearchRetailer1
+        case MENU_KEY.WAREHOUSES_SEARCH_TODAY:
+          return permission.viewWarehouseSearchToday
         default:
           return true;
       }

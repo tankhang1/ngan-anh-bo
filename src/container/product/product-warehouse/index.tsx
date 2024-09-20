@@ -19,9 +19,9 @@ import AppTable from "../../../components/common/table/table";
 import { useNavigate } from "react-router-dom";
 import { TProduct } from "../../../assets/types";
 
-import { BASE_PORT, MAP_PRODUCT_TYPE } from "../../../constants";
+import { BASE_PORT } from "../../../constants";
 import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
-import { exportExcelFile, fDate, fNumber } from "../../../hooks";
+import { exportExcelFile, fNumber } from "../../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
@@ -197,7 +197,7 @@ function ProductWarehousePage() {
                       </Button>
                     </OverlayTrigger>
                   ) : null} */}
-                  {permission.exportProductWarehouse ? (
+                  {permission.createProductProductionInfo ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -294,8 +294,7 @@ function ProductWarehousePage() {
                 label: "Quy cách đóng gói",
                 render: (value) => <td>{value.pack_configuration}</td>,
               },
-              permission.editProductMarketingInfo
-                ? {
+               {
                     key: "",
                     label: "Chức năng",
                     render: (value) => (
@@ -309,7 +308,7 @@ function ProductWarehousePage() {
                       </td>
                     ),
                   }
-                : undefined,
+               ,
 
               {
                 key: "time_created",

@@ -236,22 +236,20 @@ function Employee() {
                 render: (value) => <td>{value.area}</td>,
               },
 
-              permission.editEmployee
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => (
-                      <td>
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => navigate(`ce/${false}/${value.uuid}`)}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </td>
-                    ),
-                  }
-                : undefined,
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() => navigate(`ce/${false}/${value.uuid}`)}
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
               {
                 key: "time_created",
                 label: "Thời gian tạo",

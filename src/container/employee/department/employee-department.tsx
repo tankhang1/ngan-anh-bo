@@ -231,26 +231,24 @@ function EmployeeDepartment() {
                 label: "Chú thích",
                 render: (value) => <td>{value.note}</td>,
               },
-              permission.editDepartment
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => (
-                      <td>
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => {
-                            setOpenCEModal(true);
-                            setModalInfo(value);
-                            setIsCreate(false);
-                          }}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </td>
-                    ),
-                  }
-                : undefined,
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() => {
+                        setOpenCEModal(true);
+                        setModalInfo(value);
+                        setIsCreate(false);
+                      }}
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
             ]}
             data={departments || []}
             filters={[
@@ -348,22 +346,24 @@ function EmployeeDepartment() {
                 <Button variant="danger" onClick={onModalClose}>
                   Hủy
                 </Button>
-                <AppWarning onAccept={() => handleSubmit()}>
-                  <Button
-                    variant="primary"
-                    className={`btn justify-content-center align-items-center ${
-                      isLoadingCreate || (isLoadingUpdate && "btn-loader ")
-                    }`}
-                  >
-                    <span>Xác nhận</span>
-                    {isLoadingCreate ||
-                      (isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      ))}
-                  </Button>
-                </AppWarning>
+                {(permission.editDepartment || permission.createDepartment )&& (
+                  <AppWarning onAccept={() => handleSubmit()}>
+                    <Button
+                      variant="primary"
+                      className={`btn justify-content-center align-items-center ${
+                        isLoadingCreate || (isLoadingUpdate && "btn-loader ")
+                      }`}
+                    >
+                      <span>Xác nhận</span>
+                      {isLoadingCreate ||
+                        (isLoadingUpdate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        ))}
+                    </Button>
+                  </AppWarning>
+                )}
               </Modal.Footer>
             </div>
           )}

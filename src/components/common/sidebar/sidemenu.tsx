@@ -34,7 +34,7 @@ export const MENU_KEY = {
   OPERATORS_TOPUP_TODAY: "OPERATORS_TOPUP_TODAY",
   OPERATORS_GIFT_TODAY: "OPERATORS_GIFT_TODAY",
   OPERATORS_SMS_GATEWAY: "OPERATORS_SMS_GATEWAY",
-  OPERATORS_BRANDNAME: "OPERATORS_BRANDNAME",
+  OPERATORS_SMS_BRANDNAME: "OPERATORS_SMS_BRANDNAME",
   CUSTOMERS_SEARCH: "CUSTOMERS_SEARCH",
   CUSTOMERS_VALIDATE: "CUSTOMERS_VALIDATE",
   CUSTOMERS_UNVALIDATE: "CUSTOMERS_UNVALIDATE",
@@ -79,6 +79,8 @@ export const MENU_KEY = {
   WAREHOUSES_REPORT_RETURN: "WAREHOUSES_REPORT_RETURN",
   WAREHOUSES_REPORT_INGREDIENT: "WAREHOUSES_REPORT_INGREDIENT",
   WAREHOUSES_REPORT_INGREDIENT_PACKING: "WAREHOUSES_REPORT_INGREDIENT_PACKING",
+
+  WAREHOUSES:"WAREHOUSES"
 };
 
 export const MENUITEMS = [
@@ -193,8 +195,8 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Brandname",
-        key: MENU_KEY.OPERATORS_BRANDNAME,
+        title: "SMS Brandname",
+        key: MENU_KEY.OPERATORS_SMS_BRANDNAME,
       },
     ],
   },
@@ -354,7 +356,7 @@ export const MENUITEMS = [
     ],
   },
   {
-    title: "Thông tin kho",
+    title: "Sản xuất và kho",
     icon: icon7,
     badgetxt: "",
     type: "sub",
@@ -453,7 +455,7 @@ export const MENUITEMS = [
         active: true,
         selected: false,
         dirchange: false,
-        key: MENU_KEY.WAREHOUSES_MATERIAL,
+        key: MENU_KEY.WAREHOUSES,
         children: [
           {
             path: `${
