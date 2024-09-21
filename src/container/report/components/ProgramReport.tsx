@@ -7,11 +7,10 @@ import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { downloadLink, exportMultipleSheet, fNumber } from "../../../hooks";
+import { fNumber } from "../../../hooks";
 import { useGetReportProgramPointDetailByTimeQuery } from "../../../redux/api/report/report.api";
 import AppTable from "../../../components/common/table/table";
 import { TProgramPointDetail } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
 import { useExportProgramPointDetailMutation } from "../../../redux/api/excel/excel.api";
 function TopupReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
@@ -42,7 +41,7 @@ function TopupReport() {
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url.data);
+        if (url) window.open(url.data, "_blank");
       });
   };
   const mapProgram = useMemo(() => {

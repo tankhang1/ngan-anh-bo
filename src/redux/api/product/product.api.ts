@@ -7,6 +7,8 @@ import {
   TProductCreateForm,
   BASE_RES,
   TIngredientPacking,
+  TProgramPointDetail,
+  TProgramTopupDetail,
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
@@ -156,6 +158,26 @@ export const productApi = createApi({
       }),
       invalidatesTags: [TagsEnum.INGREDIENTS_PACKING],
     }),
+    getListProgramPointDetail: builder.query<
+      { name: string; sign_board: string; data: TProgramPointDetail[] },
+      { zl: string }
+    >({
+      query: (params) => ({
+        url: "/program/point/customer/identify",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
+    getListProgramTopupDetail: builder.query<
+      { name: string; sign_board: string; data: TProgramTopupDetail[] },
+      { zl: string }
+    >({
+      query: (params) => ({
+        url: "/program/topup/customer/identify",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
   }),
 });
 
@@ -169,4 +191,6 @@ export const {
   useCreateIngredientMutation,
   useImportIngredientPackingMutation,
   useUpdateIngredientByCodeMutation,
+  useGetListProgramPointDetailQuery,
+  useGetListProgramTopupDetailQuery,
 } = productApi;

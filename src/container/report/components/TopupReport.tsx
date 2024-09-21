@@ -55,7 +55,7 @@ function TopupReport() {
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url.data);
+        if (url) window.open(url.data, "_blank");
       });
   };
   return (

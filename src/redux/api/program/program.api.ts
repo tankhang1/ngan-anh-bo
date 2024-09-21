@@ -73,26 +73,6 @@ export const programApi = createApi({
             ]
           : [TagsEnum.PROGRAM_TOPUP],
     }),
-    getListProgramPointDetail: builder.query<
-      TProgramPointDetail[],
-      { zl: string }
-    >({
-      query: (params) => ({
-        url: "/program/point/customer/identify",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
-    }),
-    getListProgramTopupDetail: builder.query<
-      TProgramTopupDetail[],
-      { zl: string }
-    >({
-      query: (params) => ({
-        url: "/program/topup/customer/identify",
-        method: HTTPS_METHOD.GET,
-        params,
-      }),
-    }),
   }),
 });
 
@@ -101,6 +81,4 @@ export const {
   useGetListProgramTopupStatusQuery,
   useGetCounterProgramPointByStatusQuery,
   useGetCounterProgramTopupByStatusQuery,
-  useGetListProgramPointDetailQuery,
-  useGetListProgramTopupDetailQuery,
 } = programApi;

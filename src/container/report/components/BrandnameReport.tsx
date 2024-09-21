@@ -10,7 +10,6 @@ import { format, isBefore } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { downloadLink, exportMultipleSheet } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
 import { TBrandname } from "../../../assets/types";
 import { useExportBrandnameMutation } from "../../../redux/api/excel/excel.api";
@@ -58,7 +57,7 @@ function BrandnameReport() {
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url.data);
+        if (url) window.open(url.data, "_blank");
       });
   };
   return (

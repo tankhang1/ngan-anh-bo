@@ -80,14 +80,14 @@ function SMS_QR_Report() {
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url.data);
+        if (url) window.open(url.data, "_blank");
       });
     await exportPackageExcel({
       ...rangDate,
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url.data);
+        if (url) window.open(url.data, "_blank");
       });
   };
   const mapReport = useMemo(() => {

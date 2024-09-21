@@ -115,10 +115,11 @@ const WarehouseExport = () => {
         st: query?.st,
         ed: query?.ed,
         type: query?.type ?? "ALL",
-      }).then(async (url) => {
-        // await downloadLink(url.data)
-        console.log(url);
-      });
+      })
+        .unwrap()
+        .then(async (url) => {
+          if (url) window.open(url.data, "_blank");
+        });
   };
 
   return (

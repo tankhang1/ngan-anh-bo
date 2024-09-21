@@ -16,8 +16,11 @@ import {
 } from "../../../redux/api/info/info.api";
 import { fDate, fNumber } from "../../../hooks";
 import { TCustomerRes } from "../../../assets/types";
-import { useGetListProgramPointDetailQuery } from "../../../redux/api/program/program.api";
 import { format } from "date-fns";
+import {
+  useGetListProgramPointDetailQuery,
+  useGetListProgramTopupDetailQuery,
+} from "../../../redux/api/product/product.api";
 
 function SearchCustomer() {
   const [searchValue, setSearchValue] = useState("");
@@ -61,7 +64,7 @@ function SearchCustomer() {
     }
   );
 
-  const { data: programTopup } = useGetListProgramPointDetailQuery(
+  const { data: programTopup } = useGetListProgramTopupDetailQuery(
     {
       zl: customerInfo?.uuid!,
     },
@@ -470,7 +473,7 @@ function SearchCustomer() {
                       className="d-flex flex-wrap gap-4 pb-4 overflow-y-scroll "
                       style={{ maxHeight: 400 }}
                     >
-                      {programPoint?.map((point, index) => (
+                      {programPoint?.data?.map((point, index) => (
                         <div
                           key={index}
                           className="shadow px-3 rounded-2 py-3"
@@ -511,7 +514,7 @@ function SearchCustomer() {
                           </div>
                         </div>
                       ))}
-                      {programPoint?.length === 0 && (
+                      {programPoint?.data?.length === 0 && (
                         <p className="text-md text-center w-100">
                           Chưa có dữ liệu
                         </p>
@@ -525,7 +528,7 @@ function SearchCustomer() {
                       className="d-flex flex-wrap gap-4 pb-4 overflow-scroll"
                       style={{ maxHeight: 400 }}
                     >
-                      {programTopup?.map((topup, index) => (
+                      {programTopup?.data?.map((topup, index) => (
                         <div
                           key={index}
                           className="shadow px-4 py-3 rounded-2"
@@ -553,18 +556,9 @@ function SearchCustomer() {
                               {topup?.price ? fNumber(topup.price) : ""}
                             </p>
                           </div>
-                          <div className="d-flex">
-                            <p
-                              className="text-black text-sm"
-                              style={{ width: 150 }}
-                            >
-                              Số lần tham gia:
-                            </p>
-                            <p className="text-black text-sm">{topup.total}</p>
-                          </div>
                         </div>
                       ))}
-                      {programTopup?.length === 0 && (
+                      {programTopup?.data?.length === 0 && (
                         <p className="text-md text-center w-100">
                           Chưa có dữ liệu
                         </p>
