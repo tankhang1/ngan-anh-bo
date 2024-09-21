@@ -71,7 +71,11 @@ const fDate = (date?: number | string, localFormat?: string) => {
   )}-${stringDate.slice(6, 8)}`;
 };
 const downloadLink = async (url: string) => {
-  await fetch(url)
+  await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.blob())
     .then((blob) => {
       const url = window.URL.createObjectURL(new Blob([blob]));

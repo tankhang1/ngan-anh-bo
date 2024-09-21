@@ -17,12 +17,16 @@ import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
 import AppId from "../../../components/common/app-id";
 import { TProductDashboardTable } from "../../../assets/types";
-import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
+import {
+  useExportBinMutation,
+  useExportPackageMutation,
+  useExportSMSMutation,
+} from "../../../redux/api/excel/excel.api";
 function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(new Date(), "yyyyMMdd"),
-    ed: +format(new Date(), "yyyyMMdd"),
+    st: +format(new Date(), "yyyyMMdd") * 10000,
+    ed: +format(new Date(), "yyyyMMdd") * 10000,
   });
 
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
@@ -30,7 +34,8 @@ function SMS_QR_Report() {
     ed: new Date(),
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
-  const [exportExcel] = useExportSMSMutation();
+  const [exportBinExcel] = useExportBinMutation();
+  const [exportPackageExcel] = useExportPackageMutation();
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
     {
       ...rangDate,
@@ -70,12 +75,19 @@ function SMS_QR_Report() {
     }
   );
   const handleExportExcel = async () => {
-    await exportExcel({
+    await exportBinExcel({
       ...rangDate,
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url);
+        if (url) await downloadLink(url.data);
+      });
+    await exportPackageExcel({
+      ...rangDate,
+    })
+      .unwrap()
+      .then(async (url) => {
+        if (url) await downloadLink(url.data);
       });
   };
   const mapReport = useMemo(() => {
@@ -142,8 +154,8 @@ function SMS_QR_Report() {
               onClick={() => {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
-                  st: +format(newRangeDate.st, "yyyyMMdd"),
-                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
+                  st: +format(newRangeDate.st, "yyyyMMdd") * 10000,
+                  ed: +format(newRangeDate.ed, "yyyyMMdd") * 10000,
                 });
                 setListDays(
                   getDaysArray(

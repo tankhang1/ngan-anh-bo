@@ -21,8 +21,8 @@ import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
 function SMSReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(new Date(), "yyyyMMdd"),
-    ed: +format(new Date(), "yyyyMMdd"),
+    st: +format(new Date(), "yyyyMMdd") * 10000,
+    ed: +format(new Date(), "yyyyMMdd") * 10000,
   });
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
     st: new Date(),
@@ -75,7 +75,7 @@ function SMSReport() {
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url);
+        if (url) await downloadLink(url.data);
       });
   };
   const mapReport = useMemo(() => {
@@ -142,8 +142,8 @@ function SMSReport() {
               onClick={() => {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
-                  st: +format(newRangeDate.st, "yyyyMMdd"),
-                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
+                  st: +format(newRangeDate.st, "yyyyMMdd") * 10000,
+                  ed: +format(newRangeDate.ed, "yyyyMMdd") * 10000,
                 });
                 setListDays(
                   getDaysArray(

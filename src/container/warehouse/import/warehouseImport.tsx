@@ -104,7 +104,7 @@ const WarehouseImport = () => {
       })
         .unwrap()
         .then(async (url) => {
-          if (url) await downloadLink(url);
+          if (url) await downloadLink(url.data);
         });
   };
 

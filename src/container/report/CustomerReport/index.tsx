@@ -18,6 +18,7 @@ import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import Select from "react-select";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 import { MapCustomerType } from "../../../constants";
+import AppSelect from "../../../components/AppSelect";
 
 function CustomerReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
@@ -26,26 +27,30 @@ function CustomerReport() {
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
-  const [customerType, setCustomerType] = useState<string>(
-    groupObjectives?.[0].symbol || ""
-  );
-  const [isValidate, setIsValidate] = useState(false);
-  const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(new Date(), "yyyyMMdd"),
-    ed: +format(new Date(), "yyyyMMdd"),
+
+  const [rangDate, setRangeDate] = useState<{
+    st: number;
+    ed: number;
+    t: string;
+  }>({
+    st: +(format(new Date(), "yyyyMMdd") + "0000"),
+    ed: +(format(new Date(), "yyyyMMdd") + "0000"),
+    t: "RETAILER1",
   });
-  const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
+  const [newRangeDate, setNewRangeDate] = useState<{
+    st: Date;
+    ed: Date;
+  }>({
     st: new Date(),
     ed: new Date(),
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
   const [exportExcel] = useExportCustomerDataMutation();
   const [page, setPage] = useState(1);
-
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2359"),
+      ed: +(format(new Date(), "yyyyMMdd") + "0000"),
       s: 1,
     },
     {
@@ -56,7 +61,7 @@ function CustomerReport() {
     useGetListCustomerQuery(
       {
         st: +(rangDate.st.toString() + "0000"),
-        ed: +(rangDate.ed.toString() + "2359"),
+        ed: +(rangDate.ed.toString() + "0000"),
         nu: page - 1,
         sz: 10,
         s: 1,
@@ -69,7 +74,7 @@ function CustomerReport() {
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
     {
       st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2359"),
+      ed: +(rangDate.ed.toString() + "0000"),
       nu: 0,
       sz: 99999,
     },
@@ -102,14 +107,14 @@ function CustomerReport() {
       await exportExcel({ ...rangDate })
         .unwrap()
         .then(async (url) => {
-          if (url) await downloadLink(url);
+          if (url) await downloadLink(url.data);
         });
     }
   };
 
   useEffect(() => {
     if (groupObjectives) {
-      setCustomerType(groupObjectives?.[0].symbol);
+      setRangeDate({ ...rangDate, t: groupObjectives[0].symbol });
     }
   }, [groupObjectives]);
 
@@ -168,8 +173,9 @@ function CustomerReport() {
               } bg-danger text-white`}
               onClick={() => {
                 setRangeDate({
-                  st: +format(newRangeDate.st, "yyyyMMdd"),
-                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
+                  ...rangDate,
+                  st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
+                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "0000"),
                 });
                 setListDays(
                   getDaysArray(
@@ -220,9 +226,20 @@ function CustomerReport() {
       </Card>
       <Card className="custom-card">
         <Card.Header>
-          <Card.Title>Khách hàng xác thực</Card.Title>
+          <Card.Title>Danh sách khách hàng</Card.Title>
 
           <div className="d-flex align-items-center gap-2">
+            <AppSelect
+              data={
+                groupObjectives?.map((item) => ({
+                  label: item.name,
+                  value: item.symbol,
+                })) ?? []
+              }
+              placeholder="Chọn đối tượng khách hàng"
+              value={rangDate.t}
+              onChange={(e) => setRangeDate({ ...rangDate, t: e })}
+            />
             <button
               className={`btn btn-bd-primary ${
                 isSmallScreen ? "btn-icon" : ""

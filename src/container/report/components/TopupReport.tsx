@@ -22,7 +22,7 @@ function TopupReport() {
     ed: new Date(),
   });
   const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
-  const [exportExcel]=useExportProgramTopupDetailMutation()
+  const [exportExcel] = useExportProgramTopupDetailMutation();
   const { data: topups, isLoading: isLoadingTopup } =
     useGetReportProgramTopupDetailByTimeQuery(
       {
@@ -55,7 +55,7 @@ function TopupReport() {
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url);
+        if (url) await downloadLink(url.data);
       });
   };
   return (
