@@ -9,7 +9,6 @@ import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
 import { useGetListIngredientPackingQuery } from "../../../redux/api/warehouse/warehouse.api";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
-import { fDate } from "../../../hooks";
 import { useGetListDevicesQuery } from "../../../redux/api/product/product.api";
 
 const WarehouseCreateManufactorOrder = () => {
@@ -50,6 +49,7 @@ const WarehouseCreateManufactorOrder = () => {
           handleSubmit,
           handleChange,
           setFieldValue,
+          resetForm,
           values,
           touched,
           errors,
@@ -93,7 +93,12 @@ const WarehouseCreateManufactorOrder = () => {
                     </Form.Label>
                     <div className="d-flex gap-2">
                       <button
-                        onClick={() => setTypeExport("BIN")}
+                        onClick={() => {
+                          if (typeExport !== "BIN") {
+                            setTypeExport("BIN");
+                            resetForm();
+                          }
+                        }}
                         className={`btn ${
                           typeExport === "BIN"
                             ? "btn-primary"
@@ -103,7 +108,12 @@ const WarehouseCreateManufactorOrder = () => {
                         Tạo lệnh xuất thùng
                       </button>
                       <button
-                        onClick={() => setTypeExport("PACKET")}
+                        onClick={() => {
+                          if (typeExport !== "PACKET") {
+                            setTypeExport("PACKET");
+                            resetForm();
+                          }
+                        }}
                         className={`btn ${
                           typeExport === "PACKET"
                             ? "btn-primary"
@@ -176,6 +186,7 @@ const WarehouseCreateManufactorOrder = () => {
                       placeholder="Nhập số lượng sản xuất"
                       name="total_bin"
                       className="input-placeholder"
+                      value={values.total_bin ?? ""}
                       onChange={handleChange}
                       isInvalid={touched.total_bin && !!errors.total_bin}
                     />
@@ -235,18 +246,15 @@ const WarehouseCreateManufactorOrder = () => {
                     </Form.Label>
 
                     <DatePicker
-                      name=""
+                      name="expect_packing_date"
                       onChange={(date) => {
-                        setFieldValue("estimate_export", date);
+                        if (date)
+                          setFieldValue(
+                            "expect_packing_date",
+                            format(date, "dd-MM-yyyy")
+                          );
                       }}
-                      value={
-                        values.expect_packing_date
-                          ? format(
-                              new Date(values.expect_packing_date),
-                              "dd-MM-yyyy"
-                            )
-                          : ""
-                      }
+                      value={values.expect_packing_date ?? ""}
                       placeholderText="Chọn ngày khấu hao dự kiến (DD/MM/YYYY)"
                       isClearable
                       maxDate={new Date()}

@@ -833,8 +833,8 @@ export type TManufactorOrder = {
   device_code: string | null;
   product_code: string | null;
   shipment_code: string | null;
-  total_bin: number;
-  expect_packing_date: number;
-  total_extra: number;
-  ingredient_id?: string;
+  total_bin: number | null;
+  expect_packing_date: number | null;
+  total_extra: number | null;
+  ingredient_id: string | null;
 };

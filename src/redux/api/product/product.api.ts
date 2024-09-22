@@ -46,7 +46,7 @@ export const productApi = createApi({
       }),
       transformResponse: (response: TDevice[]) => {
         return response.map((value) => ({
-          label: value.device_name,
+          label: `${value.device_name}-${value.device_ip}`,
           value: value.device_code,
         }));
       },
