@@ -32,10 +32,12 @@ function CustomerReport() {
     st: number;
     ed: number;
     t: string;
+    k: string;
   }>({
     st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
     ed: +(format(new Date(), "yyyyMMdd") + "2359"),
     t: "RETAILER1",
+    k: "",
   });
   const [newRangeDate, setNewRangeDate] = useState<{
     st: Date;

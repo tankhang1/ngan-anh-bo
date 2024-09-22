@@ -224,7 +224,7 @@ function TopupReport() {
           {
             key: "price",
             label: "Số tiền",
-            render: (value) => <td>{fNumber(value.price ?? 0)}</td>,
+            render: (value) => <td>{fNumber((value.price ?? 0) * 1000)}</td>,
           },
           {
             key: "time_topup",

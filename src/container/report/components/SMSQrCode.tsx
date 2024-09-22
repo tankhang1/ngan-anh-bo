@@ -232,7 +232,7 @@ function SMS_QR_Report() {
       <Row>
         <Col xl={6}>
           <AppTable
-            title="SMS"
+            title="SMS Gateway"
             isLoading={isLoadingBin || isLoadingPacket}
             headers={[
               {
