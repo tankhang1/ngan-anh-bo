@@ -76,7 +76,7 @@ function ProductCreate() {
         qr_printing: values.qr_printing ? 1 : 0,
         sku_bin: +(values?.sku_bin ?? 0),
         sku_box: +(values?.sku_box ?? 0),
-        bin_pallet: +(values?.bin_pallet ?? 0),
+        bin_pallet: +(values?.bin_pallet ?? 1),
         mop: +(values?.mop ?? 0),
         net_weight: +(values.net_weight ?? 0),
         type: +values.type,

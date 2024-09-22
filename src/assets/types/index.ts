@@ -837,4 +837,5 @@ export type TManufactorOrder = {
   expect_packing_date: number | null;
   total_extra: number | null;
   ingredient_id: string | null;
+  min_bin: number | null;
 };

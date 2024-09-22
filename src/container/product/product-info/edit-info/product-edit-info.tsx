@@ -85,7 +85,7 @@ function ProductEditInfo() {
         qr_printing: values.qr_printing ? 1 : 0,
         sku_bin: +(values?.sku_bin ?? 0),
         sku_box: +(values?.sku_box ?? 0),
-        bin_pallet: +(values?.bin_pallet ?? 0),
+        bin_pallet: +(values?.bin_pallet ?? 1),
         mop: +(values?.mop ?? 0),
         net_weight: +(values.net_weight ?? 0),
         type: +values.type,
@@ -124,7 +124,7 @@ function ProductEditInfo() {
     <Fragment>
       <Formik
         initialValues={{
-          bin_pallet: product?.bin_pallet ?? 0,
+          bin_pallet: product?.bin_pallet ?? 1,
           code: product?.code ?? "",
           code_bin: product?.code_bin ?? "",
           brand_code: product?.brand_code ?? "",
@@ -184,37 +184,39 @@ function ProductEditInfo() {
                 >
                   Trở lại
                 </button>
-                {isEdit ? (
-                  permission.editProductMarketingInfo&&<AppWarning
-                  onAccept={() => {
-                    console.log(errors);
-                    if (!errors)
-                      toast.showToast("Vui lòng điền đầy đủ thông tin");
-                    else handleSubmit(values as any);
-                  }}
-                >
-                  <button
-                    className={`btn btn-purple-light justify-content-center align-items-center ${
-                      isLoadingUpdate && "btn-loader"
-                    }`}
-                  >
-                    <span>Lưu</span>
-                    {isLoadingUpdate && (
-                      <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
-                      </span>
+                {isEdit
+                  ? permission.editProductMarketingInfo && (
+                      <AppWarning
+                        onAccept={() => {
+                          console.log(errors);
+                          if (!errors)
+                            toast.showToast("Vui lòng điền đầy đủ thông tin");
+                          else handleSubmit(values as any);
+                        }}
+                      >
+                        <button
+                          className={`btn btn-purple-light justify-content-center align-items-center ${
+                            isLoadingUpdate && "btn-loader"
+                          }`}
+                        >
+                          <span>Lưu</span>
+                          {isLoadingUpdate && (
+                            <span className="loading">
+                              <i className="ri-loader-2-fill fs-19"></i>
+                            </span>
+                          )}
+                        </button>
+                      </AppWarning>
+                    )
+                  : permission.editProductMarketingInfo && (
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center}`}
+                        type={"button"}
+                        onClick={() => setIsEdit(true)}
+                      >
+                        <span>Chỉnh sửa</span>
+                      </button>
                     )}
-                  </button>
-                </AppWarning>
-                ) : permission.editProductMarketingInfo&&(
-                  <button
-                    className={`btn btn-purple-light justify-content-center align-items-center}`}
-                    type={"button"}
-                    onClick={() => setIsEdit(true)}
-                  >
-                    <span>Chỉnh sửa</span>
-                  </button>
-                )}
               </div>
             </Card.Header>
             <Card.Body>
@@ -884,7 +886,7 @@ function ProductEditInfo() {
                       type="number"
                       id="bin_pallet_validate"
                       name="bin_pallet"
-                      min={0}
+                      min={1}
                       defaultValue={values.bin_pallet}
                       onChange={handleChange}
                       isInvalid={touched.bin_pallet && !!errors.bin_pallet}

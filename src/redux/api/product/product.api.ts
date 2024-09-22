@@ -9,6 +9,7 @@ import {
   TIngredientPacking,
   TProgramPointDetail,
   TProgramTopupDetail,
+  TManufactorOrder,
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
@@ -178,6 +179,13 @@ export const productApi = createApi({
         params,
       }),
     }),
+    createProcedureOrder: builder.mutation<BASE_RES, TManufactorOrder>({
+      query: (body) => ({
+        url: "/product/procedure-order/import",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+    }),
   }),
 });
 
@@ -193,4 +201,5 @@ export const {
   useUpdateIngredientByCodeMutation,
   useGetListProgramPointDetailQuery,
   useGetListProgramTopupDetailQuery,
+  useCreateProcedureOrderMutation,
 } = productApi;

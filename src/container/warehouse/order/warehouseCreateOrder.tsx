@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useContext, useMemo, useState } from "react";
 import { ProductTypeEnum, TManufactorOrder } from "../../../assets/types";
 import { Card, Col, Form, InputGroup, Stack } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -9,14 +9,20 @@ import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
 import { useGetListIngredientPackingQuery } from "../../../redux/api/warehouse/warehouse.api";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
-import { useGetListDevicesQuery } from "../../../redux/api/product/product.api";
+import {
+  useCreateProcedureOrderMutation,
+  useGetListDevicesQuery,
+} from "../../../redux/api/product/product.api";
+import { ToastContext } from "../../../components/AppToast";
 
 const WarehouseCreateManufactorOrder = () => {
-  const isLoadingCreate = false;
+  const toast = useContext(ToastContext);
   const { data: products } = useGetListProductsQuery();
   const { data: ingredientPackings } = useGetListIngredientPackingQuery();
   const { data: devices } = useGetListDevicesQuery();
   const [typeExport, setTypeExport] = useState<"BIN" | "PACKET">("BIN");
+  const [createProcedureOrder, { isLoading: isLoadingCreate }] =
+    useCreateProcedureOrderMutation();
   const filterProduct = useMemo(() => {
     if (typeExport === "BIN")
       return products?.filter(
@@ -28,7 +34,22 @@ const WarehouseCreateManufactorOrder = () => {
       );
   }, [typeExport, products]);
 
-  const onCreateManufactorOrder = (values: TManufactorOrder) => {};
+  const onCreateManufactorOrder = async (values: TManufactorOrder) => {
+    await createProcedureOrder({
+      ...values,
+      expect_packing_date: values.expect_packing_date
+        ? +format(new Date(values.expect_packing_date), "yyyyMMdd")
+        : 0,
+      total_extra: values?.total_extra ?? 0,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("log", value);
+        if (value.status === 0) toast.showToast("Tạo lệnh sản xuất thành công");
+        else toast.showToast("Tạo lệnh sản xuất thất bại");
+      })
+      .catch(() => toast.showToast("Tạo lệnh sản xuất thất bại"));
+  };
   const navigate = useNavigate();
   return (
     <Fragment>
@@ -41,6 +62,7 @@ const WarehouseCreateManufactorOrder = () => {
           total_bin: null,
           total_extra: null,
           ingredient_id: null,
+          min_bin: null,
         }}
         onSubmit={onCreateManufactorOrder}
         enableReinitialize
@@ -130,18 +152,21 @@ const WarehouseCreateManufactorOrder = () => {
                     </Form.Label>
                     <AppSelect
                       onChange={(value) => {
-                        const [ingredient_id, code] = value.split("-");
+                        const [ingredient_id, code, bin_pallet] =
+                          value.split("-");
                         setFieldValue("product_code", code);
                         setFieldValue("ingredient_id", ingredient_id);
+                        setFieldValue("min_bin", bin_pallet);
+                        setFieldValue("total_bin", bin_pallet);
                         setFieldValue("shipment_code", "");
                       }}
                       data={
                         filterProduct?.map((item) => ({
                           label: item.description ?? "",
-                          value: `${item.ingredient_id}-${item.code}`,
+                          value: `${item.ingredient_id}-${item.code}-${item.bin_pallet}`,
                         })) ?? []
                       }
-                      value={`${values?.ingredient_id}-${values.product_code}`}
+                      value={`${values?.ingredient_id}-${values.product_code}-${values.min_bin}`}
                       placeholder="Chọn sản phẩm"
                       isInValid={!!errors.product_code && touched.product_code}
                       errorText={errors.product_code}
@@ -177,17 +202,24 @@ const WarehouseCreateManufactorOrder = () => {
                   </Form.Group>
                   <Form.Group className="mb-2">
                     <Form.Label className="text-black">
-                      Nhập số lượng sản xuất
+                      Nhập số lượng sản xuất{" "}
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
                       type="number"
-                      min={0}
+                      min={values?.min_bin ?? 0}
                       placeholder="Nhập số lượng sản xuất"
                       name="total_bin"
                       className="input-placeholder"
                       value={values.total_bin ?? ""}
-                      onChange={handleChange}
+                      onChange={(value) => {
+                        if (
+                          values?.min_bin &&
+                          +value.target.value >= values.min_bin
+                        )
+                          setFieldValue("total_bin", value.target.value);
+                      }}
                       isInvalid={touched.total_bin && !!errors.total_bin}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -206,16 +238,13 @@ const WarehouseCreateManufactorOrder = () => {
                         type="number"
                         min={0}
                         placeholder="Số lượng khấu hao dự kiến"
-                        name="expect_packing_date"
+                        name="total_extra"
                         className="input-placeholder"
                         onChange={handleChange}
-                        isInvalid={
-                          touched.expect_packing_date &&
-                          !!errors.expect_packing_date
-                        }
+                        isInvalid={touched.total_extra && !!errors.total_extra}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {errors.expect_packing_date}
+                        {errors.total_extra}
                       </Form.Control.Feedback>
                     </Form.Group>
                   )}
@@ -251,13 +280,20 @@ const WarehouseCreateManufactorOrder = () => {
                         if (date)
                           setFieldValue(
                             "expect_packing_date",
-                            format(date, "dd-MM-yyyy")
+                            format(date, "yyyy-MM-dd")
                           );
                       }}
-                      value={values.expect_packing_date ?? ""}
+                      value={
+                        values?.expect_packing_date
+                          ? format(
+                              new Date(values.expect_packing_date),
+                              "dd-MM-yyyy"
+                            )
+                          : ""
+                      }
                       placeholderText="Chọn ngày khấu hao dự kiến (DD/MM/YYYY)"
                       isClearable
-                      maxDate={new Date()}
+                      minDate={new Date()}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.expect_packing_date}
