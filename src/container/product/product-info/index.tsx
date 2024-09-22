@@ -32,7 +32,7 @@ const PRODUCT_FILTERS = [
     label: "Mã sản phẩm",
   },
   {
-    key: "product_name_detail",
+    key: "description",
     label: "Tên sản phẩm",
   },
   {

@@ -428,6 +428,23 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.SMS],
     }),
+    getListSMSGatewayDayByDay: builder.query<TSMSGateway[], BaseQuery>({
+      query: (params) => ({
+        url: "/api/report/sms",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.SMS as const,
+                id,
+              })),
+              TagsEnum.SMS,
+            ]
+          : [TagsEnum.SMS],
+    }),
     getListMaterial: builder.query<TMaterial[], void>({
       query: () => ({
         url: "/api/product/material/all",
@@ -478,6 +495,7 @@ export const {
   useGetListFormulationQuery,
   useGetListIndicationQuery,
   useGetListSMSGatewayQuery,
+  useGetListSMSGatewayDayByDayQuery,
   useGetListMaterialQuery,
   useGetBinPackageTodayQuery,
   useGetListBrandnameTodayQuery,

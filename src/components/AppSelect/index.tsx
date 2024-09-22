@@ -71,11 +71,12 @@ const AppSelect = ({
   useEffect(() => {
     value &&
       setSearch(filterData?.find((item) => item.value === value)?.label ?? "");
-  }, [value]);
+  }, [value, filterData]);
 
   useEffect(() => {
     setFilterData(data);
   }, [data]);
+
   return (
     <div className="position-relative" ref={dropdownRef}>
       <InputGroup>

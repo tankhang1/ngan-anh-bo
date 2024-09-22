@@ -34,7 +34,7 @@ function CustomerReport() {
     t: string;
   }>({
     st: +(format(new Date(), "yyyyMMdd") + "0000"),
-    ed: +(format(new Date(), "yyyyMMdd") + "0000"),
+    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
     t: "RETAILER1",
   });
   const [newRangeDate, setNewRangeDate] = useState<{
@@ -49,8 +49,7 @@ function CustomerReport() {
   const [page, setPage] = useState(1);
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
-      st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "0000"),
+      ...rangDate,
       s: 1,
     },
     {
@@ -60,8 +59,7 @@ function CustomerReport() {
   const { data: customers, isLoading: isLoadingCustomer } =
     useGetListCustomerQuery(
       {
-        st: +(rangDate.st.toString() + "0000"),
-        ed: +(rangDate.ed.toString() + "0000"),
+        ...rangDate,
         nu: page - 1,
         sz: 10,
         s: 1,
@@ -73,8 +71,7 @@ function CustomerReport() {
 
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
     {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "0000"),
+      ...rangDate,
       nu: 0,
       sz: 99999,
     },
@@ -175,7 +172,7 @@ function CustomerReport() {
                 setRangeDate({
                   ...rangDate,
                   st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
-                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "0000"),
+                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
                 });
                 setListDays(
                   getDaysArray(

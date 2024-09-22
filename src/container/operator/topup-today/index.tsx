@@ -7,16 +7,24 @@ import { useGetReportProgramTopupDetailTodayQuery } from "../../../redux/api/rep
 import { fNumber } from "../../../hooks";
 const TOPUP_FILTERS = [
   {
-    key: "id",
-    label: "ID",
+    key: "phone",
+    label: "Số điện thoại",
+  },
+  {
+    key: "code",
+    label: "Mã code",
+  },
+  {
+    key: "product_name",
+    label: "Tên sản phẩm",
+  },
+  {
+    key: "program_name",
+    label: "Tên chương trình",
   },
   {
     key: "customer_name",
     label: "Tên khách hàng",
-  },
-  {
-    key: "phone",
-    label: "Số điện thoại",
   },
 ];
 

@@ -17,7 +17,7 @@ function BrandnameReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +(format(new Date(), "yyyyMMdd") + "0000"),
-    ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
     st: new Date(),
@@ -108,7 +108,7 @@ function BrandnameReport() {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
                   st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
-                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2399"),
+                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
                 });
                 setListDays(
                   getDaysArray(

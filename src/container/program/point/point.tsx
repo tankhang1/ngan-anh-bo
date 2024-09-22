@@ -25,16 +25,8 @@ import { format } from "date-fns";
 
 const POINT_FILTERS = [
   {
-    key: "id",
-    label: "ID",
-  },
-  {
     key: "name",
     label: "Tên chương trình",
-  },
-  {
-    key: "status",
-    label: "Trạng thái",
   },
 ];
 const STATUS_FILTERS = [

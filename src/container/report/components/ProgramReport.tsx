@@ -16,7 +16,7 @@ function TopupReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +(format(new Date(), "yyyyMMdd") + "0000"),
-    ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
   const [exportExcel] = useExportProgramPointDetailMutation();
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({

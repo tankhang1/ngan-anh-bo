@@ -17,16 +17,12 @@ import { useNavigate } from "react-router-dom";
 
 const AGENT_FILTERS = [
   {
-    key: "id",
-    label: "ID",
+    key: "code",
+    label: "Mã IQR",
   },
   {
-    key: "customer_name",
-    label: "Tên khách hàng",
-  },
-  {
-    key: "phone",
-    label: "Số điện thoại",
+    key: "register_phone",
+    label: "Số điện thoại đăng ký",
   },
 ];
 
@@ -131,6 +127,7 @@ function IQRToday() {
           <AppTable
             isHeader={false}
             externalSearch={search}
+            searchByExternal={searchBy}
             title="Thông tin đại lý"
             isLoading={isLoadingBinPacket}
             headers={[
@@ -142,7 +139,7 @@ function IQRToday() {
               {
                 key: "bin_seri",
                 label: "Số seri thùng",
-                render: (value) => <td>{value.bin_seri??value.seri}</td>,
+                render: (value) => <td>{value.bin_seri ?? value.seri}</td>,
               },
 
               {
@@ -201,7 +198,7 @@ function IQRToday() {
                 label: "Trạng thái",
                 render: (value) => (
                   <td>
-                    {value.customer_code? (
+                    {value.customer_code ? (
                       <Badge bg="success">Đã xác thực</Badge>
                     ) : (
                       <Badge bg="warning">Chờ xác thực </Badge>
@@ -215,18 +212,18 @@ function IQRToday() {
                 label: "Chức năng",
                 render: (value) => (
                   <td>
-                      <button
-                        className="btn btn-icon btn-sm btn-primary-ghost"
-                        onClick={() =>
-                          navigate(
-                            `${
-                              import.meta.env.BASE_URL
-                            }operator/verify-customer/${value.register_phone}`
-                          )
-                        }
-                      >
-                        <i className="ti ti-eye"></i>
-                      </button>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() =>
+                        navigate(
+                          `${
+                            import.meta.env.BASE_URL
+                          }operator/verify-customer/${value.customer_uuid}`
+                        )
+                      }
+                    >
+                      <i className="ti ti-eye"></i>
+                    </button>
                   </td>
                 ),
               },

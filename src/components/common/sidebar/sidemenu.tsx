@@ -80,7 +80,7 @@ export const MENU_KEY = {
   WAREHOUSES_REPORT_INGREDIENT: "WAREHOUSES_REPORT_INGREDIENT",
   WAREHOUSES_REPORT_INGREDIENT_PACKING: "WAREHOUSES_REPORT_INGREDIENT_PACKING",
 
-  WAREHOUSES:"WAREHOUSES"
+  WAREHOUSES: "WAREHOUSES",
 };
 
 export const MENUITEMS = [
@@ -129,7 +129,7 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "iQr",
-        key: MENU_KEY.OPERATORS_iQr_TODAY,
+        key: MENU_KEY.OPERATORS_iQr_TODAY, // Gọi API Report IQR today
       },
       {
         path: `${
@@ -140,7 +140,7 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "Danh sách chờ xác thực",
-        key: MENU_KEY.OPERATORS_CUSTOMER_UNVALIDATE_TODAY,
+        key: MENU_KEY.OPERATORS_CUSTOMER_UNVALIDATE_TODAY, // Gọi API customer list query theo ngày với t = 'ANNOY
       },
       {
         path: `${
@@ -151,7 +151,7 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "Danh sách đã xác thực",
-        key: MENU_KEY.OPERATORS_CUSTOMER_VALIDATE_TODAY,
+        key: MENU_KEY.OPERATORS_CUSTOMER_VALIDATE_TODAY, // Gọi API customer list query theo ngày vs status 1
       },
       {
         path: `${import.meta.env.BASE_URL}operator/search-topup-today`,
@@ -160,7 +160,7 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "Topup",
-        key: MENU_KEY.OPERATORS_TOPUP_TODAY,
+        key: MENU_KEY.OPERATORS_TOPUP_TODAY, // Gọi API chi tiết topup hôm nay
       },
       // {
       //   path: `${import.meta.env.BASE_URL}operator/customer-sms-6068`,
@@ -178,7 +178,7 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "Quà tặng",
-        key: MENU_KEY.OPERATORS_GIFT_TODAY,
+        key: MENU_KEY.OPERATORS_GIFT_TODAY, // Chưa phát triển
       },
       {
         path: `${import.meta.env.BASE_URL}operator/sms-gateway`,
@@ -187,7 +187,7 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "SMS Gateway",
-        key: MENU_KEY.OPERATORS_SMS_GATEWAY,
+        key: MENU_KEY.OPERATORS_SMS_GATEWAY, // Gọi API SMS hôm nay
       },
       {
         path: `${import.meta.env.BASE_URL}operator/brandname`,
@@ -196,7 +196,7 @@ export const MENUITEMS = [
         selected: false,
         dirchange: false,
         title: "SMS Brandname",
-        key: MENU_KEY.OPERATORS_SMS_BRANDNAME,
+        key: MENU_KEY.OPERATORS_SMS_BRANDNAME, // Gọi API Brandname hôm nay
       },
     ],
   },

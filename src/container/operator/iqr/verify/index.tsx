@@ -24,16 +24,22 @@ import { ToastContext } from "../../../../components/AppToast";
 import { format } from "date-fns";
 import { fDate, fParseNumber } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
-import { useUpdateCustomerMutation, useVerifyCustomerMutation } from "../../../../redux/api/other/other.api";
+import {
+  useUpdateCustomerMutation,
+  useVerifyCustomerMutation,
+} from "../../../../redux/api/other/other.api";
 import customerSchema from "../../../../schema/customers.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
-import { useGetCustomerQuery } from "../../../../redux/api/info/info.api";
+import {
+  useGetCustomerByCodeQuery,
+  useGetCustomerQuery,
+} from "../../../../redux/api/info/info.api";
 import AppSelect from "../../../../components/AppSelect";
 function VerifyCustomer() {
   const { permission } = useSelector((state: RootState) => state.auth);
-  const { phone } = useParams();
+  const { customer_uuid } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
@@ -42,15 +48,17 @@ function VerifyCustomer() {
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
-  const { data: customers } = useGetCustomerQuery({
-    k: phone,
-  },{
-    refetchOnMountOrArgChange:true
-  });
-  const customer = useMemo(() => customers?.[0], [customers]);
+  const { data: customer } = useGetCustomerByCodeQuery(
+    {
+      c: customer_uuid!,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const [verifyCustomer, { isLoading: isLoadingVerify }] =
     useVerifyCustomerMutation();
-    const [updateCustomer, { isLoading: isLoadingUpdate }] =
+  const [updateCustomer, { isLoading: isLoadingUpdate }] =
     useUpdateCustomerMutation();
   const { data: groupRetailers } = useGetListGroupRetailerQuery();
 
@@ -100,42 +108,40 @@ function VerifyCustomer() {
       });
   };
   const handleUpdateAgent = async (values: TCustomerRes) => {
-      await updateCustomer({
-        ...values,
-        uuid: values?.uuid,
-        customer_province: provinceId,
-        gender: +(values?.gender ?? 1),
-        birthday: values?.birthday
-          ? +format(values.birthday, "yyyyMMdd")
-          : null,
-        area_size: values?.area_size
-          ? fParseNumber(values.area_size.toString())
-          : null,
-        citizen_number: values?.citizen_number
-          ? +values.citizen_number
-          : values.citizen_number,
-        citizen_day: values?.citizen_day
-          ? +format(values.citizen_day, "yyyyMMdd")
-          : values?.citizen_day,
+    await updateCustomer({
+      ...values,
+      uuid: values?.uuid,
+      customer_province: provinceId,
+      gender: +(values?.gender ?? 1),
+      birthday: values?.birthday ? +format(values.birthday, "yyyyMMdd") : null,
+      area_size: values?.area_size
+        ? fParseNumber(values.area_size.toString())
+        : null,
+      citizen_number: values?.citizen_number
+        ? +values.citizen_number
+        : values.citizen_number,
+      citizen_day: values?.citizen_day
+        ? +format(values.citizen_day, "yyyyMMdd")
+        : values?.citizen_day,
+    })
+      .unwrap()
+      .then((value) => {
+        setIsEdit(false);
+        console.log("create agent success", value);
+        if (value?.status === -2) {
+          toast.showToast("Đại lý đã tồn tại");
+          return;
+        }
+        if (value?.status === 0) {
+          toast.showToast("Cập nhật đại lý thành công");
+          return;
+        }
+        toast.showToast("Cập nhật thất bại");
       })
-        .unwrap()
-        .then((value) => {
-          setIsEdit(false);
-          console.log("create agent success", value);
-          if (value?.status === -2) {
-            toast.showToast("Đại lý đã tồn tại");
-            return;
-          }
-          if (value?.status === 0) {
-            toast.showToast("Cập nhật đại lý thành công");
-            return;
-          }
-          toast.showToast("Cập nhật thất bại");
-        })
-        .catch((e) => {
-          setIsEdit(false);
-          console.log("create agent fail", e.message);
-        });
+      .catch((e) => {
+        setIsEdit(false);
+        console.log("create agent fail", e.message);
+      });
   };
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
@@ -204,41 +210,43 @@ function VerifyCustomer() {
                   </button>
 
                   <div className="d-flex gap-2">
-                    {!values.customer_code&&<AppWarning onAccept={() => handleSubmit()}>
+                    {!values.customer_code && (
+                      <AppWarning onAccept={() => handleSubmit()}>
+                        <button
+                          className={`btn btn-teal-light justify-content-center align-items-center ${
+                            isLoadingVerify && "btn-loader "
+                          }`}
+                        >
+                          <span>Xác thực</span>
+                          {isLoadingVerify && (
+                            <span className="loading">
+                              <i className="ri-loader-2-fill fs-19"></i>
+                            </span>
+                          )}
+                        </button>
+                      </AppWarning>
+                    )}
+                    <AppWarning
+                      onAccept={() => {
+                        console.log(values);
+                        if (!errors)
+                          toast.showToast("Vui lòng bổ sung thông tin");
+                        else handleUpdateAgent(values);
+                      }}
+                    >
                       <button
-                        className={`btn btn-teal-light justify-content-center align-items-center ${
-                          isLoadingVerify && "btn-loader "
+                        className={`btn  btn-purple-light justify-content-center align-items-center ${
+                          isLoadingUpdate && "btn-loader "
                         }`}
                       >
-                        <span>Xác thực</span>
-                        {isLoadingVerify && (
+                        <span>Lưu</span>
+                        {isLoadingUpdate && (
                           <span className="loading">
                             <i className="ri-loader-2-fill fs-19"></i>
                           </span>
                         )}
                       </button>
-                    </AppWarning>}
-                    <AppWarning
-                          onAccept={() => {
-                            console.log(values)
-                            if (!errors)
-                              toast.showToast("Vui lòng bổ sung thông tin");
-                            else handleUpdateAgent(values);
-                          }}
-                        >
-                          <button
-                            className={`btn  btn-purple-light justify-content-center align-items-center ${
-                              isLoadingUpdate && "btn-loader "
-                            }`}
-                          >
-                            <span>Lưu</span>
-                            {isLoadingUpdate && (
-                              <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
-                              </span>
-                            )}
-                          </button>
-                        </AppWarning>
+                    </AppWarning>
                   </div>
                 </div>
               </Card.Header>

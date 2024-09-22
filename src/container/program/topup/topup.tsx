@@ -26,10 +26,6 @@ import { RootState } from "../../../redux/store";
 
 const TOPUP_FILTERS = [
   {
-    key: "id",
-    label: "ID",
-  },
-  {
     key: "name",
     label: "Tên chương trình",
   },

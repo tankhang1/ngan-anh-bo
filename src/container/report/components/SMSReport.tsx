@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
+import { Badge, Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
 import DatePicker from "react-datepicker";
 import * as Chartjscharts from "../../charts/chartjschart/chartjsdata";
@@ -8,6 +8,7 @@ import { useMediaQuery } from "@mui/material";
 import { format, isBefore } from "date-fns";
 import {
   useGetBinsQuery,
+  useGetListSMSGatewayDayByDayQuery,
   useGetPacketsQuery,
   useGetReportDashboardDayByDayQuery,
 } from "../../../redux/api/manage/manage.api";
@@ -16,13 +17,13 @@ import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport"
 import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
 import AppId from "../../../components/common/app-id";
-import { TProductDashboardTable } from "../../../assets/types";
+import { TProductDashboardTable, TSMSGateway } from "../../../assets/types";
 import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
 function SMSReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +format(new Date(), "yyyyMMdd") * 10000,
-    ed: +format(new Date(), "yyyyMMdd") * 10000,
+    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
     st: new Date(),
@@ -43,32 +44,20 @@ function SMSReport() {
       refetchOnMountOrArgChange: true,
     }
   );
-  const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
-    {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2399"),
-      nu: 0,
-      sz: 9999,
-    },
-    {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
-    {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2399"),
-      nu: 0,
-      sz: 9999,
-    },
-    {
-      skipPollingIfUnfocused: true,
-      pollingInterval: 300000,
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data: listSMS, isLoading: isLoadingSMS } =
+    useGetListSMSGatewayDayByDayQuery(
+      {
+        ...rangDate,
+        nu: 0,
+        sz: 9999,
+      },
+      {
+        skipPollingIfUnfocused: true,
+        pollingInterval: 300000,
+        refetchOnMountOrArgChange: true,
+      }
+    );
+
   const handleExportExcel = async () => {
     await exportExcel({
       ...rangDate,
@@ -143,7 +132,7 @@ function SMSReport() {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
                   st: +format(newRangeDate.st, "yyyyMMdd") * 10000,
-                  ed: +format(newRangeDate.ed, "yyyyMMdd") * 10000,
+                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
                 });
                 setListDays(
                   getDaysArray(
@@ -188,43 +177,114 @@ function SMSReport() {
 
       <AppTable
         title="SMS"
-        isLoading={isLoadingBin || isLoadingPacket}
+        isLoading={isLoadingSMS}
         headers={[
           {
             key: "id",
             label: "ID",
-            render: (value: TProductDashboardTable) => (
+            render: (value: TSMSGateway) => (
               <td>
-                <AppId id={value.id} />
+                <AppId id={value.id ?? ""} />
+              </td>
+            ),
+          },
+          {
+            key: "info",
+            label: "Nội dung tin nhắn",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.info}</span>
               </td>
             ),
           },
           {
             key: "code",
             label: "Mã iQR",
+            render: (value: TSMSGateway) => <td>{value.code}</td>,
+          },
+          {
+            key: "product_name",
+            label: "Tên sản phẩm",
             render: (value) => (
               <td>
-                <span className="fw-semibold">{value.code}</span>
+                <span className="fw-semibold">{value.product_name}</span>
               </td>
             ),
           },
           {
-            key: "bin_seri",
-            label: "Số seri thùng",
-            render: (value) => <td>{value.bin_seri}</td>,
+            key: "name",
+            label: "Họ và tên khách hàng",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.customer_name}</span>
+              </td>
+            ),
           },
           {
-            key: "product_code",
-            label: "Mã sản phẩm",
-            render: (value) => <td>{value.product_code}</td>,
+            key: "customer_code",
+            label: "Trạng thái",
+            render: (value) => (
+              <td>
+                {!!value.customer_code ? (
+                  <Badge bg="success">Đã xác thực</Badge>
+                ) : (
+                  <Badge bg="warning">Chờ xác thực </Badge>
+                )}
+              </td>
+            ),
           },
           {
-            key: "time_use",
-            label: "Ngày sử dụng",
-            render: (value) => <td>{value.time_use}</td>,
+            key: "phone",
+            label: "Số điện thoại",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.phone}</span>
+              </td>
+            ),
+          },
+          {
+            key: "customer_province_name",
+            label: "Tỉnh thành",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">
+                  {value.customer_province_name}
+                </span>
+              </td>
+            ),
+          },
+          {
+            key: "customer_district_name",
+            label: "Quận huyện",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">
+                  {value.customer_district_name}
+                </span>
+              </td>
+            ),
+          },
+          {
+            key: "customer_area",
+            label: "Khu vực",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.customer_area}</span>
+              </td>
+            ),
+          },
+
+          {
+            key: "time",
+            label: "Thời gian nhắn tin",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.time}</span>
+              </td>
+            ),
           },
         ]}
-        data={[...(bins?.sms ?? []), ...(packets?.sms ?? [])]}
+        data={listSMS || []}
       />
     </Stack>
   );

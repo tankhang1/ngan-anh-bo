@@ -26,7 +26,7 @@ function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +format(new Date(), "yyyyMMdd") * 10000,
-    ed: +format(new Date(), "yyyyMMdd") * 10000,
+    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
 
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
@@ -50,8 +50,7 @@ function SMS_QR_Report() {
   );
   const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
     {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2399"),
+      ...rangDate,
       nu: 0,
       sz: 9999,
     },
@@ -63,8 +62,7 @@ function SMS_QR_Report() {
   );
   const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
     {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2399"),
+      ...rangDate,
       nu: 0,
       sz: 9999,
     },
@@ -152,10 +150,9 @@ function SMS_QR_Report() {
             <button
               className="btn btn-icon bg-danger"
               onClick={() => {
-                console.log("rang date", newRangeDate);
                 setRangeDate({
                   st: +format(newRangeDate.st, "yyyyMMdd") * 10000,
-                  ed: +format(newRangeDate.ed, "yyyyMMdd") * 10000,
+                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
                 });
                 setListDays(
                   getDaysArray(

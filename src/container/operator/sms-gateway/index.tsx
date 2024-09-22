@@ -9,29 +9,25 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TCustomerRes, TSMSGateway } from "../../../assets/types";
+import { TSMSGateway } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
 import {
-  useGetCounterCustomerQuery,
-  useGetListCustomerQuery,
   useGetListGroupObjectiveQuery,
   useGetListSMSGatewayQuery,
 } from "../../../redux/api/manage/manage.api";
-import { format } from "date-fns";
 
 const AGENT_FILTERS = [
   {
-    key: "id",
-    label: "ID",
-  },
-  {
-    key: "customer_name",
-    label: "Tên khách hàng",
-  },
-  {
     key: "phone",
     label: "Số điện thoại",
+  },
+  {
+    key: "code",
+    label: "Mã iQr",
+  },
+  {
+    key: "name",
+    label: "Tên khách hàng",
   },
 ];
 

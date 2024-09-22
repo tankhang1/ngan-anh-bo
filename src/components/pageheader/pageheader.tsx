@@ -11,7 +11,7 @@ const MapLabel = new Map([
   ["product", "Thông tin sản phẩm"],
   ["point", "Quản lý chương trình tích điểm"],
   ["topup", "Quản lý chương trình topup"],
-  ["chance","Quản lý chương trình may rủi"],
+  ["chance", "Quản lý chương trình may rủi"],
   ["report", "Báo cáo"],
   ["iQr", "iQr"],
   ["program-point", "Báo cáo chương trình tích điểm"],
@@ -46,15 +46,16 @@ const MapLabel = new Map([
   ["indication", "Quản lý nhóm thuốc"],
   ["formulation", "Quản lý dạng thuốc"],
   ["search-customer", "Tra cứu thông tin khách hàng"],
-  ["search-product","Tra cứu thông tin sản phẩm"],
+  ["search-product", "Tra cứu thông tin sản phẩm"],
   ["sms-gateway", "SMS Gateway"],
-  ["brandname","SMS Brandname"],
+  ["brandname", "SMS Brandname"],
   ["iqr-today", "iQr hôm nay"],
   ["material-create", "Thêm mới mã vật tư"],
   ["material-fill", "Nhập nguyên vật liệu"],
   ["report-material", "Danh sách vật tư"],
   ["report-material-packing", "Danh sách nguyên vật liệu"],
-  ["retailer1","Danh sách mã khách hàng xuất kho"]
+  ["retailer1", "Danh sách mã khách hàng xuất kho"],
+  ["verify-customer", "Thông tin khách hàng"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();
@@ -64,6 +65,8 @@ const Pageheader = () => {
     : pathname;
   const locationArray = trimmedPathname.split("/").filter(Boolean);
   const componentNames = locationArray.map((item) => {
+    if (trimmedPathname.includes("verify-customer"))
+      return MapLabel.get("verify-customer");
     if (trimmedPathname.includes("ce")) return MapLabel.get("ce");
     return MapLabel.get(item) ?? item.charAt(0).toUpperCase() + item.slice(1);
   });

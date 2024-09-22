@@ -145,6 +145,7 @@ export type TBin = {
   customer_name: string | undefined;
   customer_province_name?: string;
   customer_province?: string;
+  customer_uuid?: string;
   type_use: number; // 0 : Qr Code, 1 : SMS
   point: number;
 };
@@ -534,6 +535,7 @@ export type TCustomerRes = {
   customer_code?: string; // ko cần
   customer_type?: string; // select
   customer_name?: string;
+  customer_uuid?: string;
   customer_province?: string; // select
   customer_province_name?: string; // ko cần
   customer_area?: string; // ko cần
@@ -815,7 +817,7 @@ export type TSMSGateway = {
   code_bin_package_item: number;
   product_name: string;
 };
-export type TCustomerStaff={
+export type TCustomerStaff = {
   id: number;
   code: string;
   name: string;
@@ -825,4 +827,4 @@ export type TCustomerStaff={
   province: string;
   type: string;
   sale_name: string;
-}
+};

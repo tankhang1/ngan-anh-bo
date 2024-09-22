@@ -1,11 +1,5 @@
 import React, { Fragment, useContext, useDeferredValue, useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  InputGroup,
-} from "react-bootstrap";
+import { Button, Card, Col, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../../components/common/table/table";
 
 import { ToastContext } from "../../../../components/AppToast";
@@ -39,7 +33,7 @@ function ManageMaterial() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Tìm kiếm thông tin"
+                      placeholder="Mã vật tư"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                     />

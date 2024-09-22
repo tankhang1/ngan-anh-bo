@@ -110,9 +110,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<SearchWarehouseExport />}
               />
               <Route
-                path={`${
-                  import.meta.env.BASE_URL
-                }warehouse/search/retailer1`}
+                path={`${import.meta.env.BASE_URL}warehouse/search/retailer1`}
                 element={<SearchWarehouseCustomerExport />}
               />
               <Route
@@ -240,7 +238,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${
                   import.meta.env.BASE_URL
-                }operator/verify-customer/:phone`}
+                }operator/verify-customer/:customer_uuid`}
                 element={<VerifyCustomer />}
               />
               <Route

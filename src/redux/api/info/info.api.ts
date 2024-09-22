@@ -83,7 +83,7 @@ export const infoApi = createApi({
         params,
       }),
     }),
-    getCustomerByCode: builder.query<TAgent, { c: string }>({
+    getCustomerByCode: builder.query<TCustomerRes, { c: string }>({
       query: (params) => ({
         url: "/api/customer/code",
         method: HTTPS_METHOD.GET,
@@ -94,7 +94,7 @@ export const infoApi = createApi({
       query: (params) => ({
         url: "/api/customer/search",
         method: HTTPS_METHOD.GET,
-        params,        
+        params,
       }),
     }),
     getCustomerCounter: builder.query<number, BaseQuery>({
