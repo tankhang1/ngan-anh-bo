@@ -437,7 +437,7 @@ export const MENUITEMS = [
           {
             path: `${
               import.meta.env.BASE_URL
-            }warehouse/manufacture-order/create`,
+            }warehouse/create-manufactor-order`,
             type: "link",
             active: false,
             selected: false,

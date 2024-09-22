@@ -69,8 +69,7 @@ const AppSelect = ({
   };
 
   useEffect(() => {
-    value &&
-      setSearch(filterData?.find((item) => item.value === value)?.label ?? "");
+    setSearch(filterData?.find((item) => item.value === value)?.label ?? "");
   }, [value, filterData]);
 
   useEffect(() => {
@@ -92,6 +91,15 @@ const AppSelect = ({
           disabled={disabled}
           style={{ borderColor: isInValid ? "red" : "#ebedef" }}
         />
+        {search.length > 0 && (
+          <button
+            onClick={() => setSearch("")}
+            className="btn btn-icon"
+            style={{ backgroundColor: "#ff5880" }}
+          >
+            <i className="ti ti-x text-white" />
+          </button>
+        )}
         <button
           disabled={disabled}
           onClick={() => {

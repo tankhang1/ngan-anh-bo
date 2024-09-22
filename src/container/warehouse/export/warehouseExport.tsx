@@ -46,7 +46,7 @@ type TExportForm = {
   end_date: string;
 };
 const WarehouseExport = () => {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission } = useSelector((state: RootState) => state.auth  );
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();

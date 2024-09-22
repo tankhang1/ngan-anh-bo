@@ -70,6 +70,7 @@ import VerifyCustomer from "./container/operator/iqr/verify/index.tsx";
 import BrandnameToday from "./container/operator/brandname-today/index.tsx";
 import SearchWarehouseCustomerExport from "./container/warehouse/export/searchWarehouseCustomerExport.tsx";
 import BrandnameReport from "./container/report/components/BrandnameReport.tsx";
+import WarehouseCreateManufactorOrder from "./container/warehouse/order/warehouseCreateOrder.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -152,6 +153,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }customer/unvalidate/ce/:isCreate/:id`}
                 element={<CustomerUnValidationCreateEdit />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/create-manufactor-order`}
+                element={<WarehouseCreateManufactorOrder />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}customer/unvalidate`}

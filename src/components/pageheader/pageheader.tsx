@@ -56,6 +56,7 @@ const MapLabel = new Map([
   ["report-material-packing", "Danh sách nguyên vật liệu"],
   ["retailer1", "Danh sách mã khách hàng xuất kho"],
   ["verify-customer", "Thông tin khách hàng"],
+  ["create-manufactor-order", "Tạo lệnh sản xuất"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();
