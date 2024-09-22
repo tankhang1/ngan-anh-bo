@@ -46,10 +46,12 @@ export const productApi = createApi({
         method: HTTPS_METHOD.GET,
       }),
       transformResponse: (response: TDevice[]) => {
-        return response.map((value) => ({
-          label: `${value.device_name}-${value.device_ip}`,
-          value: value.device_code,
-        }));
+        return response
+          ?.filter((item) => !!item?.device_ip)
+          .map((value) => ({
+            label: `${value.device_name}-${value.device_ip}`,
+            value: value.device_code,
+          }));
       },
       providesTags: (results) =>
         results
