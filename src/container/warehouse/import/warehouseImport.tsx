@@ -100,7 +100,7 @@ const WarehouseImport = () => {
       await exportExcel({
         st: query?.st,
         ed: query?.ed,
-        type: query?.type ?? "ALL",
+        t: query?.type ?? "ALL",
       })
         .unwrap()
         .then(async (url) => {
