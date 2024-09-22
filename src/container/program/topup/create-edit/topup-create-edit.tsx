@@ -193,14 +193,13 @@ function TopupCreateEdit() {
               : values.products.map((item) => item.value).join(",")
             : "",
 
-        // objectives:
-        //   typeof values.objectives !== "string"
-        //     ? values.objectives.length === 1 &&
-        //       values.objectives[0]?.value === "all"
-        //       ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
-        //       : values.objectives.map((item) => item.value).join(",")
-        //     : "",
-        objectives: "RETAILER2",
+        objectives:
+          typeof values.objectives !== "string"
+            ? values.objectives.length === 1 &&
+              values.objectives[0]?.value === "all"
+              ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
+              : values.objectives.map((item) => item.value).join(",")
+            : "",
         price: +(values?.price ?? 0),
         goods_type:
           typeof values.goods_type !== "string"
