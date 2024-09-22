@@ -74,7 +74,7 @@ const WarehouseCreateManufactorOrder = () => {
                       isLoadingCreate && "btn-loader "
                     }`}
                   >
-                    <span>Thêm mới</span>
+                    <span>Tạo lệnh</span>
                     {isLoadingCreate && (
                       <span className="loading">
                         <i className="ri-loader-2-fill fs-19"></i>
