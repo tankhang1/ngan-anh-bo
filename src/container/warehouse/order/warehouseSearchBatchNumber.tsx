@@ -64,47 +64,60 @@ const WarehouseSearchBatchNumber = () => {
           </Card.Body>
         </Card>
       </Col>
-      <Row>
-        <Col md={6}>
-          <Card className="custom-card p-3">
-            <Card.Header>
-              <h5>Thông tin lô</h5>
-            </Card.Header>
-            <Card.Body>
-              <Row>
-                <Col md={6}>
-                  <img
-                    style={{
-                      width: "100%",
-                      maxHeight: 300,
-                      objectFit: "fill",
-                      borderRadius: 10,
-                    }}
-                    src={
-                      //   product?.code
-                      //     ? `${BASE_PORT}/${product?.code}.jpg`
-                      //     : "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
-                    }
-                  />
-                </Col>
-                <Col md={6}>
+      <Stack gap={4}>
+        <Row>
+          <Col md={6}>
+            <Card className="custom-card p-3 h-100">
+              <Card.Header>
+                <h5>Thông tin lô</h5>
+              </Card.Header>
+              <Card.Body>
+                <Stack gap={1}>
+                  <span className="text-black fs-17 fw-smibold">
+                    &#x2022; Mã sản phẩm :{" "}
+                    <span className="fw-normal">NAXXXXXX</span>
+                  </span>
+                  <span className="text-black fs-17 fw-smibold">
+                    &#x2022; Tên sản phẩm :{" "}
+                    <span className="fw-normal">XXXXXXX</span>
+                  </span>
+                  <span className="text-black fs-17 fw-smibold">
+                    &#x2022; Nhóm sản phẩm :{" "}
+                    <span className="fw-normal">XXXXXXX</span>
+                  </span>
+
+                  <span className="text-black fs-17 fw-smibold">
+                    &#x2022; Ngày sản xuất :{" "}
+                    <span className="fw-normal">XXXXX</span>
+                  </span>
+                  <span className="text-black fs-17 fw-smibold">
+                    &#x2022; Ngày hết hạn :{" "}
+                    <span className="fw-normal">XXXXX</span>
+                  </span>
+                  <span className="text-black fs-17 fw-smibold">
+                    &#x2022; Thông tin lệnh sản xuất :{" "}
+                    <span className="fw-normal">XXXXX</span>
+                  </span>
+                </Stack>
+                {/* )} */}
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={6}>
+            <Card className="custom-card p-3 h-100">
+              <Card.Header>
+                <h5>Thông tin lô nguyên liệu</h5>
+              </Card.Header>
+              <Card.Body>
+                <Row>
                   <Stack gap={1}>
                     <span className="text-black fs-17 fw-smibold">
-                      &#x2022; Mã iQr :{" "}
+                      &#x2022; Mã lô :{" "}
                       <span className="fw-normal">{searchValue}</span>
                     </span>
                     <span className="text-black fs-17 fw-smibold">
-                      &#x2022; Mã sản phẩm :{" "}
+                      &#x2022; Tên lô nguyên liệu:{" "}
                       <span className="fw-normal">NAXXXXXX</span>
-                    </span>
-                    <span className="text-black fs-17 fw-smibold">
-                      &#x2022; Tên sản phẩm :{" "}
-                      <span className="fw-normal">XXXXXXX</span>
-                    </span>
-                    <span className="text-black fs-17 fw-smibold">
-                      &#x2022; Nhóm sản phẩm :{" "}
-                      <span className="fw-normal">XXXXXXX</span>
                     </span>
 
                     <span className="text-black fs-17 fw-smibold">
@@ -116,93 +129,82 @@ const WarehouseSearchBatchNumber = () => {
                       <span className="fw-normal">XXXXX</span>
                     </span>
                     <span className="text-black fs-17 fw-smibold">
-                      &#x2022; Thông tin lệnh sản xuất :{" "}
+                      &#x2022; Nguồn gốc :{" "}
                       <span className="fw-normal">XXXXX</span>
                     </span>
                   </Stack>
-                </Col>
-              </Row>
-              {/* )} */}
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6}>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        <Col>
           <Card className="custom-card p-3">
-            <Card.Header>
-              <h5>Thông tin lô nguyên liệu</h5>
-            </Card.Header>
             <Card.Body>
-              <Row>
-                <Stack gap={1}>
-                  <span className="text-black fs-17 fw-smibold">
-                    &#x2022; Mã lô :{" "}
-                    <span className="fw-normal">{searchValue}</span>
-                  </span>
-                  <span className="text-black fs-17 fw-smibold">
-                    &#x2022; Tên lô nguyên liệu:{" "}
-                    <span className="fw-normal">NAXXXXXX</span>
-                  </span>
-
-                  <span className="text-black fs-17 fw-smibold">
-                    &#x2022; Ngày sản xuất :{" "}
-                    <span className="fw-normal">XXXXX</span>
-                  </span>
-                  <span className="text-black fs-17 fw-smibold">
-                    &#x2022; Ngày hết hạn :{" "}
-                    <span className="fw-normal">XXXXX</span>
-                  </span>
-                </Stack>
-              </Row>
+              <AppTable
+                isHeader={true}
+                title="Danh sách thùng"
+                headers={[
+                  {
+                    key: "id",
+                    label: "Id",
+                    render: ({ id }) => <td>{id}</td>,
+                  },
+                  {
+                    key: "shipment_code",
+                    label: "Lệnh sản xuất",
+                    render: ({ agent_code }) => <td>{agent_code}</td>,
+                  },
+                  {
+                    key: "batch_number",
+                    label: "Lô sản suất/ Batch",
+                    render: ({ agent_name }) => <td>{agent_name}</td>,
+                  },
+                  {
+                    key: "shipment_code",
+                    label: "Tên sản phẩm",
+                    render: ({ agent_code }) => <td>{agent_code}</td>,
+                  },
+                  {
+                    key: "goods_type",
+                    label: "Số thùng",
+                    render: ({ goods_type }) => <td>{goods_type}</td>,
+                  },
+                  {
+                    key: "staff_export_code",
+                    label: "Số lượng code gói",
+                    render: ({ staff_export_code }) => (
+                      <td>{staff_export_code}</td>
+                    ),
+                  },
+                  {
+                    key: "staff_export_name",
+                    label: "Trạng thái",
+                    render: ({ staff_export_name }) => (
+                      <td>{staff_export_name}</td>
+                    ),
+                  },
+                  {
+                    key: "staff_export_name",
+                    label: "Mã xuất kho",
+                    render: ({ staff_export_name }) => (
+                      <td>{staff_export_name}</td>
+                    ),
+                  },
+                  {
+                    key: "staff_export_name",
+                    label: "Thời gian xuất kho",
+                    render: ({ staff_export_name }) => (
+                      <td>{staff_export_name}</td>
+                    ),
+                  },
+                ]}
+                data={[]}
+              />
             </Card.Body>
           </Card>
         </Col>
-        <Card className="custom-card p-3">
-          <Card.Body>
-            <AppTable
-              isHeader={true}
-              title="Danh sách thùng"
-              headers={[
-                {
-                  key: "id",
-                  label: "Id",
-                  render: ({ id }) => <td>{id}</td>,
-                },
-                {
-                  key: "shipment_code",
-                  label: "Lệnh sản xuất",
-                  render: ({ agent_code }) => <td>{agent_code}</td>,
-                },
-                {
-                  key: "Lô sản xuất /Batch",
-                  label: "Tên đại lý",
-                  render: ({ agent_name }) => <td>{agent_name}</td>,
-                },
-
-                {
-                  key: "goods_type",
-                  label: "Số thùng",
-                  render: ({ goods_type }) => <td>{goods_type}</td>,
-                },
-                {
-                  key: "staff_export_code",
-                  label: "Số lượng code gói",
-                  render: ({ staff_export_code }) => (
-                    <td>{staff_export_code}</td>
-                  ),
-                },
-                {
-                  key: "staff_export_name",
-                  label: "Trạng thái",
-                  render: ({ staff_export_name }) => (
-                    <td>{staff_export_name}</td>
-                  ),
-                },
-              ]}
-              data={[]}
-            />
-          </Card.Body>
-        </Card>
-      </Row>
+      </Stack>
     </Fragment>
   );
 };
