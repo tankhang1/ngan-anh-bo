@@ -6,7 +6,7 @@ import {
   useGetListBrandnamesQuery,
   useGetListBrandnameTodayQuery,
 } from "../../../redux/api/manage/manage.api";
-import { format, isBefore } from "date-fns";
+import { format, isBefore, subDays } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
@@ -16,14 +16,18 @@ import { useExportBrandnameMutation } from "../../../redux/api/excel/excel.api";
 function BrandnameReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +(format(new Date(), "yyyyMMdd") + "0000"),
+    st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
     ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
-    st: new Date(),
+    st: subDays(new Date(), 10),
     ed: new Date(),
   });
-  const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
+  const [listDays, setListDays] = useState(
+    getDaysArray(new Date(newRangeDate.st), new Date(newRangeDate.ed)).map(
+      (item) => format(item, "yyyy-MM-dd")
+    )
+  );
   const [exportExcel] = useExportBrandnameMutation();
 
   const { data: brandnames, isLoading: isLoadingBrandname } =
@@ -41,7 +45,7 @@ function BrandnameReport() {
     const brandname = lodash.groupBy(
       brandnames?.map((item) => ({
         ...item,
-        time: format(new Date(item?.time), "dd-MM-yyyy"),
+        time: format(new Date(item?.time), "yyyy-MM-dd"),
       })),
       "time"
     );
@@ -114,7 +118,7 @@ function BrandnameReport() {
                   getDaysArray(
                     new Date(newRangeDate.st),
                     new Date(newRangeDate.ed)
-                  ).map((item) => format(item, "dd-MM-yyyy"))
+                  ).map((item) => format(item, "yyyy-MM-dd"))
                 );
               }}
             >

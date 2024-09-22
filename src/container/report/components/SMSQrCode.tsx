@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import * as Chartjscharts from "../../charts/chartjschart/chartjsdata";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
 import { useMediaQuery } from "@mui/material";
-import { format, isBefore } from "date-fns";
+import { format, isBefore, subDays } from "date-fns";
 import {
   useGetBinsQuery,
   useGetPacketsQuery,
@@ -25,15 +25,19 @@ import {
 function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(new Date(), "yyyyMMdd") * 10000,
+    st: +format(subDays(new Date(), 10), "yyyyMMdd") * 10000,
     ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
 
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
-    st: new Date(),
+    st: subDays(new Date(), 10),
     ed: new Date(),
   });
-  const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
+  const [listDays, setListDays] = useState(
+    getDaysArray(new Date(newRangeDate.st), new Date(newRangeDate.ed)).map(
+      (item) => format(item, "yyyy-MM-dd")
+    )
+  );
   const [exportBinExcel] = useExportBinMutation();
   const [exportPackageExcel] = useExportPackageMutation();
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
@@ -92,7 +96,7 @@ function SMS_QR_Report() {
     const data =
       reportDayByDay?.map((date) => {
         return {
-          date: fDate(date.day, "dd-MM-YYYY"),
+          date: fDate(date.day, "yyyy-MM-dd"),
           topup: date.topup,
           brandname: date.brandname,
           agent: date.agent,

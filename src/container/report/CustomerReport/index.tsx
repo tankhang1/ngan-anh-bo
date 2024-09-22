@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Card, Col, Form, InputGroup, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Dashed } from "../../charts/apexcharts/linechart/linechartdata";
-import { format, isBefore } from "date-fns";
+import { format, isBefore, subDays } from "date-fns";
 import {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
@@ -33,7 +33,7 @@ function CustomerReport() {
     ed: number;
     t: string;
   }>({
-    st: +(format(new Date(), "yyyyMMdd") + "0000"),
+    st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
     ed: +(format(new Date(), "yyyyMMdd") + "2359"),
     t: "RETAILER1",
   });
@@ -41,10 +41,14 @@ function CustomerReport() {
     st: Date;
     ed: Date;
   }>({
-    st: new Date(),
+    st: subDays(new Date(), 19),
     ed: new Date(),
   });
-  const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
+  const [listDays, setListDays] = useState(
+    getDaysArray(new Date(newRangeDate.st), new Date(newRangeDate.ed)).map(
+      (item) => format(item, "yyyy-MM-dd")
+    )
+  );
   const [exportExcel] = useExportCustomerDataMutation();
   const [page, setPage] = useState(1);
   const { data: counterCustomer } = useGetCounterCustomerQuery(
@@ -85,7 +89,7 @@ function CustomerReport() {
     const data =
       reportDayByDay?.map((date) => {
         return {
-          date: fDate(date.day, "dd-MM-yyyy"),
+          date: fDate(date.day, "yyyy-MM-dd"),
           topup: date.topup,
           brandname: date.brandname,
           agent: date.agent,
@@ -178,7 +182,7 @@ function CustomerReport() {
                   getDaysArray(
                     new Date(newRangeDate.st),
                     new Date(newRangeDate.ed)
-                  ).map((item) => format(item, "dd-MM-yyyy"))
+                  ).map((item) => format(item, "yyyy-MM-dd"))
                 );
               }}
             >

@@ -18,9 +18,9 @@ interface spark3 {
 }
 
 // Revenue Statistics
-
 export const Basicline = ({ ...props }: spark3) => {
   const { series, colors, categories, title } = props;
+
   const initial = useMemo(
     () => ({
       series: series,
@@ -58,6 +58,7 @@ export const Basicline = ({ ...props }: spark3) => {
           },
         },
         xaxis: {
+          type: "datetime", // Set x-axis type to datetime
           categories: categories,
           labels: {
             show: true,
@@ -66,6 +67,13 @@ export const Basicline = ({ ...props }: spark3) => {
               fontSize: "11px",
               fontWeight: 600,
               cssClass: "apexcharts-xaxis-label",
+            },
+            formatter: function (value: string) {
+              return new Date(value).toLocaleDateString("vi-VN", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              });
             },
           },
         },
@@ -2667,17 +2675,17 @@ export const Dashed = ({ ...props }: spark3) => {
         chart: {
           height: 320,
           type: "line",
-          zoom: {
-            enabled: false,
-          },
           events: {
             mounted: (chart: { windowResizeHandler: () => void }) => {
               chart.windowResizeHandler();
             },
           },
+          zoom: {
+            enabled: false, // Disable zoom
+          },
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
         },
         stroke: {
           width: [3, 4, 3],
@@ -2720,7 +2728,8 @@ export const Dashed = ({ ...props }: spark3) => {
           },
         },
         xaxis: {
-          categories: categories,
+          type: "datetime", // Set the x-axis type to datetime
+          categories: categories, // Ensure categories contain valid date strings or Date objects
           labels: {
             show: true,
             style: {
@@ -2728,6 +2737,13 @@ export const Dashed = ({ ...props }: spark3) => {
               fontSize: "11px",
               fontWeight: 600,
               cssClass: "apexcharts-xaxis-label",
+            },
+            formatter: function (value: string) {
+              return new Date(value).toLocaleDateString("vi-VN", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              });
             },
           },
         },
@@ -2743,6 +2759,9 @@ export const Dashed = ({ ...props }: spark3) => {
           },
         },
         tooltip: {
+          x: {
+            format: "dd MMM yyyy", // Tooltip format for datetime
+          },
           y: [
             {
               title: {
