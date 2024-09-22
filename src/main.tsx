@@ -71,6 +71,7 @@ import BrandnameToday from "./container/operator/brandname-today/index.tsx";
 import SearchWarehouseCustomerExport from "./container/warehouse/export/searchWarehouseCustomerExport.tsx";
 import BrandnameReport from "./container/report/components/BrandnameReport.tsx";
 import WarehouseCreateManufactorOrder from "./container/warehouse/order/warehouseCreateOrder.tsx";
+import WarehouseSearchBatchNumber from "./container/warehouse/order/warehouseSearchBatchNumber.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -159,6 +160,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }warehouse/create-manufactor-order`}
                 element={<WarehouseCreateManufactorOrder />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/search/batch-number`}
+                element={<WarehouseSearchBatchNumber />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}customer/unvalidate`}
