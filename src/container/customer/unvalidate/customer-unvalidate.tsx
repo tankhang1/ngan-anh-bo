@@ -286,11 +286,7 @@ function CustomerUnValidation() {
                     <button
                       className="btn btn-icon btn-sm btn-primary-ghost"
                       onClick={() =>
-                        navigate(
-                          `ce/${false}/${value.uuid}_${customerType}_${
-                            page - 1
-                          }`
-                        )
+                        navigate(`ce/${false}/${value.customer_code}`)
                       }
                     >
                       <i className="ti ti-edit"></i>

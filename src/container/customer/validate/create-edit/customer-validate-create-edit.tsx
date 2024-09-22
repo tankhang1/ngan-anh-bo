@@ -34,7 +34,10 @@ import AppWarning from "../../../../components/AppWarning";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppSelect from "../../../../components/AppSelect";
-import { useGetCustomerQuery } from "../../../../redux/api/info/info.api";
+import {
+  useGetCustomerByCodeQuery,
+  useGetCustomerQuery,
+} from "../../../../redux/api/info/info.api";
 
 function CustomerValidationCreateEdit() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -51,15 +54,15 @@ function CustomerValidationCreateEdit() {
     refetchOnMountOrArgChange: true,
   });
   const { data: groupRetailers } = useGetListGroupRetailerQuery();
-  const { data: customers } = useGetCustomerQuery(
+  const { data: customer } = useGetCustomerByCodeQuery(
     {
-      k: id,
+      c: id!,
     },
     {
       skip: isCreate === "true",
+      refetchOnMountOrArgChange: true,
     }
   );
-  const customer = useMemo(() => customers?.[0], [customers]);
   const [createCustomer, { isLoading: isLoadingCreate }] =
     useCreateUpdateCustomerMutation();
   const [updateCustomer, { isLoading: isLoadingUpdate }] =

@@ -30,6 +30,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
 import AppSelect from "../../../../components/AppSelect";
+import { useGetCustomerByCodeQuery } from "../../../../redux/api/info/info.api";
 
 function CustomerUnValidationCreateEdit() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -47,17 +48,13 @@ function CustomerUnValidationCreateEdit() {
     refetchOnMountOrArgChange: true,
     skip: isCreate !== "true",
   });
-  const { data: customer } = useGetListCustomerQuery(
+  const { data: customer } = useGetCustomerByCodeQuery(
     {
-      t: id?.split("_")[1],
-      nu: +(id?.split("_")[2] ?? 0),
-      sz: 10,
+      c: id!,
     },
     {
-      selectFromResult: ({ data }) => ({
-        data: data?.find((customer) => customer.uuid == id?.split("_")[0]),
-      }),
       skip: isCreate === "true",
+      refetchOnMountOrArgChange: true,
     }
   );
   const [createCustomer, { isLoading: isLoadingCreate }] =
