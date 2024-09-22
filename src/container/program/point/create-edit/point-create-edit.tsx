@@ -579,6 +579,11 @@ function PointCreateEdit() {
                       onChange={handleChange}
                       isInvalid={touched.time_start && !!errors.time_start}
                       disabled={isDisableAccess("time_start")}
+                      min={
+                        new Date(new Date().setDate(new Date().getDate() + 1))
+                          .toISOString()
+                          .split("T")[0]
+                      }
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.time_start?.toString()}
@@ -600,7 +605,11 @@ function PointCreateEdit() {
                       isInvalid={touched.time_end && !!errors.time_end}
                       min={
                         isCreate === "true"
-                          ? format(new Date(), "yyyy-MM-dd")
+                          ? new Date(
+                              new Date().setDate(new Date().getDate() + 1)
+                            )
+                              .toISOString()
+                              .split("T")[0]
                           : values.time_end
                       }
                       disabled={isDisableAccess("time_end")}

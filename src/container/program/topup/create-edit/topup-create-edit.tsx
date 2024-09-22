@@ -482,6 +482,11 @@ function TopupCreateEdit() {
                       className="input-placeholder"
                       name="time_start"
                       value={values.time_start}
+                      min={
+                        new Date(new Date().setDate(new Date().getDate() + 1))
+                          .toISOString()
+                          .split("T")[0]
+                      }
                       lang="vi"
                       onChange={handleChange}
                       isInvalid={touched.time_start && !!errors.time_start}
@@ -508,7 +513,11 @@ function TopupCreateEdit() {
                       isInvalid={touched.time_end && !!errors.time_end}
                       min={
                         isCreate === "true"
-                          ? format(new Date(), "yyyy-MM-dd")
+                          ? new Date(
+                              new Date().setDate(new Date().getDate() + 1)
+                            )
+                              .toISOString()
+                              .split("T")[0]
                           : values.time_end
                       }
                       disabled={isDisableAccess("time_end")}
