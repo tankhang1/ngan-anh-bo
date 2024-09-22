@@ -229,7 +229,7 @@ function TopupCreateEdit() {
             navigate(-1);
             toast.showToast("Thêm mới chương trình thành công");
           } else if (value.status === -4)
-            toast.showToast("Ngày bắt đầu sau 1 ngày");
+            toast.showToast("Thêm mới thất bại, ngày bắt đầu phải sau 1 ngày");
           else toast.showToast(value.message);
         })
         .catch(() => {
@@ -483,7 +483,7 @@ function TopupCreateEdit() {
                       name="time_start"
                       value={values.time_start}
                       min={
-                        new Date(new Date().setDate(new Date().getDate() + 1))
+                        new Date(new Date().setDate(new Date().getDate() + 2))
                           .toISOString()
                           .split("T")[0]
                       }
@@ -514,7 +514,7 @@ function TopupCreateEdit() {
                       min={
                         isCreate === "true"
                           ? new Date(
-                              new Date().setDate(new Date().getDate() + 1)
+                              new Date().setDate(new Date().getDate() + 2)
                             )
                               .toISOString()
                               .split("T")[0]

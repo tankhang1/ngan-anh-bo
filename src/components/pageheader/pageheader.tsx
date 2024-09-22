@@ -67,8 +67,9 @@ const Pageheader = () => {
     : pathname;
   const locationArray = trimmedPathname.split("/").filter(Boolean);
   const componentNames = locationArray.map((item) => {
-    if (trimmedPathname.includes("verify-customer"))
-      return MapLabel.get("verify-customer");
+    if (trimmedPathname.includes("operator/topup/list"))
+      if (trimmedPathname.includes("verify-customer"))
+        return MapLabel.get("verify-customer");
     if (trimmedPathname.includes("ce")) return MapLabel.get("ce");
     return MapLabel.get(item) ?? item.charAt(0).toUpperCase() + item.slice(1);
   });
