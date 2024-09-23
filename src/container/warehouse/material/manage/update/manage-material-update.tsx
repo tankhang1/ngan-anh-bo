@@ -151,7 +151,7 @@ const ManageMaterialUpdate = () => {
                     </Form.Group>
                     <Form.Group>
                       <Form.Label className="text-black">
-                        Tên vật tư <span style={{ color: "red" }}>*</span>
+                        Công thức <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       <Form.Control
                         required
@@ -168,9 +168,7 @@ const ManageMaterialUpdate = () => {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group>
-                      <Form.Label className="text-black">
-                        Mô tả vật tư
-                      </Form.Label>
+                      <Form.Label className="text-black">Tên vật tư</Form.Label>
                       <Form.Control
                         required
                         type="textarea"
