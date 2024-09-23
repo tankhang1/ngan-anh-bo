@@ -247,7 +247,7 @@ function CustomerUnValidateToday() {
                         navigate(
                           `${
                             import.meta.env.BASE_URL
-                          }operator/verify-customer/${value.customer_uuid}`
+                          }operator/verify-customer/${value.uuid}`
                         )
                       }
                     >

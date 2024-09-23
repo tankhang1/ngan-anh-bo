@@ -73,6 +73,7 @@ function IQRToday() {
             <div className="contact-header">
               <div className="d-sm-flex d-block align-items-center justify-content-between">
                 <div className="h5 fw-semibold mb-0">Tìm kiếm thông tin</div>
+
                 <div className="d-flex w-sm-100 mt-sm-0 mt-2 align-items-center">
                   <InputGroup>
                     <Form.Control
@@ -128,7 +129,7 @@ function IQRToday() {
             isHeader={false}
             externalSearch={search}
             searchByExternal={searchBy}
-            title="Thông tin đại lý"
+            title="Thông tin đại lý "
             isLoading={isLoadingBinPacket}
             headers={[
               {

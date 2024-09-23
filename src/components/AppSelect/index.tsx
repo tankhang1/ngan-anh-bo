@@ -69,8 +69,8 @@ const AppSelect = ({
   };
 
   useEffect(() => {
-    setSearch(filterData?.find((item) => item.value === value)?.label ?? "");
-  }, [value, filterData]);
+    value && setSearch(data?.find((item) => item.value === value)?.label ?? "");
+  }, [value, data]);
 
   useEffect(() => {
     setFilterData(data);
@@ -93,7 +93,10 @@ const AppSelect = ({
         />
         {search.length > 0 && (
           <button
-            onClick={() => setSearch("")}
+            onClick={() => {
+              setFilterData(data);
+              setSearch("");
+            }}
             className="btn btn-icon"
             style={{ backgroundColor: "#ff5880" }}
           >
