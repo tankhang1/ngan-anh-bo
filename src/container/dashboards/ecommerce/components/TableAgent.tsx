@@ -34,11 +34,11 @@ function TableAgent() {
           ),
         },
         {
-          key: "name",
+          key: "customer_name",
           label: "Tên",
           render: (value) => (
             <td>
-              <span className="fw-semibold">{value.name}</span>
+              <span className="fw-semibold">{value.customer_name}</span>
             </td>
           ),
         },
@@ -48,9 +48,9 @@ function TableAgent() {
           render: (value) => <td>{value.phone}</td>,
         },
         {
-          key: "province",
-          label: "Địa chỉ",
-          render: (value) => <td>{value.province}</td>,
+          key: "customer_province_name",
+          label: "Tỉnh thành",
+          render: (value) => <td>{value.customer_province_name}</td>,
         },
         {
           key: "time_verify",
