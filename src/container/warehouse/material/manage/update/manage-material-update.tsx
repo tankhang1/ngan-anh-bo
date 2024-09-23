@@ -30,6 +30,7 @@ const ManageMaterialUpdate = () => {
       },
       {
         skip: !code ? true : false,
+        refetchOnMountOrArgChange: true,
       }
     );
   const navigate = useNavigate();
