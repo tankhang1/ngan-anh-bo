@@ -8,7 +8,7 @@ const productSchema = Yup.object().shape({
 
   code: Yup.string().required("Mã sản phẩm là bắt buộc"),
 
-  code_bin: Yup.string().required("Mã thùng là bắt buộc"),
+  code_bin: Yup.string(),
 
   brand_code: Yup.string().required("Mã thương hiệu là bắt buộc"),
 

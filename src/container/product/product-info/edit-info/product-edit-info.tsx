@@ -526,7 +526,10 @@ function ProductEditInfo() {
                   </Form.Group>
                 </Row>
                 <Row>
-                  <Form.Group as={Col} md={6}>
+                  <Form.Group
+                    as={Col}
+                    md={values.type !== ProductTypeEnum.BIN.toString() ? 6 : 12}
+                  >
                     <Form.Label className="text-black">
                       Hình thức đóng gói <span style={{ color: "red" }}>*</span>
                     </Form.Label>
@@ -572,27 +575,29 @@ function ProductEditInfo() {
                       {errors.type}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md={6}>
-                    <Form.Label className="text-black">
-                      Mã thùng <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <AppSelect
-                      onChange={(value) => {
-                        setFieldValue("code_bin", value);
-                      }}
-                      data={
-                        binIds?.map((item) => ({
-                          label: item.label ?? "",
-                          value: item.value ?? "",
-                        })) ?? []
-                      }
-                      value={values?.code_bin}
-                      placeholder="Chọn mã thùng"
-                      isInValid={!!errors.code_bin && touched.code_bin}
-                      errorText={errors.code_bin}
-                      disabled={isEdit === false}
-                    />
-                  </Form.Group>
+                  {values.type !== ProductTypeEnum.BIN.toString() && (
+                    <Form.Group as={Col} md={6}>
+                      <Form.Label className="text-black">
+                        Mã thùng <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <AppSelect
+                        onChange={(value) => {
+                          setFieldValue("code_bin", value);
+                        }}
+                        data={
+                          binIds?.map((item) => ({
+                            label: item.label ?? "",
+                            value: item.value ?? "",
+                          })) ?? []
+                        }
+                        value={values?.code_bin}
+                        placeholder="Chọn mã thùng"
+                        isInValid={!!errors.code_bin && touched.code_bin}
+                        errorText={errors.code_bin}
+                        disabled={isEdit === false}
+                      />
+                    </Form.Group>
+                  )}
                 </Row>
                 <Row>
                   <Form.Group as={Col} md={4}>
