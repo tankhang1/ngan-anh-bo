@@ -69,7 +69,7 @@ function ProductCreate() {
     useCreateProductMutation();
 
   const onHandleSubmit = async (values: TProductCreateForm) => {
-    if (productId)
+    if (productId) {
       await createProduct({
         ...values,
         qr_mapping: values.qr_mapping ? 1 : 0,
@@ -109,6 +109,7 @@ function ProductCreate() {
         .catch(() => {
           toast.showToast("Hết hạn token");
         });
+    }
   };
 
   return (
