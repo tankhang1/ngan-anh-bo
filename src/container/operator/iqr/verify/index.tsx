@@ -211,7 +211,15 @@ function VerifyCustomer() {
 
                   <div className="d-flex gap-2">
                     {!values.customer_code && (
-                      <AppWarning onAccept={() => handleSubmit()}>
+                      <AppWarning
+                        onAccept={() => {
+                          if (values.customer_type === "ANONYMOUS") {
+                            toast.showToast(
+                              "Đối tượng khách hàng phải khác chưa định danh trước khi xác thực khách hàng"
+                            );
+                          } else handleSubmit();
+                        }}
+                      >
                         <button
                           className={`btn btn-teal-light justify-content-center align-items-center ${
                             isLoadingVerify && "btn-loader "
