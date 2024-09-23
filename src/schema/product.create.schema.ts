@@ -12,7 +12,7 @@ const productCreateSchema = Yup.object().shape({
 
   version: Yup.string().required("Mã phiên bản là bắt buộc"),
 
-  code_bin: Yup.string().required("Mã thùng là bắt buộc"),
+  code_bin: Yup.string(),
 
   certificate_of_origin: Yup.string().nullable(),
 
