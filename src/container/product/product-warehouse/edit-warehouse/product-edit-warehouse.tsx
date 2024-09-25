@@ -589,7 +589,7 @@ function ProductEditWarehouse() {
                   </Form.Group>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
-                      Trọng lượng <span style={{ color: "red" }}>*</span>
+                      Trọng lượng gói<span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       type="number"

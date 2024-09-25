@@ -365,6 +365,7 @@ export type TProgramTopupDetail = {
   code_hash: string;
   product_name: string;
   time_topup: string; // Consider using `Date` type if you want to handle date objects
+  total: number;
 };
 export type TDevice = {
   id: number;

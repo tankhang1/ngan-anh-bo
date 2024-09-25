@@ -210,7 +210,7 @@ function VerifyCustomer() {
                   </button>
 
                   <div className="d-flex gap-2">
-                    {!values.customer_code && (
+                    {values.status === 0 && (
                       <AppWarning
                         onAccept={() => {
                           if (values.customer_type === "ANONYMOUS") {
@@ -339,6 +339,7 @@ function VerifyCustomer() {
                           touched.customer_type && !!errors.customer_type
                         }
                         required
+                        disabled={values.status === 1}
                       >
                         <option value="">-- Chọn nhóm khách hàng --</option>
                         {groupObjectives?.map((item) => (
@@ -365,6 +366,7 @@ function VerifyCustomer() {
                           touched.retailer_group && !!errors.retailer_group
                         }
                         required
+                        disabled={values.status === 1}
                       >
                         <option value="">-- Chọn nhóm đại lý --</option>
                         {groupRetailers?.map((item) => (
@@ -391,6 +393,7 @@ function VerifyCustomer() {
                         className="input-placeholder"
                         onChange={handleChange}
                         isInvalid={touched.phone && !!errors.phone}
+                        disabled={values.status === 1}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.phone}
@@ -413,6 +416,7 @@ function VerifyCustomer() {
                         }
                         required
                         name="form-switch-lg info_primary"
+                        disabled={values.status === 1}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.info_primary}

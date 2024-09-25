@@ -364,7 +364,7 @@ function CustomerValidationCreateEdit() {
                           touched.customer_type && !!errors.customer_type
                         }
                         required
-                        disabled={isCreate === "false" && isEdit === false}
+                        disabled={true}
                       >
                         <option value="">-- Chọn nhóm khách hàng --</option>
                         {groupObjectives
@@ -396,7 +396,7 @@ function CustomerValidationCreateEdit() {
                             touched.retailer_group && !!errors.retailer_group
                           }
                           required
-                          disabled={isCreate === "false" && isEdit === false}
+                          disabled={true}
                         >
                           <option value="">-- Chọn nhóm đại lý --</option>
                           {groupRetailers?.map((item) => (
@@ -450,7 +450,8 @@ function CustomerValidationCreateEdit() {
                         required
                         className="form-check-md mb-2 input-placeholder"
                         name="info_primary"
-                        disabled={isCreate === "false" && isEdit === false}
+                        // disabled={isCreate === "false" && isEdit === false}
+                        disabled={true}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.info_primary}

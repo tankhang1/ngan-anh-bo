@@ -285,9 +285,7 @@ function CustomerUnValidation() {
                   <td className="d-flex justify-content-center align-item-center">
                     <button
                       className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() =>
-                        navigate(`ce/${false}/${value.customer_code}`)
-                      }
+                      onClick={() => navigate(`ce/${false}/${value.uuid}`)}
                     >
                       <i className="ti ti-edit"></i>
                     </button>
