@@ -14,6 +14,7 @@ import {
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 const AGENT_FILTERS = [
   {
@@ -157,11 +158,11 @@ function IQRToday() {
                 label: "Tên sản phẩm",
                 render: (value) => <td>{value.product_name}</td>,
               },
-              {
-                key: "point",
-                label: "Số điểm",
-                render: (value) => <td>{value.point}</td>,
-              },
+              // {
+              //   key: "point",
+              //   label: "Số điểm",
+              //   render: (value) => <td>{value.point}</td>,
+              // },
               {
                 key: "register_phone",
                 label: "Số điện thoại đăng ký",
@@ -269,7 +270,13 @@ function IQRToday() {
               {
                 key: "time_use",
                 label: "Ngày sử dụng",
-                render: (value) => <td>{value.time_use}</td>,
+                render: (value) => (
+                  <td>
+                    {value.time_use
+                      ? format(new Date(value.time_use), "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
             ]}
             data={binPacket || []}

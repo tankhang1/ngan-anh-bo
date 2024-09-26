@@ -158,20 +158,20 @@ function TopupToday() {
                 ),
               },
               {
-                key: "area",
-                label: "Khu vực",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.area}</span>
-                  </td>
-                ),
-              },
-              {
                 key: "province_name",
                 label: "Tỉnh thành",
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">{value.province_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "area",
+                label: "Khu vực",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.area}</span>
                   </td>
                 ),
               },
