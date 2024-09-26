@@ -231,7 +231,7 @@ function CustomerUnValidateToday() {
                 label: "Trạng thái",
                 render: (value) => (
                   <td>
-                    {value.customer_code ? (
+                    {value.status === 1 ? (
                       <span className="bg-success bg-opacity-100 text-white badge ">
                         Đã xác thực
                       </span>
