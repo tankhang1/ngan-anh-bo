@@ -28,11 +28,7 @@ import { format } from "date-fns";
 
 const PRODUCT_FILTERS = [
   {
-    key: "name_display_root",
-    label: "Mã sản phẩm",
-  },
-  {
-    key: "product_name_detail",
+    key: "description",
     label: "Tên sản phẩm",
   },
   {
@@ -70,7 +66,7 @@ function ProductWarehousePage() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(PRODUCT_FILTERS[0].key);
-  const [changeType, setChangeType] = useState<number>(0); // true: thùng, false: gói
+  const [changeType, setChangeType] = useState<number>(-1); // true: thùng, false: gói
   const deferSearchValue = useDeferredValue(search);
 
   const navigate = useNavigate();
@@ -294,22 +290,20 @@ function ProductWarehousePage() {
                 label: "Quy cách đóng gói",
                 render: (value) => <td>{value.pack_configuration}</td>,
               },
-               {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => (
-                      <td>
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => navigate(`edit/${value.code}`)}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </td>
-                    ),
-                  }
-               ,
-
+              {
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() => navigate(`edit/${value.code}`)}
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
               {
                 key: "time_created",
                 label: "Thời gian tạo",

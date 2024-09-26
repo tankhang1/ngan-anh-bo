@@ -7,6 +7,9 @@ import {
   TProductCreateForm,
   BASE_RES,
   TIngredientPacking,
+  TProgramPointDetail,
+  TProgramTopupDetail,
+  TManufactorOrder,
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
@@ -43,10 +46,12 @@ export const productApi = createApi({
         method: HTTPS_METHOD.GET,
       }),
       transformResponse: (response: TDevice[]) => {
-        return response.map((value) => ({
-          label: value.device_name,
-          value: value.device_code,
-        }));
+        return response
+          ?.filter((item) => !!item?.device_ip)
+          .map((value) => ({
+            label: `${value.device_name}-${value.device_ip}`,
+            value: value.device_code,
+          }));
       },
       providesTags: (results) =>
         results
@@ -156,6 +161,33 @@ export const productApi = createApi({
       }),
       invalidatesTags: [TagsEnum.INGREDIENTS_PACKING],
     }),
+    getListProgramPointDetail: builder.query<
+      { name: string; sign_board: string; data: TProgramPointDetail[] },
+      { zl: string }
+    >({
+      query: (params) => ({
+        url: "/program/point/customer/identify",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
+    getListProgramTopupDetail: builder.query<
+      { name: string; sign_board: string; data: TProgramTopupDetail[] },
+      { zl: string }
+    >({
+      query: (params) => ({
+        url: "/program/topup/customer/identify",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
+    createProcedureOrder: builder.mutation<BASE_RES, TManufactorOrder>({
+      query: (body) => ({
+        url: "/product/procedure-order/import",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+    }),
   }),
 });
 
@@ -169,4 +201,7 @@ export const {
   useCreateIngredientMutation,
   useImportIngredientPackingMutation,
   useUpdateIngredientByCodeMutation,
+  useGetListProgramPointDetailQuery,
+  useGetListProgramTopupDetailQuery,
+  useCreateProcedureOrderMutation,
 } = productApi;

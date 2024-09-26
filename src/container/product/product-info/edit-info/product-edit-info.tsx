@@ -85,7 +85,7 @@ function ProductEditInfo() {
         qr_printing: values.qr_printing ? 1 : 0,
         sku_bin: +(values?.sku_bin ?? 0),
         sku_box: +(values?.sku_box ?? 0),
-        bin_pallet: +(values?.bin_pallet ?? 0),
+        bin_pallet: +(values?.bin_pallet ?? 1),
         mop: +(values?.mop ?? 0),
         net_weight: +(values.net_weight ?? 0),
         type: +values.type,
@@ -119,12 +119,11 @@ function ProductEditInfo() {
         });
     }
   };
-  console.log(product);
   return (
     <Fragment>
       <Formik
         initialValues={{
-          bin_pallet: product?.bin_pallet ?? 0,
+          bin_pallet: product?.bin_pallet ?? 1,
           code: product?.code ?? "",
           code_bin: product?.code_bin ?? "",
           brand_code: product?.brand_code ?? "",
@@ -184,37 +183,39 @@ function ProductEditInfo() {
                 >
                   Trở lại
                 </button>
-                {isEdit ? (
-                  permission.editProductMarketingInfo&&<AppWarning
-                  onAccept={() => {
-                    console.log(errors);
-                    if (!errors)
-                      toast.showToast("Vui lòng điền đầy đủ thông tin");
-                    else handleSubmit(values as any);
-                  }}
-                >
-                  <button
-                    className={`btn btn-purple-light justify-content-center align-items-center ${
-                      isLoadingUpdate && "btn-loader"
-                    }`}
-                  >
-                    <span>Lưu</span>
-                    {isLoadingUpdate && (
-                      <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
-                      </span>
+                {isEdit
+                  ? permission.editProductMarketingInfo && (
+                      <AppWarning
+                        onAccept={() => {
+                          console.log(errors);
+                          if (!errors)
+                            toast.showToast("Vui lòng điền đầy đủ thông tin");
+                          else handleSubmit(values as any);
+                        }}
+                      >
+                        <button
+                          className={`btn btn-purple-light justify-content-center align-items-center ${
+                            isLoadingUpdate && "btn-loader"
+                          }`}
+                        >
+                          <span>Lưu</span>
+                          {isLoadingUpdate && (
+                            <span className="loading">
+                              <i className="ri-loader-2-fill fs-19"></i>
+                            </span>
+                          )}
+                        </button>
+                      </AppWarning>
+                    )
+                  : permission.editProductMarketingInfo && (
+                      <button
+                        className={`btn btn-purple-light justify-content-center align-items-center}`}
+                        type={"button"}
+                        onClick={() => setIsEdit(true)}
+                      >
+                        <span>Chỉnh sửa</span>
+                      </button>
                     )}
-                  </button>
-                </AppWarning>
-                ) : permission.editProductMarketingInfo&&(
-                  <button
-                    className={`btn btn-purple-light justify-content-center align-items-center}`}
-                    type={"button"}
-                    onClick={() => setIsEdit(true)}
-                  >
-                    <span>Chỉnh sửa</span>
-                  </button>
-                )}
               </div>
             </Card.Header>
             <Card.Body>
@@ -524,7 +525,10 @@ function ProductEditInfo() {
                   </Form.Group>
                 </Row>
                 <Row>
-                  <Form.Group as={Col} md={6}>
+                  <Form.Group
+                    as={Col}
+                    md={values.type !== ProductTypeEnum.BIN.toString() ? 6 : 12}
+                  >
                     <Form.Label className="text-black">
                       Hình thức đóng gói <span style={{ color: "red" }}>*</span>
                     </Form.Label>
@@ -570,27 +574,29 @@ function ProductEditInfo() {
                       {errors.type}
                     </Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group as={Col} md={6}>
-                    <Form.Label className="text-black">
-                      Mã thùng <span style={{ color: "red" }}>*</span>
-                    </Form.Label>
-                    <AppSelect
-                      onChange={(value) => {
-                        setFieldValue("code_bin", value);
-                      }}
-                      data={
-                        binIds?.map((item) => ({
-                          label: item.label ?? "",
-                          value: item.value ?? "",
-                        })) ?? []
-                      }
-                      value={values?.code_bin}
-                      placeholder="Chọn mã thùng"
-                      isInValid={!!errors.code_bin && touched.code_bin}
-                      errorText={errors.code_bin}
-                      disabled={isEdit === false}
-                    />
-                  </Form.Group>
+                  {values.type !== ProductTypeEnum.BIN.toString() && (
+                    <Form.Group as={Col} md={6}>
+                      <Form.Label className="text-black">
+                        Mã thùng <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <AppSelect
+                        onChange={(value) => {
+                          setFieldValue("code_bin", value);
+                        }}
+                        data={
+                          binIds?.map((item) => ({
+                            label: item.label ?? "",
+                            value: item.value ?? "",
+                          })) ?? []
+                        }
+                        value={values?.code_bin}
+                        placeholder="Chọn mã thùng"
+                        isInValid={!!errors.code_bin && touched.code_bin}
+                        errorText={errors.code_bin}
+                        disabled={isEdit === false}
+                      />
+                    </Form.Group>
+                  )}
                 </Row>
                 <Row>
                   <Form.Group as={Col} md={4}>
@@ -618,7 +624,7 @@ function ProductEditInfo() {
                   </Form.Group>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
-                      Trọng lượng <span style={{ color: "red" }}>*</span>
+                      Trọng lượng gói<span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       type="number"
@@ -884,7 +890,7 @@ function ProductEditInfo() {
                       type="number"
                       id="bin_pallet_validate"
                       name="bin_pallet"
-                      min={0}
+                      min={1}
                       defaultValue={values.bin_pallet}
                       onChange={handleChange}
                       isInvalid={touched.bin_pallet && !!errors.bin_pallet}

@@ -69,13 +69,13 @@ const AppSelect = ({
   };
 
   useEffect(() => {
-    value &&
-      setSearch(filterData?.find((item) => item.value === value)?.label ?? "");
-  }, [value]);
+    value && setSearch(data?.find((item) => item.value === value)?.label ?? "");
+  }, [value, data]);
 
   useEffect(() => {
     setFilterData(data);
   }, [data]);
+
   return (
     <div className="position-relative" ref={dropdownRef}>
       <InputGroup>
@@ -91,6 +91,18 @@ const AppSelect = ({
           disabled={disabled}
           style={{ borderColor: isInValid ? "red" : "#ebedef" }}
         />
+        {search.length > 0 && (
+          <button
+            onClick={() => {
+              setFilterData(data);
+              setSearch("");
+            }}
+            className="btn btn-icon"
+            style={{ backgroundColor: "#ff5880" }}
+          >
+            <i className="ti ti-x text-white" />
+          </button>
+        )}
         <button
           disabled={disabled}
           onClick={() => {

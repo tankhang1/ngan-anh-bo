@@ -117,11 +117,11 @@ const WarehouseReportExport = () => {
       await exportExcel({
         st: query?.st,
         ed: query?.ed,
-        type: query?.type ?? "ALL",
+        t: query?.type ?? "ALL",
       })
         .unwrap()
         .then(async (url) => {
-          if (url) await downloadLink(url);
+          if (url) window.open(url.data, "_blank");
         });
   };
 

@@ -70,6 +70,8 @@ import VerifyCustomer from "./container/operator/iqr/verify/index.tsx";
 import BrandnameToday from "./container/operator/brandname-today/index.tsx";
 import SearchWarehouseCustomerExport from "./container/warehouse/export/searchWarehouseCustomerExport.tsx";
 import BrandnameReport from "./container/report/components/BrandnameReport.tsx";
+import WarehouseCreateManufactorOrder from "./container/warehouse/order/warehouseCreateOrder.tsx";
+import WarehouseSearchBatchNumber from "./container/warehouse/order/warehouseSearchBatchNumber.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -110,9 +112,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<SearchWarehouseExport />}
               />
               <Route
-                path={`${
-                  import.meta.env.BASE_URL
-                }warehouse/search/retailer1`}
+                path={`${import.meta.env.BASE_URL}warehouse/search/retailer1`}
                 element={<SearchWarehouseCustomerExport />}
               />
               <Route
@@ -154,6 +154,18 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }customer/unvalidate/ce/:isCreate/:id`}
                 element={<CustomerUnValidationCreateEdit />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/create-manufactor-order`}
+                element={<WarehouseCreateManufactorOrder />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }warehouse/search/batch-number`}
+                element={<WarehouseSearchBatchNumber />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}customer/unvalidate`}
@@ -240,7 +252,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${
                   import.meta.env.BASE_URL
-                }operator/verify-customer/:phone`}
+                }operator/verify-customer/:customer_uuid`}
                 element={<VerifyCustomer />}
               />
               <Route

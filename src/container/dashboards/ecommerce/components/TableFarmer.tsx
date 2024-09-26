@@ -10,7 +10,7 @@ function TableFarmer() {
     useGetListCustomerQuery(
       {
         st: +(format(new Date(), "yyyyMMdd") + "0000"),
-        ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+        ed: +(format(new Date(), "yyyyMMdd") + "2359"),
         t: "ANONYMOUS",
       },
       {

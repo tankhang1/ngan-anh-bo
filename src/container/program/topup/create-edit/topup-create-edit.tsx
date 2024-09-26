@@ -193,14 +193,13 @@ function TopupCreateEdit() {
               : values.products.map((item) => item.value).join(",")
             : "",
 
-        // objectives:
-        //   typeof values.objectives !== "string"
-        //     ? values.objectives.length === 1 &&
-        //       values.objectives[0]?.value === "all"
-        //       ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
-        //       : values.objectives.map((item) => item.value).join(",")
-        //     : "",
-        objectives: "RETAILER2",
+        objectives:
+          typeof values.objectives !== "string"
+            ? values.objectives.length === 1 &&
+              values.objectives[0]?.value === "all"
+              ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
+              : values.objectives.map((item) => item.value).join(",")
+            : "",
         price: +(values?.price ?? 0),
         goods_type:
           typeof values.goods_type !== "string"
@@ -229,7 +228,7 @@ function TopupCreateEdit() {
             navigate(-1);
             toast.showToast("Thêm mới chương trình thành công");
           } else if (value.status === -4)
-            toast.showToast("Ngày bắt đầu sau 1 ngày");
+            toast.showToast("Thêm mới thất bại, ngày bắt đầu phải sau 1 ngày");
           else toast.showToast(value.message);
         })
         .catch(() => {
@@ -247,14 +246,13 @@ function TopupCreateEdit() {
                 : values.products.map((item) => item.value).join(",")
               : "",
 
-          // objectives:
-          //   typeof values.objectives !== "string"
-          //     ? values.objectives.length === 1 &&
-          //       values.objectives[0]?.value === "all"
-          //       ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
-          //       : values.objectives.map((item) => item.value).join(",")
-          //     : "",
-          objectives: "RETAILER2",
+          objectives:
+            typeof values.objectives !== "string"
+              ? values.objectives.length === 1 &&
+                values.objectives[0]?.value === "all"
+                ? OBJECTIVES_SELECT?.map((item) => item.value).join(",")
+                : values.objectives.map((item) => item.value).join(",")
+              : "",
           price: +(values?.price ?? 0),
           time_start:
             values.time_start &&
@@ -337,7 +335,7 @@ function TopupCreateEdit() {
           name: topupProgram?.name ?? "",
           products: mapCodeProduct(topupProgram?.products),
           price: topupProgram?.price ?? "",
-          objectives: [],
+          objectives: mapObjective(topupProgram?.objectives) ?? "",
           time_end: topupProgram?.time_end
             ? format(new Date(topupProgram.time_end), "yyyy-MM-dd")
             : ("" as any),
@@ -482,6 +480,11 @@ function TopupCreateEdit() {
                       className="input-placeholder"
                       name="time_start"
                       value={values.time_start}
+                      min={
+                        new Date(new Date().setDate(new Date().getDate() + 2))
+                          .toISOString()
+                          .split("T")[0]
+                      }
                       lang="vi"
                       onChange={handleChange}
                       isInvalid={touched.time_start && !!errors.time_start}
@@ -508,7 +511,11 @@ function TopupCreateEdit() {
                       isInvalid={touched.time_end && !!errors.time_end}
                       min={
                         isCreate === "true"
-                          ? format(new Date(), "yyyy-MM-dd")
+                          ? new Date(
+                              new Date().setDate(new Date().getDate() + 2)
+                            )
+                              .toISOString()
+                              .split("T")[0]
                           : values.time_end
                       }
                       disabled={isDisableAccess("time_end")}

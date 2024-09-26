@@ -14,67 +14,66 @@ export const excelApi = createApi({
       }
       return;
     },
-    responseHandler: (response) => response.text(),
   }),
 
   endpoints: (builder) => ({
-    exportCustomerData: builder.mutation<string, BaseQuery>({
+    exportCustomerData: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/customer/list/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportBin: builder.mutation<string, BaseQuery>({
+    exportBin: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/report/bin/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportPackage: builder.mutation<string, BaseQuery>({
+    exportPackage: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/report/package/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportWarehouseExportDetail: builder.mutation<string, BaseQuery>({
+    exportWarehouseExportDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/warehouse/export/time/detail/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportWarehouseImportDetail: builder.mutation<string, BaseQuery>({
+    exportWarehouseImportDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/warehouse/import/time/detail/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportBrandname: builder.mutation<string, BaseQuery>({
+    exportBrandname: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/report/brandname/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportSMS: builder.mutation<string, BaseQuery>({
+    exportSMS: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/report/sms/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportProgramPointDetail: builder.mutation<string, BaseQuery>({
+    exportProgramPointDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/program/point/detail/excel",
         method: HTTPS_METHOD.POST,
         body,
       }),
     }),
-    exportProgramTopupDetail: builder.mutation<string, BaseQuery>({
+    exportProgramTopupDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/program/topup/detail/excel",
         method: HTTPS_METHOD.POST,

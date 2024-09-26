@@ -26,10 +26,6 @@ import { RootState } from "../../../redux/store";
 
 const TOPUP_FILTERS = [
   {
-    key: "id",
-    label: "ID",
-  },
-  {
     key: "name",
     label: "Tên chương trình",
   },
@@ -256,7 +252,7 @@ function TopupProgram() {
                     <td>
                       <span className="d-flex gap-1 flex-wrap">
                         {products.length > 5
-                          ? products.map((item, index) => (
+                          ? products.slice(0, 5).map((item, index) => (
                               <Badge
                                 bg="outline-success"
                                 className="round-pill"

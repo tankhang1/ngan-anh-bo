@@ -71,25 +71,31 @@ const fDate = (date?: number | string, localFormat?: string) => {
   )}-${stringDate.slice(6, 8)}`;
 };
 const downloadLink = async (url: string) => {
-  await fetch(url)
+  await fetch(
+    "https://file-examples.com/wp-content/storage/2017/02/file_example_XLS_10.xls",
+    {
+      method: "GET",
+    }
+  )
     .then((response) => response.blob())
     .then((blob) => {
-      const url = window.URL.createObjectURL(new Blob([blob]));
+      const fileURL = window.URL.createObjectURL(blob); // Use a different variable name
       const link = document.createElement("a");
-      link.href = url;
-      console.log(url);
-      link.download = "downloaded-file";
+      link.href = fileURL;
+      console.log(fileURL);
+      link.download = "downloaded-file.xls"; // Add the appropriate file extension
       document.body.appendChild(link);
 
       link.click();
 
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(fileURL); // Use the correct URL here
     })
     .catch((error) => {
       console.error("Error fetching the file:", error);
     });
 };
+
 export {
   exportExcelFile,
   exportMultipleSheet,

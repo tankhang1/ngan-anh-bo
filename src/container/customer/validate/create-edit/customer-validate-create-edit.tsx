@@ -34,7 +34,10 @@ import AppWarning from "../../../../components/AppWarning";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppSelect from "../../../../components/AppSelect";
-import { useGetCustomerQuery } from "../../../../redux/api/info/info.api";
+import {
+  useGetCustomerByCodeQuery,
+  useGetCustomerQuery,
+} from "../../../../redux/api/info/info.api";
 
 function CustomerValidationCreateEdit() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -51,15 +54,15 @@ function CustomerValidationCreateEdit() {
     refetchOnMountOrArgChange: true,
   });
   const { data: groupRetailers } = useGetListGroupRetailerQuery();
-  const { data: customers } = useGetCustomerQuery(
+  const { data: customer } = useGetCustomerByCodeQuery(
     {
-      k: id,
+      c: id!,
     },
     {
       skip: isCreate === "true",
+      refetchOnMountOrArgChange: true,
     }
   );
-  const customer = useMemo(() => customers?.[0], [customers]);
   const [createCustomer, { isLoading: isLoadingCreate }] =
     useCreateUpdateCustomerMutation();
   const [updateCustomer, { isLoading: isLoadingUpdate }] =
@@ -361,7 +364,7 @@ function CustomerValidationCreateEdit() {
                           touched.customer_type && !!errors.customer_type
                         }
                         required
-                        disabled={isCreate === "false" && isEdit === false}
+                        disabled={true}
                       >
                         <option value="">-- Chọn nhóm khách hàng --</option>
                         {groupObjectives
@@ -393,7 +396,7 @@ function CustomerValidationCreateEdit() {
                             touched.retailer_group && !!errors.retailer_group
                           }
                           required
-                          disabled={isCreate === "false" && isEdit === false}
+                          disabled={true}
                         >
                           <option value="">-- Chọn nhóm đại lý --</option>
                           {groupRetailers?.map((item) => (
@@ -447,7 +450,8 @@ function CustomerValidationCreateEdit() {
                         required
                         className="form-check-md mb-2 input-placeholder"
                         name="info_primary"
-                        disabled={isCreate === "false" && isEdit === false}
+                        // disabled={isCreate === "false" && isEdit === false}
+                        disabled={true}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.info_primary}

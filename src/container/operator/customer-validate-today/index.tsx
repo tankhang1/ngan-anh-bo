@@ -15,10 +15,6 @@ import { Checkbox } from "@mui/material";
 
 const AGENT_FILTERS = [
   {
-    key: "id",
-    label: "ID",
-  },
-  {
     key: "customer_name",
     label: "Tên khách hàng",
   },
@@ -29,14 +25,9 @@ const AGENT_FILTERS = [
 ];
 
 function CustomerValidateToday() {
-  const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
-    refetchOnMountOrArgChange: false,
-  });
-
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const [page, setPage] = useState(1);
-  const navigate = useNavigate();
 
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
@@ -144,7 +135,7 @@ function CustomerValidateToday() {
                 ),
               },
               {
-                key: "name",
+                key: "customer_name",
                 label: "Họ và tên",
                 render: (value) => (
                   <td>

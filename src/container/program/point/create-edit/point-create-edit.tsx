@@ -5,11 +5,20 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { Card, Col, Row, Stack, Form, Badge } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Row,
+  Stack,
+  Form,
+  Badge,
+  FormCheck,
+  Modal,
+} from "react-bootstrap";
 import { Formik } from "formik";
 import { TPointCreateForm } from "../../../../assets/types";
 import Select from "react-select";
-import { OBJECTIVES_SELECT, PROVINCES } from "../../../../constants";
+import { BASE_PORT, OBJECTIVES_SELECT, PROVINCES } from "../../../../constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
@@ -30,6 +39,8 @@ import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 import pointProgramSchema from "../../../../schema/pointProgram.schema";
 import AppWarning from "../../../../components/AppWarning";
+import { Checkbox } from "@mui/material";
+import AppTable from "../../../../components/common/table/table";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -254,7 +265,9 @@ function PointCreateEdit() {
             return;
           }
           if (value.status === -4) {
-            toast.showToast("Ngày bắt đầu sau 1 ngày");
+            toast.showToast(
+              "Thêm mới thất bại, ngày bắt đầu chương trình phải sau 1 ngày"
+            );
             return;
           }
           toast.showToast("Thêm mới chương trình bị lỗi");
@@ -403,6 +416,7 @@ function PointCreateEdit() {
         </Badge>
       );
   };
+
   return (
     <Fragment>
       <Formik
@@ -579,6 +593,11 @@ function PointCreateEdit() {
                       onChange={handleChange}
                       isInvalid={touched.time_start && !!errors.time_start}
                       disabled={isDisableAccess("time_start")}
+                      min={
+                        new Date(new Date().setDate(new Date().getDate() + 2))
+                          .toISOString()
+                          .split("T")[0]
+                      }
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.time_start?.toString()}
@@ -600,7 +619,11 @@ function PointCreateEdit() {
                       isInvalid={touched.time_end && !!errors.time_end}
                       min={
                         isCreate === "true"
-                          ? format(new Date(), "yyyy-MM-dd")
+                          ? new Date(
+                              new Date().setDate(new Date().getDate() + 2)
+                            )
+                              .toISOString()
+                              .split("T")[0]
                           : values.time_end
                       }
                       disabled={isDisableAccess("time_end")}
@@ -614,7 +637,16 @@ function PointCreateEdit() {
                   <Form.Label className="text-black">
                     Chọn sản phẩm <span style={{ color: "red" }}>*</span>
                   </Form.Label>
-
+                  <div className="d-flex align-items-center gap-2 mb-1">
+                    <FormCheck
+                      className="form-check-md"
+                      label="Chọn tất cả thùng"
+                    />
+                    <FormCheck
+                      className="form-check-md"
+                      label="Chọn tất cả gói"
+                    />
+                  </div>
                   <Select
                     isMulti
                     name="colors"
@@ -863,6 +895,67 @@ function PointCreateEdit() {
                 </Form.Group>
               </Stack>
             </Card.Body>
+            {/* <Modal show={true} size="lg">
+              <Modal.Header closeButton>
+                <Modal.Title as={"h5"}>
+                  Chọn sản phẩm ({values.products?.length} SP){" "}
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="d-flex gap-2">
+                  <AppTable
+                    title="Danh sách sản phẩm"
+                    headers={[
+                      {
+                        key: "description",
+                        label: "Tên sản phẩm",
+                        render: (value) => <td>{value.description}</td>,
+                      },
+
+                      {
+                        key: "image_url",
+                        label: "Hình ảnh",
+                        render: (value) => (
+                          <td>
+                            <img
+                              src={
+                                `${BASE_PORT}/${value.code}.jpg` ||
+                                "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
+                              }
+                              className="img object-fit-cover"
+                              style={{
+                                height: 100,
+                                width: "auto",
+                              }}
+                            />
+                          </td>
+                        ),
+                      },
+                      {
+                        key: "check",
+                        label: "Chọn sản phẩm",
+                        render: (value) => (
+                          <td>
+                            <Checkbox />
+                          </td>
+                        ),
+                      },
+                      {
+                        key: "name_display_root",
+                        label: "Mã sản phẩm",
+                        render: (value) => <td>{value.name_display_root}</td>,
+                      },
+                      {
+                        key: "pack_configuration",
+                        label: "Quy cách đóng gói",
+                        render: (value) => <td>{value.pack_configuration}</td>,
+                      },
+                    ]}
+                    data={products || []}
+                  />
+                </div>
+              </Modal.Body>
+            </Modal> */}
           </Card>
         )}
       </Formik>

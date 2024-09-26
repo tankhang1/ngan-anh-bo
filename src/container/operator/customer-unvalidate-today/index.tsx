@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
@@ -10,17 +9,11 @@ import {
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
-import { useVerifyCustomerMutation } from "../../../redux/api/other/other.api";
 import { MapCustomerType } from "../../../constants";
-import { Checkbox } from "@mui/material";
 
 const AGENT_FILTERS = [
   {
-    key: "id",
-    label: "ID",
-  },
-  {
-    key: "customer_name",
+    key: "name",
     label: "Tên khách hàng",
   },
   {
@@ -254,7 +247,7 @@ function CustomerUnValidateToday() {
                         navigate(
                           `${
                             import.meta.env.BASE_URL
-                          }operator/verify-customer/${value.phone}`
+                          }operator/verify-customer/${value.uuid}`
                         )
                       }
                     >

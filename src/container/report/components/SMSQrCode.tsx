@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import * as Chartjscharts from "../../charts/chartjschart/chartjsdata";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
 import { useMediaQuery } from "@mui/material";
-import { format, isBefore } from "date-fns";
+import { format, isBefore, subDays } from "date-fns";
 import {
   useGetBinsQuery,
   useGetPacketsQuery,
@@ -17,20 +17,29 @@ import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
 import AppId from "../../../components/common/app-id";
 import { TProductDashboardTable } from "../../../assets/types";
-import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
+import {
+  useExportBinMutation,
+  useExportPackageMutation,
+  useExportSMSMutation,
+} from "../../../redux/api/excel/excel.api";
 function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(new Date(), "yyyyMMdd"),
-    ed: +format(new Date(), "yyyyMMdd"),
+    st: +format(subDays(new Date(), 10), "yyyyMMdd") * 10000,
+    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
 
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
-    st: new Date(),
+    st: subDays(new Date(), 10),
     ed: new Date(),
   });
-  const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
-  const [exportExcel] = useExportSMSMutation();
+  const [listDays, setListDays] = useState(
+    getDaysArray(new Date(newRangeDate.st), new Date(newRangeDate.ed)).map(
+      (item) => format(item, "yyyy-MM-dd")
+    )
+  );
+  const [exportBinExcel] = useExportBinMutation();
+  const [exportPackageExcel] = useExportPackageMutation();
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
     {
       ...rangDate,
@@ -45,8 +54,7 @@ function SMS_QR_Report() {
   );
   const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
     {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2399"),
+      ...rangDate,
       nu: 0,
       sz: 9999,
     },
@@ -58,8 +66,7 @@ function SMS_QR_Report() {
   );
   const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
     {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2399"),
+      ...rangDate,
       nu: 0,
       sz: 9999,
     },
@@ -70,19 +77,26 @@ function SMS_QR_Report() {
     }
   );
   const handleExportExcel = async () => {
-    await exportExcel({
+    await exportBinExcel({
       ...rangDate,
     })
       .unwrap()
       .then(async (url) => {
-        if (url) await downloadLink(url);
+        if (url) window.open(url.data, "_blank");
+      });
+    await exportPackageExcel({
+      ...rangDate,
+    })
+      .unwrap()
+      .then(async (url) => {
+        if (url) window.open(url.data, "_blank");
       });
   };
   const mapReport = useMemo(() => {
     const data =
       reportDayByDay?.map((date) => {
         return {
-          date: fDate(date.day, "dd-MM-YYYY"),
+          date: fDate(date.day, "yyyy-MM-dd"),
           topup: date.topup,
           brandname: date.brandname,
           agent: date.agent,
@@ -140,10 +154,9 @@ function SMS_QR_Report() {
             <button
               className="btn btn-icon bg-danger"
               onClick={() => {
-                console.log("rang date", newRangeDate);
                 setRangeDate({
-                  st: +format(newRangeDate.st, "yyyyMMdd"),
-                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
+                  st: +format(newRangeDate.st, "yyyyMMdd") * 10000,
+                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
                 });
                 setListDays(
                   getDaysArray(
@@ -219,7 +232,7 @@ function SMS_QR_Report() {
       <Row>
         <Col xl={6}>
           <AppTable
-            title="SMS"
+            title="SMS Gateway"
             isLoading={isLoadingBin || isLoadingPacket}
             headers={[
               {

@@ -15,7 +15,7 @@ function ProductTable() {
   const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+      ed: +(format(new Date(), "yyyyMMdd") + "2359"),
       nu: 0,
       sz: 9999,
     },
@@ -28,7 +28,7 @@ function ProductTable() {
   const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2399"),
+      ed: +(format(new Date(), "yyyyMMdd") + "2359"),
       nu: 0,
       sz: 9999,
     },

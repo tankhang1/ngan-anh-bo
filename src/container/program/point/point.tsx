@@ -25,16 +25,8 @@ import { format } from "date-fns";
 
 const POINT_FILTERS = [
   {
-    key: "id",
-    label: "ID",
-  },
-  {
     key: "name",
     label: "Tên chương trình",
-  },
-  {
-    key: "status",
-    label: "Trạng thái",
   },
 ];
 const STATUS_FILTERS = [
@@ -60,7 +52,7 @@ function PointProgram() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(POINT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
-  const [status, setStatus] = useState(1);
+  const [status, setStatus] = useState(-1);
   const navigate = useNavigate();
   const [listPoints, setListPoints] = useState<TProgramPoint[]>([]);
   const [page, setPage] = useState(1);
@@ -256,7 +248,7 @@ function PointProgram() {
                     <td>
                       <span className="d-flex gap-1 flex-wrap">
                         {products.length > 5
-                          ? products.map((item, index) => (
+                          ? products.slice(0, 5).map((item, index) => (
                               <Badge
                                 bg="outline-success"
                                 className="round-pill"

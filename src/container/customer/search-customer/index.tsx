@@ -15,9 +15,16 @@ import {
   useGetCustomerQuery,
 } from "../../../redux/api/info/info.api";
 import { fDate, fNumber } from "../../../hooks";
-import { TCustomerRes } from "../../../assets/types";
-import { useGetListProgramPointDetailQuery } from "../../../redux/api/program/program.api";
+import {
+  TCustomerRes,
+  TProgramPointDetail,
+  TProgramTopupDetail,
+} from "../../../assets/types";
 import { format } from "date-fns";
+import {
+  useGetListProgramPointDetailQuery,
+  useGetListProgramTopupDetailQuery,
+} from "../../../redux/api/product/product.api";
 
 function SearchCustomer() {
   const [searchValue, setSearchValue] = useState("");
@@ -61,7 +68,7 @@ function SearchCustomer() {
     }
   );
 
-  const { data: programTopup } = useGetListProgramPointDetailQuery(
+  const { data: programTopup } = useGetListProgramTopupDetailQuery(
     {
       zl: customerInfo?.uuid!,
     },
@@ -300,7 +307,14 @@ function SearchCustomer() {
                       <p className="text-black text-md" style={{ width: 200 }}>
                         Thời gian:
                       </p>
-                      <p className="text-black text-md">{customerInfo?.time}</p>
+                      <p className="text-black text-md">
+                        {customerInfo?.time
+                          ? format(
+                              new Date(customerInfo.time),
+                              "dd/MM/yyyy hh:mm:ss"
+                            )
+                          : ""}
+                      </p>
                     </div>
                     <div className=" d-flex">
                       <p className="text-black text-md" style={{ width: 200 }}>
@@ -361,7 +375,7 @@ function SearchCustomer() {
                       </p>
                       <p className="text-black text-md">
                         {customerInfo?.birthday
-                          ? fDate(customerInfo.birthday)
+                          ? fDate(customerInfo.birthday, "dd/MM/yyyy hh:mm:ss")
                           : ""}
                       </p>
                     </div>
@@ -415,10 +429,18 @@ function SearchCustomer() {
                     </div>
                     <div className="d-flex">
                       <p className="text-black text-md" style={{ width: 200 }}>
-                        Phân loại:
+                        Đối tượng:
                       </p>
                       <p className="text-black text-md">
                         {customerInfo?.customer_type}
+                      </p>
+                    </div>
+                    <div className="d-flex">
+                      <p className="text-black text-md" style={{ width: 200 }}>
+                        Nhóm đại lý:
+                      </p>
+                      <p className="text-black text-md">
+                        {customerInfo?.retailer_group_name}
                       </p>
                     </div>
                     <div className="d-flex">
@@ -444,7 +466,12 @@ function SearchCustomer() {
                         Thời gian:
                       </p>
                       <p className="text-black text-md">
-                        {customerInfo?.time_verify}
+                        {customerInfo?.time_verify
+                          ? format(
+                              new Date(customerInfo?.time_verify),
+                              "dd/MM/yyyy hh:mm:ss"
+                            )
+                          : ""}
                       </p>
                     </div>
                     <div className="d-flex">
@@ -470,52 +497,73 @@ function SearchCustomer() {
                       className="d-flex flex-wrap gap-4 pb-4 overflow-y-scroll "
                       style={{ maxHeight: 400 }}
                     >
-                      {programPoint?.map((point, index) => (
-                        <div
-                          key={index}
-                          className="shadow px-3 rounded-2 py-3"
-                          style={{ flex: "0 1 calc(50% - 1rem)" }} // Adjust width for two columns
-                        >
-                          <div className="d-flex">
-                            <p
-                              className="text-black text-sm"
-                              style={{ width: 200 }}
-                            >
-                              Chương trình:
-                            </p>
-                            <p className="text-black text-sm">
-                              {point?.program_name}
-                            </p>
-                          </div>
-                          <div className="d-flex">
-                            <p
-                              className="text-black text-sm"
-                              style={{ width: 200 }}
-                            >
-                              Điểm tích lũy:
-                            </p>
-                            <p className="text-black text-sm">{point?.point}</p>
-                          </div>
-                          <div className="d-flex">
-                            <p
-                              className="text-black text-sm"
-                              style={{ width: 200 }}
-                            >
-                              Thời gian tích lũy điểm gần nhất:
-                            </p>
-                            <p className="text-black text-sm">
-                              {point?.time_update
-                                ? format(point?.time_update, "dd/MM/yyyy")
-                                : ""}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                      {programPoint?.length === 0 && (
-                        <p className="text-md text-center w-100">
-                          Chưa có dữ liệu
-                        </p>
-                      )}
+                      <AppTable
+                        title="Danh sách điểm tích lũy"
+                        maxPage={programPoint?.data?.length}
+                        headers={[
+                          {
+                            key: "program_name",
+                            label: "Tên chương trình",
+                            render: (value: TProgramPointDetail) => (
+                              <td>{value.program_name}</td>
+                            ),
+                          },
+                          {
+                            key: "name",
+                            label: "Họ và tên",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.customer_name}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "product_name",
+                            label: "Tên sản phẩm",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.product_name}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "product_name",
+                            label: "Tên sản phẩm",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.program_name}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "point",
+                            label: "Số điểm",
+                            render: (value) => <td>{value.point}</td>,
+                          },
+
+                          {
+                            key: "time_update",
+                            label: "Thời gian tích lũy điểm",
+                            render: (value) => (
+                              <td>
+                                {value?.time_update
+                                  ? format(
+                                      value?.time_update,
+                                      "dd/MM/yyyy hh:mm:ss"
+                                    )
+                                  : ""}
+                              </td>
+                            ),
+                          },
+                        ]}
+                        data={programPoint?.data || []}
+                      />
                     </div>
                   </div>
                 )}
@@ -525,50 +573,43 @@ function SearchCustomer() {
                       className="d-flex flex-wrap gap-4 pb-4 overflow-scroll"
                       style={{ maxHeight: 400 }}
                     >
-                      {programTopup?.map((topup, index) => (
-                        <div
-                          key={index}
-                          className="shadow px-4 py-3 rounded-2"
-                          style={{ flex: "0 1 calc(50% - 1rem)" }} // 50% width minus the gap for two columns
-                        >
-                          <div className="d-flex">
-                            <p
-                              className="text-black text-sm"
-                              style={{ width: 150 }}
-                            >
-                              Tên khách hàng:
-                            </p>
-                            <p className="text-black text-sm">
-                              {topup?.customer_name}
-                            </p>
-                          </div>
-                          <div className="d-flex">
-                            <p
-                              className="text-black text-sm"
-                              style={{ width: 150 }}
-                            >
-                              Số tiền:
-                            </p>
-                            <p className="text-black text-sm">
-                              {topup?.price ? fNumber(topup.price) : ""}
-                            </p>
-                          </div>
-                          <div className="d-flex">
-                            <p
-                              className="text-black text-sm"
-                              style={{ width: 150 }}
-                            >
-                              Số lần tham gia:
-                            </p>
-                            <p className="text-black text-sm">{topup.total}</p>
-                          </div>
-                        </div>
-                      ))}
-                      {programTopup?.length === 0 && (
-                        <p className="text-md text-center w-100">
-                          Chưa có dữ liệu
-                        </p>
-                      )}
+                      <AppTable
+                        title="Danh sách quà tặng"
+                        maxPage={programTopup?.data?.length}
+                        headers={[
+                          {
+                            key: "program_name",
+                            label: "Tên chương trình",
+                            render: (value: TProgramTopupDetail) => (
+                              <td>{value.program_name}</td>
+                            ),
+                          },
+                          {
+                            key: "customer_name",
+                            label: "Tên khách hàng",
+                            render: (value) => <td>{value.customer_name}</td>,
+                          },
+                          {
+                            key: "price",
+                            label: "Số tiền thưởng",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value?.price
+                                    ? fNumber(value.price * 1000)
+                                    : ""}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "total",
+                            label: "Số lần tham gia",
+                            render: (value) => <td>{value.total}</td>,
+                          },
+                        ]}
+                        data={programTopup?.data || []}
+                      />
                     </div>
                   </div>
                 )}

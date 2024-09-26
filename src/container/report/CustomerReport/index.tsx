@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Card, Col, Form, InputGroup, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Dashed } from "../../charts/apexcharts/linechart/linechartdata";
-import { format, isBefore } from "date-fns";
+import { format, isBefore, subDays } from "date-fns";
 import {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
@@ -18,6 +18,7 @@ import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
 import Select from "react-select";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 import { MapCustomerType } from "../../../constants";
+import AppSelect from "../../../components/AppSelect";
 
 function CustomerReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
@@ -26,26 +27,35 @@ function CustomerReport() {
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
-  const [customerType, setCustomerType] = useState<string>(
-    groupObjectives?.[0].symbol || ""
-  );
-  const [isValidate, setIsValidate] = useState(false);
-  const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(new Date(), "yyyyMMdd"),
-    ed: +format(new Date(), "yyyyMMdd"),
+
+  const [rangDate, setRangeDate] = useState<{
+    st: number;
+    ed: number;
+    t: string;
+    k: string;
+  }>({
+    st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
+    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
+    t: "RETAILER1",
+    k: "",
   });
-  const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
-    st: new Date(),
+  const [newRangeDate, setNewRangeDate] = useState<{
+    st: Date;
+    ed: Date;
+  }>({
+    st: subDays(new Date(), 19),
     ed: new Date(),
   });
-  const [listDays, setListDays] = useState([format(new Date(), "dd-MM-yyyy")]);
+  const [listDays, setListDays] = useState(
+    getDaysArray(new Date(newRangeDate.st), new Date(newRangeDate.ed)).map(
+      (item) => format(item, "yyyy-MM-dd")
+    )
+  );
   const [exportExcel] = useExportCustomerDataMutation();
   const [page, setPage] = useState(1);
-
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
-      st: +(format(new Date(), "yyyyMMdd") + "0000"),
-      ed: +(format(new Date(), "yyyyMMdd") + "2359"),
+      ...rangDate,
       s: 1,
     },
     {
@@ -55,8 +65,7 @@ function CustomerReport() {
   const { data: customers, isLoading: isLoadingCustomer } =
     useGetListCustomerQuery(
       {
-        st: +(rangDate.st.toString() + "0000"),
-        ed: +(rangDate.ed.toString() + "2359"),
+        ...rangDate,
         nu: page - 1,
         sz: 10,
         s: 1,
@@ -68,8 +77,7 @@ function CustomerReport() {
 
   const { data: reportDayByDay } = useGetReportDashboardDayByDayQuery(
     {
-      st: +(rangDate.st.toString() + "0000"),
-      ed: +(rangDate.ed.toString() + "2359"),
+      ...rangDate,
       nu: 0,
       sz: 99999,
     },
@@ -83,7 +91,7 @@ function CustomerReport() {
     const data =
       reportDayByDay?.map((date) => {
         return {
-          date: fDate(date.day, "dd-MM-yyyy"),
+          date: fDate(date.day, "yyyy-MM-dd"),
           topup: date.topup,
           brandname: date.brandname,
           agent: date.agent,
@@ -102,14 +110,14 @@ function CustomerReport() {
       await exportExcel({ ...rangDate })
         .unwrap()
         .then(async (url) => {
-          if (url) await downloadLink(url);
+          if (url) window.open(url.data, "_blank");
         });
     }
   };
 
   useEffect(() => {
     if (groupObjectives) {
-      setCustomerType(groupObjectives?.[0].symbol);
+      setRangeDate({ ...rangDate, t: groupObjectives[0].symbol });
     }
   }, [groupObjectives]);
 
@@ -168,14 +176,15 @@ function CustomerReport() {
               } bg-danger text-white`}
               onClick={() => {
                 setRangeDate({
-                  st: +format(newRangeDate.st, "yyyyMMdd"),
-                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
+                  ...rangDate,
+                  st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
+                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
                 });
                 setListDays(
                   getDaysArray(
                     new Date(newRangeDate.st),
                     new Date(newRangeDate.ed)
-                  ).map((item) => format(item, "dd-MM-yyyy"))
+                  ).map((item) => format(item, "yyyy-MM-dd"))
                 );
               }}
             >
@@ -220,9 +229,20 @@ function CustomerReport() {
       </Card>
       <Card className="custom-card">
         <Card.Header>
-          <Card.Title>Khách hàng xác thực</Card.Title>
+          <Card.Title>Danh sách khách hàng</Card.Title>
 
           <div className="d-flex align-items-center gap-2">
+            <AppSelect
+              data={
+                groupObjectives?.map((item) => ({
+                  label: item.name,
+                  value: item.symbol,
+                })) ?? []
+              }
+              placeholder="Chọn đối tượng khách hàng"
+              value={rangDate.t}
+              onChange={(e) => setRangeDate({ ...rangDate, t: e })}
+            />
             <button
               className={`btn btn-bd-primary ${
                 isSmallScreen ? "btn-icon" : ""

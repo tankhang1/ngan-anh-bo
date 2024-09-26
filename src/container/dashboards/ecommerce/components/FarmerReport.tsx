@@ -23,7 +23,7 @@ function FarmerReport() {
     const data =
       report7days?.map((date) => {
         return {
-          date: fDate(date.day, "dd-MM-YYYY"),
+          date: fDate(date.day, "yyyy-MM-dd"),
           topup: date.topup,
           brandname: date.brandname,
           agent: date.agent,
@@ -57,7 +57,7 @@ function FarmerReport() {
                 },
               ]}
               categories={getDaysArray(subDays(new Date(), 7), new Date()).map(
-                (item) => format(new Date(item), "dd-MM-yyyy")
+                (item) => format(new Date(item), "yyyy-MM-dd")
               )}
               colors={["#76cff5", "#27c86b"]}
             />

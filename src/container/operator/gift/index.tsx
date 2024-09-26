@@ -28,7 +28,7 @@ const TOPUP_FILTERS = [
   },
 ];
 
-function TopupToday() {
+function GiftToday() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(TOPUP_FILTERS[0].key);
   const { data: topups, isLoading: isLoadingTopup } =
@@ -191,4 +191,4 @@ function TopupToday() {
   );
 }
 
-export default TopupToday;
+export default GiftToday;

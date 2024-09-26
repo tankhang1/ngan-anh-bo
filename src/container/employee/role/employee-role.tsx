@@ -1,11 +1,4 @@
-import React, {
-  Fragment,
-  useCallback,
-  useContext,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from "react";
+import React, { Fragment, useContext, useDeferredValue, useState } from "react";
 import {
   Button,
   Card,
@@ -20,7 +13,6 @@ import {
 import AppTable from "../../../components/common/table/table";
 import { TEmployeeRole } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
 import { useGetListEmployeeRoleQuery } from "../../../redux/api/manage/manage.api";
 import { Formik } from "formik";
 import {
@@ -231,24 +223,23 @@ function EmployeeRole() {
                 render: (value) => <td>{value.note}</td>,
               },
               {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => (
-                      <td>
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => {
-                            setOpenCEModal(true);
-                            setModalInfo(value);
-                            setIsCreate(false);
-                          }}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                      </td>
-                    ),
-                  }
-              ,
+                key: "",
+                label: "Chức năng",
+                render: (value) => (
+                  <td>
+                    <button
+                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      onClick={() => {
+                        setOpenCEModal(true);
+                        setModalInfo(value);
+                        setIsCreate(false);
+                      }}
+                    >
+                      <i className="ti ti-edit"></i>
+                    </button>
+                  </td>
+                ),
+              },
             ]}
             data={roles || []}
             filters={[
@@ -345,22 +336,24 @@ function EmployeeRole() {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="danger">Hủy</Button>
-                {(permission.createRole||permission.editRole) &&<AppWarning onAccept={() => handleSubmit()}>
-                  <Button
-                    variant="primary"
-                    className={`btn justify-content-center align-items-center ${
-                      isLoadingCreate || (isLoadingUpdate && "btn-loader ")
-                    }`}
-                  >
-                    <span>Xác nhận</span>
-                    {isLoadingCreate ||
-                      (isLoadingUpdate && (
-                        <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
-                        </span>
-                      ))}
-                  </Button>
-                </AppWarning>}
+                {(permission.createRole || permission.editRole) && (
+                  <AppWarning onAccept={() => handleSubmit()}>
+                    <Button
+                      variant="primary"
+                      className={`btn justify-content-center align-items-center ${
+                        isLoadingCreate || (isLoadingUpdate && "btn-loader ")
+                      }`}
+                    >
+                      <span>Xác nhận</span>
+                      {isLoadingCreate ||
+                        (isLoadingUpdate && (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        ))}
+                    </Button>
+                  </AppWarning>
+                )}
               </Modal.Footer>
             </div>
           )}

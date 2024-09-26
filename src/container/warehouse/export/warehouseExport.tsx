@@ -46,7 +46,7 @@ type TExportForm = {
   end_date: string;
 };
 const WarehouseExport = () => {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission } = useSelector((state: RootState) => state.auth  );
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
@@ -114,11 +114,12 @@ const WarehouseExport = () => {
       await exportExcel({
         st: query?.st,
         ed: query?.ed,
-        type: query?.type ?? "ALL",
-      }).then(async (url) => {
-        // await downloadLink(url.data)
-        console.log(url);
-      });
+        t: query?.type ?? "ALL",
+      })
+        .unwrap()
+        .then(async (url) => {
+          if (url) window.open(url.data, "_blank");
+        });
   };
 
   return (

@@ -69,14 +69,14 @@ function ProductCreate() {
     useCreateProductMutation();
 
   const onHandleSubmit = async (values: TProductCreateForm) => {
-    if (productId)
+    if (productId) {
       await createProduct({
         ...values,
         qr_mapping: values.qr_mapping ? 1 : 0,
         qr_printing: values.qr_printing ? 1 : 0,
         sku_bin: +(values?.sku_bin ?? 0),
         sku_box: +(values?.sku_box ?? 0),
-        bin_pallet: +(values?.bin_pallet ?? 0),
+        bin_pallet: +(values?.bin_pallet ?? 1),
         mop: +(values?.mop ?? 0),
         net_weight: +(values.net_weight ?? 0),
         type: +values.type,
@@ -109,6 +109,7 @@ function ProductCreate() {
         .catch(() => {
           toast.showToast("Hết hạn token");
         });
+    }
   };
 
   return (

@@ -18,13 +18,17 @@ interface spark3 {
 
 export const Basicolumn = ({ ...props }: spark3) => {
   const { series, categories, colors } = props;
+
   const initial = useMemo(
     () => ({
       series: series,
       options: {
         chart: {
           type: "bar",
-          height: 320,
+          height: 500,
+          zoom: {
+            enabled: false, // Disable zoom
+          },
           events: {
             mounted: (chart: any) => {
               chart.windowResizeHandler();
@@ -34,14 +38,13 @@ export const Basicolumn = ({ ...props }: spark3) => {
         plotOptions: {
           bar: {
             horizontal: false,
-            columnWidth: "80%",
           },
         },
         grid: {
           borderColor: "#f2f5f7",
         },
         dataLabels: {
-          enabled: false,
+          enabled: true,
         },
         colors: colors ?? ["#8e54e9", "#4876e6", "#f5b849"],
         stroke: {
@@ -50,6 +53,7 @@ export const Basicolumn = ({ ...props }: spark3) => {
           colors: ["transparent"],
         },
         xaxis: {
+          type: "datetime",
           categories: categories,
           labels: {
             show: true,
@@ -58,6 +62,13 @@ export const Basicolumn = ({ ...props }: spark3) => {
               fontSize: "11px",
               fontWeight: 600,
               cssClass: "apexcharts-xaxis-label",
+            },
+            formatter: function (value: string) {
+              return new Date(value).toLocaleDateString("vi-VN", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              });
             },
           },
         },
@@ -82,6 +93,9 @@ export const Basicolumn = ({ ...props }: spark3) => {
           opacity: 1,
         },
         tooltip: {
+          x: {
+            format: "dd MMM yyyy",
+          },
           y: {
             formatter: function (val: any) {
               return val + " người";
@@ -98,10 +112,11 @@ export const Basicolumn = ({ ...props }: spark3) => {
       options={initial.options}
       series={initial.series}
       type="bar"
-      height={300}
+      height={500} // Match the height with the chart options
     />
   );
 };
+
 //column with data labels
 
 export class Columnwithlabels extends Component<{}, spark3> {
@@ -130,6 +145,7 @@ export class Columnwithlabels extends Component<{}, spark3> {
         },
         plotOptions: {
           bar: {
+            columnWidth: 100,
             borderRadius: 10,
             dataLabels: {
               position: "top", // top, center, bottom
@@ -228,7 +244,7 @@ export class Columnwithlabels extends Component<{}, spark3> {
         options={this.state.options}
         series={this.state.series}
         type="bar"
-        height={300}
+        height={700}
       />
     );
   }
