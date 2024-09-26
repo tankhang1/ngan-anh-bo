@@ -560,7 +560,9 @@ function ProductCreate() {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group as={Col} md={4}>
-                    <Form.Label className="text-black">Trọng lượng</Form.Label>
+                    <Form.Label className="text-black">
+                      Trọng lượng gói
+                    </Form.Label>
                     <Form.Control
                       type="number"
                       id="net_weight_validate"
