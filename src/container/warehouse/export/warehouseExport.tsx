@@ -46,7 +46,7 @@ type TExportForm = {
   end_date: string;
 };
 const WarehouseExport = () => {
-  const { permission } = useSelector((state: RootState) => state.auth  );
+  const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
@@ -324,7 +324,13 @@ const WarehouseExport = () => {
               {
                 key: "time",
                 label: "Thời gian xuất kho",
-                render: ({ time_export }) => <td>{time_export}</td>,
+                render: ({ time_export }) => (
+                  <td>
+                    {time_export
+                      ? format(new Date(time_export), "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "",

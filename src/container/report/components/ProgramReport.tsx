@@ -219,7 +219,13 @@ function TopupReport() {
             {
               key: "time_earn",
               label: "Thời gian tích điểm",
-              render: (value) => <td>{value.time_earn}</td>,
+              render: (value) => (
+                <td>
+                  {value.time_earn
+                    ? format(value.time_earn, "dd/MM/yyyy hh:mm:ss")
+                    : ""}
+                </td>
+              ),
             },
           ]}
           data={(points || []) as any}

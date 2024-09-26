@@ -333,6 +333,7 @@ export type TTopupTableDashboard = {
 export type TProgramPointDetail = {
   id: number;
   program_name: string;
+  program_uuid: string;
   customer_code: string | null;
   customer_name: string | null;
   province_name: string | null;
@@ -352,6 +353,7 @@ export type TProgramPointDetail = {
 export type TProgramTopupDetail = {
   id: number;
   program_name: string;
+  program_uuid: string;
   customer_uuid: string;
   zalo_device_id: string;
   customer_code: string;
@@ -839,4 +841,57 @@ export type TManufactorOrder = {
   total_extra: number | null;
   ingredient_id: string | null;
   min_bin: number | null;
+};
+
+export type TProgramPointZaloDetail = {
+  id: number;
+  program_uuid: string;
+  program_name: string;
+  customer_uuid: string;
+  customer_code: string;
+  customer_name: string;
+  province: string;
+  province_name: string;
+  area: string | null;
+  phone: string;
+  point: number;
+  point_coefficient: number;
+  agent_code: string;
+  agent_name: string;
+  code: string;
+  code_hash: string;
+  product_code: string;
+  product_name: string;
+  time_earn: string;
+  time_earn_number: number;
+  c1_price_vnd: number;
+  c2_price_vnd: number;
+  zalo_device_id: string;
+};
+
+export type TProgramTopupZaloDetail = {
+  id: number;
+  program_uuid: string;
+  program_name: string;
+  customer_uuid: string;
+  zalo_device_id: string;
+  customer_code: string | null;
+  customer_name: string | null;
+  province: string;
+  province_name: string | null;
+  area: string | null;
+  phone: string;
+  price: number;
+  agent_code: string | null;
+  agent_name: string | null;
+  code: string;
+  code_hash: string;
+  product_code: string;
+  product_name: string;
+  time_topup: string;
+  time_topup_number: number;
+  request_id: string;
+  response_id: string;
+  response_body: string;
+  status: number;
 };

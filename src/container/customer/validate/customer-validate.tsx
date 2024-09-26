@@ -299,7 +299,10 @@ function CustomerValidation() {
                 render: (value) => (
                   <td>
                     {value?.time_verify
-                      ? format(new Date(value.time_verify), "yyyy-MM-dd hh:mm")
+                      ? format(
+                          new Date(value.time_verify),
+                          "dd/MM/yyyy hh:mm:ss"
+                        )
                       : ""}
                   </td>
                 ),

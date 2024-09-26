@@ -1,6 +1,6 @@
 import React from "react";
 import AppTable from "../../../../components/common/table/table";
-import { TAgent } from "../../../../assets/types";
+import { TAgent, TCustomerRes } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
 import { useGetListCustomerQuery } from "../../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
@@ -25,11 +25,11 @@ function TableAgent() {
       title="Danh sách đại lý đã xác thực hôm nay"
       headers={[
         {
-          key: "id",
-          label: "ID",
-          render: (value: TAgent) => (
+          key: "customer_name",
+          label: "Mã khách hàng",
+          render: (value: TCustomerRes) => (
             <td>
-              <AppId id={value.id} />
+              <span className="fw-semibold">{value.customer_code}</span>
             </td>
           ),
         },
@@ -53,12 +53,17 @@ function TableAgent() {
           render: (value) => <td>{value.customer_province_name}</td>,
         },
         {
+          key: "customer_area",
+          label: "Khu vực",
+          render: (value) => <td>{value.customer_area}</td>,
+        },
+        {
           key: "time_verify",
           label: "Thời gian xác thực",
           render: (value) => (
             <td>
               {value?.time_verify
-                ? format(new Date(value?.time_verify), "dd/MM/yyyy")
+                ? format(new Date(value?.time_verify), "dd/MM/yyyy hh:mm:ss")
                 : ""}
             </td>
           ),

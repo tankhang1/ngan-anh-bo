@@ -177,7 +177,13 @@ function CustomerValidateToday() {
               {
                 key: "time",
                 label: "Thời gian đăng kí",
-                render: (value) => <td>{value.time}</td>,
+                render: (value) => (
+                  <td>
+                    {value?.time
+                      ? format(new Date(value.time), "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "time_verify",
@@ -185,7 +191,10 @@ function CustomerValidateToday() {
                 render: (value) => (
                   <td>
                     {value?.time_verify
-                      ? format(new Date(value.time_verify), "yyyy-MM-dd hh:mm")
+                      ? format(
+                          new Date(value.time_verify),
+                          "dd/MM/yyyy hh:mm:ss"
+                        )
                       : ""}
                   </td>
                 ),

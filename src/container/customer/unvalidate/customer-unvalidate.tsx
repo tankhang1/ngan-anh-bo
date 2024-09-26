@@ -249,7 +249,10 @@ function CustomerUnValidation() {
                 render: (value) => (
                   <td>
                     {value?.time_verify
-                      ? format(new Date(value.time_verify), "yyyy-MM-dd hh:mm")
+                      ? format(
+                          new Date(value.time_verify),
+                          "dd/MM/yyyy0 hh:mm:ss"
+                        )
                       : ""}
                   </td>
                 ),
@@ -294,7 +297,13 @@ function CustomerUnValidation() {
               {
                 key: "time",
                 label: "Thời gian đăng ký",
-                render: (value) => <td>{value.time}</td>,
+                render: (value) => (
+                  <td>
+                    {value.time
+                      ? format(value.time, "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "time_updated",

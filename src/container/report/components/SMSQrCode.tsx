@@ -25,7 +25,7 @@ import {
 function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(subDays(new Date(), 10), "yyyyMMdd") * 10000,
+    st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
     ed: +(format(new Date(), "yyyyMMdd") + "2359"),
   });
 
@@ -155,14 +155,14 @@ function SMS_QR_Report() {
               className="btn btn-icon bg-danger"
               onClick={() => {
                 setRangeDate({
-                  st: +format(newRangeDate.st, "yyyyMMdd") * 10000,
+                  st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
                   ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
                 });
                 setListDays(
                   getDaysArray(
                     new Date(newRangeDate.st),
                     new Date(newRangeDate.ed)
-                  ).map((item) => format(item, "dd-MM-yyyy"))
+                  ).map((item) => format(item, "yyyy-MM-dd"))
                 );
               }}
             >
@@ -266,7 +266,13 @@ function SMS_QR_Report() {
               {
                 key: "time_use",
                 label: "Ngày sử dụng",
-                render: (value) => <td>{value.time_use}</td>,
+                render: (value) => (
+                  <td>
+                    {value.time_use
+                      ? format(value.time_use, "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
             ]}
             data={[...(bins?.sms ?? []), ...(packets?.sms ?? [])]}
@@ -308,7 +314,13 @@ function SMS_QR_Report() {
               {
                 key: "time_use",
                 label: "Ngày sử dụng",
-                render: (value) => <td>{value.time_use}</td>,
+                render: (value) => (
+                  <td>
+                    {value.time_use
+                      ? format(value.time_use, "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
             ]}
             data={[

@@ -283,7 +283,9 @@ function SMSReport() {
             label: "Thời gian nhắn tin",
             render: (value) => (
               <td>
-                <span className="fw-semibold">{value.time}</span>
+                <span className="fw-semibold">
+                  {value.time ? format(value.time, "dd/MM/yyyy hh:mm:ss") : ""}
+                </span>
               </td>
             ),
           },

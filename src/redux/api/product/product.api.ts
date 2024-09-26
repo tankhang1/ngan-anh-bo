@@ -2,7 +2,6 @@ import { HTTPS_METHOD } from "../../../constants";
 import {
   TDevice,
   TProduct,
-  TProductForm,
   TIngredient,
   TProductCreateForm,
   BASE_RES,

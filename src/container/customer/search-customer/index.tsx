@@ -13,12 +13,16 @@ import AppTable from "../../../components/common/table/table";
 import {
   useGetCustomerCounterQuery,
   useGetCustomerQuery,
+  useGetProgramPointDetailMutation,
+  useGetProgramTopupDetailMutation,
 } from "../../../redux/api/info/info.api";
 import { fDate, fNumber } from "../../../hooks";
 import {
   TCustomerRes,
   TProgramPointDetail,
+  TProgramPointZaloDetail,
   TProgramTopupDetail,
+  TProgramTopupZaloDetail,
 } from "../../../assets/types";
 import { format } from "date-fns";
 import {
@@ -36,6 +40,13 @@ function SearchCustomer() {
   const [page, setPage] = useState(1);
   const [openDetail, setOpenDetail] = useState(false);
   const [customerInfo, setCustomerInfo] = useState<TCustomerRes>();
+  const [programPointDetail, setProgramPointDetail] = useState<
+    TProgramPointZaloDetail[] | null
+  >(null);
+  const [programTopupDetail, setProgramTopupDetail] = useState<
+    TProgramTopupZaloDetail[] | null
+  >(null);
+
   const onSearch = () => {
     if (searchValue.length === 0) return;
   };
@@ -76,6 +87,41 @@ function SearchCustomer() {
       skip: customerInfo?.uuid ? false : true,
     }
   );
+  const [getProgramPointDetail, { isLoading: isLoadingProgramPoint }] =
+    useGetProgramPointDetailMutation();
+  const [getProgramTopupDetail, { isLoading: isLoadingProgramTopup }] =
+    useGetProgramTopupDetailMutation();
+
+  const openPointDetail = async (
+    customer_uuid: string,
+    program_uuid: string
+  ) => {
+    await getProgramPointDetail({
+      pu: program_uuid,
+      u: customer_uuid,
+    })
+      .unwrap()
+      .then((values) => {
+        setProgramPointDetail(values);
+        setOpenDetail(false);
+      })
+      .catch(() => {});
+  };
+  const openTopupDetail = async (
+    customer_uuid: string,
+    program_uuid: string
+  ) => {
+    await getProgramTopupDetail({
+      pu: program_uuid,
+      u: customer_uuid,
+    })
+      .unwrap()
+      .then((values) => {
+        setProgramTopupDetail(values);
+        setOpenDetail(false);
+      })
+      .catch(() => {});
+  };
 
   return (
     <Fragment>
@@ -214,7 +260,11 @@ function SearchCustomer() {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title as="h5">Chi tiết khách hàng</Modal.Title>
+          <Modal.Title as="h5">
+            {customerInfo?.customer_name ||
+              customerInfo?.name ||
+              "Thông tin khách hàng"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex flex-column gap-4">
@@ -509,6 +559,25 @@ function SearchCustomer() {
                             ),
                           },
                           {
+                            key: "",
+                            label: "Chi tiết",
+                            render: (value) => (
+                              <td>
+                                <button
+                                  className="btn btn-icon btn-md btn-bd-primary"
+                                  onClick={() =>
+                                    openPointDetail(
+                                      value.customer_uuid,
+                                      value.program_uuid
+                                    )
+                                  }
+                                >
+                                  <i className="ti ti-eye"></i>
+                                </button>
+                              </td>
+                            ),
+                          },
+                          {
                             key: "name",
                             label: "Họ và tên",
                             render: (value) => (
@@ -519,28 +588,7 @@ function SearchCustomer() {
                               </td>
                             ),
                           },
-                          {
-                            key: "product_name",
-                            label: "Tên sản phẩm",
-                            render: (value) => (
-                              <td>
-                                <span className="fw-semibold">
-                                  {value.product_name}
-                                </span>
-                              </td>
-                            ),
-                          },
-                          {
-                            key: "product_name",
-                            label: "Tên sản phẩm",
-                            render: (value) => (
-                              <td>
-                                <span className="fw-semibold">
-                                  {value.program_name}
-                                </span>
-                              </td>
-                            ),
-                          },
+
                           {
                             key: "point",
                             label: "Số điểm",
@@ -585,13 +633,27 @@ function SearchCustomer() {
                             ),
                           },
                           {
-                            key: "customer_name",
-                            label: "Tên khách hàng",
-                            render: (value) => <td>{value.customer_name}</td>,
+                            key: "",
+                            label: "Chi tiết",
+                            render: (value) => (
+                              <td>
+                                <button
+                                  className="btn btn-icon btn-md btn-bd-primary"
+                                  onClick={() =>
+                                    openTopupDetail(
+                                      value.customer_uuid,
+                                      value.program_uuid ?? ""
+                                    )
+                                  }
+                                >
+                                  <i className="ti ti-eye"></i>
+                                </button>
+                              </td>
+                            ),
                           },
                           {
                             key: "price",
-                            label: "Số tiền thưởng",
+                            label: "Số tiền thưởng (vnđ)",
                             render: (value) => (
                               <td>
                                 <span className="fw-semibold">
@@ -607,6 +669,20 @@ function SearchCustomer() {
                             label: "Số lần tham gia",
                             render: (value) => <td>{value.total}</td>,
                           },
+                          {
+                            key: "province_name",
+                            label: "Tỉnh thành",
+                            render: (value) => <td>{value.province_name}</td>,
+                          },
+                          {
+                            key: "",
+                            label: "Tổng số tiền (vnđ)",
+                            render: (value) => (
+                              <td>
+                                {fNumber(value.total * value.price * 1000)}
+                              </td>
+                            ),
+                          },
                         ]}
                         data={programTopup?.data || []}
                       />
@@ -616,6 +692,164 @@ function SearchCustomer() {
               </div>
             </div>
           </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={programTopupDetail !== null}
+        onHide={() => {
+          setProgramTopupDetail(null);
+          setOpenDetail(true);
+        }}
+        backdrop
+        size="lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {programTopupDetail && programTopupDetail.length > 0
+              ? programTopupDetail[0].program_name
+              : "Chi tiết chương trình topup"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="d-flex p-3">
+            <AppTable
+              title=""
+              headers={[
+                {
+                  key: "code",
+                  label: "Mã code",
+                  render: (value: TProgramTopupDetail) => <td>{value.code}</td>,
+                },
+                {
+                  key: "product_name",
+                  label: "Tên sản phẩm",
+                  render: (value) => <td>{value.product_name}</td>,
+                },
+                {
+                  key: "price",
+                  label: "Số tiền",
+                  render: (value) => <td>{fNumber(value.price * 1000)}</td>,
+                },
+                {
+                  key: "time_topup",
+                  label: "Thời gian topup",
+                  render: (value) => (
+                    <td>
+                      {value.time_topup
+                        ? format(
+                            new Date(value.time_topup),
+                            "dd/MM/yyyy hh:mm:ss"
+                          )
+                        : ""}
+                    </td>
+                  ),
+                },
+                {
+                  key: "agent_name",
+                  label: "Tên đại lý",
+                  render: (value) => (
+                    <td>
+                      <span className="fw-semibold">{value.agent_name}</span>
+                    </td>
+                  ),
+                },
+
+                {
+                  key: "phone",
+                  label: "Số điện thoại",
+                  render: (value) => (
+                    <td>
+                      <span className="fw-semibold">{value.phone}</span>
+                    </td>
+                  ),
+                },
+              ]}
+              data={(programTopupDetail || []) as any}
+              filters={[]}
+              isLoading={isLoadingProgramTopup}
+            />
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={programPointDetail !== null}
+        onHide={() => {
+          setProgramPointDetail(null);
+          setOpenDetail(true);
+        }}
+        size="lg"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="px-3 pt-3">
+            {programPointDetail && programPointDetail.length > 0
+              ? programPointDetail[0].program_name
+              : "Chi tiết chương trình tích điểm"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AppTable
+            title=""
+            headers={[
+              {
+                key: "program_name",
+                label: "Tên chương trình",
+                render: (value: TProgramPointDetail) => (
+                  <td>
+                    <span className="fw-semibold"> {value.program_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "agent_name",
+                label: "Tên đại lý cấp 1",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.agent_name}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "phone",
+                label: "Số điện thoại",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.phone}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "code",
+                label: "Mã code",
+                render: (value) => <td>{value.code}</td>,
+              },
+              {
+                key: "product_name",
+                label: "Tên sản phẩm",
+                render: (value) => <td>{value.product_name}</td>,
+              },
+              {
+                key: "point",
+                label: "Số điểm",
+                render: (value) => <td>{fNumber(value.point ?? 0)}</td>,
+              },
+
+              {
+                key: "time_earn",
+                label: "Thời gian tích điểm",
+                render: (value) => (
+                  <td>
+                    {value.time_earn
+                      ? format(new Date(value.time_earn), "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
+              },
+            ]}
+            data={(programPointDetail || []) as any}
+            filters={[]}
+            isLoading={isLoadingProgramPoint}
+          />
         </Modal.Body>
       </Modal>
     </Fragment>

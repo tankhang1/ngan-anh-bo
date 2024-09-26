@@ -5,6 +5,7 @@ import { TProgramTopupDetail } from "../../../assets/types";
 
 import { useGetReportProgramTopupDetailTodayQuery } from "../../../redux/api/report/report.api";
 import { fNumber } from "../../../hooks";
+import { format } from "date-fns";
 const TOPUP_FILTERS = [
   {
     key: "phone",
@@ -178,7 +179,11 @@ function TopupToday() {
               {
                 key: "time_topup",
                 label: "Thời gian topup",
-                render: (value) => <td>{value.time_topup}</td>,
+                render: (value) => (
+                  <td>
+                    {format(new Date(value.time_topup), "dd/MM/yyyy hh:mm:ss")}
+                  </td>
+                ),
               },
             ]}
             data={topups || []}

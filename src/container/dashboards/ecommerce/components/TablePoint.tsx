@@ -4,6 +4,7 @@ import { TProgramPointDetail } from "../../../../assets/types";
 import AppId from "../../../../components/common/app-id";
 import { useGetReportProgramPointDetailTodayQuery } from "../../../../redux/api/report/report.api";
 import { fNumber } from "../../../../hooks";
+import { format } from "date-fns";
 
 function TablePoint() {
   const { data: points, isLoading: isLoadingPoint } =
@@ -83,7 +84,13 @@ function TablePoint() {
         {
           key: "time_earn",
           label: "Thời gian tích điểm",
-          render: (value) => <td>{value.time_earn}</td>,
+          render: (value) => (
+            <td>
+              {value.time_earn
+                ? format(new Date(value.time_earn), "dd/MM/yyyy hh:mm:ss")
+                : ""}
+            </td>
+          ),
         },
       ]}
       data={(points || []) as any}

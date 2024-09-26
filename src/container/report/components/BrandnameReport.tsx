@@ -171,7 +171,7 @@ function BrandnameReport() {
             label: "Thời gian",
             render: (value) => (
               <td>
-                {value?.time ? format(value.time, "dd/MM/yyyy hh:mm") : ""}
+                {value?.time ? format(value.time, "dd/MM/yyyy hh:mm:ss") : ""}
               </td>
             ),
           },

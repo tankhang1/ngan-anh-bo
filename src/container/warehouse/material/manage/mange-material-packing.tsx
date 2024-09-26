@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { useGetListIngredientPackingQuery } from "../../../../redux/api/warehouse/warehouse.api";
 import { fDate } from "../../../../hooks";
+import { format } from "date-fns";
 
 function ManageMaterialPacking() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -69,17 +70,38 @@ function ManageMaterialPacking() {
               {
                 key: "import_date",
                 label: "Ngày nhập kho",
-                render: (value) => <td>{fDate(value.import_date)}</td>,
+                render: (value) => (
+                  <td>
+                    {format(
+                      new Date(fDate(value.import_date)),
+                      "dd/MM/yyyy hh:mm:ss"
+                    )}
+                  </td>
+                ),
               },
               {
                 key: "manufacture_date",
                 label: "Ngày sản xuất",
-                render: (value) => <td>{fDate(value.manufacture_date)}</td>,
+                render: (value) => (
+                  <td>
+                    {format(
+                      new Date(fDate(value.manufacture_date)),
+                      "dd/MM/yyyy hh:mm:ss"
+                    )}
+                  </td>
+                ),
               },
               {
                 key: "expiration_date",
                 label: "Ngày hết hạn",
-                render: (value) => <td>{fDate(value.expiration_date)}</td>,
+                render: (value) => (
+                  <td>
+                    {format(
+                      new Date(fDate(value.expiration_date)),
+                      "dd/MM/yyyy hh:mm:ss"
+                    )}
+                  </td>
+                ),
               },
               {
                 key: "ingredient_code",

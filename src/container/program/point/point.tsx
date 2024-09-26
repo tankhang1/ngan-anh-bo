@@ -395,7 +395,14 @@ function PointProgram() {
               {
                 key: "time_create",
                 label: "Thời gian tạo",
-                render: (value) => <td>{value.time_create}</td>,
+                render: (value) => (
+                  <td>
+                    {" "}
+                    {value.time_create
+                      ? format(value.time_create, "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "time_updated",
@@ -403,7 +410,7 @@ function PointProgram() {
                 render: (value) => (
                   <td>
                     {value.time_updated
-                      ? format(value.time_updated, "yyyy-MM-dd hh:mm:ss")
+                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
                       : ""}
                   </td>
                 ),

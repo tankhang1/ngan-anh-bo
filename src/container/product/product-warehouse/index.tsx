@@ -310,7 +310,7 @@ function ProductWarehousePage() {
                 render: (value) => (
                   <td>
                     {value.time_created
-                      ? format(value.time_created, "yyyy-MM-dd hh:mm")
+                      ? format(value.time_created, "dd/MM/yyyy hh:mm")
                       : ""}
                   </td>
                 ),
@@ -321,7 +321,7 @@ function ProductWarehousePage() {
                 render: (value) => (
                   <td>
                     {value.time_updated
-                      ? format(value.time_updated, "yyyy-MM-dd hh:mm")
+                      ? format(value.time_updated, "dd/MM/yyyy hh:mm")
                       : ""}
                   </td>
                 ),

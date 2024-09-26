@@ -70,6 +70,15 @@ function ProductTable() {
                 </td>
               ),
             },
+            {
+              key: "response",
+              label: "Thông tin phản hồi",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.response}</span>
+                </td>
+              ),
+            },
 
             {
               key: "product_name",
@@ -96,6 +105,15 @@ function ProductTable() {
               render: (value) => (
                 <td>
                   <span className="fw-semibold">{value.phone}</span>
+                </td>
+              ),
+            },
+            {
+              key: "smsc",
+              label: "Nhà mạng",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.smsc}</span>
                 </td>
               ),
             },
@@ -136,7 +154,11 @@ function ProductTable() {
               label: "Thời gian nhắn tin",
               render: (value) => (
                 <td>
-                  <span className="fw-semibold">{value.time}</span>
+                  <span className="fw-semibold">
+                    {value.time
+                      ? format(new Date(value.time), "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </span>
                 </td>
               ),
             },
@@ -151,13 +173,9 @@ function ProductTable() {
           isLoading={isLoadingBin || isLoadingPacket}
           headers={[
             {
-              key: "id",
-              label: "ID",
-              render: (value: TProductDashboardTable) => (
-                <td>
-                  <AppId id={value.id} />
-                </td>
-              ),
+              key: "seri",
+              label: "Số seri",
+              render: (value) => <td>{value.seri}</td>,
             },
             {
               key: "code",
@@ -168,11 +186,7 @@ function ProductTable() {
                 </td>
               ),
             },
-            {
-              key: "bin_seri",
-              label: "Số seri thùng",
-              render: (value) => <td>{value.bin_seri}</td>,
-            },
+
             {
               key: "product_code",
               label: "Mã sản phẩm",
@@ -181,7 +195,13 @@ function ProductTable() {
             {
               key: "time_use",
               label: "Ngày sử dụng",
-              render: (value) => <td>{value.time_use}</td>,
+              render: (value) => (
+                <td>
+                  {value.time_use
+                    ? format(new Date(value.time_use), "dd/MM/yyyy hh:mm:ss")
+                    : ""}
+                </td>
+              ),
             },
           ]}
           data={[

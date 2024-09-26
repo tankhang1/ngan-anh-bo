@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { useGetExportByDocumentQuery } from "../../../redux/api/warehouse/warehouse.api";
+import { format } from "date-fns";
 
 function SearchWarehouseExport() {
   const [searchValue, setSearchValue] = useState("");
@@ -138,7 +139,13 @@ function SearchWarehouseExport() {
                 {
                   key: "time",
                   label: "Thời gian xuất kho",
-                  render: ({ time }) => <td>{time}</td>,
+                  render: ({ time }) => (
+                    <td>
+                      {time
+                        ? format(new Date(time), "dd/MM/yyyy hh:mm:ss")
+                        : ""}
+                    </td>
+                  ),
                 },
               ]}
               data={exports || []}

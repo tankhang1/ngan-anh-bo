@@ -8,6 +8,8 @@ import {
   TCustomerRes,
   BASE_RES,
   BaseQuery,
+  TProgramPointZaloDetail,
+  TProgramTopupZaloDetail,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
@@ -104,6 +106,27 @@ export const infoApi = createApi({
         params,
       }),
     }),
+    //u: customer_uuid, pu: program_uuid
+    getProgramPointDetail: builder.mutation<
+      TProgramPointZaloDetail[],
+      { u: string; pu: string }
+    >({
+      query: (params) => ({
+        url: "/api/program/point/detail/customer",
+        method: HTTPS_METHOD.PATCH,
+        params,
+      }),
+    }),
+    getProgramTopupDetail: builder.mutation<
+      TProgramTopupZaloDetail[],
+      { u: string; pu: string }
+    >({
+      query: (params) => ({
+        url: "/api/program/topup/detail/customer",
+        method: HTTPS_METHOD.PATCH,
+        params,
+      }),
+    }),
   }),
 });
 export const {
@@ -115,4 +138,6 @@ export const {
   useGetCustomerByCodeQuery,
   useGetCustomerQuery,
   useGetCustomerCounterQuery,
+  useGetProgramPointDetailMutation,
+  useGetProgramTopupDetailMutation,
 } = infoApi;

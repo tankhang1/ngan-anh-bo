@@ -337,7 +337,13 @@ function TopupProgram() {
               {
                 key: "time_create",
                 label: "Thời gian tạo",
-                render: (value) => <td>{value.time_create}</td>,
+                render: (value) => (
+                  <td>
+                    {value.time_create
+                      ? format(value.time_create, "dd/MM/yyyy hh:mm:ss")
+                      : ""}
+                  </td>
+                ),
               },
               {
                 key: "time_updated",
@@ -345,7 +351,7 @@ function TopupProgram() {
                 render: (value) => (
                   <td>
                     {value.time_updated
-                      ? format(value.time_updated, "yyyy-MM-dd hh:mm")
+                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
                       : ""}
                   </td>
                 ),

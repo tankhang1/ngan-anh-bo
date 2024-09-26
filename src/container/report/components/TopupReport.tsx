@@ -229,7 +229,13 @@ function TopupReport() {
           {
             key: "time_topup",
             label: "Thời gian topup",
-            render: (value) => <td>{value.time_topup}</td>,
+            render: (value) => (
+              <td>
+                {value.time_topup
+                  ? format(value.time_topup, "dd/MM/yyyy hh:mm:ss")
+                  : ""}
+              </td>
+            ),
           },
         ]}
         data={(topups || []) as any}

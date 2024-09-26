@@ -19,6 +19,12 @@ import {
 import { BASE_PORT } from "../../../constants";
 import { fDate } from "../../../hooks";
 import Loading from "../../../assets/images/apps/loading.gif";
+const TypeBinExport = new Map([
+  ["SALE", "Hàng hóa"],
+  ["MARKETING", "Khuyến mãi"],
+  ["BORROW", "Hàng mượn"],
+  ["PROMOTION", "Hàng quảng bá"],
+]);
 function SearchProductCode() {
   const [searchValue, setSearchValue] = useState("");
   const [isPermitSearch, setIsPermitSearch] = useState(false);
@@ -144,19 +150,22 @@ function SearchProductCode() {
                     <Col md={6}>
                       <Stack gap={1}>
                         <span className="text-black fs-17 fw-smibold">
-                          &#x2022; Mã iQr :{" "}
-                          <span className="fw-normal">{searchValue}</span>
-                        </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          &#x2022; Mã sản phẩm :{" "}
-                          <span className="fw-normal">{product?.code}</span>
-                        </span>
-                        <span className="text-black fs-17 fw-smibold">
-                          &#x2022; Tên sản phẩm :{" "}
-                          <span className="fw-normal">
+                          <span className="fs-20 fw-bold">
                             {product?.description}
                           </span>
                         </span>
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Mã sản phẩm :{" "}
+                          <span className="fw-normal">
+                            {product?.name_display_root}
+                          </span>
+                        </span>
+
+                        <span className="text-black fs-17 fw-smibold">
+                          &#x2022; Mã iQr :{" "}
+                          <span className="fw-normal">{searchValue}</span>
+                        </span>
+
                         <span className="text-black fs-17 fw-smibold">
                           &#x2022; Nhóm sản phẩm :{" "}
                           <span className="fw-normal">
@@ -168,7 +177,10 @@ function SearchProductCode() {
                           &#x2022; Ngày sản xuất :{" "}
                           <span className="fw-normal">
                             {binPackage?.manufacture_date
-                              ? fDate(binPackage.manufacture_date)
+                              ? fDate(
+                                  binPackage.manufacture_date,
+                                  "dd/MM/yyyy hh:mm:ss"
+                                )
                               : ""}
                           </span>
                         </span>
@@ -176,7 +188,10 @@ function SearchProductCode() {
                           &#x2022; Ngày hết hạn :{" "}
                           <span className="fw-normal">
                             {binPackage?.expiration_date
-                              ? fDate(binPackage.expiration_date)
+                              ? fDate(
+                                  binPackage.expiration_date,
+                                  "dd/MM/yyyy hh:mm:ss"
+                                )
                               : ""}
                           </span>
                         </span>
@@ -225,6 +240,15 @@ function SearchProductCode() {
                         {binPackage?.batch_number}
                       </span>
                     </span>
+                    <span className="text-black fs-17 fw-smibold">
+                      - Loại sản phẩm :{" "}
+                      <span className="fw-normal">
+                        {warehouseExport?.goods_type
+                          ? TypeBinExport.get(warehouseExport.goods_type)
+                          : ""}
+                      </span>
+                    </span>
+
                     {/*Table code export bin lấy được agent code , batchnumber , mã lô, thời gian xuất kho, loại hàng hóa, địa chỉ giao, người nhận hàng, nhân viên giao hàng, loại hàng hóa phần xuất kho --> từ seri thùng lấy ra */}
                     <span className="text-black fs-17 fw-smibold">
                       - Ngày xuất kho :{" "}

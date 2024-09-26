@@ -7,6 +7,7 @@ const HTTPS_METHOD = {
   POST: "POST",
   PUT: "PUT",
   GET: "GET",
+  PATCH: "PATCH",
 };
 const LOCAL_KEY = {
   TOKEN: "TOKEN",

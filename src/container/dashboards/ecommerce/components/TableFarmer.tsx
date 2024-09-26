@@ -55,7 +55,13 @@ function TableFarmer() {
         {
           key: "time",
           label: "Thời gian đăng ký",
-          render: (value) => <td>{value?.time ? value.time : ""}</td>,
+          render: (value) => (
+            <td>
+              {value?.time
+                ? format(new Date(value.time), "dd/MM/yyyy hh:mm:ss")
+                : ""}
+            </td>
+          ),
         },
         {
           key: "status",

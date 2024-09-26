@@ -15,6 +15,7 @@ import {
   useGetListGroupObjectiveQuery,
   useGetListSMSGatewayQuery,
 } from "../../../redux/api/manage/manage.api";
+import { format } from "date-fns";
 
 const AGENT_FILTERS = [
   {
@@ -112,6 +113,11 @@ function SMSGateway() {
             isChange={customerType}
             headers={[
               {
+                key: "code",
+                label: "Mã iQR",
+                render: (value: TSMSGateway) => <td>{value.code}</td>,
+              },
+              {
                 key: "id",
                 label: "ID",
                 render: (value: TSMSGateway) => (
@@ -130,9 +136,13 @@ function SMSGateway() {
                 ),
               },
               {
-                key: "code",
-                label: "Mã iQR",
-                render: (value: TSMSGateway) => <td>{value.code}</td>,
+                key: "response",
+                label: "Thông tin phản hồi",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.response}</span>
+                  </td>
+                ),
               },
               {
                 key: "product_name",
@@ -175,6 +185,15 @@ function SMSGateway() {
                 ),
               },
               {
+                key: "smsc",
+                label: "Nhà mạng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.smsc}</span>
+                  </td>
+                ),
+              },
+              {
                 key: "customer_province_name",
                 label: "Tỉnh thành",
                 render: (value) => (
@@ -211,7 +230,9 @@ function SMSGateway() {
                 label: "Thời gian nhắn tin",
                 render: (value) => (
                   <td>
-                    <span className="fw-semibold">{value.time}</span>
+                    <span className="fw-semibold">
+                      {format(value.time, "dd/MM/yyyy hh:mm:ss")}
+                    </span>
                   </td>
                 ),
               },

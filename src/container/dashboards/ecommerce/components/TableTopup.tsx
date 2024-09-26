@@ -3,6 +3,7 @@ import AppTable from "../../../../components/common/table/table";
 import { TProgramTopupDetail } from "../../../../assets/types";
 import { fNumber } from "../../../../hooks";
 import { useGetReportProgramTopupDetailTodayQuery } from "../../../../redux/api/report/report.api";
+import { format } from "date-fns";
 
 function TableTopup() {
   const { data: topups, isLoading: isLoadingTopup } =
@@ -33,7 +34,13 @@ function TableTopup() {
         {
           key: "time_topup",
           label: "Thời gian topup",
-          render: (value) => <td>{value.time_topup}</td>,
+          render: (value) => (
+            <td>
+              {value.time_topup
+                ? format(new Date(value.time_topup), "dd/MM/yyyy hh:mm:ss")
+                : ""}
+            </td>
+          ),
         },
         {
           key: "program_name",
