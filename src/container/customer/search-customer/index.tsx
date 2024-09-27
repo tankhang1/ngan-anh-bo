@@ -72,10 +72,10 @@ function SearchCustomer() {
 
   const { data: programPoint } = useGetListProgramPointDetailQuery(
     {
-      zl: customerInfo?.zalo_device_id!,
+      zl: customerInfo?.uuid!,
     },
     {
-      skip: customerInfo?.zalo_device_id ? false : true,
+      skip: customerInfo?.uuid ? false : true,
     }
   );
 
