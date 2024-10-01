@@ -364,7 +364,7 @@ function CustomerValidationCreateEdit() {
                           touched.customer_type && !!errors.customer_type
                         }
                         required
-                        disabled={true}
+                        disabled={isCreate === "true" ? false : true}
                       >
                         <option value="">-- Chọn nhóm khách hàng --</option>
                         {groupObjectives
@@ -396,7 +396,7 @@ function CustomerValidationCreateEdit() {
                             touched.retailer_group && !!errors.retailer_group
                           }
                           required
-                          disabled={true}
+                          disabled={isCreate === "true" ? false : true}
                         >
                           <option value="">-- Chọn nhóm đại lý --</option>
                           {groupRetailers?.map((item) => (
