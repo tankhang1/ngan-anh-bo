@@ -23,11 +23,9 @@ import {
   useGetListProductsQuery,
 } from "../../../../redux/api/info/info.api";
 import {
-  useCreateProductMutation,
   useGetListDevicesQuery,
   useGetListIngredientsQuery,
   useUpdateProductByMarketingMutation,
-  useUpdateProductMutation,
 } from "../../../../redux/api/product/product.api";
 import { useUploadFileMutation } from "../../../../redux/api/media/media.api";
 import { FilePondFile } from "filepond";
@@ -624,7 +622,8 @@ function ProductEditInfo() {
                   </Form.Group>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
-                      Trọng lượng gói<span style={{ color: "red" }}>*</span>
+                      Trọng lượng gói / dung tích chai
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       type="number"
@@ -799,7 +798,7 @@ function ProductEditInfo() {
                 <Form.Group as={Col} md={4}>
                   <Form.Label className="text-black">Sản xuất</Form.Label>
                   <Form.Check
-                    label="Đóng gói"
+                    label="Đóng gói ( Cho phép mapping )"
                     onChange={(e) =>
                       setFieldValue("qr_mapping", e.target.checked)
                     }
@@ -807,7 +806,7 @@ function ProductEditInfo() {
                     disabled={true}
                   />
                   <Form.Check
-                    label="In trên bao bì"
+                    label="Cho phép in mã iQr"
                     onChange={(e) =>
                       setFieldValue("qr_printing", e.target.checked)
                     }
@@ -905,7 +904,7 @@ function ProductEditInfo() {
                 </Row>
                 <Form.Group>
                   <Form.Label className="text-black">
-                    Thiết bị in bao bì
+                    Thiết bị in mã iQr
                   </Form.Label>
                   <Form.Select
                     className="form-select input-placeholder"

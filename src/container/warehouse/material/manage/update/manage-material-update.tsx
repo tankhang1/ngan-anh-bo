@@ -1,10 +1,7 @@
 import React, { Fragment, useContext } from "react";
 import { Card, Col, Form, Stack } from "react-bootstrap";
 import AppWarning from "../../../../../components/AppWarning";
-import {
-  useCreateIngredientMutation,
-  useUpdateIngredientByCodeMutation,
-} from "../../../../../redux/api/product/product.api";
+import { useUpdateIngredientByCodeMutation } from "../../../../../redux/api/product/product.api";
 import { useNavigate, useParams } from "react-router-dom";
 import * as formik from "formik";
 import { TIngredient } from "../../../../../assets/types";
@@ -168,7 +165,9 @@ const ManageMaterialUpdate = () => {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group>
-                      <Form.Label className="text-black">Tên vật tư</Form.Label>
+                      <Form.Label className="text-black">
+                        Tên vật tư <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
                       <Form.Control
                         required
                         type="textarea"
@@ -291,21 +290,26 @@ const ManageMaterialUpdate = () => {
                         Quy cách đóng gói
                         <span style={{ color: "red" }}>*</span>
                       </Form.Label>
-                      <Form.Control
+                      <Form.Select
                         required
-                        type="text"
+                        className="form-select input-placeholder"
                         name="packing"
                         defaultValue={values.packing}
                         onChange={handleChange}
                         isInvalid={touched.packing && !!errors.packing}
-                        placeholder="Quy cách đóng gói ( VD: Thùng 25 lt )"
-                        className="input-placeholder"
-                      />
+                      >
+                        <option value="">-- Chọn quy cách đóng gói --</option>
+                        <option value="Bao">Bao</option>
+                        <option value="Can">Can</option>
+                        <option value="Drum">Drum</option>
+                        <option value="Phi">Phi</option>
+                        <option value="Phuy">Phuy</option>
+                        <option value="Thùng">Thùng</option>
+                      </Form.Select>
                       <Form.Control.Feedback type="invalid">
                         {errors.packing}
                       </Form.Control.Feedback>
                     </Form.Group>
-
                     <Form.Group>
                       <Form.Label className="text-black">
                         Khối lượng (kg/lt)

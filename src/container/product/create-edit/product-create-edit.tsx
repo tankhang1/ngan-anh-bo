@@ -1,13 +1,5 @@
 import React, { Fragment, useContext, useMemo, useState } from "react";
-import {
-  Card,
-  Col,
-  Form,
-  OverlayTrigger,
-  Row,
-  Stack,
-  Tooltip,
-} from "react-bootstrap";
+import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 
 import { TProductCreateForm } from "../../../assets/types";
@@ -225,7 +217,7 @@ function ProductCreate() {
                   </Col>
                   <Col xl={6}>
                     <Stack className="d-flex gap-2">
-                      <Form.Group>
+                      {/* <Form.Group>
                         <Form.Label className="text-black">
                           Mã sản phẩm (Hệ thống)
                           <span style={{ color: "red" }}>*</span>
@@ -247,7 +239,7 @@ function ProductCreate() {
                         <Form.Control.Feedback type="invalid">
                           {errors.code}
                         </Form.Control.Feedback>
-                      </Form.Group>
+                      </Form.Group> */}
                       <Form.Group>
                         <Form.Label className="text-black">
                           Tên sản phẩm
@@ -561,7 +553,7 @@ function ProductCreate() {
                   </Form.Group>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
-                      Trọng lượng gói
+                      Trọng lượng gói / dung tích chai
                     </Form.Label>
                     <Form.Control
                       type="number"

@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 const createIngredientSchema = Yup.object().shape({
-  description: Yup.string(), // Required string
+  description: Yup.string().required("Vui lòng nhập tên vật tư"), // Required string
   packing: Yup.string().required("Vui lòng nhập mô tả vật liệu"), // Required string
   product_type: Yup.string().required("Vui lòng chọn loại sản phẩm"), // Required string
   formulation: Yup.string().required("Vui lòng nhập mã công thức"), // Required string for formulation code
@@ -11,7 +11,7 @@ const createIngredientSchema = Yup.object().shape({
     .typeError("Trọng lượng phải là số hợp lệ"), // Ensure it's a valid number
   product_indication: Yup.string().required("Vui lòng nhập mã chỉ định"), // Required string for indication code
   brand_code: Yup.string().required("Vui lòng nhập mã thương hiệu"), // Required string for brand code
-  ingredient: Yup.string().required("Vui lòng nhập thành phần"), // Required string
+  ingredient: Yup.string().required("Vui lòng nhập công thức"), // Required string
   certificate_of_origin: Yup.string().required(
     "Vui lòng nhập giấy chứng nhận xuất xứ"
   ), // Required string

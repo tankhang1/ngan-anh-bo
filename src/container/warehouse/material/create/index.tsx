@@ -134,12 +134,12 @@ const CreateMaterialWarehouse = () => {
                   </Form.Group>
                   <Form.Group>
                     <Form.Label className="text-black">
-                      Tên vật tư <span style={{ color: "red" }}>*</span>
+                      Công thức <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
                       type="text"
-                      placeholder="Tên vật tư"
+                      placeholder="Công thức (VD: Copper Oxychloride…..........	850g/kg )"
                       name="ingredient"
                       defaultValue={values.ingredient as string}
                       onChange={handleChange}
@@ -151,11 +151,13 @@ const CreateMaterialWarehouse = () => {
                     </Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label className="text-black">Mô tả vật tư</Form.Label>
+                    <Form.Label className="text-black">
+                      Tên vật tư <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
                     <Form.Control
                       required
                       type="textarea"
-                      placeholder="Mô tả vật tư"
+                      placeholder="Tên vật tư VD: COC 85WP 20 kg )"
                       name="description"
                       defaultValue={values.description as string}
                       onChange={handleChange}
@@ -166,6 +168,7 @@ const CreateMaterialWarehouse = () => {
                       {errors.description}
                     </Form.Control.Feedback>
                   </Form.Group>
+
                   <Form.Group>
                     <Form.Label className="text-black">
                       Tên thương hiệu <span style={{ color: "red" }}>*</span>
@@ -255,7 +258,7 @@ const CreateMaterialWarehouse = () => {
                       defaultValue={values.product_type}
                       onChange={handleChange}
                       isInvalid={touched.product_type && !!errors.product_type}
-                      placeholder="Hàm lượng công thức ( VD: 21-21-21+TE )"
+                      placeholder="Hàm lượng công thức ( VD: 85WP )"
                       className="input-placeholder"
                     />
                     <Form.Control.Feedback type="invalid">
@@ -269,16 +272,22 @@ const CreateMaterialWarehouse = () => {
                       Quy cách đóng gói
                       <span style={{ color: "red" }}>*</span>
                     </Form.Label>
-                    <Form.Control
+                    <Form.Select
                       required
-                      type="text"
+                      className="form-select input-placeholder"
                       name="packing"
                       defaultValue={values.packing}
                       onChange={handleChange}
                       isInvalid={touched.packing && !!errors.packing}
-                      placeholder="Quy cách đóng gói ( VD: Thùng 25 lt )"
-                      className="input-placeholder"
-                    />
+                    >
+                      <option value="">-- Chọn quy cách đóng gói --</option>
+                      <option value="Bao">Bao</option>
+                      <option value="Can">Can</option>
+                      <option value="Drum">Drum</option>
+                      <option value="Phi">Phi</option>
+                      <option value="Phuy">Phuy</option>
+                      <option value="Thùng">Thùng</option>
+                    </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.packing}
                     </Form.Control.Feedback>

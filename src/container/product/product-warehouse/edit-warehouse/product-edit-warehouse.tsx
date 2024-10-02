@@ -589,7 +589,8 @@ function ProductEditWarehouse() {
                   </Form.Group>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
-                      Trọng lượng gói<span style={{ color: "red" }}>*</span>
+                      Trọng lượng gói / dung tích chai
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       type="number"
@@ -762,7 +763,7 @@ function ProductEditWarehouse() {
                 <Form.Group as={Col} md={4}>
                   <Form.Label className="text-black">Sản xuất</Form.Label>
                   <Form.Check
-                    label="Đóng gói"
+                    label="Đóng gói ( Cho phép mapping )"
                     onChange={(e) =>
                       setFieldValue("qr_mapping", e.target.checked)
                     }
@@ -770,7 +771,7 @@ function ProductEditWarehouse() {
                     disabled={isEdit === false}
                   />
                   <Form.Check
-                    label="In trên bao bì"
+                    label="Cho phép in mã iQr"
                     onChange={(e) =>
                       setFieldValue("qr_printing", e.target.checked)
                     }
@@ -868,7 +869,7 @@ function ProductEditWarehouse() {
                 </Row>
                 <Form.Group>
                   <Form.Label className="text-black">
-                    Thiết bị in bao bì
+                    Thiết bị in mã iQr
                   </Form.Label>
                   <Form.Select
                     className="form-select input-placeholder"

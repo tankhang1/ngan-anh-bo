@@ -47,12 +47,12 @@ const productSchema = Yup.object().shape({
   short_info: Yup.string().nullable(),
 
   sku_bin: Yup.number()
-    .min(0, "SKU bin phải lớn hơn hoặc bằng 0")
-    .required("SKU bin là bắt buộc"),
+    .min(0, "Số sản phẩm / thùng phải lớn hơn hoặc bằng 0")
+    .required("Số sản phẩm / thùng là bắt buộc"),
 
   sku_box: Yup.number()
-    .min(0, "SKU box phải lớn hơn hoặc bằng 0")
-    .required("SKU box là bắt buộc"),
+    .min(0, "Số sản phẩm / hộp phải lớn hơn hoặc bằng 0")
+    .required("Số sản phẩm / hộp là bắt buộc"),
 
   type: Yup.string()
     .required("Vui lòng chọn hình thức đóng gói") // Custom error message for when no option is selected
@@ -70,8 +70,8 @@ const productSchema = Yup.object().shape({
   unit: Yup.string().required("Đơn vị tính là bắt buộc"),
 
   mop: Yup.number()
-    .min(0, "MOP phải lớn hơn hoặc bằng 0")
-    .required("MOP là bắt buộc"),
+    .min(0, "Số lượng sản xuất tối thiểu phải lớn hơn hoặc bằng 0")
+    .required("Số lượng sản xuất tối thiểu là bắt buộc"),
 
   device_code: Yup.string().nullable(),
 

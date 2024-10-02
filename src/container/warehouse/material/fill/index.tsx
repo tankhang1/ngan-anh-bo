@@ -112,7 +112,7 @@ const FillMaterialWarehouse = () => {
                       <Form.Control
                         required
                         type="text"
-                        placeholder="Mã vận đơn"
+                        placeholder="Mã vận đơn (VD: PO105244052061 )"
                         name="shipment_code"
                         defaultValue={values.shipment_code as string}
                         onChange={handleChange}
