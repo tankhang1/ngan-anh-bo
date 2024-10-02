@@ -406,7 +406,7 @@ function EmployeeCreateEdit() {
                             <Form.Control
                               required
                               type="date"
-                              readOnly
+                              onKeyDown={(e) => e.preventDefault()}
                               placeholder="Ngày sinh"
                               name="birthday"
                               defaultValue={values.birthday}
@@ -516,7 +516,7 @@ function EmployeeCreateEdit() {
                           <Form.Control
                             required
                             type="date"
-                            readOnly
+                            onKeyDown={(e) => e.preventDefault()}
                             placeholder="Ngày cấp"
                             name="citizen_day"
                             id="citizen_day_validate"

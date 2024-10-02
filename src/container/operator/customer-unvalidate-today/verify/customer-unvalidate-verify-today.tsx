@@ -261,7 +261,7 @@ function CustomerUnValidationVerify() {
                         <Form.Control
                           required
                           type="date"
-                          readOnly
+                          onKeyDown={(e) => e.preventDefault()}
                           id="birthday_validate"
                           placeholder="Ngày sinh"
                           name="birthday"
@@ -395,7 +395,7 @@ function CustomerUnValidationVerify() {
                         <Form.Control
                           required
                           type="date"
-                          readOnly
+                          onKeyDown={(e) => e.preventDefault()}
                           className="input-placeholder"
                           placeholder="Nhập ngày cấp CCCD"
                           name="citizen_day"

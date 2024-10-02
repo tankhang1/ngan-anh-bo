@@ -475,7 +475,7 @@ function TopupCreateEdit() {
                     <Form.Control
                       required
                       type="date"
-                      readOnly
+                      onKeyDown={(e) => e.preventDefault()}
                       id="time_start_validate"
                       placeholder="Ngày bắt đầu"
                       className="input-placeholder"
@@ -503,7 +503,7 @@ function TopupCreateEdit() {
                     <Form.Control
                       required
                       type="date"
-                      readOnly
+                      onKeyDown={(e) => e.preventDefault()}
                       id="time_end_validate"
                       placeholder="Ngày kết thúc"
                       className="input-placeholder"

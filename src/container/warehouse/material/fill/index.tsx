@@ -133,8 +133,8 @@ const FillMaterialWarehouse = () => {
                       <Form.Control
                         required
                         type="date"
-                        readOnly
                         name="import_date"
+                        onKeyDown={(e) => e.preventDefault()}
                         defaultValue={values.import_date}
                         onChange={handleChange}
                         isInvalid={touched.import_date && !!errors.import_date}
@@ -259,7 +259,7 @@ const FillMaterialWarehouse = () => {
                         }
                         placeholder="Ngày sản xuất"
                         className="input-placeholder"
-                        readOnly
+                        onKeyDown={(e) => e.preventDefault()}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.manufacture_date}
@@ -274,7 +274,7 @@ const FillMaterialWarehouse = () => {
                       <Form.Control
                         required
                         type="date"
-                        readOnly
+                        onKeyDown={(e) => e.preventDefault()}
                         name="expiration_date"
                         defaultValue={values.expiration_date}
                         onChange={handleChange}
