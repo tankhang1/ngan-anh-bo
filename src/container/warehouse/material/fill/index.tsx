@@ -26,7 +26,7 @@ const FillMaterialWarehouse = () => {
   ) => {
     await importIngredientPacking({
       ...values,
-      import_date: format(new Date(values.import_date), "yyyy/MM/dd") as any,
+      import_date: +format(new Date(values.import_date), "yyyyMMdd"),
       manufacture_date: +format(
         new Date(values.manufacture_date),
         "yyyyMMdd"
@@ -56,7 +56,7 @@ const FillMaterialWarehouse = () => {
           expiration_date: 0,
           expiry: 0,
           orgin: "",
-          import_date: "", // yyyy/mm/dd
+          import_date: 0, // yyyy/mm/dd
           note: "",
         }}
         onSubmit={onHandleCreateIngredient}
@@ -180,7 +180,7 @@ const FillMaterialWarehouse = () => {
                     </Form.Label>
                     <Form.Control
                       required
-                      type="text"
+                      type="number"
                       name="packing"
                       defaultValue={values.packing}
                       onChange={handleChange}

@@ -208,18 +208,12 @@ const WarehouseCreateManufactorOrder = () => {
                     <Form.Control
                       required
                       type="number"
-                      min={values?.min_bin ?? 0}
+                      min={values?.min_bin ?? 50}
                       placeholder="Nhập số lượng sản xuất"
                       name="total_bin"
                       className="input-placeholder"
-                      value={values.total_bin ?? ""}
-                      onChange={(value) => {
-                        if (
-                          values?.min_bin &&
-                          +value.target.value >= values.min_bin
-                        )
-                          setFieldValue("total_bin", value.target.value);
-                      }}
+                      value={values.total_bin ?? 0}
+                      onChange={handleChange}
                       isInvalid={touched.total_bin && !!errors.total_bin}
                     />
                     <Form.Control.Feedback type="invalid">

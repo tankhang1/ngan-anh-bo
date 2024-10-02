@@ -408,7 +408,7 @@ export type TIngredientPacking = {
   expiration_date: number; // YYYYMMDD format
   expiry: number; // In months
   orgin: string; // "origin" might be a typo in your data, correct if needed
-  import_date: string; // YYYYMMDD format
+  import_date: number; // YYYYMMDD format
   note: string | null;
 };
 export type TProvince = {
