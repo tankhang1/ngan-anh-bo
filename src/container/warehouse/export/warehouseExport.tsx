@@ -231,6 +231,7 @@ const WarehouseExport = () => {
                             <Form.Control
                               className="form-select"
                               type="date"
+                              readOnly
                               name="start_date"
                               defaultValue={values.start_date}
                               onChange={handleChange}
@@ -252,6 +253,7 @@ const WarehouseExport = () => {
                             <Form.Control
                               className="form-select"
                               type="date"
+                              readOnly
                               name="end_date"
                               defaultValue={values.end_date}
                               onChange={handleChange}

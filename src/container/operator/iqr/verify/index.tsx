@@ -313,6 +313,7 @@ function VerifyCustomer() {
                         <Form.Control
                           required
                           type="date"
+                          readOnly
                           id="birthday_validate"
                           placeholder="Ngày sinh"
                           name="birthday"
@@ -466,6 +467,7 @@ function VerifyCustomer() {
                         <Form.Control
                           required
                           type="date"
+                          readOnly
                           className="input-placeholder"
                           placeholder="Nhập ngày cấp CCCD"
                           name="citizen_day"

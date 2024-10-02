@@ -585,6 +585,7 @@ function PointCreateEdit() {
                     <Form.Control
                       required
                       type="date"
+                      readOnly
                       placeholder="Ngày bắt đầu"
                       name="time_start"
                       value={values.time_start}
@@ -611,6 +612,7 @@ function PointCreateEdit() {
                     <Form.Control
                       required
                       type="date"
+                      readOnly
                       placeholder="Ngày kết thúc"
                       name="time_end"
                       className="input-placeholder"

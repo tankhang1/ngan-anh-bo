@@ -339,6 +339,7 @@ function CustomerValidationCreateEdit() {
                           id="birthday_validate"
                           placeholder="Ngày sinh"
                           name="birthday"
+                          readOnly
                           value={values.birthday}
                           lang="vi"
                           onChange={handleChange}
@@ -508,6 +509,7 @@ function CustomerValidationCreateEdit() {
                           value={values.citizen_day}
                           className="input-placeholder"
                           onChange={handleChange}
+                          readOnly
                           isInvalid={
                             touched.citizen_day && !!errors.citizen_day
                           }

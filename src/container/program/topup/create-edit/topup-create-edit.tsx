@@ -475,6 +475,7 @@ function TopupCreateEdit() {
                     <Form.Control
                       required
                       type="date"
+                      readOnly
                       id="time_start_validate"
                       placeholder="Ngày bắt đầu"
                       className="input-placeholder"
@@ -502,6 +503,7 @@ function TopupCreateEdit() {
                     <Form.Control
                       required
                       type="date"
+                      readOnly
                       id="time_end_validate"
                       placeholder="Ngày kết thúc"
                       className="input-placeholder"
