@@ -30,4 +30,5 @@ export enum TagsEnum {
   INDICATION = "INDICATION",
   FORMULATION = "FORMULATION",
   SMS = "SMS",
+  BINS_BY_BATCH = "BINS_BY_BATCH",
 }

@@ -72,6 +72,7 @@ import SearchWarehouseCustomerExport from "./container/warehouse/export/searchWa
 import BrandnameReport from "./container/report/components/BrandnameReport.tsx";
 import WarehouseCreateManufactorOrder from "./container/warehouse/order/warehouseCreateOrder.tsx";
 import WarehouseSearchBatchNumber from "./container/warehouse/order/warehouseSearchBatchNumber.tsx";
+import WarehouseListOrder from "./container/warehouse/order/warehouseListOrder.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -142,6 +143,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }warehouse/report-material-packing`}
                 element={<ManageMaterialPacking />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}warehouse/list-order`}
+                element={<WarehouseListOrder />}
               />
               <Route
                 path={`${

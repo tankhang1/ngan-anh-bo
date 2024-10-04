@@ -58,6 +58,7 @@ const MapLabel = new Map([
   ["verify-customer", "Thông tin khách hàng"],
   ["create-manufactor-order", "Tạo lệnh sản xuất"],
   ["batch-number", "Thông tin lô hàng/ Batch Number"],
+  ["list-order", "Danh sách lệnh"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

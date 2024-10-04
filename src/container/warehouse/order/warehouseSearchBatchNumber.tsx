@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -9,14 +9,30 @@ import {
   Row,
   Stack,
 } from "react-bootstrap";
-import { BASE_PORT } from "../../../constants";
 import AppTable from "../../../components/common/table/table";
+import { useGetExportBinsByBatchQuery } from "../../../redux/api/warehouse/warehouse.api";
 
 const WarehouseSearchBatchNumber = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isPermitSearch, setIsPermitSearch] = useState(false);
   const isFetchingBinPackage = false;
-  const onSearch = () => {};
+  const { data: bins, isFetching: isFetchingBin } =
+    useGetExportBinsByBatchQuery(
+      {
+        bn: searchValue,
+      },
+      {
+        skip: !isPermitSearch,
+      }
+    );
+
+  const onSearch = () => {
+    if (!searchValue) return;
+    setIsPermitSearch(true);
+  };
+  useEffect(() => {
+    setIsPermitSearch(false);
+  }, [bins]);
   return (
     <Fragment>
       <Col xl={12}>
@@ -65,7 +81,7 @@ const WarehouseSearchBatchNumber = () => {
         </Card>
       </Col>
       <Stack gap={4}>
-        <Row>
+        {/* <Row>
           <Col md={6}>
             <Card className="custom-card p-3 h-100">
               <Card.Header>
@@ -99,7 +115,6 @@ const WarehouseSearchBatchNumber = () => {
                     <span className="fw-normal">XXXXX</span>
                   </span>
                 </Stack>
-                {/* )} */}
               </Card.Body>
             </Card>
           </Col>
@@ -137,7 +152,7 @@ const WarehouseSearchBatchNumber = () => {
               </Card.Body>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
         <Col>
           <Card className="custom-card p-3">
             <Card.Body>
@@ -156,9 +171,19 @@ const WarehouseSearchBatchNumber = () => {
                     render: ({ agent_code }) => <td>{agent_code}</td>,
                   },
                   {
+                    key: "document_code",
+                    label: "Mã phiếu",
+                    render: ({ document_code }) => <td>{document_code}</td>,
+                  },
+                  {
                     key: "batch_number",
                     label: "Lô sản suất/ Batch",
                     render: ({ agent_name }) => <td>{agent_name}</td>,
+                  },
+                  {
+                    key: "code",
+                    label: "Mã thùng",
+                    render: ({ code }) => <td>{code}</td>,
                   },
                   {
                     key: "shipment_code",
@@ -167,7 +192,7 @@ const WarehouseSearchBatchNumber = () => {
                   },
                   {
                     key: "goods_type",
-                    label: "Số thùng",
+                    label: "Loại hàng hóa",
                     render: ({ goods_type }) => <td>{goods_type}</td>,
                   },
                   {
@@ -186,20 +211,31 @@ const WarehouseSearchBatchNumber = () => {
                   },
                   {
                     key: "staff_export_name",
-                    label: "Mã xuất kho",
+                    label: "Tên nhân viên xuất kho",
                     render: ({ staff_export_name }) => (
                       <td>{staff_export_name}</td>
                     ),
                   },
                   {
-                    key: "staff_export_name",
+                    key: "receiver",
+                    label: "Người nhận",
+                    render: ({ receiver }) => <td>{receiver}</td>,
+                  },
+                  {
+                    key: "time",
                     label: "Thời gian xuất kho",
-                    render: ({ staff_export_name }) => (
-                      <td>{staff_export_name}</td>
+                    render: ({ time }) => <td>{time}</td>,
+                  },
+                  {
+                    key: "work_center_export_code",
+                    label: "Mã kho",
+                    render: ({ work_center_export_code }) => (
+                      <td>{work_center_export_code}</td>
                     ),
                   },
                 ]}
-                data={[]}
+                data={bins || []}
+                isLoading={isFetchingBin}
               />
             </Card.Body>
           </Card>

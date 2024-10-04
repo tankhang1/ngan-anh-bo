@@ -895,3 +895,86 @@ export type TProgramTopupZaloDetail = {
   response_body: string;
   status: number;
 };
+
+export type TBinByBatch = {
+  id: number;
+  code: string;
+  code_hash: string;
+  seri: string;
+  agent_code: string;
+  agent_name: string;
+  batch_number: string;
+  device: string;
+  sku: string;
+  sku_sub: string;
+  procedure_order_detail_item: number;
+  time: string;
+  time_number: string;
+  document_code: string;
+  document_code_detail: string;
+  goods_type: string;
+  address: string;
+  staff_import_code: string;
+  staff_import_name: string;
+  staff_export_code: string;
+  staff_export_name: string;
+  receiver: string;
+  work_center_export_code: string;
+};
+
+export type TProcedure = {
+  id: number;
+  code: string;
+  product_code: string;
+  product_name: string;
+  product_number: number; // product id -> ko hiện
+  container_number: string; // Số lượng thùng
+  ingredient_packing_code: string;
+  ingredient_name: string;
+  manufacture_date: number; // ngày sản xuất sp
+  expiration_date: number; // ngày hết hạn sp
+  expiry: number;
+  expect_packing_date: number; // ngày thực hiện đóng gói
+  note: string;
+  total_sku: number;
+  total_bin: number;
+  total_box: number;
+  total_pallet: number;
+  status: number;
+  bin_pallet: number;
+  sku_bin: number;
+  sku_box: number;
+  box_bin: number;
+  work_center_code: string;
+  extra_temp: number;
+  execute_date: number;
+  order_number: number;
+  device_code: string;
+  have_procedure: number;
+  time_created: string;
+};
+
+export type TProcedureOrderDetail = {
+  id: number;
+  procedure_order_code: string;
+  device_code: string;
+  product_code: string;
+  product_name: string;
+  product_number: number;
+  batch_number: string;
+  manufacture_date: number;
+  expiration_date: number;
+  expiry: number;
+  expect_packing_date: number;
+  execute_date: number;
+  total_sku: number;
+  total_bin: number;
+  total_box: number;
+  status: number;
+  sku_bin: number;
+  sku_box: number;
+  box_bin: number;
+  order_number: number;
+  print_label: number;
+  finish_map: number;
+};

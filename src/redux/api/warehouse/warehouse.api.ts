@@ -1,9 +1,12 @@
 import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
 import {
   BaseQuery,
+  TBinByBatch,
   TCustomerStaff,
   TIngredient,
   TIngredientPacking,
+  TProcedure,
+  TProcedureOrderDetail,
   TWarehouseDocument,
   TWarehouseDocumentImport,
   TWarehouseExport,
@@ -24,7 +27,11 @@ export const warehouseApi = createApi({
       return;
     },
   }),
-  tagTypes: [TagsEnum.INGREDIENTS, TagsEnum.INGREDIENTS_PACKING],
+  tagTypes: [
+    TagsEnum.INGREDIENTS,
+    TagsEnum.INGREDIENTS_PACKING,
+    TagsEnum.BINS_BY_BATCH,
+  ],
   endpoints: (builder) => ({
     getExportDetail: builder.query<TWarehouseExport[], BaseQuery>({
       query: (params) => ({
@@ -158,12 +165,55 @@ export const warehouseApi = createApi({
         { type: TagsEnum.INGREDIENTS as const, id: result?.id },
       ],
     }),
-    getCustomerStaff: builder.query<TCustomerStaff[],void>({
-      query:()=>({
+    getCustomerStaff: builder.query<TCustomerStaff[], void>({
+      query: () => ({
         url: "/consumer-staff",
         method: HTTPS_METHOD.GET,
-      })
-    })
+      }),
+    }),
+    getExportBinsByBatch: builder.query<TBinByBatch[], { bn: string }>({
+      query: ({ bn }) => ({
+        url: "/batch-number/bin-list",
+        method: HTTPS_METHOD.GET,
+        params: {
+          bn: bn,
+        },
+      }),
+      providesTags: (result, error, arg) => [
+        { type: TagsEnum.BINS_BY_BATCH as const, id: arg.bn },
+      ],
+    }),
+    getProcedureOrderByTime: builder.query<TProcedure[], BaseQuery>({
+      query: (query) => ({
+        url: "/procedure-order/list",
+        method: HTTPS_METHOD.GET,
+        params: query,
+      }),
+    }),
+    getProcedureOrderCounterByTime: builder.query<number, BaseQuery>({
+      query: (query) => ({
+        url: "/procedure-order/counter",
+        method: HTTPS_METHOD.GET,
+        params: query,
+      }),
+    }),
+    getProcedureOrderDetailByTime: builder.query<
+      TProcedureOrderDetail[],
+      BaseQuery
+    >({
+      query: (query) => ({
+        url: "/procedure-order-detail/list",
+        method: HTTPS_METHOD.GET,
+        params: query,
+      }),
+    }),
+    getProcedureOrderDetailCounterByTime: builder.query<number, BaseQuery>({
+      query: (query) => ({
+        url: "/procedure-order-detail/counter",
+        method: HTTPS_METHOD.GET,
+        params: query,
+      }),
+    }),
   }),
 });
 
@@ -182,5 +232,10 @@ export const {
   useGetIngredientPackingByIngredientCodeQuery,
   useGetIngredientPackingByShipmentCodeQuery,
   useGetListIngredientPackingQuery,
-  useGetCustomerStaffQuery
+  useGetCustomerStaffQuery,
+  useGetExportBinsByBatchQuery,
+  useGetProcedureOrderByTimeQuery,
+  useGetProcedureOrderCounterByTimeQuery,
+  useGetProcedureOrderDetailByTimeQuery,
+  useGetProcedureOrderDetailCounterByTimeQuery,
 } = warehouseApi;
