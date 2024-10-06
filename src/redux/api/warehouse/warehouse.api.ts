@@ -202,7 +202,7 @@ export const warehouseApi = createApi({
       BaseQuery
     >({
       query: (query) => ({
-        url: "/procedure-order-detail/list",
+        url: "/procedure-order/detail",
         method: HTTPS_METHOD.GET,
         params: query,
       }),

@@ -3,15 +3,12 @@ import { Button, Card, Col, Form, Modal, Stack } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
 import {
-  useGetImportByDocumentCounterQuery,
-  useGetImportByDocumentQuery,
-  useGetImportDocumentsQuery,
   useGetProcedureOrderByTimeQuery,
   useGetProcedureOrderCounterByTimeQuery,
   useGetProcedureOrderDetailByTimeQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
 import { BaseQuery } from "../../../assets/types";
-import { downloadLink, exportExcelFile, fDate } from "../../../hooks";
+import { fDate } from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -40,8 +37,8 @@ const WarehouseListOrder = () => {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
-  const [documentDetail, setDocumentDetail] = useState<string | undefined>();
   const [page, setPage] = useState(1);
+  const [documentDetail, setDocumentDetail] = useState("");
   const [exportExcel] = useExportWarehouseImportDetailMutation();
   const {
     data: procedureOrders,
@@ -70,15 +67,15 @@ const WarehouseListOrder = () => {
         skip: !query ? true : false,
       }
     );
-  //   const { data: importDetail, isLoading: loadingImportDetail } =
-  //     useGetProcedureOrderDetailByTimeQuery(
-  //       {
-  //         code: documentDetail!,
-  //       },
-  //       {
-  //         skip: documentDetail ? false : true,
-  //       }
-  //     );
+  const { data: orderDetails, isLoading: loadingOrderDetail } =
+    useGetProcedureOrderDetailByTimeQuery(
+      {
+        c: documentDetail!,
+      },
+      {
+        skip: documentDetail ? false : true,
+      }
+    );
   const onSearch = (values: TImportForm) => {
     if (search !== values.document_code) setSearch(values.document_code);
     if (
@@ -294,7 +291,7 @@ const WarehouseListOrder = () => {
                     <button
                       className="btn btn-icon btn-sm btn-primary-ghost"
                       onClick={() => {
-                        //   setDocumentDetail(value.document_code);
+                        setDocumentDetail(value.code);
                       }}
                     >
                       <i className="ti ti-edit"></i>
@@ -309,9 +306,9 @@ const WarehouseListOrder = () => {
           />
         </Card>
       </Col>
-      {/* <Modal
+      <Modal
         show={documentDetail ? true : false}
-        onHide={() => setDocumentDetail(undefined)}
+        onHide={() => setDocumentDetail("")}
         size="lg"
       >
         <Modal.Header closeButton>
@@ -321,23 +318,25 @@ const WarehouseListOrder = () => {
           <AppTable
             isHeader={false}
             title="Thông tin nhập kho"
-            isLoading={loadingImportDetail}
-            maxPage={importDetail?.length}
+            isLoading={loadingOrderDetail}
+            maxPage={orderDetails?.length}
             headers={[
               {
-                key: "document_code",
+                key: "procedure_order_code",
                 label: "Mã phiếu",
-                render: ({ document_code }) => <td>{document_code}</td>,
+                render: ({ procedure_order_code }) => (
+                  <td>{procedure_order_code}</td>
+                ),
               },
               {
-                key: "agent_code",
-                label: "Mã đại lý",
-                render: ({ agent_code }) => <td>{agent_code}</td>,
+                key: "product_name",
+                label: "Tên sản phẩm",
+                render: ({ product_name }) => <td>{product_name}</td>,
               },
               {
-                key: "agent_name",
-                label: "Tên đại lý",
-                render: ({ agent_name }) => <td>{agent_name}</td>,
+                key: "product_number",
+                label: "Số lượng sản phẩm",
+                render: ({ product_number }) => <td>{product_number}</td>,
               },
               {
                 key: "batch_number",
@@ -345,40 +344,43 @@ const WarehouseListOrder = () => {
                 render: ({ batch_number }) => <td>{batch_number}</td>,
               },
               {
-                key: "seri",
-                label: "Mã thùng",
-                render: ({ seri }) => <td>{seri}</td>,
+                key: "sku_bin",
+                label: "Số sản phẩm/thùng",
+                render: ({ sku_bin }) => <td>{sku_bin}</td>,
               },
               {
-                key: "staff_import_code",
-                label: "Mã nhân viên nhập kho",
-                render: ({ staff_import_code }) => <td>{staff_import_code}</td>,
+                key: "sku_box",
+                label: "Số sản phẩm/hộp",
+                render: ({ sku_box }) => <td>{sku_box}</td>,
               },
               {
-                key: "staff_import_name",
-                label: "Tên nhân viên nhập kho",
-                render: ({ staff_import_name }) => <td>{staff_import_name}</td>,
-              },
-              {
-                key: "work_center_import_code",
-                label: "Mã kho",
-                render: ({ work_center_import_code }) => (
-                  <td>{work_center_import_code}</td>
+                key: "manufacture_date",
+                label: "Ngày sản xuất",
+                render: ({ manufacture_date }) => (
+                  <td>{fDate(manufacture_date)}</td>
                 ),
               },
-
               {
-                key: "time",
-                label: "Thời gian nhâp kho",
-                render: ({ time }) => <td>{time}</td>,
+                key: "expiration_date",
+                label: "Ngày hết hạn",
+                render: ({ expiration_date }) => (
+                  <td>{fDate(expiration_date)}</td>
+                ),
+              },
+              {
+                key: "expect_packing_date",
+                label: "Ngày đóng gói",
+                render: ({ expect_packing_date }) => (
+                  <td>{fDate(expect_packing_date)}</td>
+                ),
               },
             ]}
-            data={importDetail || []}
+            data={orderDetails || []}
             searchByExternal="document_code"
             externalSearch=""
           />
         </Modal.Body>
-      </Modal> */}
+      </Modal>
     </Fragment>
   );
 };

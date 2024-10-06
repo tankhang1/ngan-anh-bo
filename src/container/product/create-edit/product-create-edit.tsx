@@ -248,7 +248,7 @@ function ProductCreate() {
                           required
                           type="text"
                           id="product_name_detail_validate"
-                          placeholder="Tên sản phẩm"
+                          placeholder="Tên sản phẩm ( VD: MeMan 72WP 45gr )"
                           name="product_name_detail"
                           defaultValue={values.product_name_detail}
                           onChange={handleChange}
@@ -271,7 +271,7 @@ function ProductCreate() {
                           required
                           type="text"
                           id="name_display_label_validate"
-                          placeholder="Tên sản phẩm (thu gọn)"
+                          placeholder="Tên sản phẩm (thu gọn) ( VD: MeMan 72WP 45gr )"
                           name="name_display_label"
                           defaultValue={values.name_display_label}
                           onChange={handleChange}

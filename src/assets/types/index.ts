@@ -432,6 +432,7 @@ export type BaseQuery = {
   k?: string; //loại khách hàng (đã xác thực)
   type?: string;
   s?: number;
+  c?: string;
 };
 export type TPackage = {
   id: number;
