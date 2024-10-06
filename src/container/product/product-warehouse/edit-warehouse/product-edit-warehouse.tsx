@@ -273,7 +273,7 @@ function ProductEditWarehouse() {
                           required
                           type="text"
                           id="product_name_detail_validate"
-                          placeholder="Tên sản phẩm"
+                          placeholder="Tên sản phẩm (thu gọn) ( VD: MeMan 72WP 45gr )"
                           name="product_name_detail"
                           defaultValue={values.product_name_detail}
                           onChange={handleChange}
@@ -297,7 +297,7 @@ function ProductEditWarehouse() {
                           required
                           type="text"
                           id="name_display_label_validate"
-                          placeholder="Tên sản phẩm (thu gọn)"
+                          placeholder="Tên sản phẩm (thu gọn) ( VD: MeMan 72WP 45gr )"
                           name="name_display_label"
                           defaultValue={values.name_display_label}
                           onChange={handleChange}
@@ -407,7 +407,7 @@ function ProductEditWarehouse() {
                           required
                           type="text"
                           id="version"
-                          placeholder="Mã phiên bảng"
+                          placeholder="Mã phiên bảng ( VD: 1 )"
                           name="version"
                           defaultValue={values.version}
                           onChange={handleChange}
@@ -579,7 +579,7 @@ function ProductEditWarehouse() {
                         touched.pack_configuration &&
                         !!errors.pack_configuration
                       }
-                      placeholder="Quy cách đóng gói"
+                      placeholder="Quy cách đóng gói ( VD: Chai 1Lt )"
                       className="input-placeholder"
                       disabled={true}
                     ></Form.Control>
@@ -603,6 +603,7 @@ function ProductEditWarehouse() {
                       required
                       className="input-placeholder"
                       disabled={true}
+                      placeholder="VD: 1,000"
                     ></Form.Control>
                     <Form.Control.Feedback type="invalid">
                       {errors.net_weight}
@@ -692,7 +693,7 @@ function ProductEditWarehouse() {
                       defaultValue={values.description}
                       onChange={handleChange}
                       isInvalid={touched.description && !!errors.description}
-                      placeholder="Mô tả sản phẩm (chi tiết)"
+                      placeholder="Mô tả sản phẩm (chi tiết) ( VD: Chai OK Sulfolac 85SC 1Lt )"
                       rows={3} // You can adjust the number of rows as needed
                       className="input-placeholder"
                       disabled={true}
@@ -707,7 +708,7 @@ function ProductEditWarehouse() {
                     Thành phần nguyên liệu
                   </Form.Label>
                   <Editor
-                    placeholder="Thành phần nguyên liệu"
+                    placeholder="Thành phần nguyên liệu ( VD: Sulfur	850g/lít )"
                     value={values.ingredient}
                     handOnChange={(value) => setFieldValue("ingredient", value)}
                   />
