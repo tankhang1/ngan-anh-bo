@@ -795,7 +795,7 @@ function ProductEditInfo() {
                     />
                   </Form.Group>
                 </Row>
-                <Form.Group as={Col} md={4}>
+                {/* <Form.Group as={Col} md={4}>
                   <Form.Label className="text-black">Sản xuất</Form.Label>
                   <Form.Check
                     label="Đóng gói ( Cho phép mapping )"
@@ -813,8 +813,8 @@ function ProductEditInfo() {
                     disabled={true}
                     checked={!!values.qr_printing}
                   />
-                </Form.Group>
-                <Row>
+                </Form.Group> */}
+                {/* <Row>
                   <Form.Group as={Col} md={3}>
                     <Form.Label className="text-black">
                       Số lượng sản xuất tối thiểu{" "}
@@ -927,7 +927,7 @@ function ProductEditInfo() {
                   <Form.Control.Feedback type="invalid">
                     {errors.device_code}
                   </Form.Control.Feedback>
-                </Form.Group>
+                </Form.Group> */}
               </Stack>
             </Card.Body>
           </Card>

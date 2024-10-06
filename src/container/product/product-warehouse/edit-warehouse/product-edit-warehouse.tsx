@@ -422,7 +422,7 @@ function ProductEditWarehouse() {
                     </Stack>
                   </Col>
                 </Row>
-                <Row>
+                {/* <Row>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
                       Số điểm thưởng <span style={{ color: "red" }}>*</span>
@@ -488,7 +488,7 @@ function ProductEditWarehouse() {
                       </p>
                     )}
                   </Form.Group>
-                </Row>
+                </Row> */}
                 <Row>
                   <Form.Group
                     as={Col}
@@ -867,7 +867,7 @@ function ProductEditWarehouse() {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
-                <Form.Group>
+                {/* <Form.Group>
                   <Form.Label className="text-black">
                     Thiết bị in mã iQr
                   </Form.Label>
@@ -891,7 +891,7 @@ function ProductEditWarehouse() {
                   <Form.Control.Feedback type="invalid">
                     {errors.device_code}
                   </Form.Control.Feedback>
-                </Form.Group>
+                </Form.Group> */}
               </Stack>
             </Card.Body>
           </Card>
