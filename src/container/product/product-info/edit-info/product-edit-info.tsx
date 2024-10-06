@@ -440,7 +440,7 @@ function ProductEditInfo() {
                           required
                           type="text"
                           id="version"
-                          placeholder="Mã phiên bảng"
+                          placeholder="Mã phiên bảng ( VD: 1 )"
                           name="version"
                           defaultValue={values.version}
                           onChange={handleChange}
@@ -612,7 +612,7 @@ function ProductEditInfo() {
                         touched.pack_configuration &&
                         !!errors.pack_configuration
                       }
-                      placeholder="Quy cách đóng gói"
+                      placeholder="Quy cách đóng gói ( VD: Thùng 280 gói x 65g )"
                       className="input-placeholder"
                       disabled={isEdit === false}
                     ></Form.Control>
@@ -725,7 +725,7 @@ function ProductEditInfo() {
                       defaultValue={values.description}
                       onChange={handleChange}
                       isInvalid={touched.description && !!errors.description}
-                      placeholder="Mô tả sản phẩm (chi tiết)"
+                      placeholder="Mô tả sản phẩm (chi tiết) ( VD: Chai OK Sulfolac 85SC 1Lt )"
                       rows={3} // You can adjust the number of rows as needed
                       className="input-placeholder"
                       disabled={isEdit === false}
@@ -740,7 +740,7 @@ function ProductEditInfo() {
                     Thành phần nguyên liệu
                   </Form.Label>
                   <Editor
-                    placeholder="Thành phần nguyên liệu"
+                    placeholder="Thành phần nguyên liệu ( VD: Sulfur	850g/lít )"
                     value={values.ingredient}
                     handOnChange={(value) => setFieldValue("ingredient", value)}
                     disabled={true}
