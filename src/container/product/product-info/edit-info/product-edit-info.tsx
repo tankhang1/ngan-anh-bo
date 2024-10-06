@@ -306,7 +306,7 @@ function ProductEditInfo() {
                           required
                           type="text"
                           id="product_name_detail_validate"
-                          placeholder="Tên sản phẩm"
+                          placeholder="Tên sản phẩm ( VD: Nutrivant Plus Rice 0-46-30+Mgo+B 50gr )"
                           name="product_name_detail"
                           defaultValue={values.product_name_detail}
                           onChange={handleChange}
@@ -330,7 +330,7 @@ function ProductEditInfo() {
                           required
                           type="text"
                           id="name_display_label_validate"
-                          placeholder="Tên sản phẩm (thu gọn)"
+                          placeholder="Tên sản phẩm (thu gọn) ( VD: Nutrivant Rice 50gr )"
                           name="name_display_label"
                           defaultValue={values.name_display_label}
                           onChange={handleChange}
@@ -440,7 +440,7 @@ function ProductEditInfo() {
                           required
                           type="text"
                           id="version"
-                          placeholder="Mã phiên bảng ( VD: 1 )"
+                          placeholder="Phiên bảng ( VD: T01 )"
                           name="version"
                           defaultValue={values.version}
                           onChange={handleChange}
@@ -458,7 +458,8 @@ function ProductEditInfo() {
                 <Row>
                   <Form.Group as={Col} md={4}>
                     <Form.Label className="text-black">
-                      Số điểm thưởng <span style={{ color: "red" }}>*</span>
+                      Số điểm thưởng (sao){" "}
+                      <span style={{ color: "red" }}>*</span>
                     </Form.Label>
 
                     <NumericFormat
@@ -694,7 +695,7 @@ function ProductEditInfo() {
                 <Row>
                   <Form.Group as={Col} md={6}>
                     <Form.Label className="text-black">
-                      Mô tả sản phẩm (thu gọn)
+                      Mô tả sản phẩm (chi tiêtd)
                     </Form.Label>
                     <Form.Control
                       required
@@ -704,7 +705,7 @@ function ProductEditInfo() {
                       defaultValue={values.short_info}
                       onChange={handleChange}
                       isInvalid={touched.short_info && !!errors.short_info}
-                      placeholder="Mô tả sản phẩm (thu gọn)"
+                      placeholder="Mô tả sản phẩm (chi tiết)"
                       rows={3} // You can adjust the number of rows as needed
                       className="input-placeholder"
                       disabled={isEdit === false}
@@ -715,7 +716,7 @@ function ProductEditInfo() {
                   </Form.Group>
                   <Form.Group as={Col} md={6}>
                     <Form.Label className="text-black">
-                      Mô tả sản phẩm (chi tiết)
+                      Mô tả sản phẩm (thu gọn)
                     </Form.Label>
                     <Form.Control
                       required
@@ -725,7 +726,7 @@ function ProductEditInfo() {
                       defaultValue={values.description}
                       onChange={handleChange}
                       isInvalid={touched.description && !!errors.description}
-                      placeholder="Mô tả sản phẩm (chi tiết) ( VD: Chai OK Sulfolac 85SC 1Lt )"
+                      placeholder="Mô tả sản phẩm (thu gọn) ( VD: Chai OK Sulfolac 85SC 1Lt )"
                       rows={3} // You can adjust the number of rows as needed
                       className="input-placeholder"
                       disabled={isEdit === false}

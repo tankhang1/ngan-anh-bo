@@ -273,7 +273,7 @@ function ProductEditWarehouse() {
                           required
                           type="text"
                           id="product_name_detail_validate"
-                          placeholder="Tên sản phẩm (thu gọn) ( VD: MeMan 72WP 45gr )"
+                          placeholder="Tên sản phẩm (thu gọn) ( VD: Nutrivant Plus Rice 0-46-30+Mgo+B 50gr )"
                           name="product_name_detail"
                           defaultValue={values.product_name_detail}
                           onChange={handleChange}
@@ -297,7 +297,7 @@ function ProductEditWarehouse() {
                           required
                           type="text"
                           id="name_display_label_validate"
-                          placeholder="Tên sản phẩm (thu gọn) ( VD: MeMan 72WP 45gr )"
+                          placeholder="Tên sản phẩm (thu gọn) ( VD: Nutrivant Rice 50gr )"
                           name="name_display_label"
                           defaultValue={values.name_display_label}
                           onChange={handleChange}
@@ -407,7 +407,7 @@ function ProductEditWarehouse() {
                           required
                           type="text"
                           id="version"
-                          placeholder="Mã phiên bảng ( VD: 1 )"
+                          placeholder="Phiên bảng ( VD: T01 )"
                           name="version"
                           defaultValue={values.version}
                           onChange={handleChange}
@@ -579,7 +579,7 @@ function ProductEditWarehouse() {
                         touched.pack_configuration &&
                         !!errors.pack_configuration
                       }
-                      placeholder="Quy cách đóng gói ( VD: Chai 1Lt )"
+                      placeholder="Quy cách đóng gói ( VD: Thùng 40 gói x 500gr )"
                       className="input-placeholder"
                       disabled={true}
                     ></Form.Control>
@@ -662,7 +662,7 @@ function ProductEditWarehouse() {
                 <Row>
                   <Form.Group as={Col} md={6}>
                     <Form.Label className="text-black">
-                      Mô tả sản phẩm (thu gọn)
+                      Mô tả sản phẩm (chi tiết)
                     </Form.Label>
                     <Form.Control
                       required
@@ -672,7 +672,7 @@ function ProductEditWarehouse() {
                       defaultValue={values.short_info}
                       onChange={handleChange}
                       isInvalid={touched.short_info && !!errors.short_info}
-                      placeholder="Mô tả sản phẩm (thu gọn)"
+                      placeholder="Mô tả sản phẩm (chi tiết) "
                       rows={3} // You can adjust the number of rows as needed
                       className="input-placeholder"
                       disabled={true}
@@ -683,7 +683,7 @@ function ProductEditWarehouse() {
                   </Form.Group>
                   <Form.Group as={Col} md={6}>
                     <Form.Label className="text-black">
-                      Mô tả sản phẩm (chi tiết)
+                      Mô tả sản phẩm (thu gọn)
                     </Form.Label>
                     <Form.Control
                       required
@@ -691,9 +691,9 @@ function ProductEditWarehouse() {
                       id="description_validate"
                       name="description"
                       defaultValue={values.description}
+                      placeholder="Mô tả sản phẩm (thu gọn) ( VD: Chai OK Sulfolac 85SC 1Lt )"
                       onChange={handleChange}
                       isInvalid={touched.description && !!errors.description}
-                      placeholder="Mô tả sản phẩm (chi tiết) ( VD: Chai OK Sulfolac 85SC 1Lt )"
                       rows={3} // You can adjust the number of rows as needed
                       className="input-placeholder"
                       disabled={true}

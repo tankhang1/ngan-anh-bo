@@ -134,12 +134,12 @@ const CreateMaterialWarehouse = () => {
                   </Form.Group>
                   <Form.Group>
                     <Form.Label className="text-black">
-                      Công thức <span style={{ color: "red" }}>*</span>
+                      Thành phần <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <Form.Control
                       required
                       type="text"
-                      placeholder="Công thức (VD: Copper Oxychloride…..........	850g/kg )"
+                      placeholder="Thành phần (VD: Copper Oxychloride…..........	850g/kg )"
                       name="ingredient"
                       defaultValue={values.ingredient as string}
                       onChange={handleChange}
