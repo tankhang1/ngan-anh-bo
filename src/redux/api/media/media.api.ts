@@ -1,5 +1,5 @@
 import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
-import { TArea, TProvince } from "../../../assets/types";
+import { TArea, TProvince, TWorkCenter } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
 
@@ -66,6 +66,17 @@ export const mediaApi = createApi({
             ]
           : [TagsEnum.PROVINCE],
     }),
+    getListWorkCenters: builder.query<
+      { label: string; value: string }[],
+      void | null
+    >({
+      query: () => ({
+        url: "/warehouse/work-centers",
+        method: HTTPS_METHOD.GET,
+      }),
+      transformResponse: (results: TWorkCenter[]) =>
+        results?.map((item) => ({ label: item.name, value: item.code })),
+    }),
   }),
 });
 
@@ -74,4 +85,5 @@ export const {
   useUploadStaffFileMutation,
   useGetDistrictQuery,
   useGetListProvinceQuery,
+  useGetListWorkCentersQuery,
 } = mediaApi;

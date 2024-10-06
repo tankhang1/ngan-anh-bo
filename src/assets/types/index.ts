@@ -896,6 +896,29 @@ export type TProgramTopupZaloDetail = {
   status: number;
 };
 
+export type TWarehouseDevice = {
+  id: number;
+  work_center_code: string;
+  domain: string;
+  key: string;
+  device_id: string;
+  device_name: string;
+  time_created: Date;
+  time_authen: Date;
+  time_updated: Date;
+  status: number;
+};
+
+export type TWorkCenter = {
+  id: number;
+  code: string;
+  name: string;
+  address: string;
+  factory_name: string;
+  factory_code: string;
+  note: string;
+};
+
 export type TBinByBatch = {
   id: number;
   code: string;

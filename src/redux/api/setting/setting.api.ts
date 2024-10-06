@@ -5,6 +5,7 @@ import {
   TBrand,
   TFormulation,
   TIndication,
+  TWarehouseDevice,
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
@@ -18,6 +19,7 @@ export const settingApi = createApi({
     TagsEnum.BRAND,
     TagsEnum.INDICATION,
     TagsEnum.FORMULATION,
+    TagsEnum.DEVICES_WAREHOUSE,
   ],
   endpoints: (builder) => ({
     createGroupRetailer: builder.mutation<BASE_RES, TGroupRetailer>({
@@ -52,6 +54,52 @@ export const settingApi = createApi({
       }),
       invalidatesTags: [TagsEnum.FORMULATION],
     }),
+    getListWarehouseDevices: builder.query<TWarehouseDevice[], void>({
+      query: () => ({
+        url: "/app/warehouse/devices",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.DEVICES_WAREHOUSE as const,
+                id,
+              })),
+              TagsEnum.DEVICES_WAREHOUSE,
+            ]
+          : [TagsEnum.DEVICES_WAREHOUSE],
+    }),
+    createDeviceKey: builder.mutation<BASE_RES, { work_center_code: string }>({
+      query: (body) => ({
+        url: "/app/warehouse/device/generate",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.DEVICES_WAREHOUSE],
+    }),
+    deactiveDeviceKey: builder.mutation<
+      BASE_RES,
+      { work_center_code: string; key: string; device_id: string }
+    >({
+      query: (body) => ({
+        url: "/app/warehouse/device/deactive",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.DEVICES_WAREHOUSE],
+    }),
+    activeDeviceKey: builder.mutation<
+      BASE_RES,
+      { work_center_code: string; key: string; device_id: string }
+    >({
+      query: (body) => ({
+        url: "/app/warehouse/device/active",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.DEVICES_WAREHOUSE],
+    }),
   }),
 });
 
@@ -60,4 +108,9 @@ export const {
   useCreateBrandMutation,
   useCreateFormulationMutation,
   useCreateIndicationMutation,
+
+  useGetListWarehouseDevicesQuery,
+  useActiveDeviceKeyMutation,
+  useCreateDeviceKeyMutation,
+  useDeactiveDeviceKeyMutation,
 } = settingApi;

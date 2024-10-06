@@ -58,6 +58,7 @@ const MapLabel = new Map([
   ["verify-customer", "Thông tin khách hàng"],
   ["create-manufactor-order", "Tạo lệnh sản xuất"],
   ["batch-number", "Thông tin lô hàng/ Batch Number"],
+  ["device", "Quản lý thiết bị"],
   ["list-order", "Danh sách lệnh"],
 ]);
 const Pageheader = () => {
@@ -71,6 +72,8 @@ const Pageheader = () => {
     if (trimmedPathname.includes("operator/topup/list"))
       if (trimmedPathname.includes("verify-customer"))
         return MapLabel.get("verify-customer");
+    if (trimmedPathname.includes("device")) return MapLabel.get("device");
+
     if (trimmedPathname.includes("ce")) return MapLabel.get("ce");
     return MapLabel.get(item) ?? item.charAt(0).toUpperCase() + item.slice(1);
   });

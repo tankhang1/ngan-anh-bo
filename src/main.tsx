@@ -72,6 +72,7 @@ import SearchWarehouseCustomerExport from "./container/warehouse/export/searchWa
 import BrandnameReport from "./container/report/components/BrandnameReport.tsx";
 import WarehouseCreateManufactorOrder from "./container/warehouse/order/warehouseCreateOrder.tsx";
 import WarehouseSearchBatchNumber from "./container/warehouse/order/warehouseSearchBatchNumber.tsx";
+import DevicePage from "./container/settings/device/index.tsx";
 import WarehouseListOrder from "./container/warehouse/order/warehouseListOrder.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -340,6 +341,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}setting/indication`}
                 element={<SettingIndicationPage />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}setting/device`}
+                element={<DevicePage />}
               />
 
               <Route

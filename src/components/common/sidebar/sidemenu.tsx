@@ -62,6 +62,9 @@ export const MENU_KEY = {
   SETTINGS_BRAND: "SETTINGS_BRAND",
   SETTINGS_INDICATION: "SETTINGS_INDICATION",
   SETTINGS_FORMULATION: "SETTINGS_FORMULATION",
+
+  SETTINGS_DEVICE: "SETTINGS_DEVICE",
+
   WAREHOUSES_CREATE_MATERIAL: "WAREHOUSES_CREATE_MATERIAL",
   WAREHOUSES_FILL_MATERIAL: "WAREHOUSES_FILL_MATERIAL",
   WAREHOUSES_MATERIAL: "WAREHOUSES_MATERIAL",
@@ -688,6 +691,15 @@ export const MENUITEMS = [
         dirchange: false,
         title: "Dạng thuốc",
         key: MENU_KEY.SETTINGS_FORMULATION,
+      },
+      {
+        path: `${import.meta.env.BASE_URL}setting/device`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Thiết bị",
+        key: MENU_KEY.SETTINGS_DEVICE,
       },
     ],
   },
