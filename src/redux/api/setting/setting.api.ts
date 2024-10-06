@@ -78,12 +78,12 @@ export const settingApi = createApi({
       }),
       invalidatesTags: [TagsEnum.DEVICES_WAREHOUSE],
     }),
-    deactiveDeviceKey: builder.mutation<
+    removeDeviceKey: builder.mutation<
       BASE_RES,
       { work_center_code: string; key: string; device_id: string }
     >({
       query: (body) => ({
-        url: "/app/warehouse/device/deactive",
+        url: "/app/warehouse/device/remove",
         method: HTTPS_METHOD.POST,
         body,
       }),
@@ -112,5 +112,5 @@ export const {
   useGetListWarehouseDevicesQuery,
   useActiveDeviceKeyMutation,
   useCreateDeviceKeyMutation,
-  useDeactiveDeviceKeyMutation,
+  useRemoveDeviceKeyMutation,
 } = settingApi;

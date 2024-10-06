@@ -16,8 +16,8 @@ import AppWarning from "../../../components/AppWarning";
 import {
   useActiveDeviceKeyMutation,
   useCreateDeviceKeyMutation,
-  useDeactiveDeviceKeyMutation,
   useGetListWarehouseDevicesQuery,
+  useRemoveDeviceKeyMutation,
 } from "../../../redux/api/setting/setting.api";
 import { ToastContext } from "../../../components/AppToast";
 import { useGetListWorkCentersQuery } from "../../../redux/api/media/media.api";
@@ -33,7 +33,7 @@ const DevicePage = () => {
   const [openAddKey, setOpenAddKey] = useState(false);
   const { data: listDevices, isLoading } = useGetListWarehouseDevicesQuery();
   const [activeDeviceKey] = useActiveDeviceKeyMutation();
-  const [deactiveDeviceKey] = useDeactiveDeviceKeyMutation();
+  const [removeDeviceKey] = useRemoveDeviceKeyMutation();
   const [createDeviceKey, { isLoading: isCreateDeviceKey }] =
     useCreateDeviceKeyMutation();
   const { data: listWorkCenters } = useGetListWorkCentersQuery();
@@ -71,9 +71,9 @@ const DevicePage = () => {
         });
     else toast.showToast("Thiết bị chưa kích hoạt");
   };
-  const onDeActiveDeviceKey = async (value: Partial<TWarehouseDevice>) => {
+  const onRemoveDeviceKey = async (value: Partial<TWarehouseDevice>) => {
     if (value.device_id && value.work_center_code && value.key)
-      await deactiveDeviceKey({
+      await removeDeviceKey({
         device_id: value.device_id,
         work_center_code: value.work_center_code,
         key: value.key,
@@ -218,9 +218,9 @@ const DevicePage = () => {
               render: (value) => (
                 <td className="d-flex justify-content-center align-item-center">
                   {value.status === 1 ? (
-                    <AppWarning onAccept={() => onDeActiveDeviceKey(value)}>
+                    <AppWarning onAccept={() => onRemoveDeviceKey(value)}>
                       <button className="btn btn-icon btn-sm btn-danger-ghost">
-                        <i className="ti ti-ban"></i>
+                        <i className="ti ti-trash"></i>
                       </button>
                     </AppWarning>
                   ) : (
