@@ -37,7 +37,7 @@ function TableTopup() {
           render: (value) => (
             <td>
               {value.time_topup
-                ? format(new Date(value.time_topup), "dd/MM/yyyy hh:mm:ss")
+                ? format(new Date(value.time_topup), "dd/MM/yyyy HH:mm:ss")
                 : ""}
             </td>
           ),

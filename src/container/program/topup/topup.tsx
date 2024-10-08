@@ -340,7 +340,7 @@ function TopupProgram() {
                 render: (value) => (
                   <td>
                     {value.time_create
-                      ? format(value.time_create, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_create, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),
@@ -351,7 +351,7 @@ function TopupProgram() {
                 render: (value) => (
                   <td>
                     {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

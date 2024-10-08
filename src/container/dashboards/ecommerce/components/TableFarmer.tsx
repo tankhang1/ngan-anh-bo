@@ -58,7 +58,7 @@ function TableFarmer() {
           render: (value) => (
             <td>
               {value?.time
-                ? format(new Date(value.time), "dd/MM/yyyy hh:mm:ss")
+                ? format(new Date(value.time), "dd/MM/yyyy HH:mm:ss")
                 : ""}
             </td>
           ),

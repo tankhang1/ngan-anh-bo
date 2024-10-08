@@ -222,7 +222,7 @@ function TopupReport() {
               render: (value) => (
                 <td>
                   {value.time_earn
-                    ? format(value.time_earn, "dd/MM/yyyy hh:mm:ss")
+                    ? format(value.time_earn, "dd/MM/yyyy HH:mm:ss")
                     : ""}
                 </td>
               ),

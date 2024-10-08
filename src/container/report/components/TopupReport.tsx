@@ -232,7 +232,7 @@ function TopupReport() {
             render: (value) => (
               <td>
                 {value.time_topup
-                  ? format(value.time_topup, "dd/MM/yyyy hh:mm:ss")
+                  ? format(value.time_topup, "dd/MM/yyyy HH:mm:ss")
                   : ""}
               </td>
             ),

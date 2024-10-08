@@ -181,7 +181,7 @@ function TopupToday() {
                 label: "Thời gian topup",
                 render: (value) => (
                   <td>
-                    {format(new Date(value.time_topup), "dd/MM/yyyy hh:mm:ss")}
+                    {format(new Date(value.time_topup), "dd/MM/yyyy HH:mm:ss")}
                   </td>
                 ),
               },

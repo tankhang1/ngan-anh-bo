@@ -156,7 +156,7 @@ function ProductTable() {
                 <td>
                   <span className="fw-semibold">
                     {value.time
-                      ? format(new Date(value.time), "dd/MM/yyyy hh:mm:ss")
+                      ? format(new Date(value.time), "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </span>
                 </td>
@@ -198,7 +198,7 @@ function ProductTable() {
               render: (value) => (
                 <td>
                   {value.time_use
-                    ? format(new Date(value.time_use), "dd/MM/yyyy hh:mm:ss")
+                    ? format(new Date(value.time_use), "dd/MM/yyyy HH:mm:ss")
                     : ""}
                 </td>
               ),

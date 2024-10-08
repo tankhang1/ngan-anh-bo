@@ -180,7 +180,7 @@ function CustomerValidateToday() {
                 render: (value) => (
                   <td>
                     {value?.time
-                      ? format(new Date(value.time), "dd/MM/yyyy hh:mm:ss")
+                      ? format(new Date(value.time), "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),
@@ -193,7 +193,7 @@ function CustomerValidateToday() {
                     {value?.time_verify
                       ? format(
                           new Date(value.time_verify),
-                          "dd/MM/yyyy hh:mm:ss"
+                          "dd/MM/yyyy HH:mm:ss"
                         )
                       : ""}
                   </td>

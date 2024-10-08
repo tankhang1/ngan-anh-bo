@@ -269,7 +269,7 @@ function SMS_QR_Report() {
                 render: (value) => (
                   <td>
                     {value.time_use
-                      ? format(value.time_use, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_use, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),
@@ -317,7 +317,7 @@ function SMS_QR_Report() {
                 render: (value) => (
                   <td>
                     {value.time_use
-                      ? format(value.time_use, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_use, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

@@ -87,7 +87,7 @@ function TablePoint() {
           render: (value) => (
             <td>
               {value.time_earn
-                ? format(new Date(value.time_earn), "dd/MM/yyyy hh:mm:ss")
+                ? format(new Date(value.time_earn), "dd/MM/yyyy HH:mm:ss")
                 : ""}
             </td>
           ),

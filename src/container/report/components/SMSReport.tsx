@@ -284,7 +284,7 @@ function SMSReport() {
             render: (value) => (
               <td>
                 <span className="fw-semibold">
-                  {value.time ? format(value.time, "dd/MM/yyyy hh:mm:ss") : ""}
+                  {value.time ? format(value.time, "dd/MM/yyyy HH:mm:ss") : ""}
                 </span>
               </td>
             ),

@@ -453,6 +453,7 @@ function CustomerUnValidationCreateEdit() {
                         <Form.Select
                           className="form-select input-placeholder"
                           name="retailer_group"
+                          value={values.retailer_group}
                           onChange={(e) =>
                             setFieldValue("retailer_group", e.target.value)
                           }

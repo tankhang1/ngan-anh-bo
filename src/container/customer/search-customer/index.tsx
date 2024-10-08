@@ -361,7 +361,7 @@ function SearchCustomer() {
                         {customerInfo?.time
                           ? format(
                               new Date(customerInfo.time),
-                              "dd/MM/yyyy hh:mm:ss"
+                              "dd/MM/yyyy HH:mm:ss"
                             )
                           : ""}
                       </p>
@@ -519,7 +519,7 @@ function SearchCustomer() {
                         {customerInfo?.time_verify
                           ? format(
                               new Date(customerInfo?.time_verify),
-                              "dd/MM/yyyy hh:mm:ss"
+                              "dd/MM/yyyy HH:mm:ss"
                             )
                           : ""}
                       </p>
@@ -603,7 +603,7 @@ function SearchCustomer() {
                                 {value?.time_update
                                   ? format(
                                       value?.time_update,
-                                      "dd/MM/yyyy hh:mm:ss"
+                                      "dd/MM/yyyy HH:mm:ss"
                                     )
                                   : ""}
                               </td>
@@ -738,7 +738,7 @@ function SearchCustomer() {
                       {value.time_topup
                         ? format(
                             new Date(value.time_topup),
-                            "dd/MM/yyyy hh:mm:ss"
+                            "dd/MM/yyyy HH:mm:ss"
                           )
                         : ""}
                     </td>
@@ -840,7 +840,7 @@ function SearchCustomer() {
                 render: (value) => (
                   <td>
                     {value.time_earn
-                      ? format(new Date(value.time_earn), "dd/MM/yyyy hh:mm:ss")
+                      ? format(new Date(value.time_earn), "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

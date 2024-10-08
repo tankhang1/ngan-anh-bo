@@ -179,7 +179,7 @@ const DevicePage = () => {
               render: (value: TWarehouseDevice) => (
                 <td>
                   {value?.time_authen
-                    ? format(new Date(value.time_authen), "dd/MM/yyyy hh:mm:ss")
+                    ? format(new Date(value.time_authen), "dd/MM/yyyy HH:mm:ss")
                     : ""}
                 </td>
               ),
@@ -192,7 +192,7 @@ const DevicePage = () => {
                   {value?.time_created
                     ? format(
                         new Date(value.time_created),
-                        "dd/MM/yyyy hh:mm:ss"
+                        "dd/MM/yyyy HH:mm:ss"
                       )
                     : ""}
                 </td>
@@ -206,7 +206,7 @@ const DevicePage = () => {
                   {value?.time_updated
                     ? format(
                         new Date(value.time_updated),
-                        "dd/MM/yyyy hh:mm:ss"
+                        "dd/MM/yyyy HH:mm:ss"
                       )
                     : ""}
                 </td>

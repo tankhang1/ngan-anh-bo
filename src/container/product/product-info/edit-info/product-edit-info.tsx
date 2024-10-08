@@ -695,7 +695,7 @@ function ProductEditInfo() {
                 <Row>
                   <Form.Group as={Col} md={6}>
                     <Form.Label className="text-black">
-                      Mô tả sản phẩm (chi tiêtd)
+                      Mô tả sản phẩm (chi tiết)
                     </Form.Label>
                     <Form.Control
                       required

@@ -33,7 +33,7 @@ function TableBrandname() {
           label: "Thời gian",
           render: (value) => (
             <td>
-              {value?.time ? format(value.time, "dd/MM/yyyy hh:mm:ss") : ""}
+              {value?.time ? format(value.time, "dd/MM/yyyy HH:mm:ss") : ""}
             </td>
           ),
         },

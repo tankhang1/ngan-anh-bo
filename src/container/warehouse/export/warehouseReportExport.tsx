@@ -288,7 +288,7 @@ const WarehouseReportExport = () => {
                 render: ({ time_export }) => (
                   <td>
                     {time_export
-                      ? format(new Date(time_export), "dd/MM/yyyy hh:mm:ss")
+                      ? format(new Date(time_export), "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

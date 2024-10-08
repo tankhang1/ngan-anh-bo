@@ -134,7 +134,7 @@ function CustomerUnValidation() {
                       placement="top"
                       overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
                     >
-                      <Button
+                      
                         variant=""
                         aria-label="button"
                         type="button"
@@ -300,7 +300,7 @@ function CustomerUnValidation() {
                 render: (value) => (
                   <td>
                     {value.time
-                      ? format(value.time, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),
@@ -311,7 +311,7 @@ function CustomerUnValidation() {
                 render: (value) => (
                   <td>
                     {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

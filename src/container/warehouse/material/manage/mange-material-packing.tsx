@@ -74,7 +74,7 @@ function ManageMaterialPacking() {
                   <td>
                     {format(
                       new Date(fDate(value.import_date)),
-                      "dd/MM/yyyy hh:mm:ss"
+                      "dd/MM/yyyy HH:mm:ss"
                     )}
                   </td>
                 ),
@@ -86,7 +86,7 @@ function ManageMaterialPacking() {
                   <td>
                     {format(
                       new Date(fDate(value.manufacture_date)),
-                      "dd/MM/yyyy hh:mm:ss"
+                      "dd/MM/yyyy HH:mm:ss"
                     )}
                   </td>
                 ),
@@ -98,7 +98,7 @@ function ManageMaterialPacking() {
                   <td>
                     {format(
                       new Date(fDate(value.expiration_date)),
-                      "dd/MM/yyyy hh:mm:ss"
+                      "dd/MM/yyyy HH:mm:ss"
                     )}
                   </td>
                 ),

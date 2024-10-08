@@ -162,7 +162,6 @@ function CustomerValidationCreateEdit() {
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
   }, [customer]);
-
   return (
     <Fragment>
       <Formik
@@ -397,6 +396,7 @@ function CustomerValidationCreateEdit() {
                             touched.retailer_group && !!errors.retailer_group
                           }
                           required
+                          value={values.retailer_group}
                           disabled={isCreate === "true" ? false : true}
                         >
                           <option value="">-- Chọn nhóm đại lý --</option>

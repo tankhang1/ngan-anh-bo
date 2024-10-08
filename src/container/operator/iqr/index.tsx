@@ -273,7 +273,7 @@ function IQRToday() {
                 render: (value) => (
                   <td>
                     {value.time_use
-                      ? format(new Date(value.time_use), "dd/MM/yyyy hh:mm:ss")
+                      ? format(new Date(value.time_use), "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

@@ -256,7 +256,7 @@ function Employee() {
                 render: (value) => (
                   <td>
                     {value.time_created
-                      ? format(value.time_created, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_created, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),
@@ -267,7 +267,7 @@ function Employee() {
                 render: (value) => (
                   <td>
                     {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

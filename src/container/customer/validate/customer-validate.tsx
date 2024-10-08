@@ -29,6 +29,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { MapCustomerType } from "../../../constants";
 import { Checkbox } from "@mui/material";
+import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
+import { downloadLink } from "../../../hooks";
 
 const AGENT_FILTERS = [
   {
@@ -51,12 +53,47 @@ function CustomerValidation() {
     refetchOnMountOrArgChange: false,
   });
 
+  const [isLoadingExportExcel, setIsLoadingExportExcel] = useState(false);
+  const [exportExcel] = useExportCustomerDataMutation();
+
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("phone");
   const [customerType, setCustomerType] = useState<string>("ALL");
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
-
+  const handleExportExcel = async () => {
+    if (customerType === "ALL") {
+      groupObjectives
+        ?.filter((objective) => objective.symbol !== "ANONYMOUS")
+        .forEach(async (item) => {
+          setIsLoadingExportExcel(true);
+          await exportExcel({
+            t: item.symbol,
+            k: "",
+          })
+            .unwrap()
+            .then((value) => {
+              setTimeout(() => {
+                window.open(value.data, "_blank");
+                setIsLoadingExportExcel(false);
+              }, 3000);
+            });
+        });
+    } else {
+      setIsLoadingExportExcel(true);
+      await exportExcel({
+        t: customerType,
+        k: "",
+      })
+        .unwrap()
+        .then((value) => {
+          setTimeout(() => {
+            window.open(value.data, "_blank");
+            setIsLoadingExportExcel(false);
+          }, 3000);
+        });
+    }
+  };
   const onChangeCustomerType = (type: string) => {
     if (type !== customerType) {
       setSearch("");
@@ -198,13 +235,21 @@ function CustomerValidation() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-success-light ms-2"
+                        className={`btn btn-icon btn-success-light ms-2 ${
+                          isLoadingExportExcel && "btn-loader"
+                        }`}
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
-                        onClick={() => {}}
+                        onClick={handleExportExcel}
                       >
-                        <i className="ti ti-database-export"></i>
+                        {isLoadingExportExcel ? (
+                          <span className="loading">
+                            <i className="ri-loader-2-fill fs-19"></i>
+                          </span>
+                        ) : (
+                          <i className="ti ti-database-export"></i>
+                        )}
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -356,7 +401,7 @@ function CustomerValidation() {
                 render: (value) => (
                   <td>
                     {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy hh:mm:ss")
+                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
                       : ""}
                   </td>
                 ),

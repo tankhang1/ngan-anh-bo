@@ -231,7 +231,7 @@ function SMSGateway() {
                 render: (value) => (
                   <td>
                     <span className="fw-semibold">
-                      {format(value.time, "dd/MM/yyyy hh:mm:ss")}
+                      {format(value.time, "dd/MM/yyyy HH:mm:ss")}
                     </span>
                   </td>
                 ),

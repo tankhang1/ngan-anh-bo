@@ -63,7 +63,7 @@ function TableAgent() {
           render: (value) => (
             <td>
               {value?.time_verify
-                ? format(new Date(value?.time_verify), "dd/MM/yyyy hh:mm:ss")
+                ? format(new Date(value?.time_verify), "dd/MM/yyyy HH:mm:ss")
                 : ""}
             </td>
           ),

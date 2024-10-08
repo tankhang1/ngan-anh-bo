@@ -287,7 +287,7 @@ function Accounts() {
                   <td>
                     <span className="fw-semibold">
                       {value?.created
-                        ? format(value.created, "dd/MM/yyyy hh:mm:ss")
+                        ? format(value.created, "dd/MM/yyyy HH:mm:ss")
                         : ""}
                     </span>
                   </td>

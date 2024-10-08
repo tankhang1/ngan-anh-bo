@@ -457,7 +457,7 @@ const onPermissionFeature = (permission: TPermit) => {
         viewValidateCustomer: permission.permit_view_detail,
         viewListValidateCustomer: permission.permit_view_list,
         createValidateCustomer: permission.permit_create,
-        exportValiteCustomer: permission.permit_export,
+        exportValidateCustomer: permission.permit_export,
         editValidateCustomer: permission.permit_edit,
       };
     }

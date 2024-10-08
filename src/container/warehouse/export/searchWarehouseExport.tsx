@@ -142,7 +142,7 @@ function SearchWarehouseExport() {
                   render: ({ time }) => (
                     <td>
                       {time
-                        ? format(new Date(time), "dd/MM/yyyy hh:mm:ss")
+                        ? format(new Date(time), "dd/MM/yyyy HH:mm:ss")
                         : ""}
                     </td>
                   ),
