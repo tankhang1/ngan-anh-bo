@@ -41,6 +41,7 @@ import pointProgramSchema from "../../../../schema/pointProgram.schema";
 import AppWarning from "../../../../components/AppWarning";
 import { Checkbox } from "@mui/material";
 import AppTable from "../../../../components/common/table/table";
+import { E } from "../../../../assets/libs/chart.js/chunks/helpers.segment";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -75,6 +76,9 @@ function PointCreateEdit() {
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const [type, setType] = useState<"RETAILER" | "FARMER">("RETAILER");
+  const [isCheckedAllBinOrPacket, setIsCheckedAllBinOrPacket] = useState<
+    "BIN" | "PACKET" | null
+  >(null);
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
@@ -417,6 +421,7 @@ function PointCreateEdit() {
       );
   };
 
+  const onChangeMap = (checkedBin: boolean, checkedPacket: boolean) => {};
   return (
     <Fragment>
       <Formik
@@ -643,10 +648,46 @@ function PointCreateEdit() {
                     <FormCheck
                       className="form-check-md"
                       label="Chọn tất cả thùng"
+                      checked={isCheckedAllBinOrPacket === "BIN"}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setIsCheckedAllBinOrPacket("BIN");
+
+                          const binFilter = products
+                            ?.filter((product) => product.type === 4)
+                            ?.map((item) => ({
+                              label: `${item.description}-${item.code}`,
+                              value: item.code,
+                            }));
+                          if (binFilter)
+                            setFieldValue("products", [...binFilter]);
+                        } else {
+                          setIsCheckedAllBinOrPacket(null);
+
+                          setFieldValue("products", []);
+                        }
+                      }}
                     />
                     <FormCheck
                       className="form-check-md"
                       label="Chọn tất cả gói"
+                      checked={isCheckedAllBinOrPacket === "PACKET"}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setIsCheckedAllBinOrPacket("PACKET");
+                          const packetFilter = products
+                            ?.filter((product) => product.type === 0)
+                            ?.map((item) => ({
+                              label: `${item.description}-${item.code}`,
+                              value: item.code,
+                            }));
+                          if (packetFilter)
+                            setFieldValue("products", [...packetFilter]);
+                        } else {
+                          setIsCheckedAllBinOrPacket(null);
+                          setFieldValue("products", []);
+                        }
+                      }}
                     />
                   </div>
                   <Select
@@ -787,7 +828,7 @@ function PointCreateEdit() {
                     <Form.Select
                       className="form-select input-placeholder"
                       name="retailer_group"
-                      defaultValue={values.retailer_group}
+                      value={values.retailer_group}
                       onChange={handleChange}
                       isInvalid={
                         touched.retailer_group && !!errors.retailer_group
