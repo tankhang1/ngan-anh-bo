@@ -82,7 +82,7 @@ function ProductEditWarehouse() {
       await updateProduct({
         ...product,
         ...values,
-        qr_mapping: values.qr_mapping ? 1 : 0,
+        qr_mapping: +values.type === 4 ? 0 : values.qr_mapping ? 1 : 0,
         qr_printing: values.qr_printing ? 1 : 0,
         sku_bin: +(values?.sku_bin ?? 0),
         sku_box: +(values?.sku_box ?? 0),
@@ -763,14 +763,16 @@ function ProductEditWarehouse() {
                 </Row>
                 <Form.Group as={Col} md={4}>
                   <Form.Label className="text-black">Sản xuất</Form.Label>
-                  <Form.Check
-                    label="Đóng gói ( Cho phép mapping )"
-                    onChange={(e) =>
-                      setFieldValue("qr_mapping", e.target.checked)
-                    }
-                    checked={values.qr_mapping}
-                    disabled={isEdit === false}
-                  />
+                  {+values.type !== 4 && (
+                    <Form.Check
+                      label="Đóng gói ( Cho phép mapping )"
+                      onChange={(e) =>
+                        setFieldValue("qr_mapping", e.target.checked)
+                      }
+                      checked={values.qr_mapping}
+                      disabled={isEdit === false}
+                    />
+                  )}
                   <Form.Check
                     label="Cho phép in mã iQr"
                     onChange={(e) =>
