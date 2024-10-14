@@ -1,3 +1,4 @@
+import { IconArrowLeft } from "@tabler/icons-react";
 import React, { FC, Fragment } from "react";
 import { Link } from "react-router-dom";
 
@@ -30,7 +31,10 @@ const Error404: FC<Error404Props> = () => {
                     to={`${import.meta.env.BASE_URL}dashboards`}
                     className="btn btn-primary mt-3"
                   >
-                    <i className="ri-arrow-left-line align-middle me-1 d-inline-block"></i>
+                    <IconArrowLeft
+                      size={14}
+                      className=" align-middle me-1 d-inline-block"
+                    ></IconArrowLeft>
                     Trở lại home
                   </Link>
                 </div>

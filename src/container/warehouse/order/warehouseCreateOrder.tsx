@@ -14,6 +14,7 @@ import {
   useGetListDevicesQuery,
 } from "../../../redux/api/product/product.api";
 import { ToastContext } from "../../../components/AppToast";
+import { IconLoader } from "@tabler/icons-react";
 
 const WarehouseCreateManufactorOrder = () => {
   const toast = useContext(ToastContext);
@@ -99,7 +100,7 @@ const WarehouseCreateManufactorOrder = () => {
                     <span>Tạo lệnh</span>
                     {isLoadingCreate && (
                       <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
+                        <IconLoader size={19} />
                       </span>
                     )}
                   </button>

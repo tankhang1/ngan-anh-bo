@@ -1,17 +1,28 @@
 //Icons
 
-import store from "../../../redux/store";
+import {
+  IconBox,
+  IconBuildingWarehouse,
+  IconChartArcs,
+  IconDeviceDesktop,
+  IconSettings,
+  IconSettingsAutomation,
+  IconUser,
+  IconUserCircle,
+  IconUserPentagon,
+  IconUsers,
+} from "@tabler/icons-react";
 
-const icon1 = <i className="bx bx-desktop"></i>;
-const icon2 = <i className="ti ti-box"></i>;
-const icon16 = <i className="bx bx-user"></i>;
-const icon17 = <i className="ti ti-settings-automation"></i>;
-const icon18 = <i className="ti ti-chart-infographic"></i>;
-const icon3 = <i className="ti ti-settings"></i>;
-const icon4 = <i className="bi bi-people"></i>;
-const icon5 = <i className="bx bx-user-voice"></i>;
-const icon6 = <i className="bx bx-user-circle"></i>;
-const icon7 = <i className="ti ti-building-warehouse"></i>;
+const icon1 = <IconDeviceDesktop size={20} />;
+const icon2 = <IconBox size={20} />;
+const icon16 = <IconUser size={20} />;
+const icon17 = <IconSettingsAutomation size={20} />;
+const icon18 = <IconChartArcs size={20} />;
+const icon3 = <IconSettings size={20} />;
+const icon4 = <IconUsers size={20} />;
+const icon5 = <IconUserPentagon size={20} />;
+const icon6 = <IconUserCircle size={20} />;
+const icon7 = <IconBuildingWarehouse size={20} />;
 export const MENU_KEY = {
   MAIN_TITLE: "MAIN_TITLE",
   MANAGE_TITLE: "MANAGE_TITLE",

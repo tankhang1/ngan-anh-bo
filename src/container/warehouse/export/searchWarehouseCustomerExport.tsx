@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { useGetCustomerStaffQuery } from "../../../redux/api/warehouse/warehouse.api";
+import { IconSearch, IconX } from "@tabler/icons-react";
 
 function SearchWarehouseCustomerExport() {
   const [searchValue, setSearchValue] = useState("");
@@ -44,7 +45,7 @@ function SearchWarehouseCustomerExport() {
                       setSearchValue("");
                     }}
                   >
-                    <i className="ti ti-x"></i>
+                    <IconX size={16} />
                   </Button>
                   <Button
                     variant=""
@@ -53,7 +54,7 @@ function SearchWarehouseCustomerExport() {
                     type="button"
                     onClick={onSearch}
                   >
-                    <i className="ri-search-line"></i>
+                    <IconSearch size={16} />
                   </Button>
                 </InputGroup>
               </div>

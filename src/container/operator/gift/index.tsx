@@ -5,6 +5,7 @@ import { TProgramTopupDetail } from "../../../assets/types";
 
 import { useGetReportProgramTopupDetailTodayQuery } from "../../../redux/api/report/report.api";
 import { fNumber } from "../../../hooks";
+import { IconDotsVertical, IconSearch } from "@tabler/icons-react";
 const TOPUP_FILTERS = [
   {
     key: "phone",
@@ -62,19 +63,19 @@ function GiftToday() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {TOPUP_FILTERS.map((item, index) => (

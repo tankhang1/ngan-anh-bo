@@ -17,6 +17,7 @@ import { PROVINCES } from "../../../constants";
 import Select from "react-select";
 import { TArea } from "../../../assets/types";
 import { useGetListProvinceQuery } from "../../../redux/api/media/media.api";
+import { IconPlus, IconSearch, IconX } from "@tabler/icons-react";
 
 const DATA = [
   { id: 1, code: "AGG", name: "An Giang", area: "Nam Sông Hậu 2" },
@@ -106,7 +107,7 @@ function SettingArea() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <OverlayTrigger
@@ -119,7 +120,7 @@ function SettingArea() {
                       variant=""
                       aria-label="button"
                       type="button"
-                      className="btn btn-icon btn-success-light ms-2"
+                      className="btn btn-icon p-0 btn-success-light ms-2"
                       data-bs-toggle="tooltip"
                       data-bs-placement="top"
                       data-bs-title="Add Contact"
@@ -136,7 +137,7 @@ function SettingArea() {
                         ])
                       }
                     >
-                      <i className="ri-add-line"></i>
+                      <IconPlus size={16} />
                     </Button>
                   </OverlayTrigger>
                 </div>
@@ -170,7 +171,7 @@ function SettingArea() {
                             variant=""
                             aria-label="button"
                             type="button"
-                            className="btn btn-icon btn-success-light ms-2"
+                            className="btn btn-icon p-0 btn-success-light ms-2"
                             data-bs-toggle="tooltip"
                             data-bs-placement="top"
                             data-bs-title="Add Contact"
@@ -187,14 +188,14 @@ function SettingArea() {
                               ]);
                             }}
                           >
-                            <i className="ti ti-plus"></i>
+                            <IconPlus size={16} />
                           </Button>
 
                           <Button
                             variant=""
                             aria-label="button"
                             type="button"
-                            className="btn btn-icon btn-danger-light ms-2"
+                            className="btn btn-icon p-0 btn-danger-light ms-2"
                             data-bs-toggle="tooltip"
                             data-bs-placement="top"
                             data-bs-title="Add Contact"
@@ -207,7 +208,7 @@ function SettingArea() {
                               setData([...newData]);
                             }}
                           >
-                            <i className="ti ti-x"></i>
+                            <IconX size={16} />
                           </Button>
                         </Row>
                       </Card.Header>
@@ -244,46 +245,7 @@ function SettingArea() {
                                     ))}
                                   </Form.Select>
 
-                                  <Row>
-                                    {/* <Button
-                                      variant=""
-                                      aria-label="button"
-                                      type="button"
-                                      className="btn btn-icon btn-info-light ms-2"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                      data-bs-title="Add Contact"
-                                      onClick={() => {
-                                        if (newProvince) {
-                                          onChangeNewArea({
-                                            code: newProvince.value,
-                                            name: newProvince.label,
-                                            area: item || newArea,
-                                            id: data.length,
-                                          });
-                                        }
-                                      }}
-                                    >
-                                      <i className="ti ti-device-floppy"></i>
-                                    </Button> */}
-                                    {/* <Button
-                                      variant=""
-                                      aria-label="button"
-                                      type="button"
-                                      className="btn btn-icon btn-danger-light ms-2"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                      data-bs-title="Add Contact"
-                                      onClick={() => {
-                                        const newData = data.filter(
-                                          (item) => item.code !== groupItem.code
-                                        );
-                                        setData([...newData]);
-                                      }}
-                                    >
-                                      <i className="ti ti-x"></i>
-                                    </Button> */}
-                                  </Row>
+                                  <Row></Row>
                                 </ListItem>
                               );
                             }
@@ -299,7 +261,7 @@ function SettingArea() {
                                   variant=""
                                   aria-label="button"
                                   type="button"
-                                  className="btn btn-icon btn-danger-light ms-2"
+                                  className="btn btn-icon p-0 btn-danger-light ms-2"
                                   data-bs-toggle="tooltip"
                                   data-bs-placement="top"
                                   data-bs-title="Add Contact"
@@ -310,7 +272,7 @@ function SettingArea() {
                                     });
                                   }}
                                 >
-                                  <i className="ti ti-x"></i>
+                                  <IconX size={16} />
                                 </Button>
                               </ListItem>
                             );

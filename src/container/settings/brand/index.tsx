@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import AppWarning from "../../../components/AppWarning";
 import { useCreateBrandMutation } from "../../../redux/api/setting/setting.api";
+import { IconLoader, IconPlus, IconSearch } from "@tabler/icons-react";
 
 function SettingBrandPage() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -80,7 +81,7 @@ function SettingBrandPage() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
 
@@ -93,13 +94,13 @@ function SettingBrandPage() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="btn btn-icon p-0 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => setOpenAddPopup({ name: "", code: "" })}
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={16} />
                       </Button>
                     </OverlayTrigger>
                   )}
@@ -206,7 +207,7 @@ function SettingBrandPage() {
                     <span>Xác nhận</span>
                     {isLoadingCreate && (
                       <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
+                        <IconLoader size={19} />
                       </span>
                     )}
                   </Button>

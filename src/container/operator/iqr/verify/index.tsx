@@ -37,6 +37,7 @@ import {
   useGetCustomerQuery,
 } from "../../../../redux/api/info/info.api";
 import AppSelect from "../../../../components/AppSelect";
+import { IconLoader } from "@tabler/icons-react";
 function VerifyCustomer() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const { customer_uuid } = useParams();
@@ -228,7 +229,7 @@ function VerifyCustomer() {
                           <span>Xác thực</span>
                           {isLoadingVerify && (
                             <span className="loading">
-                              <i className="ri-loader-2-fill fs-19"></i>
+                              <IconLoader size={19} />
                             </span>
                           )}
                         </button>
@@ -250,7 +251,7 @@ function VerifyCustomer() {
                         <span>Lưu</span>
                         {isLoadingUpdate && (
                           <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
+                            <IconLoader size={19} />
                           </span>
                         )}
                       </button>

@@ -5,6 +5,21 @@ import {
   useGetReportDashboardDayByDayQuery,
 } from "../../../../redux/api/manage/manage.api";
 import { format, subDays } from "date-fns";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconBrandMedium,
+  IconCircleCheck,
+  IconCircleDot,
+  IconCircleDotted,
+  IconGif,
+  IconGift,
+  IconMessage,
+  IconQrcode,
+  IconShovel,
+  IconTrendingDown,
+  IconTrendingUp,
+} from "@tabler/icons-react";
 
 function OutstandingReport() {
   const { data: report7days } = useGetReportDashboardDayByDayQuery(
@@ -81,7 +96,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-secondary-transparent radius-5">
-            <i className="ti ti-circle-check fs-20"></i>
+            <IconCircleCheck size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -92,7 +107,7 @@ function OutstandingReport() {
             </span>
             {mapReportCurrentDay.agent > mapReportPreviousDay.agent ? (
               <span className="ms-2 fs-13 text-secondary">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.agent / mapReportCurrentDay?.agent +
                     mapReportPreviousDay.agent) *
@@ -102,7 +117,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-secondary">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.agent /
                     (mapReportCurrentDay?.agent + mapReportPreviousDay.agent ===
@@ -122,7 +137,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-secondary-transparent radius-5">
-            <i className="ti ti-circle-dotted fs-20"></i>
+            <IconCircleDotted size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -134,7 +149,7 @@ function OutstandingReport() {
             {mapReportCurrentDay.agent_none >
             mapReportPreviousDay.agent_none ? (
               <span className="ms-2 fs-13 text-secondary">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.agent_none /
                     mapReportCurrentDay?.agent_none +
@@ -145,7 +160,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-secondary">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.agent_none /
                     (mapReportCurrentDay?.agent_none +
@@ -166,7 +181,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-info-transparent radius-5">
-            <i className="ti ti-shovel fs-20"></i>
+            <IconShovel size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -178,7 +193,7 @@ function OutstandingReport() {
 
             {mapReportCurrentDay.farmer > mapReportPreviousDay.farmer ? (
               <span className="ms-2 fs-13 text-info">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.farmer / mapReportCurrentDay?.farmer +
                     mapReportPreviousDay.farmer) *
@@ -188,7 +203,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-info">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.farmer /
                     (mapReportCurrentDay?.farmer +
@@ -209,7 +224,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-info-transparent radius-5">
-            <i className="ti ti-shovel fs-20"></i>
+            <IconShovel size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -221,7 +236,7 @@ function OutstandingReport() {
             {mapReportCurrentDay.farmer_none >
             mapReportPreviousDay.farmer_none ? (
               <span className="ms-2 fs-13 text-info">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.farmer_none /
                     mapReportCurrentDay?.farmer_none +
@@ -232,7 +247,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-info">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.farmer_none /
                     (mapReportCurrentDay?.farmer_none +
@@ -253,7 +268,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-warning-transparent radius-5">
-            <i className="ti ti-qrcode fs-20"></i>
+            <IconQrcode size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -265,7 +280,7 @@ function OutstandingReport() {
 
             {mapReportCurrentDay.qrcode > mapReportPreviousDay.qrcode ? (
               <span className="ms-2 fs-13 text-warning">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.qrcode / mapReportCurrentDay?.qrcode +
                     mapReportPreviousDay.qrcode) *
@@ -275,7 +290,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-warning">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.qrcode /
                     (mapReportCurrentDay?.qrcode +
@@ -296,7 +311,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-success-transparent radius-5">
-            <i className="ti ti-message fs-20"></i>
+            <IconMessage size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -308,7 +323,7 @@ function OutstandingReport() {
 
             {mapReportCurrentDay.sms > mapReportPreviousDay.sms ? (
               <span className="ms-2 fs-13 text-success">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.sms / mapReportCurrentDay?.sms +
                     mapReportPreviousDay.sms) *
@@ -318,7 +333,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-success">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.sms /
                     (mapReportCurrentDay?.sms + mapReportPreviousDay.sms === 0
@@ -336,7 +351,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-dark-transparent radius-5">
-            <i className="ti ti-brand-medium fs-20"></i>
+            <IconBrandMedium size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -348,7 +363,7 @@ function OutstandingReport() {
 
             {mapReportCurrentDay.brandname > mapReportPreviousDay.brandname ? (
               <span className="ms-2 fs-13 text-dark">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.brandname /
                     mapReportCurrentDay?.brandname +
@@ -359,7 +374,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-dark">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.brandname /
                     (mapReportCurrentDay?.brandname +
@@ -380,7 +395,7 @@ function OutstandingReport() {
         <Link aria-label="anchor" to="#" className="masked-link"></Link>
         <div className="me-2 my-auto">
           <div className="avatar avatar-lg bg-purple-transparent radius-5">
-            <i className="ti ti-brand-medium fs-20"></i>
+            <IconGift size={20} />
           </div>
         </div>
         <div className="flex-1">
@@ -391,7 +406,7 @@ function OutstandingReport() {
             </span>
             {mapReportCurrentDay.topup > mapReportPreviousDay.topup ? (
               <span className="ms-2 fs-13 text-primary">
-                <i className="fe fe-arrow-up-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingUp className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.topup / mapReportCurrentDay?.topup +
                     mapReportPreviousDay.topup) *
@@ -401,7 +416,7 @@ function OutstandingReport() {
               </span>
             ) : (
               <span className="ms-2 fs-13 text-primary">
-                <i className="fe fe-arrow-down-right me-1 d-inline-block fs-12"></i>
+                <IconTrendingDown className="me-1 d-inline-block" size={14} />
                 {(
                   (mapReportCurrentDay.topup /
                     (mapReportCurrentDay?.topup + mapReportPreviousDay.topup ===

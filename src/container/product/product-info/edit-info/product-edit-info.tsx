@@ -37,6 +37,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
 import AppSelect from "../../../../components/AppSelect";
+import { IconLoader } from "@tabler/icons-react";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -199,7 +200,7 @@ function ProductEditInfo() {
                           <span>Lưu</span>
                           {isLoadingUpdate && (
                             <span className="loading">
-                              <i className="ri-loader-2-fill fs-19"></i>
+                              <IconLoader size={19} />
                             </span>
                           )}
                         </button>

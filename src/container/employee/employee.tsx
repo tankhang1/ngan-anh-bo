@@ -18,6 +18,13 @@ import { format } from "date-fns";
 import { exportExcelFile, fDate } from "../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import {
+  IconDatabaseExport,
+  IconDotsVertical,
+  IconEdit,
+  IconPlus,
+  IconSearch,
+} from "@tabler/icons-react";
 
 const EMPLOYEE_FILTERS = [
   {
@@ -68,19 +75,19 @@ function Employee() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {EMPLOYEE_FILTERS.map((item, index) => (
@@ -104,13 +111,13 @@ function Employee() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="btn btn-icon p-0 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => navigate(`ce/${true}/-1`)}
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={16} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -123,13 +130,13 @@ function Employee() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-success-light ms-2"
+                        className="btn btn-icon p-0 btn-success-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={handleExportExcel}
                       >
-                        <i className="ti ti-database-export"></i>
+                        <IconDatabaseExport size={16} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -242,10 +249,10 @@ function Employee() {
                 render: (value) => (
                   <td>
                     <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                       onClick={() => navigate(`ce/${false}/${value.uuid}`)}
                     >
-                      <i className="ti ti-edit"></i>
+                      <IconEdit size={14} />
                     </button>
                   </td>
                 ),

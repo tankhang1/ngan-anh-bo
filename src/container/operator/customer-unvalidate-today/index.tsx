@@ -10,6 +10,11 @@ import {
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { MapCustomerType } from "../../../constants";
+import {
+  IconCircleCheck,
+  IconDotsVertical,
+  IconSearch,
+} from "@tabler/icons-react";
 
 const AGENT_FILTERS = [
   {
@@ -96,19 +101,19 @@ function CustomerUnValidateToday() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {AGENT_FILTERS.map((item, index) => (
@@ -251,7 +256,7 @@ function CustomerUnValidateToday() {
                 render: (value) => (
                   <td>
                     <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                       onClick={() =>
                         navigate(
                           `${
@@ -260,7 +265,7 @@ function CustomerUnValidateToday() {
                         )
                       }
                     >
-                      <i className="ti ti-circle-check"></i>
+                      <IconCircleCheck size={14} />
                     </button>
                   </td>
                 ),

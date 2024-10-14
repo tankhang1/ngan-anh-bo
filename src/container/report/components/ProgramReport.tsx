@@ -12,6 +12,11 @@ import { useGetReportProgramPointDetailByTimeQuery } from "../../../redux/api/re
 import AppTable from "../../../components/common/table/table";
 import { TProgramPointDetail } from "../../../assets/types";
 import { useExportProgramPointDetailMutation } from "../../../redux/api/excel/excel.api";
+import {
+  IconCalendar,
+  IconDatabaseExport,
+  IconFilter,
+} from "@tabler/icons-react";
 function TopupReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
@@ -71,7 +76,7 @@ function TopupReport() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -89,7 +94,7 @@ function TopupReport() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -105,7 +110,7 @@ function TopupReport() {
               </InputGroup>
             </div>
             <button
-              className="btn btn-icon bg-danger"
+              className="btn btn-icon bg-danger p-0"
               onClick={() => {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
@@ -120,19 +125,19 @@ function TopupReport() {
                 );
               }}
             >
-              <i className="ti ti-filter" style={{ color: "white" }}></i>
+              <IconFilter color="white" size={16} />
             </button>
             <button
               className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
+                isSmallScreen ? "btn-icon p-0" : ""
               }`}
               onClick={handleExportExcel}
             >
               {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
+                <IconDatabaseExport size={16} />
               ) : (
                 <div className="d-flex align-items-center gap-1">
-                  <i className="ti ti-database-export "></i>
+                  <IconDatabaseExport size={16} />
                   Xuất Excel
                 </div>
               )}

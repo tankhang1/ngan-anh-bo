@@ -31,6 +31,14 @@ import { MapCustomerType } from "../../../constants";
 import { Checkbox } from "@mui/material";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 import { downloadLink } from "../../../hooks";
+import {
+  IconDatabaseExport,
+  IconEdit,
+  IconExchange,
+  IconLoader,
+  IconPlus,
+  IconSearch,
+} from "@tabler/icons-react";
 
 const AGENT_FILTERS = [
   {
@@ -149,42 +157,20 @@ function CustomerValidation() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
-                  {/* <Dropdown className="ms-2">
-                    <Dropdown.Toggle
-                      variant=""
-                      aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i className="ti ti-dots-vertical"></i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {AGENT_FILTERS.map((item, index) => (
-                        <Dropdown.Item
-                          active={item.key === searchBy}
-                          key={index}
-                          onClick={() => setSearchBy(item.key)}
-                        >
-                          {item.label}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown> */}
+
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-info-light btn-wave no-caret"
+                      className="btn btn-icon btn-info-light btn-wave no-caret p-0"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-exchange"></i>
+                      <IconExchange size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {[
@@ -216,13 +202,13 @@ function CustomerValidation() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="btn btn-icon p-0 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => navigate(`ce/${true}/-1`)}
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={16} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -235,7 +221,7 @@ function CustomerValidation() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className={`btn btn-icon btn-success-light ms-2 ${
+                        className={`btn btn-icon btn-success-light ms-2 p-0 ${
                           isLoadingExportExcel && "btn-loader"
                         }`}
                         data-bs-toggle="tooltip"
@@ -245,10 +231,10 @@ function CustomerValidation() {
                       >
                         {isLoadingExportExcel ? (
                           <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
+                            <IconLoader size={19} />
                           </span>
                         ) : (
-                          <i className="ti ti-database-export"></i>
+                          <IconDatabaseExport size={16} />
                         )}
                       </Button>
                     </OverlayTrigger>
@@ -380,12 +366,12 @@ function CustomerValidation() {
                 render: (value) => (
                   <td className="d-flex justify-content-center align-item-center">
                     <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                       onClick={() =>
                         navigate(`ce/${false}/${value.customer_code}`)
                       }
                     >
-                      <i className="ti ti-edit"></i>
+                      <IconEdit size={14} />
                     </button>
                   </td>
                 ),

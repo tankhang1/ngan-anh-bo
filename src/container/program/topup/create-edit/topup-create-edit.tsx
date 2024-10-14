@@ -35,6 +35,7 @@ import { format } from "date-fns";
 import { ToastContext } from "../../../../components/AppToast";
 import topupProgramSchema from "../../../../schema/topupProgram.schema";
 import AppWarning from "../../../../components/AppWarning";
+import { IconLoader } from "@tabler/icons-react";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -391,7 +392,7 @@ function TopupCreateEdit() {
                       <span>Thêm mới</span>
                       {isLoadingCreate && (
                         <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
+                          <IconLoader size={19} />
                         </span>
                       )}
                     </button>
@@ -406,7 +407,7 @@ function TopupCreateEdit() {
                       <span>Lưu</span>
                       {isLoadingUpdate && (
                         <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
+                          <IconLoader size={19} />
                         </span>
                       )}
                     </button>

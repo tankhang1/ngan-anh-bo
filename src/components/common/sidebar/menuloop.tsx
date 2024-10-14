@@ -1,3 +1,4 @@
+import { IconChevronRight } from "@tabler/icons-react";
 import { Fragment } from "react";
 import { Link } from "react-router-dom";
 
@@ -25,7 +26,7 @@ function Menuloop({ MENUITEMS, toggleSidemenu, level, isPermitAccess }: any) {
             ""
           )}
         </span>
-        <i className="fe fe-chevron-right side-menu__angle"></i>
+        <IconChevronRight className="side-menu__angle" size={14} />
       </Link>
       <ul
         className={`slide-menu child${level}  ${

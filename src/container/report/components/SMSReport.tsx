@@ -19,6 +19,11 @@ import AppTable from "../../../components/common/table/table";
 import AppId from "../../../components/common/app-id";
 import { TProductDashboardTable, TSMSGateway } from "../../../assets/types";
 import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
+import {
+  IconCalendar,
+  IconDatabaseExport,
+  IconFilter,
+} from "@tabler/icons-react";
 function SMSReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
@@ -97,7 +102,7 @@ function SMSReport() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -115,7 +120,7 @@ function SMSReport() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -131,7 +136,7 @@ function SMSReport() {
               </InputGroup>
             </div>
             <button
-              className="btn btn-icon bg-danger"
+              className="btn btn-icon p-0 bg-danger"
               onClick={() => {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
@@ -146,19 +151,19 @@ function SMSReport() {
                 );
               }}
             >
-              <i className="ti ti-filter" style={{ color: "white" }}></i>
+              <IconFilter size={16} color="white" />
             </button>
             <button
               className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
+                isSmallScreen ? "btn-icon p-0" : ""
               }`}
               onClick={handleExportExcel}
             >
               {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
+                <IconDatabaseExport size={16} />
               ) : (
                 <div className="d-flex align-items-center gap-1">
-                  <i className="ti ti-database-export "></i>
+                  <IconDatabaseExport size={16} />
                   Xuất Excel
                 </div>
               )}

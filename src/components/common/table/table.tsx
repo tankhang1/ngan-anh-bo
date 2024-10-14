@@ -9,6 +9,11 @@ import { Card, Dropdown, Pagination } from "react-bootstrap";
 import Loading from "../../../assets/images/apps/loading.gif";
 import Empty from "../../../assets/images/apps/empty.jpg";
 import { useMediaQuery } from "@mui/material";
+import {
+  IconArrowDown,
+  IconArrowRight,
+  IconChevronDown,
+} from "@tabler/icons-react";
 
 type THeader<T> = {
   key: string;
@@ -169,7 +174,10 @@ const AppTable = <T extends DataItem>({
                 aria-expanded="false"
               >
                 Tìm kiếm
-                <i className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
+                <IconChevronDown
+                  size={10}
+                  className="align-middle ms-1 d-inline-block"
+                />
               </Dropdown.Toggle>
               <Dropdown.Menu role="menu">
                 {headers.map(
@@ -195,7 +203,10 @@ const AppTable = <T extends DataItem>({
                   aria-expanded="false"
                 >
                   Lọc
-                  <i className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
+                  <IconChevronDown
+                    size={10}
+                    className="align-middle ms-1 d-inline-block"
+                  />{" "}
                 </Dropdown.Toggle>
                 <Dropdown.Menu role="menu">
                   {filters?.map((filter, index) => (
@@ -259,7 +270,7 @@ const AppTable = <T extends DataItem>({
           <div className="text-black">
             Tổng cộng{" "}
             {externalSearch ? filterData.length : maxPage ?? filterData.length}{" "}
-            items <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
+            items <IconArrowRight size={15} />
           </div>
           <div className={`ms-auto ${isSmallScreen && "mx-auto"}`}>
             <nav aria-label="Page navigation" className="pagination-style-4">

@@ -19,6 +19,11 @@ import Select from "react-select";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 import { MapCustomerType } from "../../../constants";
 import AppSelect from "../../../components/AppSelect";
+import {
+  IconCalendar,
+  IconDatabaseExport,
+  IconFilter,
+} from "@tabler/icons-react";
 
 function CustomerReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
@@ -134,7 +139,7 @@ function CustomerReport() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -152,7 +157,7 @@ function CustomerReport() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -172,7 +177,7 @@ function CustomerReport() {
               className={`btn ${
                 isSmallestScreen
                   ? "w-100 d-flex justify-content-center items-center"
-                  : "btn-icon"
+                  : "btn-icon p-0"
               } bg-danger text-white`}
               onClick={() => {
                 setRangeDate({
@@ -190,11 +195,11 @@ function CustomerReport() {
             >
               {isSmallestScreen ? (
                 <div className="d-flex align-items-center gap-1">
-                  <i className="ti ti-filter"></i>
+                  <IconFilter color="white" size={16} />
                   Lọc
                 </div>
               ) : (
-                <i className="ti ti-filter" style={{ color: "white" }}></i>
+                <IconFilter color="white" size={16} />
               )}
             </button>
           </div>
@@ -245,15 +250,15 @@ function CustomerReport() {
             />
             <button
               className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
+                isSmallScreen ? "btn-icon p-0" : ""
               }`}
               onClick={handleExportExcel}
             >
               {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
+                <IconDatabaseExport size={16} />
               ) : (
                 <div className="d-flex align-items-center gap-1">
-                  <i className="ti ti-database-export "></i>
+                  <IconDatabaseExport size={16} />
                   Xuất Excel
                 </div>
               )}

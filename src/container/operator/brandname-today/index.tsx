@@ -9,10 +9,9 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TBrandname} from "../../../assets/types";
-import {
-  useGetListBrandnameTodayQuery,
-} from "../../../redux/api/manage/manage.api";
+import { TBrandname } from "../../../assets/types";
+import { useGetListBrandnameTodayQuery } from "../../../redux/api/manage/manage.api";
+import { IconDotsVertical, IconSearch } from "@tabler/icons-react";
 
 const AGENT_FILTERS = [
   {
@@ -54,19 +53,19 @@ function BrandnameToday() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {AGENT_FILTERS.map((item, index) => (

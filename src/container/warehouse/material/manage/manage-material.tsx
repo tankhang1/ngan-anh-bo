@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { useGetListIngredientAllQuery } from "../../../../redux/api/warehouse/warehouse.api";
 import { useNavigate } from "react-router-dom";
+import { IconEdit, IconSearch } from "@tabler/icons-react";
 
 function ManageMaterial() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -44,7 +45,7 @@ function ManageMaterial() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                 </div>
@@ -103,14 +104,14 @@ function ManageMaterial() {
                   <td>
                     <span className="d-flex justify-content-center align-item-center">
                       <button
-                        className="btn btn-icon btn-sm btn-primary-ghost"
+                        className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                         onClick={() => {
                           navigate(
                             `/warehouse/report-material/update/${value.code}`
                           );
                         }}
                       >
-                        <i className="ti ti-edit"></i>
+                        <IconEdit size={14} />
                       </button>
                     </span>
                   </td>

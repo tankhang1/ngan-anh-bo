@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useExportWarehouseImportDetailMutation } from "../../../redux/api/excel/excel.api";
+import { IconEdit } from "@tabler/icons-react";
 type TSearchItem = {
   label: string;
   value: string;
@@ -328,12 +329,12 @@ const WarehouseImport = () => {
                 render: (value) => (
                   <td>
                     <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                       onClick={() => {
                         setDocumentDetail(value.document_code);
                       }}
                     >
-                      <i className="ti ti-edit"></i>
+                      <IconEdit size={14} />
                     </button>
                   </td>
                 ),

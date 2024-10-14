@@ -1,11 +1,10 @@
 import { Fragment, SetStateAction, useRef, useState } from "react";
 import { Alert, Button, Card, Col, Form, Nav, Tab } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "./firebaseapi";
 import { useSignInMutation } from "../redux/api/auth/auth.api";
-import { LOCAL_KEY } from "../constants";
 import { useDispatch } from "react-redux";
 import { updateAccountInfo } from "../redux/slices/authSlice";
+import { IconLoader } from "@tabler/icons-react";
 
 //IMAGES
 // import desktoplogo from "../assets/images/brand-logos/desktop-logo.png";
@@ -175,39 +174,12 @@ const Home = () => {
                             <span className="me-2"> Đăng nhập</span>
                             {isLoading && (
                               <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
+                                <IconLoader size={19} />
                               </span>
                             )}
                           </Button>
                         </div>
                       </div>
-                      <div className="text-center">
-                        <p className="fs-12 text-muted mt-3">
-                          Chưa có tài khoản?{" "}
-                          <Link
-                            to={`${
-                              import.meta.env.BASE_URL
-                            }authentication/signup/signupbasic`}
-                            className="text-primary"
-                          >
-                            Đăng kí
-                          </Link>
-                        </p>
-                      </div>
-                      {/* <div className="text-center my-3 authentication-barrier">
-                        <span>HOẶC</span>
-                      </div>
-                      <div className="btn-list text-center">
-                        <button className="btn btn-icon btn-light btn-wave waves-effect waves-light">
-                          <i className="ri-facebook-line fw-bold "></i>
-                        </button>
-                        <button className="btn btn-icon btn-light  btn-wave waves-effect waves-light">
-                          <i className="ri-google-line fw-bold "></i>
-                        </button>
-                        <button className="btn btn-icon btn-light  btn-wave waves-effect waves-light">
-                          <i className="ri-twitter-line fw-bold "></i>
-                        </button>
-                      </div> */}
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="firebase" className="border-0">
@@ -237,20 +209,6 @@ const Home = () => {
                           />
                         </div>
                         <div className="col-xl-12 mb-2">
-                          <label
-                            htmlFor="signin-password"
-                            className="form-label text-default d-block"
-                          >
-                            Password
-                            <Link
-                              to={`${
-                                import.meta.env.BASE_URL
-                              }authentication/resetpassword/resetbasic`}
-                              className="float-end text-primary"
-                            >
-                              Forget password ?
-                            </Link>
-                          </label>
                           <div className="input-group">
                             <Form.Control
                               className="form-control form-control-lg"
@@ -319,17 +277,6 @@ const Home = () => {
                       </div>
                       <div className="text-center my-3 authentication-barrier">
                         <span>OR</span>
-                      </div>
-                      <div className="btn-list text-center">
-                        <button className="btn btn-icon btn-light btn-wave waves-effect waves-light">
-                          <i className="ri-facebook-line fw-bold "></i>
-                        </button>
-                        <button className="btn btn-icon btn-light  btn-wave waves-effect waves-light">
-                          <i className="ri-google-line fw-bold "></i>
-                        </button>
-                        <button className="btn btn-icon btn-light  btn-wave waves-effect waves-light">
-                          <i className="ri-twitter-line fw-bold "></i>
-                        </button>
                       </div>
                     </div>
                   </Tab.Pane>

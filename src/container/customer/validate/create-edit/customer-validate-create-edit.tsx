@@ -38,6 +38,7 @@ import {
   useGetCustomerByCodeQuery,
   useGetCustomerQuery,
 } from "../../../../redux/api/info/info.api";
+import { IconLoader } from "@tabler/icons-react";
 
 function CustomerValidationCreateEdit() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -239,7 +240,7 @@ function CustomerValidationCreateEdit() {
                             <span>Thêm mới</span>
                             {isLoadingCreate && (
                               <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
+                                <IconLoader size={19} />
                               </span>
                             )}
                           </button>
@@ -264,7 +265,7 @@ function CustomerValidationCreateEdit() {
                             <span>Lưu</span>
                             {isLoadingUpdate && (
                               <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
+                                <IconLoader size={19} />
                               </span>
                             )}
                           </button>

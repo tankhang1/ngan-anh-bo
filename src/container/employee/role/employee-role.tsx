@@ -24,6 +24,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import roleSchema from "../../../schema/role.schema";
 import AppWarning from "../../../components/AppWarning";
+import {
+  IconDotsVertical,
+  IconEdit,
+  IconLoader,
+  IconPlus,
+  IconSearch,
+} from "@tabler/icons-react";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -133,19 +140,19 @@ function EmployeeRole() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {EMPLOYEE_ROLE_FILTERS.map((item, index) => (
@@ -169,7 +176,7 @@ function EmployeeRole() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="btn btn-icon p-0 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
@@ -179,7 +186,7 @@ function EmployeeRole() {
                           setIsCreate(true);
                         }}
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={16} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -228,14 +235,14 @@ function EmployeeRole() {
                 render: (value) => (
                   <td>
                     <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                       onClick={() => {
                         setOpenCEModal(true);
                         setModalInfo(value);
                         setIsCreate(false);
                       }}
                     >
-                      <i className="ti ti-edit"></i>
+                      <IconEdit size={14} />
                     </button>
                   </td>
                 ),
@@ -348,7 +355,7 @@ function EmployeeRole() {
                       {isLoadingCreate ||
                         (isLoadingUpdate && (
                           <span className="loading">
-                            <i className="ri-loader-2-fill fs-19"></i>
+                            <IconLoader size={19} />
                           </span>
                         ))}
                     </Button>

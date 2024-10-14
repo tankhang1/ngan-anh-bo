@@ -45,6 +45,7 @@ import employeeSchema from "../../../schema/employee.schema";
 import AppWarning from "../../../components/AppWarning";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { IconLoader } from "@tabler/icons-react";
 
 function EmployeeCreateEdit() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -274,7 +275,7 @@ function EmployeeCreateEdit() {
                             <span>Thêm mới</span>
                             {isLoadingCreate && (
                               <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
+                                <IconLoader size={19} />
                               </span>
                             )}
                           </button>
@@ -291,7 +292,7 @@ function EmployeeCreateEdit() {
                             <span>Lưu</span>
                             {isLoadingUpdate && (
                               <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
+                                <IconLoader size={19} />
                               </span>
                             )}
                           </button>

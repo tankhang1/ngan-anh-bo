@@ -29,6 +29,7 @@ import {
   useGetListProgramPointDetailQuery,
   useGetListProgramTopupDetailQuery,
 } from "../../../redux/api/product/product.api";
+import { IconEdit, IconEye, IconSearch, IconX } from "@tabler/icons-react";
 
 function SearchCustomer() {
   const [searchValue, setSearchValue] = useState("");
@@ -158,7 +159,7 @@ function SearchCustomer() {
                       setSearchValue("");
                     }}
                   >
-                    <i className="ti ti-x"></i>
+                    <IconX size={16} />
                   </Button>
                   <Button
                     variant=""
@@ -167,7 +168,7 @@ function SearchCustomer() {
                     type="button"
                     onClick={onSearch}
                   >
-                    <i className="ri-search-line"></i>
+                    <IconSearch size={16} />
                   </Button>
                 </InputGroup>
               </div>
@@ -228,13 +229,13 @@ function SearchCustomer() {
                   render: (record) => (
                     <td>
                       <button
-                        className="btn btn-icon btn-sm btn-primary-ghost"
+                        className="btn btn-icon btn-sm btn-primary-ghost m-0 p-0"
                         onClick={() => {
                           setOpenDetail(true);
                           setCustomerInfo(record);
                         }}
                       >
-                        <i className="ti ti-edit"></i>
+                        <IconEdit size={14} />
                       </button>
                     </td>
                   ),
@@ -564,7 +565,7 @@ function SearchCustomer() {
                             render: (value) => (
                               <td>
                                 <button
-                                  className="btn btn-icon btn-md btn-bd-primary"
+                                  className="btn btn-icon btn-md btn-bd-primary m-0 p-0"
                                   onClick={() =>
                                     openPointDetail(
                                       value.customer_uuid,
@@ -572,7 +573,7 @@ function SearchCustomer() {
                                     )
                                   }
                                 >
-                                  <i className="ti ti-eye"></i>
+                                  <IconEye size={14} />
                                 </button>
                               </td>
                             ),
@@ -638,7 +639,7 @@ function SearchCustomer() {
                             render: (value) => (
                               <td>
                                 <button
-                                  className="btn btn-icon btn-md btn-bd-primary"
+                                  className="btn btn-icon btn-md btn-bd-primary m-0 p-0"
                                   onClick={() =>
                                     openTopupDetail(
                                       value.customer_uuid,
@@ -646,7 +647,7 @@ function SearchCustomer() {
                                     )
                                   }
                                 >
-                                  <i className="ti ti-eye"></i>
+                                  <IconEye size={14} />
                                 </button>
                               </td>
                             ),

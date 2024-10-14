@@ -21,6 +21,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
 import { MapCustomerType } from "../../../constants";
+import {
+  IconDatabaseExport,
+  IconDotsVertical,
+  IconEdit,
+  IconSearch,
+} from "@tabler/icons-react";
 
 const AGENT_FILTERS = [
   {
@@ -97,24 +103,24 @@ function CustomerUnValidation() {
                     />
                     <Button
                       variant=""
-                      aria-label="button"
+                      aria-label="button m-0 p-0"
                       className="btn btn-primary"
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon btn-primary-light btn-wave no-caret p-0"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {AGENT_FILTERS.map((item, index) => (
@@ -129,25 +135,6 @@ function CustomerUnValidation() {
                     </Dropdown.Menu>
                   </Dropdown>
 
-                  {/* {permission.createUnValidateCustomer ? (
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip className="tooltip">Thêm mới</Tooltip>}
-                    >
-                      
-                        variant=""
-                        aria-label="button"
-                        type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        data-bs-title="Add Contact"
-                        onClick={() => navigate(`ce/${true}/-1`)}
-                      >
-                        <i className="ri-add-line"></i>
-                      </Button>
-                    </OverlayTrigger>
-                  ) : null} */}
                   {permission.exportUnValidateCustomer ? (
                     <OverlayTrigger
                       placement="top"
@@ -157,13 +144,13 @@ function CustomerUnValidation() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-success-light ms-2"
+                        className="btn btn-icon btn-success-light ms-2 p-0"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => {}}
                       >
-                        <i className="ti ti-database-export"></i>
+                        <IconDatabaseExport size={14} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -286,10 +273,10 @@ function CustomerUnValidation() {
                 render: (value) => (
                   <td className="d-flex justify-content-center align-item-center">
                     <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      className="btn btn-icon btn-sm btn-primary-ghost p-0"
                       onClick={() => navigate(`ce/${false}/${value.uuid}`)}
                     >
-                      <i className="ti ti-edit"></i>
+                      <IconEdit size={14} />
                     </button>
                   </td>
                 ),

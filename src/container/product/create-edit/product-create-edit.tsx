@@ -27,6 +27,7 @@ import { RootState } from "../../../redux/store";
 import productCreateSchema from "../../../schema/product.create.schema";
 import AppWarning from "../../../components/AppWarning";
 import AppSelect from "../../../components/AppSelect";
+import { IconLoader } from "@tabler/icons-react";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -173,7 +174,7 @@ function ProductCreate() {
                     <span>Thêm mới</span>
                     {isLoadingCreate && (
                       <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
+                        <IconLoader size={19} />
                       </span>
                     )}
                   </button>

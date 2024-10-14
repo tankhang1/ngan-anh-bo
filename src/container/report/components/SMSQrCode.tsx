@@ -22,6 +22,11 @@ import {
   useExportPackageMutation,
   useExportSMSMutation,
 } from "../../../redux/api/excel/excel.api";
+import {
+  IconCalendar,
+  IconDatabaseExport,
+  IconFilter,
+} from "@tabler/icons-react";
 function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
@@ -118,7 +123,7 @@ function SMS_QR_Report() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -136,7 +141,7 @@ function SMS_QR_Report() {
             <div className="form-group">
               <InputGroup className="">
                 <InputGroup.Text className="input-group-text text-muted">
-                  <i className="ri-calendar-line"></i>
+                  <IconCalendar size={16} />
                 </InputGroup.Text>
                 <DatePicker
                   onChange={(date) => {
@@ -152,7 +157,7 @@ function SMS_QR_Report() {
               </InputGroup>
             </div>
             <button
-              className="btn btn-icon bg-danger"
+              className="btn btn-icon bg-danger p-0"
               onClick={() => {
                 setRangeDate({
                   st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
@@ -166,19 +171,19 @@ function SMS_QR_Report() {
                 );
               }}
             >
-              <i className="ti ti-filter" style={{ color: "white" }}></i>
+              <IconFilter size={16} color="white" />
             </button>
             <button
               className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
+                isSmallScreen ? "btn-icon p-0" : ""
               }`}
               onClick={handleExportExcel}
             >
               {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
+                <IconDatabaseExport size={16} />
               ) : (
                 <div className="d-flex align-items-center gap-1">
-                  <i className="ti ti-database-export "></i>
+                  <IconDatabaseExport size={16} />
                   Xuất Excel
                 </div>
               )}

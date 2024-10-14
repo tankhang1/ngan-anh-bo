@@ -12,6 +12,7 @@ import { COUNTRIES } from "../../../../constants";
 import { ToastContext } from "../../../../components/AppToast";
 import { format } from "date-fns";
 import fillIngredientSchema from "../../../../schema/fillIngredientPacking.schema";
+import { IconLoader } from "@tabler/icons-react";
 
 const FillMaterialWarehouse = () => {
   const [importIngredientPacking, { isLoading: isLoadingCreate }] =
@@ -94,7 +95,7 @@ const FillMaterialWarehouse = () => {
                     <span>Thêm mới</span>
                     {isLoadingCreate && (
                       <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
+                        <IconLoader size={19} />
                       </span>
                     )}
                   </button>

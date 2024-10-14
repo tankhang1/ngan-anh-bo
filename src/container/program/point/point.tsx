@@ -22,6 +22,13 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
+import {
+  IconDotsVertical,
+  IconEdit,
+  IconExchange,
+  IconPlus,
+  IconSearch,
+} from "@tabler/icons-react";
 
 const POINT_FILTERS = [
   {
@@ -101,19 +108,19 @@ function PointProgram() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {POINT_FILTERS.map((item, index) => (
@@ -131,12 +138,12 @@ function PointProgram() {
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-info-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-info-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-exchange"></i>
+                      <IconExchange size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {STATUS_FILTERS.map((item, index) => (
@@ -164,13 +171,13 @@ function PointProgram() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="btn btn-icon p-0 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => navigate(`ce/${true}/-1`)}
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={16} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -375,7 +382,7 @@ function PointProgram() {
                       <td>
                         <span className="d-flex justify-content-center align-item-center">
                           <button
-                            className="btn btn-icon btn-sm btn-primary-ghost"
+                            className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                             onClick={() =>
                               navigate(
                                 `ce/${false}/${value.uuid}_${status}_${
@@ -385,7 +392,7 @@ function PointProgram() {
                             }
                             disabled={value.status === 2}
                           >
-                            <i className="ti ti-edit"></i>
+                            <IconEdit size={14} />
                           </button>
                         </span>
                       </td>

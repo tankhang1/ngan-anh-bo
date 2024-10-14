@@ -25,6 +25,14 @@ import { exportExcelFile, fNumber } from "../../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
+import {
+  IconDatabaseExport,
+  IconDotsVertical,
+  IconEdit,
+  IconExchange,
+  IconPlus,
+  IconSearch,
+} from "@tabler/icons-react";
 
 const PRODUCT_FILTERS = [
   {
@@ -109,19 +117,19 @@ function ProductInfoPage() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="btn btn-icon p-0 btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={16} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {PRODUCT_FILTERS.map((item, index) => (
@@ -148,12 +156,12 @@ function ProductInfoPage() {
                       <Dropdown.Toggle
                         variant=""
                         aria-label="button"
-                        className="btn btn-icon btn-info-light btn-wave no-caret"
+                        className="btn btn-icon p-0 btn-info-light btn-wave no-caret"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        <i className="ti ti-exchange"></i>
+                        <IconExchange size={16} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu as="ul" className="dropdown-menu-start">
                         {PRODUCT_TYPE.map((item, index) => (
@@ -180,13 +188,13 @@ function ProductInfoPage() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="btn btn-icon p-0 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => navigate(`create`)}
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={16} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -199,13 +207,13 @@ function ProductInfoPage() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-success-light ms-2"
+                        className="btn btn-icon btn-success-light ms-2 p-0"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={handleExportExcel}
                       >
-                        <i className="ti ti-database-export"></i>
+                        <IconDatabaseExport size={16} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -293,10 +301,10 @@ function ProductInfoPage() {
                 render: (value) => (
                   <td>
                     <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
+                      className="btn btn-icon p-0 btn-sm btn-primary-ghost"
                       onClick={() => navigate(`edit/${value.code}`)}
                     >
-                      <i className="ti ti-edit"></i>
+                      <IconEdit size={14} />
                     </button>
                   </td>
                 ),

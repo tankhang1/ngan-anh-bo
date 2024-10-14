@@ -22,6 +22,13 @@ import {
 import { ToastContext } from "../../../components/AppToast";
 import { useGetListWorkCentersQuery } from "../../../redux/api/media/media.api";
 import AppSelect from "../../../components/AppSelect";
+import {
+  IconCheck,
+  IconLoader,
+  IconPlus,
+  IconSearch,
+  IconTrash,
+} from "@tabler/icons-react";
 const statusMap = new Map([
   [-1, { label: "Mới tạo mã", color: "warning" }],
   [0, { label: "Đang chờ xác thực", color: "warning" }],
@@ -111,14 +118,14 @@ const DevicePage = () => {
                     type="button"
                     id="search-contact-member"
                   >
-                    <i className="ri-search-line"></i>
+                    <IconSearch size={16} />
                   </Button>
                 </InputGroup>
                 <Button
                   variant=""
                   aria-label="button"
                   type="button"
-                  className="btn btn-icon btn-success-light ms-2"
+                  className="btn btn-icon p-0 btn-success-light ms-2"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
                   data-bs-title="Add Contact"
@@ -126,7 +133,7 @@ const DevicePage = () => {
                     setOpenAddKey(true);
                   }}
                 >
-                  <i className="ri-add-line"></i>
+                  <IconPlus size={16} />
                 </Button>
               </div>
             </div>
@@ -219,15 +226,15 @@ const DevicePage = () => {
                 <td className="d-flex justify-content-center align-item-center">
                   {value.status === 1 ? (
                     <AppWarning onAccept={() => onRemoveDeviceKey(value)}>
-                      <button className="btn btn-icon btn-sm btn-danger-ghost">
-                        <i className="ti ti-trash"></i>
+                      <button className="btn btn-icon p-0 btn-sm btn-danger-ghost">
+                        <IconTrash size={14} />
                       </button>
                     </AppWarning>
                   ) : (
                     value.status !== -1 && (
                       <AppWarning onAccept={() => onActiveDeviceKey(value)}>
-                        <button className="btn btn-icon btn-sm btn-success">
-                          <i className="ti ti-check"></i>
+                        <button className="btn btn-icon p-0 btn-sm btn-success">
+                          <IconCheck size={14} />
                         </button>
                       </AppWarning>
                     )
@@ -297,7 +304,7 @@ const DevicePage = () => {
                       <span>Xác nhận</span>
                       {isCreateDeviceKey && (
                         <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
+                          <IconLoader size={19} />
                         </span>
                       )}
                     </Button>

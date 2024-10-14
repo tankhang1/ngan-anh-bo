@@ -8,6 +8,7 @@ import { RootState } from "../../../../redux/store";
 import { useGetListIngredientPackingQuery } from "../../../../redux/api/warehouse/warehouse.api";
 import { fDate } from "../../../../hooks";
 import { format } from "date-fns";
+import { IconSearch } from "@tabler/icons-react";
 
 function ManageMaterialPacking() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -45,7 +46,7 @@ function ManageMaterialPacking() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                 </div>

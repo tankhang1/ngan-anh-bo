@@ -3,6 +3,7 @@ import { Button, Card, Col, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { useGetExportByDocumentQuery } from "../../../redux/api/warehouse/warehouse.api";
 import { format } from "date-fns";
+import { IconSearch, IconX } from "@tabler/icons-react";
 
 function SearchWarehouseExport() {
   const [searchValue, setSearchValue] = useState("");
@@ -54,7 +55,7 @@ function SearchWarehouseExport() {
                       setSearchValue("");
                     }}
                   >
-                    <i className="ti ti-x"></i>
+                    <IconX size={16} />
                   </Button>
                   <Button
                     variant=""
@@ -63,7 +64,7 @@ function SearchWarehouseExport() {
                     type="button"
                     onClick={onSearch}
                   >
-                    <i className="ri-search-line"></i>
+                    <IconSearch size={16} />
                   </Button>
                 </InputGroup>
               </div>

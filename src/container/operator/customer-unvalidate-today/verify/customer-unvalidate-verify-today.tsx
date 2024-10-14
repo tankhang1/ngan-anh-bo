@@ -24,6 +24,7 @@ import customerSchema from "../../../../schema/customers.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
+import { IconLoader } from "@tabler/icons-react";
 
 function CustomerUnValidationVerify() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -181,7 +182,7 @@ function CustomerUnValidationVerify() {
                             <span>Xác thực</span>
                             {isLoadingVerify && (
                               <span className="loading">
-                                <i className="ri-loader-2-fill fs-19"></i>
+                                <IconLoader size={19} />
                               </span>
                             )}
                           </button>

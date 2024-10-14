@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Dropdown, Form, InputGroup } from "react-bootstrap";
+import { IconChevronDown, IconX } from "@tabler/icons-react";
 
 type TOption = {
   label: string;
@@ -97,10 +98,10 @@ const AppSelect = ({
               setFilterData(data);
               setSearch("");
             }}
-            className="btn btn-icon"
+            className="border-0 px-2 justify-content-center align-items-center"
             style={{ backgroundColor: "#ff5880" }}
           >
-            <i className="ti ti-x text-white" />
+            <IconX color="white" size={20} />
           </button>
         )}
         <button
@@ -111,7 +112,7 @@ const AppSelect = ({
           className="btn border bg-gray-200"
           id="basic-addon2"
         >
-          <i className="ti ti-chevron-down" />
+          <IconChevronDown size={20} color="gray"/>
         </button>
       </InputGroup>
 

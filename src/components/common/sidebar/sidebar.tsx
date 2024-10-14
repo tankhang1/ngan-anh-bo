@@ -3,10 +3,6 @@ import { connect, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ThemeChanger } from "../../../redux/action";
 import store, { RootState } from "../../../redux/store";
-// import logo1 from "../../../assets/images/brand-logos/desktop-logo.png";
-// import logo2 from "../../../assets/images/brand-logos/toggle-logo.png";
-// import logo3 from "../../../assets/images/brand-logos/desktop-dark.png";
-// import logo4 from "../../../assets/images/brand-logos/toggle-dark.png";
 import NganAnhLogo from "../../../assets/images/brand-logos/ngan-anh-logo.png";
 import SimpleBar from "simplebar-react";
 import { MENU_KEY, MENUITEMS } from "./sidemenu";
@@ -271,7 +267,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.viewWarehouseReportIngredient ||
             permission.viewWarehouseReportIngredientPacking
           );
-        
+
         case MENU_KEY.REPORT_TITLE:
           if (
             permission.reportCustomer ||
@@ -279,7 +275,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
             permission.reportProgramChance ||
-            permission.reportSMSBrandname||
+            permission.reportSMSBrandname ||
             permission.reportSMSBrandname
           )
             return true;
@@ -298,7 +294,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.REPORTS_SMS:
           return permission.reportSMSGateway;
         case MENU_KEY.REPORTS_SMS_BRANDNAME:
-          return permission.reportSMSBrandname
+          return permission.reportSMSBrandname;
         case MENU_KEY.SETTINGS_AREA:
           return permission.settingArea;
         case MENU_KEY.SETTINGS_GROUP_CUSTOMER:
@@ -312,7 +308,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
             permission.reportProgramChance ||
-            permission.reportSMSGateway||
+            permission.reportSMSGateway ||
             permission.reportSMSBrandname
           );
         case MENU_KEY.MANAGE_SETTING:
@@ -342,9 +338,9 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             return true;
           return false;
         case MENU_KEY.REPORTS_SMS:
-          return permission.reportSMSGateway
+          return permission.reportSMSGateway;
         case MENU_KEY.REPORTS_SMS_BRANDNAME:
-          return permission.reportSMSBrandname
+          return permission.reportSMSBrandname;
         case MENU_KEY.WAREHOUSES_MATERIAL:
           return (
             permission.viewSearchBatchNumber ||
@@ -381,9 +377,9 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.WAREHOUSES_REPORT_INVENTORY:
           return permission.warehouseInventoryInfo;
         case MENU_KEY.WAREHOUSES_SEARCH_RETAILER_1:
-          return permission.viewSearchRetailer1
+          return permission.viewSearchRetailer1;
         case MENU_KEY.WAREHOUSES_SEARCH_TODAY:
-          return permission.viewWarehouseSearchToday
+          return permission.viewWarehouseSearchToday;
         default:
           return true;
       }

@@ -21,6 +21,7 @@ import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import AppWarning from "../../../components/AppWarning";
+import { IconLoader, IconPlus, IconSearch } from "@tabler/icons-react";
 
 function SettingGroupCustomer() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -78,7 +79,7 @@ function SettingGroupCustomer() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
 
@@ -91,7 +92,7 @@ function SettingGroupCustomer() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="btn btn-icon p-0 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
@@ -99,7 +100,7 @@ function SettingGroupCustomer() {
                           setOpenAddPopup({ name: "", prefix: "", symbol: "" })
                         }
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={16} />
                       </Button>
                     </OverlayTrigger>
                   )}
@@ -144,30 +145,6 @@ function SettingGroupCustomer() {
                 label: "Tên nhóm khách hàng",
                 render: (value: TGroupCustomer) => <td>{value.name}</td>,
               },
-
-              // permission.editSettingGroupCustomer
-              //   ? {
-              //       key: "",
-              //       label: "Chức năng",
-              //       render: (value) => {
-              //         console.log(value);
-              //         return (
-              //           <td>
-              //             <span className="d-flex justify-content-center align-item-center">
-              //               <button
-              //                 className="btn btn-icon btn-sm btn-primary-ghost"
-              //                 onClick={() => {
-              //                   setOpenAddPopup(value);
-              //                 }}
-              //               >
-              //                 <i className="ti ti-edit"></i>
-              //               </button>
-              //             </span>
-              //           </td>
-              //         );
-              //       },
-              //     }
-              //   : undefined,
             ]}
             data={groups || []}
             searchByExternal={searchBy}
@@ -269,7 +246,7 @@ function SettingGroupCustomer() {
                     <span>Xác nhận</span>
                     {isLoadingCreate && (
                       <span className="loading">
-                        <i className="ri-loader-2-fill fs-19"></i>
+                        <IconLoader size={19} />
                       </span>
                     )}
                   </Button>

@@ -16,6 +16,7 @@ import { ToastContext } from "../../../../../components/AppToast";
 import createIngredientSchema from "../../../../../schema/createIngredient.schema";
 import { useGetIngredientByCodeQuery } from "../../../../../redux/api/warehouse/warehouse.api";
 import Loading from "../../../../../assets/images/apps/loading.gif";
+import { IconLoader } from "@tabler/icons-react";
 const ManageMaterialUpdate = () => {
   const { code } = useParams();
   const [updateIngredient, { isLoading: isLoadingUpdate }] =
@@ -111,7 +112,7 @@ const ManageMaterialUpdate = () => {
                       <span>Cập nhật</span>
                       {isLoadingUpdate && (
                         <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
+                          <IconLoader size={19} />
                         </span>
                       )}
                     </button>

@@ -32,6 +32,14 @@ import { RootState } from "../../redux/store";
 import accountSchema from "../../schema/accounts.schema";
 import AppWarning from "../../components/AppWarning";
 import AppSelect from "../../components/AppSelect";
+import {
+  IconDatabaseExport,
+  IconDotsVertical,
+  IconLoader,
+  IconPlus,
+  IconSearch,
+  IconTrash,
+} from "@tabler/icons-react";
 
 const ACCOUNT_FILTERS = [
   {
@@ -143,19 +151,19 @@ function Accounts() {
                       type="button"
                       id="search-contact-member"
                     >
-                      <i className="ri-search-line"></i>
+                      <IconSearch size={16} />
                     </Button>
                   </InputGroup>
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
+                      className="justify-content-center px-2 align-items-center btn-primary-light btn-wave no-caret"
                       type="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <i className="ti ti-dots-vertical"></i>
+                      <IconDotsVertical size={14} />
                     </Dropdown.Toggle>
                     <Dropdown.Menu as="ul" className="dropdown-menu-start">
                       {ACCOUNT_FILTERS.map((item, index) => (
@@ -186,13 +194,13 @@ function Accounts() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-secondary-light ms-2"
+                        className="justify-content-center align-items-center px-2 btn-secondary-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => setOpenAddNewAccount(true)}
                       >
-                        <i className="ri-add-line"></i>
+                        <IconPlus size={18} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -205,13 +213,13 @@ function Accounts() {
                         variant=""
                         aria-label="button"
                         type="button"
-                        className="btn btn-icon btn-success-light ms-2"
+                        className="justify-content-center align-items-center px-2 btn-success-light ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
                         onClick={() => {}}
                       >
-                        <i className="ti ti-database-export"></i>
+                        <IconDatabaseExport size={14} />
                       </Button>
                     </OverlayTrigger>
                   ) : null}
@@ -301,12 +309,12 @@ function Accounts() {
                     render: (value) => (
                       <td className="d-flex justify-content-center align-item-center">
                         <button
-                          className="btn btn-icon btn-sm btn-danger-ghost"
+                          className="btn btn-icon btn-sm btn-danger-ghost  p-0 m-0"
                           onClick={() => {
                             setUsername(value.username || null);
                           }}
                         >
-                          <i className="ti ti-trash"></i>
+                          <IconTrash size={14} />
                         </button>
                       </td>
                     ),
@@ -342,7 +350,7 @@ function Accounts() {
             <span>Xác nhận</span>
             {isLoadingDelete && (
               <span className="loading">
-                <i className="ri-loader-2-fill fs-19"></i>
+                <IconLoader size={19} />
               </span>
             )}
           </Button>
@@ -540,7 +548,7 @@ function Accounts() {
                       <span>Xác nhận</span>
                       {isLoadingSignUp && (
                         <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
+                          <IconLoader size={19} />
                         </span>
                       )}
                     </Button>

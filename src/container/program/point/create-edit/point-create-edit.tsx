@@ -42,6 +42,7 @@ import AppWarning from "../../../../components/AppWarning";
 import { Checkbox } from "@mui/material";
 import AppTable from "../../../../components/common/table/table";
 import { E } from "../../../../assets/libs/chart.js/chunks/helpers.segment";
+import { IconLoader } from "@tabler/icons-react";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -492,7 +493,7 @@ function PointCreateEdit() {
                       <span>Thêm mới</span>
                       {isLoadingCreate && (
                         <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
+                          <IconLoader size={19} />
                         </span>
                       )}
                     </button>
@@ -507,7 +508,7 @@ function PointCreateEdit() {
                       <span>Lưu</span>
                       {isLoadingUpdate && (
                         <span className="loading">
-                          <i className="ri-loader-2-fill fs-19"></i>
+                          <IconLoader size={19} />
                         </span>
                       )}
                     </button>

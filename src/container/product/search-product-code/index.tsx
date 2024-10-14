@@ -19,6 +19,7 @@ import {
 import { BASE_PORT } from "../../../constants";
 import { fDate } from "../../../hooks";
 import Loading from "../../../assets/images/apps/loading.gif";
+import { IconSearch, IconX } from "@tabler/icons-react";
 const TypeBinExport = new Map([
   ["SALE", "Hàng hóa"],
   ["MARKETING", "Khuyến mãi"],
@@ -97,7 +98,7 @@ function SearchProductCode() {
                       setSearchValue("");
                     }}
                   >
-                    <i className="ti ti-x"></i>
+                    <IconX size={16} />
                   </Button>
                   <Button
                     variant=""
@@ -106,7 +107,7 @@ function SearchProductCode() {
                     type="button"
                     onClick={onSearch}
                   >
-                    <i className="ri-search-line"></i>
+                    <IconSearch size={16} />
                   </Button>
                 </InputGroup>
               </div>
