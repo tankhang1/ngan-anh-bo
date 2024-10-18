@@ -81,6 +81,7 @@ function CustomerUnValidationCreateEdit() {
       customer_province: provinceId,
       status: 1,
       gender: +(values?.gender ?? 1),
+      phone: values.phone?.trim() || "",
       birthday: values?.birthday ? +format(values.birthday, "yyyyMMdd") : null,
       area_size: values?.area_size ? +values.area_size : null,
       citizen_number: values?.citizen_number
@@ -118,6 +119,7 @@ function CustomerUnValidationCreateEdit() {
         uuid: values?.uuid ? values.uuid : newUUID?.toString(),
         info_primary: values.info_primary ? 1 : 0,
         customer_province: provinceId,
+        phone: values.phone?.trim() || "",
         status: 1,
         gender: +(values?.gender ?? 1),
         birthday: values?.birthday
@@ -160,6 +162,7 @@ function CustomerUnValidationCreateEdit() {
         uuid: values?.uuid ? values.uuid : newUUID?.toString(),
         info_primary: 0,
         customer_province: provinceId,
+        phone: values.phone?.trim() || "",
         status: 0,
         gender: +(values?.gender ?? 1),
         birthday: values?.birthday

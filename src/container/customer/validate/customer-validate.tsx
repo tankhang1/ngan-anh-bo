@@ -114,7 +114,7 @@ function CustomerValidation() {
     useGetListCustomerQuery(
       {
         nu: page - 1,
-        sz: 10,
+        sz: counterCustomer ?? 200,
         t: customerType,
         s: 1,
       },
@@ -139,7 +139,7 @@ function CustomerValidation() {
                       className="bg-light"
                       placeholder="Nhập số điện thoại"
                       aria-describedby="search-contact-member"
-                      onChange={(e) => setSearch(e.target.value)}
+                      onChange={(e) => setSearch(e.target.value.trim())}
                       value={search}
                     />
                     <Button
@@ -266,8 +266,6 @@ function CustomerValidation() {
             externalSearch={search}
             title="Thông tin đại lý"
             isLoading={isLoadingCustomer}
-            setExternalPage={setPage}
-            maxPage={counterCustomer}
             isChange={customerType}
             headers={[
               {

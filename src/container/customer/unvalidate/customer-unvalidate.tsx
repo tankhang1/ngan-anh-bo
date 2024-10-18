@@ -66,18 +66,14 @@ function CustomerUnValidation() {
     useGetListCustomerQuery(
       {
         nu: page - 1,
-        sz: 10,
+        sz: counterCustomer ?? 200,
         t: "ANONYMOUS",
       },
       {
         refetchOnMountOrArgChange: true,
       }
     );
-  const onChangeCustomerType = (type: string) => {
-    if (type !== customerType) {
-      setCustomerType(type);
-    }
-  };
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -93,7 +89,7 @@ function CustomerUnValidation() {
                       className="bg-light"
                       placeholder="Nhập số điện thoại"
                       aria-describedby="search-contact-member"
-                      onChange={(e) => setSearch(e.target.value)}
+                      onChange={(e) => setSearch(e.target.value.trim())}
                     />
                     <Button
                       variant=""
@@ -180,8 +176,6 @@ function CustomerUnValidation() {
             externalSearch={deferSearchValue}
             title="Thông tin đại lý"
             isLoading={isLoadingCustomer}
-            setExternalPage={setPage}
-            maxPage={counterCustomer}
             isChange={customerType}
             headers={[
               {

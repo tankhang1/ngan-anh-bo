@@ -86,6 +86,7 @@ function CustomerValidationCreateEdit() {
         uuid: values?.uuid ? values.uuid : newUUID?.toString(),
         info_primary: values.info_primary ? 1 : 0,
         customer_province: provinceId,
+        phone: values.phone?.trim() ?? "",
         status: 1,
         gender: +(values?.gender ?? 1),
         birthday: values?.birthday
@@ -124,6 +125,7 @@ function CustomerValidationCreateEdit() {
           uuid: values?.uuid ? values.uuid : newUUID?.toString(),
           info_primary: values.info_primary ? 1 : 0,
           customer_province: provinceId,
+          phone: values.phone?.trim() ?? "",
           status: 1,
           gender: +(values?.gender ?? 1),
           birthday: values?.birthday
@@ -158,7 +160,6 @@ function CustomerValidationCreateEdit() {
           });
     }
   };
-
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
   }, [customer]);
@@ -255,7 +256,11 @@ function CustomerValidationCreateEdit() {
                         </button>
                       )
                     : permission.editValidateCustomer && (
-                        <AppWarning onAccept={() => handleSubmit()}>
+                        <AppWarning
+                          onAccept={() => {
+                            handleSubmit();
+                          }}
+                        >
                           <button
                             className={`btn btn-purple-light justify-content-center align-items-center ${
                               isLoadingUpdate && "btn-loader"
