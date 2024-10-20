@@ -642,6 +642,18 @@ export type TArea = {
   area: string;
   isAdded?: boolean;
 };
+export type TInventory = {
+  id: number;
+  device_code: string;
+  product_name: string;
+  batch_number: string;
+  manufacture_date: string; // Format: YYYYMMDD
+  expiration_date: string; // Format: YYYYMMDD
+  expect_packing_date: string; // Format: YYYYMMDD
+  seri: string;
+  time: string; // Format: YYYY-MM-DD HH:mm
+  time_number: number; // Format: YYYYMMDDHHmm
+};
 
 export type TAccount = {
   id?: number;

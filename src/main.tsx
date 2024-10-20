@@ -74,6 +74,7 @@ import WarehouseCreateManufactorOrder from "./container/warehouse/order/warehous
 import WarehouseSearchBatchNumber from "./container/warehouse/order/warehouseSearchBatchNumber.tsx";
 import DevicePage from "./container/settings/device/index.tsx";
 import WarehouseListOrder from "./container/warehouse/order/warehouseListOrder.tsx";
+import WarehouseInventory from "./container/warehouse/inventory.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -172,6 +173,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   import.meta.env.BASE_URL
                 }warehouse/search/batch-number`}
                 element={<WarehouseSearchBatchNumber />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}warehouse/inventory`}
+                element={<WarehouseInventory />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}customer/unvalidate`}

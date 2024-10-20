@@ -16,6 +16,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import { warehouseApi } from "./api/warehouse/warehouse.api";
 import { excelApi } from "./api/excel/excel.api";
+import { mobiApi } from "./api/mobile/mobi.api";
 
 const persistConfig = {
   key: "root",
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   [settingApi.reducerPath]: settingApi.reducer,
   [warehouseApi.reducerPath]: warehouseApi.reducer,
   [excelApi.reducerPath]: excelApi.reducer,
+  [mobiApi.reducerPath]: mobiApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -62,7 +64,8 @@ const store = configureStore({
       .concat(accountApi.middleware)
       .concat(settingApi.middleware)
       .concat(warehouseApi.middleware)
-      .concat(excelApi.middleware),
+      .concat(excelApi.middleware)
+      .concat(mobiApi.middleware),
 });
 
 export default store;

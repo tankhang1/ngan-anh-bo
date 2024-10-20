@@ -3,6 +3,7 @@ import { TObjectiveEnum } from "../assets/types";
 const BASE_URL = "http://116.118.95.67";
 const BASE_PORT = "https://fgkawrverpi1qyawfgb.yis.vn";
 const BASE_PORT_8180 = "https://byxzenverpi1qyrvyf.yis.vn";
+const BASE_MOBILE = "https://ngananh.yis.vn";
 const HTTPS_METHOD = {
   POST: "POST",
   PUT: "PUT",
@@ -522,4 +523,5 @@ export {
   LOCAL_KEY,
   OBJECTIVES_SELECT,
   AccountPermission,
+  BASE_MOBILE,
 };

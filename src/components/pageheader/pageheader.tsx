@@ -60,6 +60,7 @@ const MapLabel = new Map([
   ["batch-number", "Thông tin lô hàng/ Batch Number"],
   ["device", "Quản lý thiết bị"],
   ["list-order", "Danh sách lệnh"],
+  ["inventory", "Danh sách tồn kho"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();
