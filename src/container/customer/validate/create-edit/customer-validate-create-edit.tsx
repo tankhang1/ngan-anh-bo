@@ -166,8 +166,10 @@ function CustomerValidationCreateEdit() {
   return (
     <Fragment>
       <Formik
+        //@ts-expect-error no check initial value
         initialValues={{
           uuid: customer?.uuid,
+          customer_code: customer?.customer_code ?? "",
           customer_name: customer?.customer_name ?? "",
           customer_province: customer?.customer_province ?? "",
           customer_type: customer?.customer_type ?? "",
@@ -289,6 +291,27 @@ function CustomerValidationCreateEdit() {
                     </Card.Title>
                   </Card.Header>
                   <Card.Body>
+                    <Form.Group className="mb-1">
+                      <Form.Label className="text-black">
+                        Mã khách hàng <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <Form.Control
+                        className="input-placeholder"
+                        required
+                        type="text"
+                        placeholder="Mã khách hàng"
+                        name="customer_code"
+                        value={values.customer_code}
+                        onChange={handleChange}
+                        isInvalid={
+                          touched.customer_code && !!errors.customer_code
+                        }
+                        disabled={true}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.customer_code}
+                      </Form.Control.Feedback>
+                    </Form.Group>
                     <Row className="mb-2">
                       <Form.Group as={Col} md={4}>
                         <Form.Label className="text-black">
@@ -344,6 +367,7 @@ function CustomerValidationCreateEdit() {
                           placeholder="Ngày sinh"
                           name="birthday"
                           onKeyDown={(e) => e.preventDefault()}
+                          //@ts-expect-error no check birthday
                           value={values.birthday}
                           lang="vi"
                           onChange={handleChange}

@@ -61,6 +61,8 @@ function Accounts() {
   const [searchBy, setSearchBy] = useState(ACCOUNT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const [openAddNewAccount, setOpenAddNewAccount] = useState(false);
+  const [openUpdateAccount, setOpenUpdateAccount] = useState(false);
+  const [accountInfo, setAccountInfo] = useState<TAccount>();
   const [username, setUsername] = useState<string | null>(null);
   const [showPW1, setShowPW1] = useState(false);
   const [showPW2, setShowPW2] = useState(false);
@@ -98,7 +100,6 @@ function Accounts() {
         });
     }
   };
-
   const onSignUpAccount = async (values: TAccount) => {
     setOpenAddNewAccount(false);
     await signUp({
@@ -299,7 +300,16 @@ function Accounts() {
                     key: "",
                     label: "Chức năng",
                     render: (value) => (
-                      <td className="d-flex justify-content-center align-item-center">
+                      <td className="d-flex gap-2 justify-content-center align-item-center">
+                        <button
+                          className="btn btn-icon btn-sm btn-primary-ghost"
+                          onClick={() => {
+                            setOpenUpdateAccount(true);
+                            setAccountInfo(value);
+                          }}
+                        >
+                          <i className="ti ti-edit"></i>
+                        </button>
                         <button
                           className="btn btn-icon btn-sm btn-danger-ghost"
                           onClick={() => {
@@ -526,6 +536,214 @@ function Accounts() {
                   <Button
                     variant="secondary"
                     onClick={() => setOpenAddNewAccount(false)}
+                  >
+                    Đóng
+                  </Button>
+
+                  <AppWarning onAccept={() => handleSubmit()}>
+                    <Button
+                      variant="primary"
+                      className={`btn justify-content-center align-items-center ${
+                        isLoadingSignUp && "btn-loader "
+                      }`}
+                    >
+                      <span>Xác nhận</span>
+                      {isLoadingSignUp && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
+                    </Button>
+                  </AppWarning>
+                </Modal.Footer>
+              </div>
+            )}
+          </Formik>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={openUpdateAccount}
+        onHide={() => setOpenUpdateAccount(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title as="h6">Cập nhật tài khoản</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik
+            initialValues={{
+              username: accountInfo?.username,
+              password: "",
+              password_recheck: "",
+              staff_code: accountInfo?.staff_code,
+              roles:
+                (accountInfo?.role_list?.slice(1, -1)?.toString() as string) ??
+                "",
+            }}
+            validationSchema={accountSchema}
+            onSubmit={onSignUpAccount}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              setFieldValue,
+              values,
+              touched,
+              errors,
+            }) => (
+              <div>
+                <Modal.Body>
+                  <Stack className="d-flex gap-1">
+                    <Form.Group controlId="username_validate">
+                      <Form.Label className="text-black form-required">
+                        Tên đăng nhập <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Tên đăng nhập"
+                        name="username"
+                        defaultValue={values.username}
+                        onChange={handleChange}
+                        isInvalid={touched.username && !!errors.username}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.username}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="password_validate">
+                      <Form.Label className="text-black">
+                        Mật khẩu <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <InputGroup>
+                        <Form.Control
+                          required
+                          type={showPW1 ? "text" : "password"}
+                          placeholder="Mật khẩu"
+                          name="password"
+                          onChange={handleChange}
+                          isInvalid={touched.password && !!errors.password}
+                        ></Form.Control>
+                        <Button
+                          variant=""
+                          className="btn btn-light bg-transparent"
+                          type="button"
+                          onClick={() => setShowPW1(!showPW1)}
+                          id="button-addon2"
+                        >
+                          <i
+                            className={`${
+                              showPW1 ? "ri-eye-line" : "ri-eye-off-line"
+                            } align-middle`}
+                          ></i>
+                        </Button>
+                      </InputGroup>
+                      {touched.password && !!errors.password && (
+                        <p
+                          style={{
+                            color: "red",
+                            fontSize: 12,
+                            marginTop: 4,
+                            fontWeight: 350,
+                          }}
+                        >
+                          {errors.password}
+                        </p>
+                      )}
+                    </Form.Group>
+                    <Form.Group controlId="password_validate">
+                      <Form.Label className="text-black">
+                        Nhập lại mật khẩu{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <InputGroup>
+                        <Form.Control
+                          required
+                          type={showPW2 ? "text" : "password"}
+                          placeholder="Mật khẩu"
+                          name="password_recheck"
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.password_recheck &&
+                            !!errors.password_recheck
+                          }
+                        />
+                        <Button
+                          variant=""
+                          className="btn btn-light bg-transparent"
+                          type="button"
+                          onClick={() => setShowPW2(!showPW2)}
+                          id="button-addon2"
+                        >
+                          <i
+                            className={`${
+                              showPW2 ? "ri-eye-line" : "ri-eye-off-line"
+                            } align-middle`}
+                          ></i>
+                        </Button>
+                      </InputGroup>
+                      {touched.password_recheck &&
+                        !!errors.password_recheck && (
+                          <p
+                            style={{
+                              color: "red",
+                              fontSize: 12,
+                              marginTop: 4,
+                              fontWeight: 350,
+                            }}
+                          >
+                            {errors.password_recheck}
+                          </p>
+                        )}
+                    </Form.Group>
+                    <Form.Group controlId="staff_code_validate">
+                      <Form.Label className="text-black form-required">
+                        Tên nhân viên <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+
+                      <AppSelect
+                        onChange={(value) => setFieldValue("staff_code", value)}
+                        value={values.staff_code}
+                        data={
+                          employees?.map((item) => ({
+                            label: `${item.name} - ${item.code}`,
+                            value: item.code ?? "",
+                          })) ?? []
+                        }
+                        placeholder="Chọn nhân viên"
+                        isInValid={!!errors.staff_code && touched.staff_code}
+                        errorText={errors.staff_code}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label className="text-black">
+                        Vai trò <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+
+                      <AppSelect
+                        onChange={(value) => setFieldValue("roles", value)}
+                        value={values.roles}
+                        data={
+                          roles?.map((item) => ({
+                            label: item.name ?? "",
+                            value: item.code ?? "",
+                          })) ?? []
+                        }
+                        placeholder="Chọn vai trò"
+                        isInValid={!!errors.roles && touched.roles}
+                        errorText={errors.roles}
+                      />
+                    </Form.Group>
+                  </Stack>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setOpenUpdateAccount(false);
+                      setAccountInfo(undefined);
+                    }}
                   >
                     Đóng
                   </Button>

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Button, Card, Col, Form, Modal, Stack } from "react-bootstrap";
+import { Button, Card, Col, Form, Modal, Row, Stack } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
 import {
@@ -122,6 +122,98 @@ const WarehouseExport = () => {
         });
   };
 
+  const handleManualExportExcel = () => {
+    exportExcelFileWithHeader(exportDetail || [], [
+      {
+        label: "Mã phiếu",
+        key: "document_code",
+      },
+      {
+        label: "Mã chi tiết phiếu",
+        key: "document_code_detail",
+      },
+      {
+        label: "Mã đơn hàng",
+        key: "code",
+      },
+      {
+        label: "Mã hash đơn hàng",
+        key: "code_hash",
+      },
+      {
+        label: "Số seri",
+        key: "seri",
+      },
+      {
+        label: "Mã đại lý",
+        key: "agent_code",
+      },
+      {
+        label: "Tên đại lý",
+        key: "agent_name",
+      },
+      {
+        label: "Mã lô",
+        key: "batch_number",
+      },
+      {
+        label: "Thiết bị",
+        key: "device",
+      },
+      {
+        label: "Mã sản phẩm",
+        key: "sku",
+      },
+      {
+        label: "Mã sản phẩm (sub) ",
+        key: "sku_sub",
+      },
+      {
+        label: "ID đơn hàng",
+        key: "procedure_order_detail_item",
+      },
+      {
+        label: "Thời gian",
+        key: "time",
+      },
+      {
+        label: "Mã thời gian",
+        key: "time_number",
+      },
+      {
+        label: "Loại hàng hóa",
+        key: "goods_type",
+      },
+      {
+        label: "Địa chỉ",
+        key: "address",
+      },
+      {
+        label: "Mã nhân nhập kho",
+        key: "staff_import_code",
+      },
+      {
+        label: "Tên nhân nhập kho",
+        key: "staff_import_name",
+      },
+      {
+        label: "Mã nhân viên xuất kho",
+        key: "staff_export_code",
+      },
+      {
+        label: "Tên nhân viên xuất kho",
+        key: "staff_export_name",
+      },
+      {
+        label: "Người nhận",
+        key: "receiver",
+      },
+      {
+        label: "Mã kho",
+        key: "work_center_export_code",
+      },
+    ]);
+  };
   return (
     <Fragment>
       <Col xl={12}>
@@ -366,6 +458,20 @@ const WarehouseExport = () => {
           <Modal.Title>Danh sách thùng</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <div className="d-flex justify-content-end mr-2 ">
+            <Button
+              variant=""
+              aria-label="button"
+              type="button"
+              className="btn btn-success-light ms-2"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              data-bs-title="Add Contact"
+              onClick={handleManualExportExcel}
+            >
+              Xuất Excel
+            </Button>
+          </div>
           <AppTable
             isHeader={false}
             title="Thông tin xuất kho"
