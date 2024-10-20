@@ -228,7 +228,7 @@ const WarehouseListOrder = () => {
               },
               {
                 key: "product_name",
-                label: "Tên sản phẩm",
+                label: "Tên lệnh sản phẩm",
                 render: ({ product_name }) => <td>{product_name}</td>,
               },
               {
@@ -330,7 +330,7 @@ const WarehouseListOrder = () => {
               },
               {
                 key: "product_name",
-                label: "Tên sản phẩm",
+                label: "Tên lệnh sản phẩm",
                 render: ({ product_name }) => <td>{product_name}</td>,
               },
               {

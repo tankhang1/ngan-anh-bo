@@ -93,12 +93,19 @@ const WarehouseInventory = () => {
             headers={[
               {
                 key: "batch_number",
+                label: "Mã lệnh sản xuất",
+                render: ({ procedure_order_code }) => (
+                  <td>{procedure_order_code}</td>
+                ),
+              },
+              {
+                key: "batch_number",
                 label: "Mã lô",
                 render: ({ batch_number }) => <td>{batch_number}</td>,
               },
               {
                 key: "product_name",
-                label: "Tên sản phẩm",
+                label: "Tên lệnh sản phẩm",
                 render: ({ product_name }) => <td>{product_name}</td>,
               },
               {
@@ -134,7 +141,9 @@ const WarehouseInventory = () => {
         size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Danh sách chi tiết</Modal.Title>
+          <Modal.Title>
+            Danh sách chi tiết ( Lô: {inventory?.[0]?.batch_number} )
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AppTable
@@ -142,19 +151,9 @@ const WarehouseInventory = () => {
             isLoading={isLoadingInventory}
             headers={[
               {
-                key: "device_code",
-                label: "Mã thiết bị",
-                render: ({ device_code }) => <td>{device_code}</td>,
-              },
-              {
-                key: "product_name",
-                label: "Tên sản phẩm",
-                render: ({ product_name }) => <td>{product_name}</td>,
-              },
-              {
-                key: "batch_number",
-                label: "Mã lô",
-                render: ({ batch_number }) => <td>{batch_number}</td>,
+                key: "seri",
+                label: "Mã thùng",
+                render: ({ seri }) => <td>{seri}</td>,
               },
               {
                 key: "manufacture_date",
@@ -178,13 +177,8 @@ const WarehouseInventory = () => {
                 ),
               },
               {
-                key: "seri",
-                label: "Mã thùng",
-                render: ({ seri }) => <td>{seri}</td>,
-              },
-              {
                 key: "time",
-                label: "Thời gian xuất kho",
+                label: "Thời gian đóng gói",
                 render: ({ time }) => <td>{time}</td>,
               },
             ]}

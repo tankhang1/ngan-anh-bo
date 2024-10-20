@@ -650,6 +650,7 @@ export type TInventory = {
   manufacture_date: string; // Format: YYYYMMDD
   expiration_date: string; // Format: YYYYMMDD
   expect_packing_date: string; // Format: YYYYMMDD
+  procedure_order_code: string;
   seri: string;
   time: string; // Format: YYYY-MM-DD HH:mm
   time_number: number; // Format: YYYYMMDDHHmm
