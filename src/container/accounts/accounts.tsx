@@ -19,6 +19,7 @@ import {
   useGetAccountRoleListQuery,
   useGetAllAccountQuery,
   useSignUpAccountMutation,
+  useUpdateAccountPasswordMutation,
 } from "../../redux/api/account/account.api";
 import { format } from "date-fns";
 import { ToastContext } from "../../components/AppToast";
@@ -32,6 +33,7 @@ import { RootState } from "../../redux/store";
 import accountSchema from "../../schema/accounts.schema";
 import AppWarning from "../../components/AppWarning";
 import AppSelect from "../../components/AppSelect";
+import accountUpdateSchema from "../../schema/accounts.update.schema";
 
 const ACCOUNT_FILTERS = [
   {
@@ -71,6 +73,8 @@ function Accounts() {
   const [deleteAccount, { isLoading: isLoadingDelete }] =
     useDeleteAccountMutation();
   const [signUp, { isLoading: isLoadingSignUp }] = useSignUpAccountMutation();
+  const [updatePassword, { isLoading: isLoadingUpdatePassword }] =
+    useUpdateAccountPasswordMutation();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: roles } = useGetAccountRoleListQuery();
   const { data: rolesPermission } = useGetRolePermissionListQuery();
@@ -101,7 +105,6 @@ function Accounts() {
     }
   };
   const onSignUpAccount = async (values: TAccount) => {
-    setOpenAddNewAccount(false);
     await signUp({
       username: values.username,
       password: values.password,
@@ -111,12 +114,38 @@ function Accounts() {
     })
       .unwrap()
       .then((value) => {
+        setOpenAddNewAccount(false);
+
         if (value.status === 0) {
           toast.showToast("Đăng ký tài khoản thành công");
         } else toast.showToast("Đăng ký tài khoản thất bại");
       })
       .catch(() => {
+        setOpenAddNewAccount(false);
         toast.showToast("Đăng ký tài khoản thất bại");
+      });
+  };
+  const onUpdateAccount = async (values: TAccount) => {
+    if (!values.password) {
+      toast.showToast(
+        "Cập nhật tài khoản thất bại, vui lòng nhập đầy đủ thông tin"
+      );
+      return;
+    }
+    await updatePassword({
+      new_password: values.password,
+      username: values.username!,
+    })
+      .unwrap()
+      .then((value) => {
+        setOpenUpdateAccount(false);
+        if (value.status === 0) {
+          toast.showToast("Cập nhật tài khoản thành công");
+        } else toast.showToast("Cập nhật tài khoản thất bại");
+      })
+      .catch(() => {
+        setOpenUpdateAccount(false);
+        toast.showToast("Cập nhật tài khoản thất bại");
       });
   };
   return (
@@ -323,7 +352,12 @@ function Accounts() {
                   }
                 : undefined,
             ]}
-            data={accounts || []}
+            data={
+              accounts?.filter(
+                (account) =>
+                  !(account.role_list as string)?.includes("ROLE_WAREHOUSE_APP")
+              ) || []
+            }
             searchByExternal={searchBy}
           />
         </Card>
@@ -543,6 +577,7 @@ function Accounts() {
                   <AppWarning onAccept={() => handleSubmit()}>
                     <Button
                       variant="primary"
+                      type="button"
                       className={`btn justify-content-center align-items-center ${
                         isLoadingSignUp && "btn-loader "
                       }`}
@@ -576,22 +611,11 @@ function Accounts() {
               username: accountInfo?.username,
               password: "",
               password_recheck: "",
-              staff_code: accountInfo?.staff_code,
-              roles:
-                (accountInfo?.role_list?.slice(1, -1)?.toString() as string) ??
-                "",
             }}
-            validationSchema={accountSchema}
-            onSubmit={onSignUpAccount}
+            validationSchema={accountUpdateSchema}
+            onSubmit={onUpdateAccount}
           >
-            {({
-              handleSubmit,
-              handleChange,
-              setFieldValue,
-              values,
-              touched,
-              errors,
-            }) => (
+            {({ handleSubmit, handleChange, values, touched, errors }) => (
               <div>
                 <Modal.Body>
                   <Stack className="d-flex gap-1">
@@ -606,7 +630,7 @@ function Accounts() {
                         name="username"
                         defaultValue={values.username}
                         onChange={handleChange}
-                        isInvalid={touched.username && !!errors.username}
+                        disabled
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.username}
@@ -697,44 +721,6 @@ function Accounts() {
                           </p>
                         )}
                     </Form.Group>
-                    <Form.Group controlId="staff_code_validate">
-                      <Form.Label className="text-black form-required">
-                        Tên nhân viên <span style={{ color: "red" }}>*</span>
-                      </Form.Label>
-
-                      <AppSelect
-                        onChange={(value) => setFieldValue("staff_code", value)}
-                        value={values.staff_code}
-                        data={
-                          employees?.map((item) => ({
-                            label: `${item.name} - ${item.code}`,
-                            value: item.code ?? "",
-                          })) ?? []
-                        }
-                        placeholder="Chọn nhân viên"
-                        isInValid={!!errors.staff_code && touched.staff_code}
-                        errorText={errors.staff_code}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label className="text-black">
-                        Vai trò <span style={{ color: "red" }}>*</span>
-                      </Form.Label>
-
-                      <AppSelect
-                        onChange={(value) => setFieldValue("roles", value)}
-                        value={values.roles}
-                        data={
-                          roles?.map((item) => ({
-                            label: item.name ?? "",
-                            value: item.code ?? "",
-                          })) ?? []
-                        }
-                        placeholder="Chọn vai trò"
-                        isInValid={!!errors.roles && touched.roles}
-                        errorText={errors.roles}
-                      />
-                    </Form.Group>
                   </Stack>
                 </Modal.Body>
                 <Modal.Footer>
@@ -748,15 +734,20 @@ function Accounts() {
                     Đóng
                   </Button>
 
-                  <AppWarning onAccept={() => handleSubmit()}>
+                  <AppWarning
+                    onAccept={() => {
+                      handleSubmit();
+                    }}
+                  >
                     <Button
                       variant="primary"
+                      type="button"
                       className={`btn justify-content-center align-items-center ${
-                        isLoadingSignUp && "btn-loader "
+                        isLoadingUpdatePassword && "btn-loader "
                       }`}
                     >
                       <span>Xác nhận</span>
-                      {isLoadingSignUp && (
+                      {isLoadingUpdatePassword && (
                         <span className="loading">
                           <i className="ri-loader-2-fill fs-19"></i>
                         </span>

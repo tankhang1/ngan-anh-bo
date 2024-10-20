@@ -54,6 +54,26 @@ export const accountApi = createApi({
             ]
           : [TagsEnum.ACCOUNT_ROLE],
     }),
+    updateAccountPassword: builder.mutation<
+      BASE_RES,
+      { username: string; new_password: string }
+    >({
+      query: (body) => ({
+        url: `/admin/update-password`,
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+    }),
+    updatePassword: builder.mutation<
+      BASE_RES,
+      { old_password: string; new_password: string }
+    >({
+      query: (body) => ({
+        url: `/customer/update-password`,
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+    }),
   }),
 });
 
@@ -62,4 +82,6 @@ export const {
   useSignUpAccountMutation,
   useDeleteAccountMutation,
   useGetAccountRoleListQuery,
+  useUpdateAccountPasswordMutation,
+  useUpdatePasswordMutation,
 } = accountApi;

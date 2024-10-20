@@ -1,10 +1,20 @@
-import React, { FC, Fragment, useEffect, useRef, useState } from "react";
+import React, {
+  FC,
+  Fragment,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
+  Button,
   Dropdown,
+  Form,
   InputGroup,
   Modal,
   Nav,
   Offcanvas,
+  Stack,
   Tab,
 } from "react-bootstrap";
 import { MENUITEMS } from "../sidebar/sidemenu";
@@ -16,11 +26,18 @@ import { ThemeChanger } from "../../../redux/action";
 //IMAGES
 
 import ngananhlogo from "../../../assets/images/brand-logos/ngan-anh-logo.png";
+import { useUpdatePasswordMutation } from "../../../redux/api/account/account.api";
+import { TAccount } from "../../../assets/types";
+import { ToastContext } from "../../AppToast";
+import { Formik } from "formik";
+import AppWarning from "../../AppWarning";
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const [startDatei, setStartDatei] = useState(new Date());
   const navigate = useNavigate();
+  const toast = useContext(ToastContext);
+
   const [show, setShow] = useState(false);
 
   const [show1, setShow1] = useState(false);
@@ -330,7 +347,8 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
 
   const [cartItems, setCartItems] = useState([...cartProduct]);
   const [cartItemCount, setCartItemCount] = useState(cartProduct.length);
-
+  const [updatePassword, { isLoading: isLoadingUpdatePassword }] =
+    useUpdatePasswordMutation();
   const handleRemove = (itemId: number) => {
     const updatedCart = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updatedCart);
@@ -432,6 +450,9 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const [searchcolor, setsearchcolor] = useState("text-dark");
   const [searchval, setsearchval] = useState("Type something");
   const [NavData, setNavData] = useState([]);
+  const [openUpdateAccount, setOpenUpdateAccount] = useState(false);
+  const [showPW1, setShowPW1] = useState(false);
+  const [showPW2, setShowPW2] = useState(false);
 
   const myfunction = (inputvalue: string) => {
     document.querySelector(".search-result")?.classList.remove("d-none");
@@ -510,7 +531,23 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", Topup);
   }
-
+  const onUpdateAccount = async (values: {
+    new_password: string;
+    old_password: string;
+  }) => {
+    await updatePassword(values)
+      .unwrap()
+      .then((value) => {
+        setOpenUpdateAccount(false);
+        if (value.status === 0) {
+          toast.showToast("Cập nhật tài khoản thành công");
+        } else toast.showToast("Cập nhật tài khoản thất bại");
+      })
+      .catch(() => {
+        setOpenUpdateAccount(false);
+        toast.showToast("Cập nhật tài khoản thất bại");
+      });
+  };
   return (
     <Fragment>
       <header className="app-header">
@@ -1174,28 +1211,13 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
                 className="dropdown-menu  border-0 main-header-dropdown  overflow-hidden header-profile-dropdown"
                 aria-labelledby="mainHeaderProfile"
               >
-                {/* <Dropdown.Item as="li" className="border-0">
-                  <Link to={`${import.meta.env.BASE_URL}pages/profile`}>
-                    <i className="fs-13 me-2 bx bx-user"></i>Profile
-                  </Link>
+                <Dropdown.Item
+                  as="li"
+                  className="border-0"
+                  onClick={() => setOpenUpdateAccount(true)}
+                >
+                  <i className="fs-13 me-2 bx bx-lock"></i>Đổi mật khẩu
                 </Dropdown.Item>
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to={`${import.meta.env.BASE_URL}pages/email/mailapp`}>
-                    <i className="fs-13 me-2 bx bx-comment"></i>Message
-                  </Link>
-                </Dropdown.Item>
-                <Dropdown.Item as="li" className="border-0">
-                  <Link
-                    to={`${import.meta.env.BASE_URL}pages/email/mailsettings`}
-                  >
-                    <i className="fs-13 me-2 bx bx-cog"></i>Settings
-                  </Link>
-                </Dropdown.Item>
-                <Dropdown.Item as="li" className="border-0">
-                  <Link to={`${import.meta.env.BASE_URL}pages/faqs`}>
-                    <i className="fs-13 me-2 bx bx-help-circle"></i>Help
-                  </Link>
-                </Dropdown.Item> */}
                 <Dropdown.Item
                   as="li"
                   className="border-0"
@@ -2070,6 +2092,149 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
             </div>
           </div>
         </div>
+      </Modal>
+      <Modal
+        show={openUpdateAccount}
+        onHide={() => setOpenUpdateAccount(false)}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title as="h6">Cập nhật tài khoản</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik
+            initialValues={{
+              new_password: "",
+              old_password: "",
+            }}
+            onSubmit={onUpdateAccount}
+          >
+            {({ handleSubmit, handleChange, values, touched, errors }) => (
+              <div>
+                <Modal.Body>
+                  <Stack className="d-flex gap-1">
+                    <Form.Group controlId="password_validate">
+                      <Form.Label className="text-black">
+                        Mật khẩu hiện tại<span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <InputGroup>
+                        <Form.Control
+                          required
+                          type={showPW1 ? "text" : "password"}
+                          placeholder="Mật khẩu hiện tại"
+                          name="old_password"
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.old_password && !!errors.old_password
+                          }
+                        ></Form.Control>
+                        <Button
+                          variant=""
+                          className="btn btn-light bg-transparent"
+                          type="button"
+                          onClick={() => setShowPW1(!showPW1)}
+                          id="button-addon2"
+                        >
+                          <i
+                            className={`${
+                              showPW1 ? "ri-eye-line" : "ri-eye-off-line"
+                            } align-middle`}
+                          ></i>
+                        </Button>
+                      </InputGroup>
+                      {touched.old_password && !!errors.old_password && (
+                        <p
+                          style={{
+                            color: "red",
+                            fontSize: 12,
+                            marginTop: 4,
+                            fontWeight: 350,
+                          }}
+                        >
+                          {errors.old_password}
+                        </p>
+                      )}
+                    </Form.Group>
+                    <Form.Group controlId="password_validate">
+                      <Form.Label className="text-black">
+                        Mật khẩu mới <span style={{ color: "red" }}>*</span>
+                      </Form.Label>
+                      <InputGroup>
+                        <Form.Control
+                          required
+                          type={showPW2 ? "text" : "password"}
+                          placeholder="Mật khẩu mới"
+                          name="new_password"
+                          onChange={handleChange}
+                          isInvalid={
+                            touched.new_password && !!errors.new_password
+                          }
+                        />
+                        <Button
+                          variant=""
+                          className="btn btn-light bg-transparent"
+                          type="button"
+                          onClick={() => setShowPW2(!showPW2)}
+                          id="button-addon2"
+                        >
+                          <i
+                            className={`${
+                              showPW2 ? "ri-eye-line" : "ri-eye-off-line"
+                            } align-middle`}
+                          ></i>
+                        </Button>
+                      </InputGroup>
+                      {touched.new_password && !!errors.new_password && (
+                        <p
+                          style={{
+                            color: "red",
+                            fontSize: 12,
+                            marginTop: 4,
+                            fontWeight: 350,
+                          }}
+                        >
+                          {errors.new_password}
+                        </p>
+                      )}
+                    </Form.Group>
+                  </Stack>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setOpenUpdateAccount(false);
+                    }}
+                  >
+                    Đóng
+                  </Button>
+
+                  <AppWarning
+                    onAccept={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    <Button
+                      variant="primary"
+                      type="button"
+                      className={`btn justify-content-center align-items-center ${
+                        isLoadingUpdatePassword && "btn-loader "
+                      }`}
+                    >
+                      <span>Xác nhận</span>
+                      {isLoadingUpdatePassword && (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      )}
+                    </Button>
+                  </AppWarning>
+                </Modal.Footer>
+              </div>
+            )}
+          </Formik>
+        </Modal.Body>
       </Modal>
     </Fragment>
   );
