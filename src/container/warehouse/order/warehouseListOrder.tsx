@@ -333,11 +333,7 @@ const WarehouseListOrder = () => {
                 label: "Tên lệnh sản phẩm",
                 render: ({ product_name }) => <td>{product_name}</td>,
               },
-              {
-                key: "product_number",
-                label: "Số lượng sản phẩm",
-                render: ({ product_number }) => <td>{product_number}</td>,
-              },
+
               {
                 key: "batch_number",
                 label: "Mã lô",
