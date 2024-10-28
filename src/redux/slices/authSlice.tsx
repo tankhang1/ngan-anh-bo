@@ -223,7 +223,7 @@ const initialValue = {
   },
 };
 
-const onPermissionFeature = (permission: TPermit) => {
+const onPermissionFeature = (permission: TPermit, isSuperAdmin?: number) => {
   switch (permission.feature_code) {
     case "DASHBOARD":
       return {
@@ -445,11 +445,10 @@ const onPermissionFeature = (permission: TPermit) => {
     }
     case "SETTINGS_DEVICE": {
       return {
-        viewDevice:
-          permission.permit_view_list || permission.permit_view_detail,
-        deactiveDevice: permission.permit_edit,
-        activeDevice: permission.permit_edit,
-        createKey: permission.permit_create,
+        viewDevice: isSuperAdmin,
+        deactiveDevice: isSuperAdmin,
+        activeDevice: isSuperAdmin,
+        createKey: isSuperAdmin,
       };
     }
     case "CUSTOMERS_VALIDATE": {
@@ -738,7 +737,10 @@ const authSlice = createSlice({
         warehouseInventoryInfo: 0,
       };
       action.payload.roles_permission.forEach((item) => {
-        const parseValue = onPermissionFeature(item);
+        const parseValue = onPermissionFeature(
+          item,
+          action.payload.roles === "ROLE_SUPERADMIN" ? 1 : 0
+        );
 
         if (parseValue) {
           //@ts-ignore

@@ -271,7 +271,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.viewWarehouseReportIngredient ||
             permission.viewWarehouseReportIngredientPacking
           );
-        
+
         case MENU_KEY.REPORT_TITLE:
           if (
             permission.reportCustomer ||
@@ -279,7 +279,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
             permission.reportProgramChance ||
-            permission.reportSMSBrandname||
+            permission.reportSMSBrandname ||
             permission.reportSMSBrandname
           )
             return true;
@@ -298,7 +298,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.REPORTS_SMS:
           return permission.reportSMSGateway;
         case MENU_KEY.REPORTS_SMS_BRANDNAME:
-          return permission.reportSMSBrandname
+          return permission.reportSMSBrandname;
         case MENU_KEY.SETTINGS_AREA:
           return permission.settingArea;
         case MENU_KEY.SETTINGS_GROUP_CUSTOMER:
@@ -312,7 +312,7 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             permission.reportProgramPoint ||
             permission.reportProgramTopup ||
             permission.reportProgramChance ||
-            permission.reportSMSGateway||
+            permission.reportSMSGateway ||
             permission.reportSMSBrandname
           );
         case MENU_KEY.MANAGE_SETTING:
@@ -342,9 +342,9 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
             return true;
           return false;
         case MENU_KEY.REPORTS_SMS:
-          return permission.reportSMSGateway
+          return permission.reportSMSGateway;
         case MENU_KEY.REPORTS_SMS_BRANDNAME:
-          return permission.reportSMSBrandname
+          return permission.reportSMSBrandname;
         case MENU_KEY.WAREHOUSES_MATERIAL:
           return (
             permission.viewSearchBatchNumber ||
@@ -381,9 +381,11 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
         case MENU_KEY.WAREHOUSES_REPORT_INVENTORY:
           return permission.warehouseInventoryInfo;
         case MENU_KEY.WAREHOUSES_SEARCH_RETAILER_1:
-          return permission.viewSearchRetailer1
+          return permission.viewSearchRetailer1;
         case MENU_KEY.WAREHOUSES_SEARCH_TODAY:
-          return permission.viewWarehouseSearchToday
+          return permission.viewWarehouseSearchToday;
+        case MENU_KEY.SETTINGS_DEVICE:
+          return permission.viewDevice;
         default:
           return true;
       }
