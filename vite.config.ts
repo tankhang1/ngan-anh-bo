@@ -6,4 +6,7 @@ export default defineConfig({
   build: {
     target: "es2015", // This ensures compatibility with older browsers
   },
+  server: {
+    port: 5174,
+  },
 });
