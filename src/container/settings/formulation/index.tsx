@@ -34,7 +34,6 @@ function SettingFormulationPage() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("name");
   const deferSearchValue = useDeferredValue(search);
   const [openAddPopup, setOpenAddPopup] = useState<Omit<
     TFormulation,
@@ -78,7 +77,7 @@ function SettingFormulationPage() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Nhập dạng thuốc"
+                      placeholder="Nhập thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -138,7 +137,6 @@ function SettingFormulationPage() {
               },
             ]}
             data={formulations || []}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

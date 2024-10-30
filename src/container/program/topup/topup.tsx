@@ -51,7 +51,6 @@ const STATUS_FILTERS = [
 function TopupProgram() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(TOPUP_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
   const [status, setStatus] = useState(1);
@@ -105,7 +104,7 @@ function TopupProgram() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -130,7 +129,7 @@ function TopupProgram() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
@@ -358,14 +357,6 @@ function TopupProgram() {
               },
             ]}
             data={programTopups || []}
-            filters={[
-              {
-                key: "status",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

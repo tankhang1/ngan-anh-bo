@@ -65,7 +65,6 @@ const PRODUCT_TYPE = [
 function ProductWarehousePage() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(PRODUCT_FILTERS[0].key);
   const [changeType, setChangeType] = useState<number>(-1); // true: thùng, false: gói
   const deferSearchValue = useDeferredValue(search);
 
@@ -115,7 +114,7 @@ function ProductWarehousePage() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -140,7 +139,7 @@ function ProductWarehousePage() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                   <OverlayTrigger
                     placement="top"
                     overlay={
@@ -328,14 +327,6 @@ function ProductWarehousePage() {
               },
             ]}
             data={filterProducts || []}
-            filters={[
-              {
-                key: "id",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

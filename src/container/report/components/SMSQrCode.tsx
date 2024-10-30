@@ -11,22 +11,20 @@ import {
   useGetPacketsQuery,
   useGetReportDashboardDayByDayQuery,
 } from "../../../redux/api/manage/manage.api";
-import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
+import { fDate } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
 import AppId from "../../../components/common/app-id";
 import { TProductDashboardTable } from "../../../assets/types";
 import {
   useExportBinMutation,
   useExportPackageMutation,
-  useExportSMSMutation,
 } from "../../../redux/api/excel/excel.api";
 function SMS_QR_Report() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
-    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
+    st: +format(subDays(new Date(), 10), "yyyyMMdd"),
+    ed: +format(new Date(), "yyyyMMdd"),
   });
 
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
@@ -54,7 +52,8 @@ function SMS_QR_Report() {
   );
   const { data: bins, isLoading: isLoadingBin } = useGetBinsQuery(
     {
-      ...rangDate,
+      st: +(rangDate.st + "0000"),
+      ed: +(rangDate.ed + "2359"),
       nu: 0,
       sz: 9999,
     },
@@ -66,7 +65,8 @@ function SMS_QR_Report() {
   );
   const { data: packets, isLoading: isLoadingPacket } = useGetPacketsQuery(
     {
-      ...rangDate,
+      st: +(rangDate.st + "0000"),
+      ed: +(rangDate.ed + "2359"),
       nu: 0,
       sz: 9999,
     },
@@ -155,8 +155,8 @@ function SMS_QR_Report() {
               className="btn btn-icon bg-danger"
               onClick={() => {
                 setRangeDate({
-                  st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
-                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
+                  st: +format(newRangeDate.st, "yyyyMMdd"),
+                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
                 });
                 setListDays(
                   getDaysArray(

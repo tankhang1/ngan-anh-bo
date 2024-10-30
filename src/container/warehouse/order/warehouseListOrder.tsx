@@ -94,6 +94,7 @@ const WarehouseListOrder = () => {
       refetchImport();
     }, 200);
   };
+  console.log(procedureOrders);
   const handleExportExcel = async () => {
     if (procedureOrders)
       await exportExcel({
@@ -106,7 +107,6 @@ const WarehouseListOrder = () => {
           if (url) window.open(url.data, "_blank");
         });
   };
-
   return (
     <Fragment>
       <Col xl={12}>
@@ -301,8 +301,6 @@ const WarehouseListOrder = () => {
               },
             ]}
             data={procedureOrders || []}
-            externalSearch={search}
-            searchByExternal="document_code"
           />
         </Card>
       </Col>

@@ -54,7 +54,7 @@ const MapLabel = new Map([
   ["material-fill", "Nhập nguyên vật liệu"],
   ["report-material", "Danh sách vật tư"],
   ["report-material-packing", "Danh sách nguyên vật liệu"],
-  ["retailer1", "Danh sách mã khách hàng xuất kho"],
+  ["retailer1", "Danh sách mã xuất kho"],
   ["verify-customer", "Thông tin khách hàng"],
   ["create-manufactor-order", "Tạo lệnh sản xuất"],
   ["batch-number", "Thông tin lô hàng/ Batch Number"],

@@ -32,6 +32,8 @@ function TopupReport() {
   const { data: points, isLoading } = useGetReportProgramPointDetailByTimeQuery(
     {
       ...rangDate,
+      nu: 0,
+      sz: 1000000,
     },
     {
       skipPollingIfUnfocused: true,

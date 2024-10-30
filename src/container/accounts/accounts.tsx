@@ -176,7 +176,7 @@ function Accounts() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -201,7 +201,7 @@ function Accounts() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
 
                   {permission.createAccount ? (
                     <OverlayTrigger
@@ -358,7 +358,7 @@ function Accounts() {
                   !(account.role_list as string)?.includes("ROLE_WAREHOUSE_APP")
               ) || []
             }
-            searchByExternal={searchBy}
+            // searchByExternal={searchBy}
           />
         </Card>
       </Col>

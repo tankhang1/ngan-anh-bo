@@ -137,7 +137,7 @@ function EmployeeDepartment() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -159,7 +159,7 @@ function EmployeeDepartment() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
 
                   {permission.createDepartment ? (
                     <OverlayTrigger
@@ -346,7 +346,7 @@ function EmployeeDepartment() {
                 <Button variant="danger" onClick={onModalClose}>
                   Hủy
                 </Button>
-                {(permission.editDepartment || permission.createDepartment )&& (
+                {(permission.editDepartment || permission.createDepartment) && (
                   <AppWarning onAccept={() => handleSubmit()}>
                     <Button
                       variant="primary"

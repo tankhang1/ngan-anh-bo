@@ -26,7 +26,6 @@ function SettingGroupCustomer() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("name");
   const deferSearchValue = useDeferredValue(search);
   const [openAddPopup, setOpenAddPopup] = useState<TGroupCustomer | null>(null);
 
@@ -67,7 +66,7 @@ function SettingGroupCustomer() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Nhập tên nhóm khách hàng"
+                      placeholder="Nhập thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -170,7 +169,6 @@ function SettingGroupCustomer() {
               //   : undefined,
             ]}
             data={groups || []}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

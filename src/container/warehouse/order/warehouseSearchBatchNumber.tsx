@@ -166,49 +166,68 @@ const WarehouseSearchBatchNumber = () => {
                     render: ({ id }) => <td>{id}</td>,
                   },
                   {
-                    key: "shipment_code",
-                    label: "Lệnh sản xuất",
-                    render: ({ agent_code }) => <td>{agent_code}</td>,
-                  },
-                  {
-                    key: "document_code",
-                    label: "Mã phiếu",
-                    render: ({ document_code }) => <td>{document_code}</td>,
-                  },
-                  {
-                    key: "batch_number",
-                    label: "Lô sản suất/ Batch",
-                    render: ({ agent_name }) => <td>{agent_name}</td>,
+                    key: "seri",
+                    label: "Mã thùng",
+                    render: ({ seri }) => <td>{seri}</td>,
                   },
                   {
                     key: "code",
-                    label: "Mã thùng",
+                    label: "Mã iQr",
                     render: ({ code }) => <td>{code}</td>,
                   },
                   {
-                    key: "shipment_code",
+                    key: "sku",
+                    label: "Mã sản phẩm",
+                    render: ({ sku }) => <td>{sku}</td>,
+                  },
+                  {
+                    key: "sku",
                     label: "Tên sản phẩm",
+                    render: ({ sku }) => <td>{""}</td>,
+                  },
+                  {
+                    key: "staff_export_name",
+                    label: "Trạng thái",
+                    render: ({ staff_export_name }) => <td>Đã xuất kho</td>,
+                  },
+                  // Chờ thông tin
+
+                  {
+                    key: "shipment_code",
+                    label: "Mã đại lý",
                     render: ({ agent_code }) => <td>{agent_code}</td>,
                   },
+                  {
+                    key: "shipment_code",
+                    label: "Tên đại lý C1",
+                    render: ({ agent_name }) => <td>{agent_name}</td>,
+                  },
+                  {
+                    key: "document_code",
+                    label: "Mã phiếu xuất kho",
+                    render: ({ document_code }) => <td>{document_code}</td>,
+                  },
+
                   {
                     key: "goods_type",
                     label: "Loại hàng hóa",
                     render: ({ goods_type }) => <td>{goods_type}</td>,
                   },
                   {
+                    key: "work_center_export_code",
+                    label: "Mã kho",
+                    render: ({ work_center_export_code }) => (
+                      <td>{work_center_export_code}</td>
+                    ),
+                  },
+                  {
                     key: "staff_export_code",
-                    label: "Số lượng code gói",
+                    label: "Mã nhân viên xuất kho",
                     render: ({ staff_export_code }) => (
                       <td>{staff_export_code}</td>
                     ),
                   },
-                  {
-                    key: "staff_export_name",
-                    label: "Trạng thái",
-                    render: ({ staff_export_name }) => (
-                      <td>{staff_export_name}</td>
-                    ),
-                  },
+
                   {
                     key: "staff_export_name",
                     label: "Tên nhân viên xuất kho",
@@ -225,13 +244,6 @@ const WarehouseSearchBatchNumber = () => {
                     key: "time",
                     label: "Thời gian xuất kho",
                     render: ({ time }) => <td>{time}</td>,
-                  },
-                  {
-                    key: "work_center_export_code",
-                    label: "Mã kho",
-                    render: ({ work_center_export_code }) => (
-                      <td>{work_center_export_code}</td>
-                    ),
                   },
                 ]}
                 data={bins || []}

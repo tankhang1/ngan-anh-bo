@@ -136,7 +136,7 @@ function EmployeeRole() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -158,7 +158,7 @@ function EmployeeRole() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
 
                   {permission.createRole ? (
                     <OverlayTrigger
@@ -242,14 +242,6 @@ function EmployeeRole() {
               },
             ]}
             data={roles || []}
-            filters={[
-              {
-                key: "id",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

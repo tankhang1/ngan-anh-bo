@@ -11,7 +11,6 @@ import {
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
@@ -87,7 +86,7 @@ function CustomerUnValidation() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Nhập số điện thoại"
+                      placeholder="Nhập thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value.trim())}
                     />
@@ -101,7 +100,7 @@ function CustomerUnValidation() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -123,7 +122,7 @@ function CustomerUnValidation() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
 
                   {/* {permission.createUnValidateCustomer ? (
                     <OverlayTrigger
@@ -312,14 +311,6 @@ function CustomerUnValidation() {
               },
             ]}
             data={customers || []}
-            filters={[
-              {
-                key: "status",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

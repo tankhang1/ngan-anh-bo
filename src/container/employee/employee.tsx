@@ -11,7 +11,6 @@ import {
 } from "react-bootstrap";
 import AppTable from "../../components/common/table/table";
 import { TEmployee } from "../../assets/types";
-import AppId from "../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { useGetListEmployeeQuery } from "../../redux/api/manage/manage.api";
 import { format } from "date-fns";
@@ -33,7 +32,6 @@ const EMPLOYEE_FILTERS = [
 function Employee() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(EMPLOYEE_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
   const { data: employees, isLoading: isLoadingEmployee } =
@@ -71,7 +69,7 @@ function Employee() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -93,7 +91,7 @@ function Employee() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
 
                   {permission.createEmployee ? (
                     <OverlayTrigger
@@ -231,9 +229,9 @@ function Employee() {
                 render: (value) => <td>{value.province_name}</td>,
               },
               {
-                key: "area",
-                label: "Khu vực",
-                render: (value) => <td>{value.area}</td>,
+                key: "areas",
+                label: "Vùng kinh doanh",
+                render: (value) => <td>{value.areas as string}</td>,
               },
 
               {
@@ -279,14 +277,6 @@ function Employee() {
               },
             ]}
             data={employees || []}
-            filters={[
-              {
-                key: "id",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

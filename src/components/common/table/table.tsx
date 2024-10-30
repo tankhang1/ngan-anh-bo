@@ -59,54 +59,24 @@ const AppTable = <T extends DataItem>({
   const [searchBy, setSearchBy] = useState(headers[0]);
   const [searchValue, setSearchValue] = useState("");
   const deferSearchValue = useDeferredValue(searchValue);
+
   const filterData = useMemo(() => {
     if (!data) return [];
-    if (filterOption && filterOption?.value !== "ALL")
-      return !isHeader
-        ? data?.filter(
-            (item) =>
-              item[filterOption?.key] === filterOption?.value &&
-              (item[searchByExternal ?? "id"] ?? "")
-                .toString()
-                .toLowerCase()
-                .includes(externalSearch?.toString()?.toLowerCase())
-          )
-        : data?.filter(
-            (item) =>
-              item[filterOption.key] === filterOption?.value &&
-              (item[searchBy?.key || "id"] ?? "")
-                .toString()
-                .toLowerCase()
-                .includes(deferSearchValue.toLowerCase())
-          );
-    return !isHeader
-      ? data?.filter((item) => {
-          console.log(
-            item,
-            item[searchByExternal ?? "id"] ?? "",
-            externalSearch
-          );
-          return (item[searchByExternal ?? "id"] ?? "")
-            ?.toString()
-            .toLowerCase()
-            .includes(externalSearch?.toString().toLowerCase());
-        })
-      : data?.filter((item) =>
-          (item[searchBy?.key || "id"] ?? "")
-            ?.toString()
-            .toLowerCase()
-            .includes(deferSearchValue.toLowerCase())
-        );
-  }, [
-    data,
-    filterOption,
-    searchBy,
-    deferSearchValue,
-    page,
-    externalSearch,
-    isHeader,
-  ]);
 
+    const searchTerm = isHeader
+      ? deferSearchValue?.toLowerCase() ?? ""
+      : externalSearch?.toLowerCase() ?? "";
+    return data.filter((item) => {
+      // If filterOption is defined, check if the item matches filter criteria
+
+      // If searchBy is defined, search by a specific key; otherwise, search all keys
+      const itemMatchesSearch = Object.values(item).some((value) =>
+        (value ?? "").toString().toLowerCase().includes(searchTerm)
+      );
+
+      return itemMatchesSearch;
+    });
+  }, [data, filterOption, deferSearchValue, externalSearch]);
   const pagingData = useMemo(() => {
     if (setExternalPage) {
       return filterData;
@@ -161,31 +131,7 @@ const AppTable = <T extends DataItem>({
                 onChange={(e) => setSearchValue(e.target.value)}
               />
             </div>
-            <Dropdown className="mb-sm-0 mb-2">
-              <Dropdown.Toggle
-                variant=""
-                className="btn btn-sm btn-outline-primary btn-wave waves-effect waves-light no-caret "
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Tìm kiếm
-                <i className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
-              </Dropdown.Toggle>
-              <Dropdown.Menu role="menu">
-                {headers.map(
-                  (item, index) =>
-                    item !== undefined && (
-                      <Dropdown.Item
-                        key={index}
-                        onClick={() => setSearchBy(item)}
-                        active={item.key === searchBy?.key}
-                      >
-                        {item.label}
-                      </Dropdown.Item>
-                    )
-                )}
-              </Dropdown.Menu>
-            </Dropdown>
+
             {filters && filters.length > 0 && (
               <Dropdown>
                 <Dropdown.Toggle

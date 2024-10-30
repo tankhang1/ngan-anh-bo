@@ -25,7 +25,6 @@ function SettingIndicationPage() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("name");
   const deferSearchValue = useDeferredValue(search);
   const [openAddPopup, setOpenAddPopup] = useState<Omit<
     TIndication,
@@ -69,7 +68,7 @@ function SettingIndicationPage() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Nhập nhóm thuốc"
+                      placeholder="Nhập thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -129,7 +128,6 @@ function SettingIndicationPage() {
               },
             ]}
             data={indications || []}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

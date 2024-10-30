@@ -28,7 +28,6 @@ function CustomerUnValidateToday() {
   });
 
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const [customerType, setCustomerType] = useState<string>(
     groupObjectives?.[0].symbol || ""
   );
@@ -99,7 +98,7 @@ function CustomerUnValidateToday() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -121,7 +120,7 @@ function CustomerUnValidateToday() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                 </div>
               </div>
             </div>
@@ -274,7 +273,6 @@ function CustomerUnValidateToday() {
                 value: "ALL",
               },
             ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

@@ -78,7 +78,7 @@ const WarehouseCreateManufactorOrder = () => {
         }) => (
           <Card className="custom-card">
             <Card.Header className="justify-content-between">
-              <Card.Title>Thông tin lệnh xuất kho</Card.Title>
+              <Card.Title>Thông tin lệnh sản xuất</Card.Title>
               <div className="d-flex flex-row align-items-center gap-2">
                 <button
                   className="btn btn-danger-light"
@@ -111,7 +111,7 @@ const WarehouseCreateManufactorOrder = () => {
                 <Stack gap={2}>
                   <div>
                     <Form.Label className="text-black">
-                      Loại lệnh xuất kho <span style={{ color: "red" }}>*</span>
+                      Cấp độ cấp mã iQr <span style={{ color: "red" }}>*</span>
                     </Form.Label>
                     <div className="d-flex gap-2">
                       <button
@@ -127,7 +127,7 @@ const WarehouseCreateManufactorOrder = () => {
                             : "btn-outline-primary"
                         }`}
                       >
-                        Tạo lệnh xuất thùng
+                        Cấp độ thùng
                       </button>
                       <button
                         onClick={() => {
@@ -142,9 +142,18 @@ const WarehouseCreateManufactorOrder = () => {
                             : "btn-outline-primary"
                         }`}
                       >
-                        Tạo lệnh xuất gói
+                        Cấp độ gói
                       </button>
                     </div>
+                    {typeExport === "BIN" ? (
+                      <p className="text-gray mt-2" style={{ fontSize: 14 }}>
+                        iQr chỉ cấp cho thùng
+                      </p>
+                    ) : (
+                      <p className="text-gray mt-2" style={{ fontSize: 14 }}>
+                        Cấp độ gói: iQr được cấp cho gói và thùng
+                      </p>
+                    )}
                   </div>
                   <Form.Group>
                     <Form.Label className="text-black">

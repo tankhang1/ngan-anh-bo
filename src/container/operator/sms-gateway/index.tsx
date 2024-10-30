@@ -38,7 +38,6 @@ function SMSGateway() {
   });
 
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const [customerType, setCustomerType] = useState<string>(
     groupObjectives?.[0].symbol || ""
   );
@@ -73,7 +72,7 @@ function SMSGateway() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -95,7 +94,7 @@ function SMSGateway() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                 </div>
               </div>
             </div>
@@ -238,14 +237,6 @@ function SMSGateway() {
               },
             ]}
             data={data ?? []}
-            filters={[
-              {
-                key: "status",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

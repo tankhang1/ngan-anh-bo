@@ -13,7 +13,6 @@ function ManageMaterialPacking() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("shipment_code");
   const deferSearchValue = useDeferredValue(search);
 
   const { data: ingredients, isLoading: isLoadingIngredient } =
@@ -34,7 +33,7 @@ function ManageMaterialPacking() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Mã vận đơn"
+                      placeholder="Nhập thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -135,7 +134,6 @@ function ManageMaterialPacking() {
               },
             ]}
             data={ingredients || []}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

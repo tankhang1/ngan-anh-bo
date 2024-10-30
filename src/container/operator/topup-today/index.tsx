@@ -31,7 +31,6 @@ const TOPUP_FILTERS = [
 
 function TopupToday() {
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(TOPUP_FILTERS[0].key);
   const { data: topups, isLoading: isLoadingTopup } =
     useGetReportProgramTopupDetailTodayQuery(undefined, {
       skipPollingIfUnfocused: true,
@@ -66,7 +65,7 @@ function TopupToday() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -88,7 +87,7 @@ function TopupToday() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                 </div>
               </div>
             </div>
@@ -187,8 +186,6 @@ function TopupToday() {
               },
             ]}
             data={topups || []}
-            filters={[]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

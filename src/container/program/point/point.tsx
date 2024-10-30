@@ -50,9 +50,8 @@ const STATUS_FILTERS = [
 function PointProgram() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(POINT_FILTERS[0].key);
   const deferSearchValue = useDeferredValue(search);
-  const [status, setStatus] = useState(-1);
+  const [status, setStatus] = useState(1);
   const navigate = useNavigate();
   const [listPoints, setListPoints] = useState<TProgramPoint[]>([]);
   const [page, setPage] = useState(1);
@@ -104,7 +103,7 @@ function PointProgram() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -126,7 +125,7 @@ function PointProgram() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                   <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
@@ -417,14 +416,6 @@ function PointProgram() {
               },
             ]}
             data={programPoints || []}
-            filters={[
-              {
-                key: "status",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

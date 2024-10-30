@@ -137,8 +137,7 @@ function CustomerValidation() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Nhập số điện thoại"
-                      aria-describedby="search-contact-member"
+                      placeholder="Nhập thông tin"
                       onChange={(e) => setSearch(e.target.value.trim())}
                       value={search}
                     />
@@ -406,14 +405,6 @@ function CustomerValidation() {
               },
             ]}
             data={customers || []}
-            filters={[
-              {
-                key: "status",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

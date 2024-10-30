@@ -46,7 +46,7 @@ import CustomerReport from "./container/report/CustomerReport/index.tsx";
 import { PageLoading } from "./redux/middlewares/pageLoading.tsx";
 import WarehouseReportExport from "./container/warehouse/export/warehouseReportExport.tsx";
 import SMSReport from "./container/report/components/SMSReport.tsx";
-import CustomerToday from "./container/operator/customer-today/index.tsx";
+// import CustomerToday from "./container/operator/customer-today/index.tsx";
 import TopupToday from "./container/operator/topup-today/index.tsx";
 import CustomerUnValidateToday from "./container/operator/customer-unvalidate-today/index.tsx";
 import ProductEditInfo from "./container/product/product-info/edit-info/product-edit-info.tsx";

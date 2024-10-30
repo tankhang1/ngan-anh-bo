@@ -22,8 +22,8 @@ import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
 function SMSReport() {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
-    st: +format(subDays(new Date(), 10), "yyyyMMdd") * 10000,
-    ed: +(format(new Date(), "yyyyMMdd") + "2359"),
+    st: +format(subDays(new Date(), 10), "yyyyMMdd"),
+    ed: +format(new Date(), "yyyyMMdd"),
   });
   const [newRangeDate, setNewRangeDate] = useState<{ st: Date; ed: Date }>({
     st: subDays(new Date(), 10),
@@ -51,7 +51,8 @@ function SMSReport() {
   const { data: listSMS, isLoading: isLoadingSMS } =
     useGetListSMSGatewayDayByDayQuery(
       {
-        ...rangDate,
+        st: +(rangDate.st + "0000"),
+        ed: +(rangDate.ed + "2359"),
         nu: 0,
         sz: 9999,
       },
@@ -135,8 +136,8 @@ function SMSReport() {
               onClick={() => {
                 console.log("rang date", newRangeDate);
                 setRangeDate({
-                  st: +format(newRangeDate.st, "yyyyMMdd") * 10000,
-                  ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
+                  st: +format(newRangeDate.st, "yyyyMMdd"),
+                  ed: +format(newRangeDate.ed, "yyyyMMdd"),
                 });
                 setListDays(
                   getDaysArray(

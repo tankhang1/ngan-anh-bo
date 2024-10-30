@@ -24,12 +24,14 @@ function SearchWarehouseCustomerExport() {
           <Card.Body>
             <div className="contact-header">
               <div className="d-flex flex-column gap-2">
-                <div className="h6 fw-semibold mb-0">Nhập mã xuất kho</div>
+                <div className="h6 fw-semibold mb-0">
+                  Nhập thông tin tìm kiếm
+                </div>
                 <InputGroup className="d-flex gap-2">
                   <Form.Control
                     type="text"
                     className="bg-light"
-                    placeholder="Vui nhập mã xuất kho"
+                    placeholder="Vui nhập thông tin tìm kiếm"
                     aria-describedby="search-contact-member"
                     onChange={(e) => setSearchValue(e.target.value)}
                     value={searchValue}
@@ -74,6 +76,11 @@ function SearchWarehouseCustomerExport() {
                   key: "export_code",
                   label: "Mã xuất kho",
                   render: ({ export_code }) => <td>{export_code}</td>,
+                },
+                {
+                  key: "code",
+                  label: "Mã khách hàng / Nhân viên",
+                  render: ({ code }) => <td>{code}</td>,
                 },
                 {
                   key: "name",

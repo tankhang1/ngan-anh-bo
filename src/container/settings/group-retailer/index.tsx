@@ -26,7 +26,6 @@ function SettingGroupRetailer() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("code");
   const deferSearchValue = useDeferredValue(search);
   const [openAddPopup, setOpenAddPopup] = useState<TGroupRetailer | null>(null);
 
@@ -146,7 +145,6 @@ function SettingGroupRetailer() {
               },
             ]}
             data={groups || []}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

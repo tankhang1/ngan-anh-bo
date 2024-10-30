@@ -28,9 +28,6 @@ const AGENT_FILTERS = [
 ];
 
 function IQRToday() {
-  const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
-    refetchOnMountOrArgChange: false,
-  });
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
@@ -95,29 +92,6 @@ function IQRToday() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
-                    <Dropdown.Toggle
-                      variant=""
-                      aria-label="button"
-                      className="btn btn-icon btn-primary-light btn-wave no-caret"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i className="ti ti-dots-vertical"></i>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu as="ul" className="dropdown-menu-start">
-                      {AGENT_FILTERS.map((item, index) => (
-                        <Dropdown.Item
-                          active={item.key === searchBy}
-                          key={index}
-                          onClick={() => setSearchBy(item.key)}
-                        >
-                          {item.label}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
                 </div>
               </div>
             </div>

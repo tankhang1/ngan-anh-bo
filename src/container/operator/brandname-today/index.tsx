@@ -9,10 +9,8 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TBrandname} from "../../../assets/types";
-import {
-  useGetListBrandnameTodayQuery,
-} from "../../../redux/api/manage/manage.api";
+import { TBrandname } from "../../../assets/types";
+import { useGetListBrandnameTodayQuery } from "../../../redux/api/manage/manage.api";
 
 const AGENT_FILTERS = [
   {
@@ -23,7 +21,6 @@ const AGENT_FILTERS = [
 
 function BrandnameToday() {
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
 
   const [page, setPage] = useState(1);
 
@@ -57,7 +54,7 @@ function BrandnameToday() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -79,7 +76,7 @@ function BrandnameToday() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                 </div>
               </div>
             </div>
@@ -122,7 +119,6 @@ function BrandnameToday() {
               },
             ]}
             data={listBrandname ?? []}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

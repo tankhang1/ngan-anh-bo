@@ -64,7 +64,7 @@ const WarehouseInventory = () => {
                   <Form.Control
                     type="text"
                     className="bg-light"
-                    placeholder="Vui nhập mã lô"
+                    placeholder="Vui nhập thông tin"
                     aria-describedby="search-contact-member"
                     onChange={(e) => setSearch(e.target.value)}
                     value={search}
@@ -105,7 +105,7 @@ const WarehouseInventory = () => {
               },
               {
                 key: "product_name",
-                label: "Tên lệnh sản phẩm",
+                label: "Sản phẩm sản xuất", // Trung dựa theo cấp độ lệnh sx
                 render: ({ product_name }) => <td>{product_name}</td>,
               },
               {
@@ -128,7 +128,6 @@ const WarehouseInventory = () => {
             ]}
             data={listInventory || []}
             externalSearch={search}
-            searchByExternal="batch_number"
           />
         </Card>
       </Col>

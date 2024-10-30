@@ -1,17 +1,14 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
+
 import {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
-  useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { MapCustomerType } from "../../../constants";
-import { Checkbox } from "@mui/material";
 
 const AGENT_FILTERS = [
   {
@@ -26,7 +23,6 @@ const AGENT_FILTERS = [
 
 function CustomerValidateToday() {
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
   const [page, setPage] = useState(1);
 
   const { data: counterCustomer } = useGetCounterCustomerQuery(
@@ -81,7 +77,7 @@ function CustomerValidateToday() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
-                  <Dropdown className="ms-2">
+                  {/* <Dropdown className="ms-2">
                     <Dropdown.Toggle
                       variant=""
                       aria-label="button"
@@ -103,7 +99,7 @@ function CustomerValidateToday() {
                         </Dropdown.Item>
                       ))}
                     </Dropdown.Menu>
-                  </Dropdown>
+                  </Dropdown> */}
                 </div>
               </div>
             </div>
@@ -223,14 +219,6 @@ function CustomerValidateToday() {
               },
             ]}
             data={customers || []}
-            filters={[
-              {
-                key: "status",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>

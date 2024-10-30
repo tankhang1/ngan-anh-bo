@@ -33,7 +33,7 @@ function ManageMaterial() {
                     <Form.Control
                       type="text"
                       className="bg-light"
-                      placeholder="Mã vật tư"
+                      placeholder="Nhập thông tin"
                       aria-describedby="search-contact-member"
                       onChange={(e) => setSearch(e.target.value)}
                     />
@@ -118,7 +118,6 @@ function ManageMaterial() {
               },
             ]}
             data={ingredients || []}
-            searchByExternal={searchBy}
           />
         </Card>
       </Col>
