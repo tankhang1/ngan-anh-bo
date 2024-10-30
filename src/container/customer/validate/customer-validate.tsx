@@ -138,7 +138,7 @@ function CustomerValidation() {
                       type="text"
                       className="bg-light"
                       placeholder="Nhập thông tin"
-                      onChange={(e) => setSearch(e.target.value.trim())}
+                      onChange={(e) => setSearch(e.target.value)}
                       value={search}
                     />
                     <Button

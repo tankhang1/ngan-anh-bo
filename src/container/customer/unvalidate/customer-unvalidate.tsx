@@ -88,7 +88,7 @@ function CustomerUnValidation() {
                       className="bg-light"
                       placeholder="Nhập thông tin"
                       aria-describedby="search-contact-member"
-                      onChange={(e) => setSearch(e.target.value.trim())}
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                     <Button
                       variant=""
