@@ -433,6 +433,7 @@ export type BaseQuery = {
   type?: string;
   s?: number;
   c?: string;
+  u?: string; //username
 };
 export type TPackage = {
   id: number;
@@ -1014,4 +1015,19 @@ export type TProcedureOrderDetail = {
   order_number: number;
   print_label: number;
   finish_map: number;
+};
+
+export type THistoryFile = {
+  id: number;
+  username: string;
+  feature_code: string;
+  description: string;
+  file_path: string;
+  status: number;
+  time_request: string;
+  time_done: string;
+  file_url: string;
+  transaction_id: string;
+  newEntry: boolean;
+  isNew: boolean;
 };

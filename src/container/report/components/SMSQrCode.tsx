@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
 import DatePicker from "react-datepicker";
@@ -20,7 +20,13 @@ import {
   useExportBinMutation,
   useExportPackageMutation,
 } from "../../../redux/api/excel/excel.api";
+import { ToastContext } from "../../../components/AppToast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 function SMS_QR_Report() {
+  const toast = useContext(ToastContext);
+  const { username } = useSelector((state: RootState) => state.auth);
+
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +format(subDays(new Date(), 10), "yyyyMMdd"),
@@ -54,8 +60,8 @@ function SMS_QR_Report() {
     {
       st: +(rangDate.st + "0000"),
       ed: +(rangDate.ed + "2359"),
+      sz: 100000,
       nu: 0,
-      sz: 9999,
     },
     {
       skipPollingIfUnfocused: true,
@@ -67,8 +73,8 @@ function SMS_QR_Report() {
     {
       st: +(rangDate.st + "0000"),
       ed: +(rangDate.ed + "2359"),
+      sz: 100000,
       nu: 0,
-      sz: 9999,
     },
     {
       skipPollingIfUnfocused: true,
@@ -79,17 +85,27 @@ function SMS_QR_Report() {
   const handleExportExcel = async () => {
     await exportBinExcel({
       ...rangDate,
+      st: +(rangDate.st + "0000"),
+      ed: +(rangDate.ed + "2359"),
+      u: username,
     })
       .unwrap()
-      .then(async (url) => {
-        if (url) window.open(url.data, "_blank");
+      .then(() => {
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
       });
     await exportPackageExcel({
       ...rangDate,
+      st: +(rangDate.st + "0000"),
+      ed: +(rangDate.ed + "2359"),
+      u: username,
     })
       .unwrap()
-      .then(async (url) => {
-        if (url) window.open(url.data, "_blank");
+      .then(() => {
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
       });
   };
   const mapReport = useMemo(() => {

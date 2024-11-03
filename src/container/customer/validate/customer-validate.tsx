@@ -1,6 +1,7 @@
 import React, {
   Fragment,
   useCallback,
+  useContext,
   useDeferredValue,
   useEffect,
   useState,
@@ -31,6 +32,7 @@ import { MapCustomerType } from "../../../constants";
 import { Checkbox } from "@mui/material";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 import { downloadLink } from "../../../hooks";
+import { ToastContext } from "../../../components/AppToast";
 
 const AGENT_FILTERS = [
   {
@@ -48,7 +50,10 @@ const AGENT_FILTERS = [
 ];
 
 function CustomerValidation() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const toast = useContext(ToastContext);
+  const { permission, username } = useSelector(
+    (state: RootState) => state.auth
+  );
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
@@ -57,42 +62,23 @@ function CustomerValidation() {
   const [exportExcel] = useExportCustomerDataMutation();
 
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("phone");
   const [customerType, setCustomerType] = useState<string>("ALL");
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const handleExportExcel = async () => {
-    if (customerType === "ALL") {
-      groupObjectives
-        ?.filter((objective) => objective.symbol !== "ANONYMOUS")
-        .forEach(async (item) => {
-          setIsLoadingExportExcel(true);
-          await exportExcel({
-            t: item.symbol,
-            k: "",
-          })
-            .unwrap()
-            .then((value) => {
-              setTimeout(() => {
-                window.open(value.data, "_blank");
-                setIsLoadingExportExcel(false);
-              }, 3000);
-            });
-        });
-    } else {
-      setIsLoadingExportExcel(true);
-      await exportExcel({
-        t: customerType,
-        k: "",
-      })
-        .unwrap()
-        .then((value) => {
-          setTimeout(() => {
-            window.open(value.data, "_blank");
-            setIsLoadingExportExcel(false);
-          }, 3000);
-        });
-    }
+    await exportExcel({
+      t: customerType,
+      k: "",
+      u: username,
+      st: 0,
+      ed: 0,
+    })
+      .unwrap()
+      .then((value) => {
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
+      });
   };
   const onChangeCustomerType = (type: string) => {
     if (type !== customerType) {

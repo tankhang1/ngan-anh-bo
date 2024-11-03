@@ -1,5 +1,14 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Button, Card, Col, Form, Modal, Row, Stack } from "react-bootstrap";
+import React, { Fragment, useContext, useState } from "react";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Modal,
+  OverlayTrigger,
+  Stack,
+  Tooltip,
+} from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
 import {
@@ -7,16 +16,13 @@ import {
   useGetExportByDocumentQuery,
   useGetExportDocumentsQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
-import { BaseQuery, TWarehouseDocument } from "../../../assets/types";
-import {
-  downloadLink,
-  exportExcelFile,
-  exportExcelFileWithHeader,
-} from "../../../hooks";
+import { BaseQuery } from "../../../assets/types";
+import { exportExcelFileWithHeader } from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useExportWarehouseExportDetailMutation } from "../../../redux/api/excel/excel.api";
+import { ToastContext } from "../../../components/AppToast";
 type TSearchItem = {
   label: string;
   value: string;
@@ -46,7 +52,10 @@ type TExportForm = {
   end_date: string;
 };
 const WarehouseExport = () => {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const toast = useContext(ToastContext);
+  const { permission, username } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
@@ -115,10 +124,13 @@ const WarehouseExport = () => {
         st: query?.st,
         ed: query?.ed,
         t: query?.type ?? "ALL",
+        u: username,
       })
         .unwrap()
-        .then(async (url) => {
-          if (url) window.open(url.data, "_blank");
+        .then(() => {
+          toast.showToast(
+            "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+          );
         });
   };
 
@@ -244,18 +256,27 @@ const WarehouseExport = () => {
                           Lọc thông tin
                         </p>
                         {permission.warehouseExportFileExport ? (
-                          <Button
-                            variant=""
-                            aria-label="button"
-                            type="button"
-                            className="btn btn-success-light ms-2"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            data-bs-title="Add Contact"
-                            onClick={handleExportExcel}
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip className="tooltip">
+                                Xuất dữ liệu chi tiết
+                              </Tooltip>
+                            }
                           >
-                            Xuất Excel
-                          </Button>
+                            <Button
+                              variant=""
+                              aria-label="button"
+                              type="button"
+                              className="btn btn-success-light ms-2"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              data-bs-title="Add Contact"
+                              onClick={handleExportExcel}
+                            >
+                              Xuất Excel
+                            </Button>
+                          </OverlayTrigger>
                         ) : null}
                       </div>
 

@@ -19,9 +19,9 @@ import {
 } from "react-bootstrap";
 import { MENUITEMS } from "../sidebar/sidemenu";
 import DatePicker from "react-datepicker";
-import store from "../../../redux/store";
+import store, { RootState } from "../../../redux/store";
 import { Link, useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { ThemeChanger } from "../../../redux/action";
 //IMAGES
 
@@ -31,9 +31,18 @@ import { TAccount } from "../../../assets/types";
 import { ToastContext } from "../../AppToast";
 import { Formik } from "formik";
 import AppWarning from "../../AppWarning";
+import { useGetListHistoryExcelQuery } from "../../../redux/api/excel/excel.api";
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
+  const { username } = useSelector((state: RootState) => state.auth);
+  const { data: listHistoryFile } = useGetListHistoryExcelQuery(
+    { u: username },
+    {
+      pollingInterval: 60000,
+      skip: !username,
+    }
+  );
   const [startDatei, setStartDatei] = useState(new Date());
   const navigate = useNavigate();
   const toast = useContext(ToastContext);
@@ -548,6 +557,7 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
         toast.showToast("Cập nhật tài khoản thất bại");
       });
   };
+
   return (
     <Fragment>
       <header className="app-header">
@@ -1167,6 +1177,76 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
               </Link>
             </div>
 
+            <Dropdown className="header-element mainuserProfile">
+              <Dropdown.Toggle
+                variant=""
+                as="a"
+                className="header-link dropdown-toggle"
+                id="mainHeaderProfile"
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="outside"
+                aria-expanded="false"
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <h6 className=" font-weight-semibold mb-0 fs-13 user-name d-sm-block d-none">
+                    Danh sách file yêu cầu
+                  </h6>
+
+                  <span className="badge text-bg-secondary">
+                    {listHistoryFile?.length || 0}
+                  </span>
+                </div>
+              </Dropdown.Toggle>
+              <Dropdown.Menu
+                as="ul"
+                className="dropdown-menu border-0 main-header-dropdown overflow-auto header-profile-dropdown"
+                aria-labelledby="mainHeaderProfile"
+                style={{ maxHeight: 500 }}
+              >
+                {listHistoryFile?.map((file, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    as="li"
+                    className="border-0 flex"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <div className="d-flex align-items-center gap-2 py-2">
+                      <div className="d-flex flex-column">
+                        <p className="text-wrap mb-0" style={{ width: 300 }}>
+                          Tên:{" "}
+                          {
+                            file.file_url.split("/")[
+                              file.file_url.split("/").length - 1
+                            ]
+                          }
+                        </p>
+                        <p className="text-wrap mb-0">
+                          Thời gian yêu cầu: {file.time_request}
+                        </p>
+                        <p className="text-wrap mb-0">
+                          Thời gian hoàn thành: {file.time_done}
+                        </p>
+                      </div>
+                      {file.status !== 1 ? (
+                        <span className="badge text-bg-secondary">
+                          Đang xử lí
+                        </span>
+                      ) : (
+                        <button
+                          className="btn btn-icon btn-sm btn-primary-ghost"
+                          role="link"
+                          onClick={() => window.open(file.file_url, "Download")}
+                        >
+                          <i className="ti ti-download" />
+                        </button>
+                      )}
+                    </div>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
             {/* <div
               className="header-element d-flex header-settings"
               onClick={handleShow1}

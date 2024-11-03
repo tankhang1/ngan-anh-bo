@@ -1,10 +1,12 @@
-import { BaseQuery } from "../../../assets/types";
+import { BaseQuery, THistoryFile } from "../../../assets/types";
 import { BASE_PORT, HTTPS_METHOD } from "../../../constants";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import store from "../../store";
+import { TagsEnum } from "../tags.enum.api";
 
 export const excelApi = createApi({
   reducerPath: "excelApi",
+  tagTypes: [TagsEnum.GET_HISTORY_EXCEL],
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_PORT,
     prepareHeaders: (headers) => {
@@ -23,6 +25,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportBin: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -30,6 +33,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportPackage: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -37,6 +41,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportWarehouseExportDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -44,6 +49,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportWarehouseImportDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -51,6 +57,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportBrandname: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -58,6 +65,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportSMS: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -65,6 +73,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportProgramPointDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -72,6 +81,7 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
     exportProgramTopupDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
@@ -79,6 +89,15 @@ export const excelApi = createApi({
         method: HTTPS_METHOD.POST,
         body,
       }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
+    }),
+    getListHistoryExcel: builder.query<THistoryFile[], BaseQuery | undefined>({
+      query: (params) => ({
+        url: "/api/report/history/file",
+        method: HTTPS_METHOD.GET,
+        params: params || {},
+      }),
+      providesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
   }),
 });
@@ -92,4 +111,5 @@ export const {
   useExportProgramPointDetailMutation,
   useExportProgramTopupDetailMutation,
   useExportSMSMutation,
+  useGetListHistoryExcelQuery,
 } = excelApi;

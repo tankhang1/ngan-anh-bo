@@ -226,7 +226,7 @@ function Accounts() {
                       </Button>
                     </OverlayTrigger>
                   ) : null}
-                  {permission.exportAccount ? (
+                  {/* {permission.exportAccount ? (
                     <OverlayTrigger
                       placement="top"
                       overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
@@ -244,7 +244,7 @@ function Accounts() {
                         <i className="ti ti-database-export"></i>
                       </Button>
                     </OverlayTrigger>
-                  ) : null}
+                  ) : null} */}
                 </div>
               </div>
             </div>

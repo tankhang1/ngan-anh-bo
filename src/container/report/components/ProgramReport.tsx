@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Card, InputGroup, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
@@ -12,7 +12,13 @@ import { useGetReportProgramPointDetailByTimeQuery } from "../../../redux/api/re
 import AppTable from "../../../components/common/table/table";
 import { TProgramPointDetail } from "../../../assets/types";
 import { useExportProgramPointDetailMutation } from "../../../redux/api/excel/excel.api";
+import { ToastContext } from "../../../components/AppToast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 function TopupReport() {
+  const toast = useContext(ToastContext);
+  const { username } = useSelector((state: RootState) => state.auth);
+
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
@@ -44,10 +50,13 @@ function TopupReport() {
   const handleExportExcel = async () => {
     await exportExcel({
       ...rangDate,
+      u: username,
     })
       .unwrap()
-      .then(async (url) => {
-        if (url) window.open(url.data, "_blank");
+      .then(() => {
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
       });
   };
   const mapProgram = useMemo(() => {

@@ -1,4 +1,10 @@
-import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
 import { Button, Card, Col, Form, Modal, Stack } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { Formik } from "formik";
@@ -8,11 +14,12 @@ import {
   useGetProcedureOrderDetailByTimeQuery,
 } from "../../../redux/api/warehouse/warehouse.api";
 import { BaseQuery } from "../../../assets/types";
-import { fDate } from "../../../hooks";
+import { exportExcelFile, fDate } from "../../../hooks";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useExportWarehouseImportDetailMutation } from "../../../redux/api/excel/excel.api";
+import { ToastContext } from "../../../components/AppToast";
 type TSearchItem = {
   label: string;
   value: string;
@@ -34,12 +41,15 @@ type TImportForm = {
   end_date: string;
 };
 const WarehouseListOrder = () => {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const toast = useContext(ToastContext);
+
+  const { permission, username } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [page, setPage] = useState(1);
   const [documentDetail, setDocumentDetail] = useState("");
-  const [exportExcel] = useExportWarehouseImportDetailMutation();
   const {
     data: procedureOrders,
     isLoading: loadingProcedureOrder,
@@ -89,24 +99,13 @@ const WarehouseListOrder = () => {
         st: +format(values.start_date, "yyyyMMdd"),
         ed: +format(values.end_date, "yyyyMMdd"),
         type: values?.type,
+        u: username,
       });
 
       refetchImport();
     }, 200);
   };
-  console.log(procedureOrders);
-  const handleExportExcel = async () => {
-    if (procedureOrders)
-      await exportExcel({
-        st: query?.st,
-        ed: query?.ed,
-        t: query?.type ?? "ALL",
-      })
-        .unwrap()
-        .then(async (url) => {
-          if (url) window.open(url.data, "_blank");
-        });
-  };
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -136,20 +135,6 @@ const WarehouseListOrder = () => {
                         <p className="text-lg fw-semibold mb-0">
                           Lọc thông tin
                         </p>
-                        {permission.warehouseExportFileImport ? (
-                          <Button
-                            variant=""
-                            aria-label="button"
-                            type="button"
-                            className="btn btn-success-light ms-2"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            data-bs-title="Add Contact"
-                            onClick={handleExportExcel}
-                          >
-                            Xuất Excel
-                          </Button>
-                        ) : null}
                       </div>
 
                       <div className="d-flex flex-column flex-md-row mt-sm-0 mt-2 gap-4 align-items-center justify-content-between">

@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Card, Col, Form, InputGroup, Stack } from "react-bootstrap";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Card, InputGroup, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Dashed } from "../../charts/apexcharts/linechart/linechartdata";
 import { format, isBefore, subDays } from "date-fns";
@@ -11,16 +11,19 @@ import {
 } from "../../../redux/api/manage/manage.api";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
 import AppTable from "../../../components/common/table/table";
-import { TAgent, TCustomerRes } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
+import { TCustomerRes } from "../../../assets/types";
 import { useMediaQuery } from "@mui/material";
-import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
-import Select from "react-select";
+import { fDate } from "../../../hooks";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 import { MapCustomerType } from "../../../constants";
 import AppSelect from "../../../components/AppSelect";
+import { ToastContext } from "../../../components/AppToast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 function CustomerReport() {
+  const toast = useContext(ToastContext);
+  const { username } = useSelector((state: RootState) => state.auth);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isSmallestScreen = useMediaQuery("(max-width:425px)");
 
@@ -36,7 +39,7 @@ function CustomerReport() {
   }>({
     st: +format(subDays(new Date(), 10), "yyyyMMdd"),
     ed: +format(new Date(), "yyyyMMdd"),
-    t: "RETAILER1",
+    t: "ALL",
     k: "",
   });
   const [newRangeDate, setNewRangeDate] = useState<{
@@ -109,17 +112,24 @@ function CustomerReport() {
 
   const handleExportExcel = async () => {
     if (customers) {
-      await exportExcel({ ...rangDate })
+      await exportExcel({
+        ...rangDate,
+        st: +(rangDate.st + "0000"),
+        ed: +(rangDate.ed + "2359"),
+        u: username,
+      })
         .unwrap()
-        .then(async (url) => {
-          if (url) window.open(url.data, "_blank");
+        .then(() => {
+          toast.showToast(
+            "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+          );
         });
     }
   };
 
   useEffect(() => {
     if (groupObjectives) {
-      setRangeDate({ ...rangDate, t: groupObjectives[0].symbol });
+      setRangeDate({ ...rangDate, t: "ALL" });
     }
   }, [groupObjectives]);
 
@@ -235,12 +245,16 @@ function CustomerReport() {
 
           <div className="d-flex align-items-center gap-2">
             <AppSelect
-              data={
-                groupObjectives?.map((item) => ({
+              data={[
+                {
+                  label: "Tất cả",
+                  value: "ALL",
+                },
+                ...(groupObjectives?.map((item) => ({
                   label: item.name,
                   value: item.symbol,
-                })) ?? []
-              }
+                })) ?? []),
+              ]}
               placeholder="Chọn đối tượng khách hàng"
               value={rangDate.t}
               onChange={(e) => setRangeDate({ ...rangDate, t: e })}
@@ -364,7 +378,7 @@ function CustomerReport() {
               },
             ]}
             data={customers || []}
-            searchByExternal="id"
+            externalSearch=""
           />
         </Card.Body>
       </Card>

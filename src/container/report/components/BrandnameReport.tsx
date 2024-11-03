@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { Card, InputGroup, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
@@ -13,7 +13,13 @@ import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport"
 import AppTable from "../../../components/common/table/table";
 import { TBrandname } from "../../../assets/types";
 import { useExportBrandnameMutation } from "../../../redux/api/excel/excel.api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { ToastContext } from "../../../components/AppToast";
 function BrandnameReport() {
+  const toast = useContext(ToastContext);
+
+  const { username } = useSelector((state: RootState) => state.auth);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
@@ -34,6 +40,8 @@ function BrandnameReport() {
     useGetListBrandnamesQuery(
       {
         ...rangDate,
+        sz: 100000,
+        nu: 0,
       },
       {
         skipPollingIfUnfocused: true,
@@ -58,10 +66,13 @@ function BrandnameReport() {
   const handleExportExcel = async () => {
     await exportExcel({
       ...rangDate,
+      u: username,
     })
       .unwrap()
-      .then(async (url) => {
-        if (url) window.open(url.data, "_blank");
+      .then(() => {
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
       });
   };
   return (

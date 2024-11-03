@@ -1,25 +1,26 @@
-import React, { useMemo, useState } from "react";
-import { Badge, Card, Col, InputGroup, Row, Stack } from "react-bootstrap";
-import { Doughnut } from "react-chartjs-2";
+import React, { useContext, useMemo, useState } from "react";
+import { Badge, Card, InputGroup, Stack } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import * as Chartjscharts from "../../charts/chartjschart/chartjsdata";
 import { Basicolumn } from "../../charts/apexcharts/columnchart/columnchartdata";
 import { useMediaQuery } from "@mui/material";
 import { format, isBefore, subDays } from "date-fns";
 import {
-  useGetBinsQuery,
   useGetListSMSGatewayDayByDayQuery,
-  useGetPacketsQuery,
   useGetReportDashboardDayByDayQuery,
 } from "../../../redux/api/manage/manage.api";
-import lodash from "lodash";
 import { getDaysArray } from "../../dashboards/ecommerce/components/AgentReport";
-import { downloadLink, exportMultipleSheet, fDate } from "../../../hooks";
+import { fDate } from "../../../hooks";
 import AppTable from "../../../components/common/table/table";
 import AppId from "../../../components/common/app-id";
-import { TProductDashboardTable, TSMSGateway } from "../../../assets/types";
+import { TSMSGateway } from "../../../assets/types";
 import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
+import { ToastContext } from "../../../components/AppToast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 function SMSReport() {
+  const toast = useContext(ToastContext);
+  const { username } = useSelector((state: RootState) => state.auth);
+
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +format(subDays(new Date(), 10), "yyyyMMdd"),
@@ -66,10 +67,15 @@ function SMSReport() {
   const handleExportExcel = async () => {
     await exportExcel({
       ...rangDate,
+      st: +(rangDate.st + "0000"),
+      ed: +(rangDate.ed + "2359"),
+      u: username,
     })
       .unwrap()
       .then(async (url) => {
-        if (url) window.open(url.data, "_blank");
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
       });
   };
   const mapReport = useMemo(() => {
