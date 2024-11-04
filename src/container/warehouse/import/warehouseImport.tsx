@@ -29,6 +29,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useExportWarehouseImportDetailMutation } from "../../../redux/api/excel/excel.api";
 import { ToastContext } from "../../../components/AppToast";
+import AppConfirm from "../../../components/AppConfirm";
 type TSearchItem = {
   label: string;
   value: string;
@@ -116,19 +117,18 @@ const WarehouseImport = () => {
     }, 200);
   };
   const handleExportExcel = async () => {
-    if (imports)
-      await exportExcel({
-        st: query?.st,
-        ed: query?.ed,
-        t: query?.type ?? "ALL",
-        u: username,
-      })
-        .unwrap()
-        .then(() => {
-          toast.showToast(
-            "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
-          );
-        });
+    await exportExcel({
+      st: query?.st,
+      ed: query?.ed,
+      t: query?.type ?? "ALL",
+      u: username,
+    })
+      .unwrap()
+      .then(() => {
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
+      });
   };
   const handleManualExportExcel = () => {
     exportExcelFileWithHeader(importDetail || [], [
@@ -256,14 +256,7 @@ const WarehouseImport = () => {
                           Lọc thông tin
                         </p>
                         {permission.warehouseExportFileImport ? (
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={
-                              <Tooltip className="tooltip">
-                                Xuất dữ liệu chi tiết
-                              </Tooltip>
-                            }
-                          >
+                          <AppConfirm onAccept={handleExportExcel}>
                             <Button
                               variant=""
                               aria-label="button"
@@ -272,11 +265,10 @@ const WarehouseImport = () => {
                               data-bs-toggle="tooltip"
                               data-bs-placement="top"
                               data-bs-title="Add Contact"
-                              onClick={handleExportExcel}
                             >
                               Xuất Excel
                             </Button>
-                          </OverlayTrigger>
+                          </AppConfirm>
                         ) : null}
                       </div>
 

@@ -25,6 +25,7 @@ import { exportExcelFile, fNumber } from "../../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
+import AppConfirm from "../../../components/AppConfirm";
 
 const PRODUCT_FILTERS = [
   {
@@ -190,10 +191,7 @@ function ProductInfoPage() {
                     </OverlayTrigger>
                   ) : null}
                   {permission.exportProductMarketingInfo ? (
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
-                    >
+                    <AppConfirm onAccept={handleExportExcel}>
                       <Button
                         variant=""
                         aria-label="button"
@@ -202,11 +200,10 @@ function ProductInfoPage() {
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
-                        onClick={handleExportExcel}
                       >
                         <i className="ti ti-database-export"></i>
                       </Button>
-                    </OverlayTrigger>
+                    </AppConfirm>
                   ) : null}
                 </div>
               </div>

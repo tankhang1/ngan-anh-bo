@@ -17,6 +17,7 @@ import { useExportSMSMutation } from "../../../redux/api/excel/excel.api";
 import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import AppConfirm from "../../../components/AppConfirm";
 function SMSReport() {
   const toast = useContext(ToastContext);
   const { username } = useSelector((state: RootState) => state.auth);
@@ -66,13 +67,13 @@ function SMSReport() {
 
   const handleExportExcel = async () => {
     await exportExcel({
-      ...rangDate,
-      st: +(rangDate.st + "0000"),
-      ed: +(rangDate.ed + "2359"),
+      ...newRangeDate,
+      st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
+      ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
       u: username,
     })
       .unwrap()
-      .then(async (url) => {
+      .then(() => {
         toast.showToast(
           "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
         );
@@ -155,21 +156,22 @@ function SMSReport() {
             >
               <i className="ti ti-filter" style={{ color: "white" }}></i>
             </button>
-            <button
-              className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
-              }`}
-              onClick={handleExportExcel}
-            >
-              {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
-              ) : (
-                <div className="d-flex align-items-center gap-1">
+            <AppConfirm onAccept={handleExportExcel}>
+              <button
+                className={`btn btn-bd-primary ${
+                  isSmallScreen ? "btn-icon" : ""
+                }`}
+              >
+                {isSmallScreen ? (
                   <i className="ti ti-database-export "></i>
-                  Xuất Excel
-                </div>
-              )}
-            </button>
+                ) : (
+                  <div className="d-flex align-items-center gap-1">
+                    <i className="ti ti-database-export "></i>
+                    Xuất Excel
+                  </div>
+                )}
+              </button>
+            </AppConfirm>
           </div>
         </Card.Header>
         <Card.Body>

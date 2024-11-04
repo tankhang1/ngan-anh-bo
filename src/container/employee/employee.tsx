@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { exportExcelFile, fDate } from "../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import AppConfirm from "../../components/AppConfirm";
 
 const EMPLOYEE_FILTERS = [
   {
@@ -113,10 +114,7 @@ function Employee() {
                     </OverlayTrigger>
                   ) : null}
                   {permission.exportEmployee ? (
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
-                    >
+                    <AppConfirm onAccept={handleExportExcel}>
                       <Button
                         variant=""
                         aria-label="button"
@@ -125,11 +123,10 @@ function Employee() {
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
-                        onClick={handleExportExcel}
                       >
                         <i className="ti ti-database-export"></i>
                       </Button>
-                    </OverlayTrigger>
+                    </AppConfirm>
                   ) : null}
                 </div>
               </div>

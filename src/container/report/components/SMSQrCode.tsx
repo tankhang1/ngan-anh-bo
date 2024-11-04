@@ -23,6 +23,7 @@ import {
 import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import AppConfirm from "../../../components/AppConfirm";
 function SMS_QR_Report() {
   const toast = useContext(ToastContext);
   const { username } = useSelector((state: RootState) => state.auth);
@@ -84,9 +85,10 @@ function SMS_QR_Report() {
   );
   const handleExportExcel = async () => {
     await exportBinExcel({
-      ...rangDate,
-      st: +(rangDate.st + "0000"),
-      ed: +(rangDate.ed + "2359"),
+      ...newRangeDate,
+      st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
+      ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
+
       u: username,
     })
       .unwrap()
@@ -96,9 +98,9 @@ function SMS_QR_Report() {
         );
       });
     await exportPackageExcel({
-      ...rangDate,
-      st: +(rangDate.st + "0000"),
-      ed: +(rangDate.ed + "2359"),
+      ...newRangeDate,
+      st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
+      ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
       u: username,
     })
       .unwrap()
@@ -184,21 +186,22 @@ function SMS_QR_Report() {
             >
               <i className="ti ti-filter" style={{ color: "white" }}></i>
             </button>
-            <button
-              className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
-              }`}
-              onClick={handleExportExcel}
-            >
-              {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
-              ) : (
-                <div className="d-flex align-items-center gap-1">
+            <AppConfirm onAccept={handleExportExcel}>
+              <button
+                className={`btn btn-bd-primary ${
+                  isSmallScreen ? "btn-icon" : ""
+                }`}
+              >
+                {isSmallScreen ? (
                   <i className="ti ti-database-export "></i>
-                  Xuất Excel
-                </div>
-              )}
-            </button>
+                ) : (
+                  <div className="d-flex align-items-center gap-1">
+                    <i className="ti ti-database-export "></i>
+                    Xuất Excel
+                  </div>
+                )}
+              </button>
+            </AppConfirm>
           </div>
         </Card.Header>
         <Card.Body>

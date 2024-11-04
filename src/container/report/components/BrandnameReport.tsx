@@ -16,6 +16,7 @@ import { useExportBrandnameMutation } from "../../../redux/api/excel/excel.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { ToastContext } from "../../../components/AppToast";
+import AppConfirm from "../../../components/AppConfirm";
 function BrandnameReport() {
   const toast = useContext(ToastContext);
 
@@ -65,7 +66,9 @@ function BrandnameReport() {
   }, [brandnames, listDays]);
   const handleExportExcel = async () => {
     await exportExcel({
-      ...rangDate,
+      ...newRangeDate,
+      st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
+      ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
       u: username,
     })
       .unwrap()
@@ -135,21 +138,22 @@ function BrandnameReport() {
             >
               <i className="ti ti-filter" style={{ color: "white" }}></i>
             </button>
-            <button
-              className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
-              }`}
-              onClick={handleExportExcel}
-            >
-              {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
-              ) : (
-                <div className="d-flex align-items-center gap-1">
+            <AppConfirm onAccept={handleExportExcel}>
+              <button
+                className={`btn btn-bd-primary ${
+                  isSmallScreen ? "btn-icon" : ""
+                }`}
+              >
+                {isSmallScreen ? (
                   <i className="ti ti-database-export "></i>
-                  Xuất Excel
-                </div>
-              )}
-            </button>
+                ) : (
+                  <div className="d-flex align-items-center gap-1">
+                    <i className="ti ti-database-export "></i>
+                    Xuất Excel
+                  </div>
+                )}
+              </button>
+            </AppConfirm>
           </div>
         </Card.Header>
         <Card.Body>

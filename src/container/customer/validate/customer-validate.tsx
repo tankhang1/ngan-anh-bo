@@ -33,6 +33,7 @@ import { Checkbox } from "@mui/material";
 import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
 import { downloadLink } from "../../../hooks";
 import { ToastContext } from "../../../components/AppToast";
+import AppConfirm from "../../../components/AppConfirm";
 
 const AGENT_FILTERS = [
   {
@@ -212,10 +213,7 @@ function CustomerValidation() {
                     </OverlayTrigger>
                   ) : null}
                   {permission.exportValidateCustomer ? (
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip className="tooltip">Xuất file</Tooltip>}
-                    >
+                    <AppConfirm onAccept={handleExportExcel}>
                       <Button
                         variant=""
                         aria-label="button"
@@ -226,7 +224,6 @@ function CustomerValidation() {
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         data-bs-title="Add Contact"
-                        onClick={handleExportExcel}
                       >
                         {isLoadingExportExcel ? (
                           <span className="loading">
@@ -236,7 +233,7 @@ function CustomerValidation() {
                           <i className="ti ti-database-export"></i>
                         )}
                       </Button>
-                    </OverlayTrigger>
+                    </AppConfirm>
                   ) : null}
                 </div>
               </div>

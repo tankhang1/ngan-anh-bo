@@ -20,6 +20,7 @@ import AppSelect from "../../../components/AppSelect";
 import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import AppConfirm from "../../../components/AppConfirm";
 
 function CustomerReport() {
   const toast = useContext(ToastContext);
@@ -113,9 +114,9 @@ function CustomerReport() {
   const handleExportExcel = async () => {
     if (customers) {
       await exportExcel({
-        ...rangDate,
-        st: +(rangDate.st + "0000"),
-        ed: +(rangDate.ed + "2359"),
+        ...newRangeDate,
+        st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
+        ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
         u: username,
       })
         .unwrap()
@@ -259,21 +260,22 @@ function CustomerReport() {
               value={rangDate.t}
               onChange={(e) => setRangeDate({ ...rangDate, t: e })}
             />
-            <button
-              className={`btn btn-bd-primary ${
-                isSmallScreen ? "btn-icon" : ""
-              }`}
-              onClick={handleExportExcel}
-            >
-              {isSmallScreen ? (
-                <i className="ti ti-database-export "></i>
-              ) : (
-                <div className="d-flex align-items-center gap-1">
+            <AppConfirm onAccept={handleExportExcel}>
+              <button
+                className={`btn btn-bd-primary ${
+                  isSmallScreen ? "btn-icon" : ""
+                }`}
+              >
+                {isSmallScreen ? (
                   <i className="ti ti-database-export "></i>
-                  Xuất Excel
-                </div>
-              )}
-            </button>
+                ) : (
+                  <div className="d-flex align-items-center gap-1">
+                    <i className="ti ti-database-export "></i>
+                    Xuất Excel
+                  </div>
+                )}
+              </button>
+            </AppConfirm>
           </div>
         </Card.Header>
         <Card.Body>
