@@ -255,9 +255,10 @@ function SearchProductCode() {
                       <span className="fw-normal">{warehouseExport?.time}</span>
                     </span>
                     <span className="text-black fs-17 fw-smibold">
-                      - Đại lý cấp 1 :{" "}
+                      - Đại lý cấp 1 ( Mã đại lý ) :{" "}
                       <span className="fw-normal">
-                        {warehouseExport?.agent_name}
+                        {warehouseExport?.agent_name} (
+                        {warehouseExport?.agent_code})
                       </span>
                     </span>
                   </Stack>
