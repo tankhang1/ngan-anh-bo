@@ -87,6 +87,7 @@ function Accounts() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
 

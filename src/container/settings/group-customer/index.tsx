@@ -37,6 +37,7 @@ function SettingGroupCustomer() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const {

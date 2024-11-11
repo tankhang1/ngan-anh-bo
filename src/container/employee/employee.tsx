@@ -31,6 +31,7 @@ function Employee() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const navigate = useNavigate();

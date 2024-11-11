@@ -52,6 +52,7 @@ function EmployeeRole() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const toast = useContext(ToastContext);

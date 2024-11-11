@@ -45,6 +45,7 @@ const DevicePage = () => {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const [createDeviceKey, { isLoading: isCreateDeviceKey }] =

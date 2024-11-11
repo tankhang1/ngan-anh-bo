@@ -38,6 +38,7 @@ function SettingBrandPage() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const {

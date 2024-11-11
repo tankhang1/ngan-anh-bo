@@ -57,6 +57,7 @@ function EmployeeDepartment() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const toast = useContext(ToastContext);

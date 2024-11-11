@@ -42,6 +42,7 @@ function SettingFormulationPage() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const {

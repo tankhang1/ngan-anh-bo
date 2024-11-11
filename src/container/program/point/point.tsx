@@ -64,6 +64,7 @@ function PointProgram() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const { data: counterProgramPoint } = useGetCounterProgramPointByStatusQuery(

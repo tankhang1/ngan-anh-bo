@@ -63,6 +63,7 @@ function ProductWarehousePage() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const { data: products, isLoading: isLoadingProduct } =

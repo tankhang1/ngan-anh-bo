@@ -59,6 +59,7 @@ function TopupProgram() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const { data: counterProgramTopup } = useGetCounterProgramTopupByStatusQuery(

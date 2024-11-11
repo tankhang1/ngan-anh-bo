@@ -39,6 +39,7 @@ function SettingIndicationPage() {
     },
     {
       refetchOnMountOrArgChange: true,
+      skip: !openedHistory,
     }
   );
   const {
