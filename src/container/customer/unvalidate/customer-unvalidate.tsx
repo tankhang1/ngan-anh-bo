@@ -55,7 +55,7 @@ function CustomerUnValidation() {
         t: "ANONYMOUS",
       },
       {
-        skip: !openedHistory,
+        refetchOnMountOrArgChange: true,
       }
     );
 
