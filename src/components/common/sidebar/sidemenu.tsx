@@ -224,6 +224,15 @@ export const MENUITEMS = [
         key: MENU_KEY.CUSTOMERS_SEARCH,
       },
       {
+        path: `${import.meta.env.BASE_URL}customer/log`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Lịch sử thay đổi",
+        key: MENU_KEY.CUSTOMERS_VALIDATE,
+      },
+      {
         path: `${import.meta.env.BASE_URL}customer/validate`,
         type: "link",
         active: false,

@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TBrand } from "../../../assets/types";
+import { GroupCode, TBrand } from "../../../assets/types";
 
 import { Formik } from "formik";
 import { useGetListBrandQuery } from "../../../redux/api/manage/manage.api";
@@ -20,6 +20,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import AppWarning from "../../../components/AppWarning";
 import { useCreateBrandMutation } from "../../../redux/api/setting/setting.api";
+import { useLogProductQuery } from "../../../redux/api/log/log.api";
+import AppHistory from "../../../components/AppHistory";
 
 function SettingBrandPage() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -29,7 +31,15 @@ function SettingBrandPage() {
   const [openAddPopup, setOpenAddPopup] = useState<Omit<TBrand, "id"> | null>(
     null
   );
-
+  const [openedHistory, setOpenHistory] = useState(false);
+  const { data: logProductBrand } = useLogProductQuery(
+    {
+      group: GroupCode.PRODUCTS_BRAND,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const {
     data: brands,
     isLoading: isLoadingBrand,
@@ -102,35 +112,56 @@ function SettingBrandPage() {
                       </Button>
                     </OverlayTrigger>
                   )}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin chương trình tích điểm"
-            isLoading={isLoadingBrand}
-            headers={[
-              {
-                key: "code",
-                label: "Mã nhãn hàng",
-                render: (value) => <td>{value.code}</td>,
-              },
-              {
-                key: "name",
-                label: "Tên nhãn hàng",
-                render: (value) => <td>{value.name}</td>,
-              },
-            ]}
-            data={brands || []}
-          />
-        </Card>
-      </Col>
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin chương trình tích điểm"
+          isLoading={isLoadingBrand}
+          headers={[
+            {
+              key: "code",
+              label: "Mã nhãn hàng",
+              render: (value) => <td>{value.code}</td>,
+            },
+            {
+              key: "name",
+              label: "Tên nhãn hàng",
+              render: (value) => <td>{value.name}</td>,
+            },
+          ]}
+          data={brands || []}
+        />
+      </Card>
+      <AppHistory
+        data={logProductBrand}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal
         show={openAddPopup !== null}
         onHide={() => setOpenAddPopup(null)}

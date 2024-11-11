@@ -11,16 +11,10 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TBrand, TFormulation, TGroupCustomer } from "../../../assets/types";
-import AppId from "../../../components/common/app-id";
+import { GroupCode, TFormulation } from "../../../assets/types";
 
 import { Formik } from "formik";
-import {
-  useGetListBrandQuery,
-  useGetListFormulationQuery,
-  useGetListGroupObjectiveQuery,
-} from "../../../redux/api/manage/manage.api";
-import { useCreateUpdateGroupObjectiveMutation } from "../../../redux/api/other/other.api";
+import { useGetListFormulationQuery } from "../../../redux/api/manage/manage.api";
 import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -29,17 +23,27 @@ import {
   useCreateBrandMutation,
   useCreateFormulationMutation,
 } from "../../../redux/api/setting/setting.api";
+import AppHistory from "../../../components/AppHistory";
+import { useLogProductQuery } from "../../../redux/api/log/log.api";
 
 function SettingFormulationPage() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
+  const [openedHistory, setOpenHistory] = useState(false);
   const deferSearchValue = useDeferredValue(search);
   const [openAddPopup, setOpenAddPopup] = useState<Omit<
     TFormulation,
     "id"
   > | null>(null);
-
+  const { data: logProductFormulation } = useLogProductQuery(
+    {
+      group: GroupCode.PRODUCTS_FORMULATION,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const {
     data: formulations,
     isLoading: isLoadingFormulation,
@@ -111,35 +115,56 @@ function SettingFormulationPage() {
                       </Button>
                     </OverlayTrigger>
                   )}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin chương trình tích điểm"
-            isLoading={isLoadingFormulation}
-            headers={[
-              {
-                key: "code",
-                label: "Mã dạng thuốc",
-                render: (value) => <td>{value.code}</td>,
-              },
-              {
-                key: "name",
-                label: "Tên dạng thuốc",
-                render: (value) => <td>{value.name}</td>,
-              },
-            ]}
-            data={formulations || []}
-          />
-        </Card>
-      </Col>
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin chương trình tích điểm"
+          isLoading={isLoadingFormulation}
+          headers={[
+            {
+              key: "code",
+              label: "Mã dạng thuốc",
+              render: (value) => <td>{value.code}</td>,
+            },
+            {
+              key: "name",
+              label: "Tên dạng thuốc",
+              render: (value) => <td>{value.name}</td>,
+            },
+          ]}
+          data={formulations || []}
+        />
+      </Card>
+      <AppHistory
+        data={logProductFormulation || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal
         show={openAddPopup !== null}
         onHide={() => setOpenAddPopup(null)}

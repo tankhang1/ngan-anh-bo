@@ -8,13 +8,18 @@ import { RootState } from "../../../../redux/store";
 import { useGetListIngredientPackingQuery } from "../../../../redux/api/warehouse/warehouse.api";
 import { fDate } from "../../../../hooks";
 import { format } from "date-fns";
+import AppHistory from "../../../../components/AppHistory";
+import { useLogWarehouseQuery } from "../../../../redux/api/log/log.api";
+import { GroupCode } from "../../../../assets/types";
 
 function ManageMaterialPacking() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
   const deferSearchValue = useDeferredValue(search);
-
+  const { data: logIngredient } = useLogWarehouseQuery({
+    group: GroupCode.INGREDIENTS_PACKING,
+  });
   const { data: ingredients, isLoading: isLoadingIngredient } =
     useGetListIngredientPackingQuery(undefined, {
       refetchOnMountOrArgChange: true,
@@ -53,7 +58,7 @@ function ManageMaterialPacking() {
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
+      <div className="d-flex flex-column flex-xl-row gap-2">
         <Card className="custom-card">
           <AppTable
             isHeader={false}
@@ -136,7 +141,8 @@ function ManageMaterialPacking() {
             data={ingredients || []}
           />
         </Card>
-      </Col>
+        <AppHistory data={logIngredient || []} />
+      </div>
     </Fragment>
   );
 }

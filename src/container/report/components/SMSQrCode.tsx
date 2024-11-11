@@ -273,6 +273,11 @@ function SMS_QR_Report() {
                 ),
               },
               {
+                key: "register_phone",
+                label: "Số điện thoại",
+                render: (value) => <td>{value.register_phone}</td>,
+              },
+              {
                 key: "bin_seri",
                 label: "Số seri thùng",
                 render: (value) => <td>{value.bin_seri}</td>,
@@ -282,6 +287,7 @@ function SMS_QR_Report() {
                 label: "Mã sản phẩm",
                 render: (value) => <td>{value.product_code}</td>,
               },
+
               {
                 key: "time_use",
                 label: "Ngày sử dụng",
@@ -319,6 +325,11 @@ function SMS_QR_Report() {
                     <span className="fw-semibold">{value.code}</span>
                   </td>
                 ),
+              },
+              {
+                key: "register_phone",
+                label: "Số điện thoại",
+                render: (value) => <td>{value.register_phone}</td>,
               },
               {
                 key: "bin_seri",

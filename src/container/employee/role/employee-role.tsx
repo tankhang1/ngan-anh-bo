@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TEmployeeRole } from "../../../assets/types";
+import { GroupCode, TEmployeeRole } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useGetListEmployeeRoleQuery } from "../../../redux/api/manage/manage.api";
 import { Formik } from "formik";
@@ -24,6 +24,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import roleSchema from "../../../schema/role.schema";
 import AppWarning from "../../../components/AppWarning";
+import AppHistory from "../../../components/AppHistory";
+import { useLogCustomerQuery } from "../../../redux/api/log/log.api";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -35,7 +37,7 @@ const EMPLOYEE_ROLE_FILTERS = [
 function EmployeeRole() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(EMPLOYEE_ROLE_FILTERS[0].key);
+  const [openedHistory, setOpenHistory] = useState(false);
   const [modalInfo, setModalInfo] = useState<TEmployeeRole | null>(null);
   const [openCEModal, setOpenCEModal] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
@@ -44,6 +46,14 @@ function EmployeeRole() {
     useUpdateEmployeeRoleMutation();
   const [createRole, { isLoading: isLoadingCreate }] =
     useCreateEmployeeRoleMutation();
+  const { data: logEmployeeRole } = useLogCustomerQuery(
+    {
+      group: GroupCode.EMPLOYEES_ROLE,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const toast = useContext(ToastContext);
 
   const {
@@ -183,68 +193,89 @@ function EmployeeRole() {
                       </Button>
                     </OverlayTrigger>
                   ) : null}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Vai trof"
-            isLoading={isLoadingRole}
-            headers={[
-              {
-                key: "id",
-                label: "ID",
-                render: (value: TEmployeeRole) => (
-                  <td>
-                    <AppId id={value.id ?? ""} />
-                  </td>
-                ),
-              },
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Vai trof"
+          isLoading={isLoadingRole}
+          headers={[
+            {
+              key: "id",
+              label: "ID",
+              render: (value: TEmployeeRole) => (
+                <td>
+                  <AppId id={value.id ?? ""} />
+                </td>
+              ),
+            },
 
-              {
-                key: "name",
-                label: "Vai trò",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.name}</span>
-                  </td>
-                ),
-              },
+            {
+              key: "name",
+              label: "Vai trò",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.name}</span>
+                </td>
+              ),
+            },
 
-              {
-                key: "note",
-                label: "Chú thích",
-                render: (value) => <td>{value.note}</td>,
-              },
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => {
-                        setOpenCEModal(true);
-                        setModalInfo(value);
-                        setIsCreate(false);
-                      }}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
-            ]}
-            data={roles || []}
-          />
-        </Card>
-      </Col>
+            {
+              key: "note",
+              label: "Chú thích",
+              render: (value) => <td>{value.note}</td>,
+            },
+            {
+              key: "",
+              label: "Chức năng",
+              render: (value) => (
+                <td>
+                  <button
+                    className="btn btn-icon btn-sm btn-primary-ghost"
+                    onClick={() => {
+                      setOpenCEModal(true);
+                      setModalInfo(value);
+                      setIsCreate(false);
+                    }}
+                  >
+                    <i className="ti ti-edit"></i>
+                  </button>
+                </td>
+              ),
+            },
+          ]}
+          data={roles || []}
+        />
+      </Card>
+      <AppHistory
+        data={logEmployeeRole || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal show={openCEModal} onHide={onModalClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>

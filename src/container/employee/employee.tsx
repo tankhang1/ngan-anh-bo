@@ -3,37 +3,36 @@ import {
   Button,
   Card,
   Col,
-  Dropdown,
   Form,
   InputGroup,
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../components/common/table/table";
-import { TEmployee } from "../../assets/types";
+import { GroupCode, TEmployee } from "../../assets/types";
 import { useNavigate } from "react-router-dom";
 import { useGetListEmployeeQuery } from "../../redux/api/manage/manage.api";
 import { format } from "date-fns";
-import { exportExcelFile, fDate } from "../../hooks";
+import { exportExcelFile } from "../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import AppConfirm from "../../components/AppConfirm";
-
-const EMPLOYEE_FILTERS = [
-  {
-    key: "name",
-    label: "Tên nhân viên",
-  },
-  {
-    key: "phone",
-    label: "Số điện thoại",
-  },
-];
+import AppHistory from "../../components/AppHistory";
+import { useLogCustomerQuery } from "../../redux/api/log/log.api";
 
 function Employee() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const deferSearchValue = useDeferredValue(search);
+  const [openedHistory, setOpenHistory] = useState(false);
+  const { data: logEmployee } = useLogCustomerQuery(
+    {
+      group: GroupCode.EMPLOYEES,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const navigate = useNavigate();
   const { data: employees, isLoading: isLoadingEmployee } =
     useGetListEmployeeQuery(null, {
@@ -128,155 +127,177 @@ function Employee() {
                       </Button>
                     </AppConfirm>
                   ) : null}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin đại lý"
-            isLoading={isLoadingEmployee}
-            headers={[
-              {
-                key: "code",
-                label: "Mã nhân viên",
-                render: (value: TEmployee) => <td>{value.code}</td>,
-              },
-              {
-                key: "avatar",
-                label: "Hình ảnh",
-                render: (value) => (
-                  <td>
-                    <img
-                      src={
-                        value.avatar ||
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
-                      }
-                      className="img object-fit-cover"
-                      style={{
-                        height: 60,
-                        width: "auto",
-                      }}
-                    />
-                  </td>
-                ),
-              },
-              {
-                key: "name",
-                label: "Tên nhân viên",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.name}</span>
-                  </td>
-                ),
-              },
 
-              // {
-              //   key: "birthday",
-              //   label: "Ngày sinh",
-              //   render: (value) => (
-              //     <td>
-              //       <span className="fw-semibold">
-              //         {value?.birthday
-              //           ? format(fDate(value.birthday), "dd/MM/yyyy")
-              //           : ""}
-              //       </span>
-              //     </td>
-              //   ),
-              // },
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin đại lý"
+          isLoading={isLoadingEmployee}
+          headers={[
+            {
+              key: "code",
+              label: "Mã nhân viên",
+              render: (value: TEmployee) => <td>{value.code}</td>,
+            },
+            {
+              key: "avatar",
+              label: "Hình ảnh",
+              render: (value) => (
+                <td>
+                  <img
+                    src={
+                      value.avatar ||
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
+                    }
+                    className="img object-fit-cover"
+                    style={{
+                      height: 60,
+                      width: "auto",
+                    }}
+                  />
+                </td>
+              ),
+            },
+            {
+              key: "name",
+              label: "Tên nhân viên",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.name}</span>
+                </td>
+              ),
+            },
 
-              {
-                key: "gender",
-                label: "Giới tính",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {value.gender ? "Nam" : "Nữ"}
-                    </span>
-                  </td>
-                ),
-              },
-              {
-                key: "phone",
-                label: "Số điện thoại",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.phone}</span>
-                  </td>
-                ),
-              },
-              // {
-              //   key: "citizen_number",
-              //   label: "CCCD",
-              //   render: (value) => <td>{value.citizen_number}</td>,
-              // },
-              {
-                key: "email",
-                label: "Email",
-                render: (value) => <td>{value.email}</td>,
-              },
-              {
-                key: "province_name",
-                label: "Tỉnh thành",
-                render: (value) => <td>{value.province_name}</td>,
-              },
-              {
-                key: "areas",
-                label: "Vùng kinh doanh",
-                render: (value) => <td>{value.areas as string}</td>,
-              },
+            // {
+            //   key: "birthday",
+            //   label: "Ngày sinh",
+            //   render: (value) => (
+            //     <td>
+            //       <span className="fw-semibold">
+            //         {value?.birthday
+            //           ? format(fDate(value.birthday), "dd/MM/yyyy")
+            //           : ""}
+            //       </span>
+            //     </td>
+            //   ),
+            // },
 
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => navigate(`ce/${false}/${value.uuid}`)}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
-              {
-                key: "time_created",
-                label: "Thời gian tạo",
-                render: (value) => (
-                  <td>
-                    {value.time_created
-                      ? format(value.time_created, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-              {
-                key: "time_updated",
-                label: "Thời gian cập nhật",
-                render: (value) => (
-                  <td>
-                    {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-              {
-                key: "note",
-                label: "Ghi chú",
-                render: (value) => <td>{value.note}</td>,
-              },
-            ]}
-            data={employees || []}
-          />
-        </Card>
-      </Col>
+            {
+              key: "gender",
+              label: "Giới tính",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">
+                    {value.gender ? "Nam" : "Nữ"}
+                  </span>
+                </td>
+              ),
+            },
+            {
+              key: "phone",
+              label: "Số điện thoại",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.phone}</span>
+                </td>
+              ),
+            },
+            // {
+            //   key: "citizen_number",
+            //   label: "CCCD",
+            //   render: (value) => <td>{value.citizen_number}</td>,
+            // },
+            {
+              key: "email",
+              label: "Email",
+              render: (value) => <td>{value.email}</td>,
+            },
+            {
+              key: "province_name",
+              label: "Tỉnh thành",
+              render: (value) => <td>{value.province_name}</td>,
+            },
+            {
+              key: "areas",
+              label: "Vùng kinh doanh",
+              render: (value) => <td>{value.areas as string}</td>,
+            },
+
+            {
+              key: "",
+              label: "Chức năng",
+              render: (value) => (
+                <td>
+                  <button
+                    className="btn btn-icon btn-sm btn-primary-ghost"
+                    onClick={() => navigate(`ce/${false}/${value.uuid}`)}
+                  >
+                    <i className="ti ti-edit"></i>
+                  </button>
+                </td>
+              ),
+            },
+            {
+              key: "time_created",
+              label: "Thời gian tạo",
+              render: (value) => (
+                <td>
+                  {value.time_created
+                    ? format(value.time_created, "dd/MM/yyyy HH:mm:ss")
+                    : ""}
+                </td>
+              ),
+            },
+            {
+              key: "time_updated",
+              label: "Thời gian cập nhật",
+              render: (value) => (
+                <td>
+                  {value.time_updated
+                    ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
+                    : ""}
+                </td>
+              ),
+            },
+            {
+              key: "note",
+              label: "Ghi chú",
+              render: (value) => <td>{value.note}</td>,
+            },
+          ]}
+          data={employees || []}
+        />
+      </Card>
+      <AppHistory
+        data={logEmployee || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
     </Fragment>
   );
 }

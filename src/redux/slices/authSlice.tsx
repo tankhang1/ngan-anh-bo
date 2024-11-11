@@ -98,6 +98,8 @@ const initialValue = {
     createUnValidateCustomer: 0,
     exportUnValidateCustomer: 0,
     editUnValidateCustomer: 0,
+    //customer
+    logCustomer: 0,
     //Employee
     viewEmployee: 0,
     viewListEmployee: 0,
@@ -458,6 +460,8 @@ const onPermissionFeature = (permission: TPermit, isSuperAdmin?: number) => {
         createValidateCustomer: permission.permit_create,
         exportValidateCustomer: permission.permit_export,
         editValidateCustomer: permission.permit_edit,
+        logCustomer:
+          permission.permit_view_detail || permission.permit_view_list,
       };
     }
     case "CUSTOMERS_UNVALIDATE": {
@@ -468,6 +472,8 @@ const onPermissionFeature = (permission: TPermit, isSuperAdmin?: number) => {
         createUnValidateCustomer: permission.permit_create,
         exportUnValiteCustomer: permission.permit_export,
         editUnValidateCustomer: permission.permit_edit,
+        logCustomer:
+          permission.permit_view_detail || permission.permit_view_list,
       };
     }
     case "WAREHOUSES_SEARCH_EXPORT": {
@@ -567,6 +573,7 @@ const onPermissionFeature = (permission: TPermit, isSuperAdmin?: number) => {
           permission.permit_view_detail || permission.permit_view_list,
       };
     }
+
     default:
       return undefined;
   }
@@ -613,6 +620,9 @@ const authSlice = createSlice({
         createUnValidateCustomer: 0,
         exportUnValidateCustomer: 0,
         editUnValidateCustomer: 0,
+        //
+        logCustomer: 0,
+
         //Employee
         viewEmployee: 0,
         viewListEmployee: 0,

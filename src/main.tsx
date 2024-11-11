@@ -75,6 +75,7 @@ import WarehouseSearchBatchNumber from "./container/warehouse/order/warehouseSea
 import DevicePage from "./container/settings/device/index.tsx";
 import WarehouseListOrder from "./container/warehouse/order/warehouseListOrder.tsx";
 import WarehouseInventory from "./container/warehouse/inventory.tsx";
+import LogCustomerPage from "./container/customer/log-customer/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -181,6 +182,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}customer/unvalidate`}
                 element={<CustomerUnValidation />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}customer/log`}
+                element={<LogCustomerPage />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}employee/role`}

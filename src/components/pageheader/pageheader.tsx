@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import { Breadcrumb } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
 const MapLabel = new Map([
@@ -61,6 +60,7 @@ const MapLabel = new Map([
   ["device", "Quản lý thiết bị"],
   ["list-order", "Danh sách lệnh"],
   ["inventory", "Danh sách tồn kho"],
+  ["log", "Lịch sử thay đổi"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();

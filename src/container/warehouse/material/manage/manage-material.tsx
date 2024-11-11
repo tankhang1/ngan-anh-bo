@@ -7,14 +7,17 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import { useGetListIngredientAllQuery } from "../../../../redux/api/warehouse/warehouse.api";
 import { useNavigate } from "react-router-dom";
+import AppHistory from "../../../../components/AppHistory";
+import { useLogWarehouseQuery } from "../../../../redux/api/log/log.api";
+import { GroupCode } from "../../../../assets/types";
 
 function ManageMaterial() {
-  const { permission } = useSelector((state: RootState) => state.auth);
-  const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("code");
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
+  const { data: logIngredient } = useLogWarehouseQuery({
+    group: GroupCode.INGREDIENTS,
+  });
   const { data: ingredients, isLoading: isLoadingIngredient } =
     useGetListIngredientAllQuery(undefined, {
       refetchOnMountOrArgChange: true,
@@ -53,7 +56,7 @@ function ManageMaterial() {
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
+      <div className="d-flex flex-column flex-xl-row gap-2">
         <Card className="custom-card">
           <AppTable
             isHeader={false}
@@ -120,7 +123,8 @@ function ManageMaterial() {
             data={ingredients || []}
           />
         </Card>
-      </Col>
+        <AppHistory data={logIngredient || []} />
+      </div>
     </Fragment>
   );
 }

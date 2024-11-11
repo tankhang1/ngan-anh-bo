@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TIndication } from "../../../assets/types";
+import { GroupCode, TIndication } from "../../../assets/types";
 
 import { Formik } from "formik";
 import { useGetListIndicationQuery } from "../../../redux/api/manage/manage.api";
@@ -20,6 +20,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import AppWarning from "../../../components/AppWarning";
 import { useCreateIndicationMutation } from "../../../redux/api/setting/setting.api";
+import AppHistory from "../../../components/AppHistory";
+import { useLogProductQuery } from "../../../redux/api/log/log.api";
 
 function SettingIndicationPage() {
   const { permission } = useSelector((state: RootState) => state.auth);
@@ -30,7 +32,15 @@ function SettingIndicationPage() {
     TIndication,
     "id"
   > | null>(null);
-
+  const [openedHistory, setOpenHistory] = useState(false);
+  const { data: logProductIndication } = useLogProductQuery(
+    {
+      group: GroupCode.PRODUCTS_INDICATION,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const {
     data: indications,
     isLoading: isLoadingIndication,
@@ -102,35 +112,56 @@ function SettingIndicationPage() {
                       </Button>
                     </OverlayTrigger>
                   )}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin chương trình tích điểm"
-            isLoading={isLoadingIndication}
-            headers={[
-              {
-                key: "code",
-                label: "Mã nhóm thuốc",
-                render: (value) => <td>{value.code}</td>,
-              },
-              {
-                key: "name",
-                label: "Tên nhóm thuốc",
-                render: (value) => <td>{value.name}</td>,
-              },
-            ]}
-            data={indications || []}
-          />
-        </Card>
-      </Col>
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin chương trình tích điểm"
+          isLoading={isLoadingIndication}
+          headers={[
+            {
+              key: "code",
+              label: "Mã nhóm thuốc",
+              render: (value) => <td>{value.code}</td>,
+            },
+            {
+              key: "name",
+              label: "Tên nhóm thuốc",
+              render: (value) => <td>{value.name}</td>,
+            },
+          ]}
+          data={indications || []}
+        />
+      </Card>
+      <AppHistory
+        data={logProductIndication || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal
         show={openAddPopup !== null}
         onHide={() => setOpenAddPopup(null)}

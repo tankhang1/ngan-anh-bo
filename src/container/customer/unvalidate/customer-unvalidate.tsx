@@ -3,14 +3,13 @@ import {
   Button,
   Card,
   Col,
-  Dropdown,
   Form,
   InputGroup,
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TCustomerRes } from "../../../assets/types";
+import { GroupCode, TCustomerRes } from "../../../assets/types";
 import { useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
@@ -20,21 +19,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
 import { MapCustomerType } from "../../../constants";
-
-const AGENT_FILTERS = [
-  {
-    key: "id",
-    label: "ID",
-  },
-  {
-    key: "name",
-    label: "Tên đại lý",
-  },
-  {
-    key: "phone",
-    label: "Số điện thoại",
-  },
-];
+import { useLogCustomerQuery } from "../../../redux/api/log/log.api";
+import AppHistory from "../../../components/AppHistory";
 
 const CUSTOMER_TYPE = [
   {
@@ -45,9 +31,9 @@ const CUSTOMER_TYPE = [
 function CustomerUnValidation() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("phone");
   const deferSearchValue = useDeferredValue(search);
   const [customerType, setCustomerType] = useState(CUSTOMER_TYPE[0].key);
+
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
@@ -168,152 +154,148 @@ function CustomerUnValidation() {
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin đại lý"
-            isLoading={isLoadingCustomer}
-            isChange={customerType}
-            headers={[
-              {
-                key: "customer_code",
-                label: "Mã khách hàng",
-                render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
-              },
-              {
-                key: "name",
-                label: "Tên đăng kí",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.name}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "name",
-                label: "Họ và tên",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.customer_name}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "sign_board",
-                label: "Tên cửa hàng",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.sign_board}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "province",
-                label: "Tỉnh thành",
-                render: (value) => <td>{value.customer_province_name}</td>,
-              },
-              {
-                key: "phone",
-                label: "Số điện thoại",
-                render: (value) => <td>{value.phone}</td>,
-              },
-              {
-                key: "customer_type",
-                label: "Nhóm khách hàng",
-                render: (value) => (
-                  <td>
-                    {value?.customer_type
-                      ? MapCustomerType.get(value.customer_type)
-                      : ""}
-                  </td>
-                ),
-              },
-              {
-                key: "source_channel_used",
-                label: "Nguồn đăng kí",
-                render: (value) => <td>{value.source_channel_used}</td>,
-              },
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin đại lý"
+          isLoading={isLoadingCustomer}
+          isChange={customerType}
+          headers={[
+            {
+              key: "customer_code",
+              label: "Mã khách hàng",
+              render: (value: TCustomerRes) => <td>{value.customer_code}</td>,
+            },
+            {
+              key: "name",
+              label: "Tên đăng kí",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.name}</span>
+                </td>
+              ),
+            },
+            {
+              key: "name",
+              label: "Họ và tên",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.customer_name}</span>
+                </td>
+              ),
+            },
+            {
+              key: "sign_board",
+              label: "Tên cửa hàng",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.sign_board}</span>
+                </td>
+              ),
+            },
+            {
+              key: "province",
+              label: "Tỉnh thành",
+              render: (value) => <td>{value.customer_province_name}</td>,
+            },
+            {
+              key: "phone",
+              label: "Số điện thoại",
+              render: (value) => <td>{value.phone}</td>,
+            },
+            {
+              key: "customer_type",
+              label: "Nhóm khách hàng",
+              render: (value) => (
+                <td>
+                  {value?.customer_type
+                    ? MapCustomerType.get(value.customer_type)
+                    : ""}
+                </td>
+              ),
+            },
+            {
+              key: "source_channel_used",
+              label: "Nguồn đăng kí",
+              render: (value) => <td>{value.source_channel_used}</td>,
+            },
 
-              {
-                key: "time_verify",
-                label: "Thời gian xác thực",
-                render: (value) => (
-                  <td>
-                    {value?.time_verify
-                      ? format(
-                          new Date(value.time_verify),
-                          "dd/MM/yyyy0 hh:mm:ss"
-                        )
-                      : ""}
-                  </td>
-                ),
-              },
-              {
-                key: "source_channel_used",
-                label: "Nguồn đăng kí",
-                render: (value) => <td>{value.source_channel_used}</td>,
-              },
-              {
-                key: "status",
-                label: "Trạng thái",
-                render: (value) => (
-                  <td>
-                    {value.status === 1 ? (
-                      <span className="bg-success bg-opacity-100 text-white badge ">
-                        Đã xác thực
-                      </span>
-                    ) : (
-                      <span className="bg-warning bg-opacity-100 text-white badge ">
-                        Chờ xác thực
-                      </span>
-                    )}
-                  </td>
-                ),
-              },
+            {
+              key: "time_verify",
+              label: "Thời gian xác thực",
+              render: (value) => (
+                <td>
+                  {value?.time_verify
+                    ? format(
+                        new Date(value.time_verify),
+                        "dd/MM/yyyy0 hh:mm:ss"
+                      )
+                    : ""}
+                </td>
+              ),
+            },
+            {
+              key: "source_channel_used",
+              label: "Nguồn đăng kí",
+              render: (value) => <td>{value.source_channel_used}</td>,
+            },
+            {
+              key: "status",
+              label: "Trạng thái",
+              render: (value) => (
+                <td>
+                  {value.status === 1 ? (
+                    <span className="bg-success bg-opacity-100 text-white badge ">
+                      Đã xác thực
+                    </span>
+                  ) : (
+                    <span className="bg-warning bg-opacity-100 text-white badge ">
+                      Chờ xác thực
+                    </span>
+                  )}
+                </td>
+              ),
+            },
 
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td className="d-flex justify-content-center align-item-center">
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => navigate(`ce/${false}/${value.uuid}`)}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
-              {
-                key: "time",
-                label: "Thời gian đăng ký",
-                render: (value) => (
-                  <td>
-                    {value.time
-                      ? format(value.time, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-              {
-                key: "time_updated",
-                label: "Thời gian cập nhật",
-                render: (value) => (
-                  <td>
-                    {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-            ]}
-            data={customers || []}
-          />
-        </Card>
-      </Col>
+            {
+              key: "",
+              label: "Chức năng",
+              render: (value) => (
+                <td className="d-flex justify-content-center align-item-center">
+                  <button
+                    className="btn btn-icon btn-sm btn-primary-ghost"
+                    onClick={() => navigate(`ce/${false}/${value.uuid}`)}
+                  >
+                    <i className="ti ti-edit"></i>
+                  </button>
+                </td>
+              ),
+            },
+            {
+              key: "time",
+              label: "Thời gian đăng ký",
+              render: (value) => (
+                <td>
+                  {value.time ? format(value.time, "dd/MM/yyyy HH:mm:ss") : ""}
+                </td>
+              ),
+            },
+            {
+              key: "time_updated",
+              label: "Thời gian cập nhật",
+              render: (value) => (
+                <td>
+                  {value.time_updated
+                    ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
+                    : ""}
+                </td>
+              ),
+            },
+          ]}
+          data={customers || []}
+        />
+      </Card>
     </Fragment>
   );
 }

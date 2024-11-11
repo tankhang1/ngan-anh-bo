@@ -6,10 +6,12 @@ import {
   Form,
   InputGroup,
   Modal,
+  OverlayTrigger,
   Stack,
+  Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TWarehouseDevice } from "../../../assets/types";
+import { GroupCode, TWarehouseDevice } from "../../../assets/types";
 import { format } from "date-fns";
 import { Formik } from "formik";
 import AppWarning from "../../../components/AppWarning";
@@ -22,6 +24,8 @@ import {
 import { ToastContext } from "../../../components/AppToast";
 import { useGetListWorkCentersQuery } from "../../../redux/api/media/media.api";
 import AppSelect from "../../../components/AppSelect";
+import AppHistory from "../../../components/AppHistory";
+import { useLogWarehouseQuery } from "../../../redux/api/log/log.api";
 const statusMap = new Map([
   [-1, { label: "Mới tạo mã", color: "warning" }],
   [0, { label: "Đang chờ xác thực", color: "warning" }],
@@ -34,6 +38,15 @@ const DevicePage = () => {
   const { data: listDevices, isLoading } = useGetListWarehouseDevicesQuery();
   const [activeDeviceKey] = useActiveDeviceKeyMutation();
   const [removeDeviceKey] = useRemoveDeviceKeyMutation();
+  const [openedHistory, setOpenHistory] = useState(false);
+  const { data: logWarehouseDevice } = useLogWarehouseQuery(
+    {
+      group: GroupCode.WAREHOUSE_DEVICES,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const [createDeviceKey, { isLoading: isCreateDeviceKey }] =
     useCreateDeviceKeyMutation();
   const { data: listWorkCenters } = useGetListWorkCentersQuery();
@@ -128,6 +141,24 @@ const DevicePage = () => {
                 >
                   <i className="ri-add-line"></i>
                 </Button>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                  }
+                >
+                  <Button
+                    variant=""
+                    aria-label="button"
+                    type="button"
+                    className="btn btn-icon btn-success-light ms-2"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    onClick={() => setOpenHistory(true)}
+                  >
+                    <i className="ti ti-history"></i>
+                  </Button>
+                </OverlayTrigger>
               </div>
             </div>
           </div>
@@ -239,6 +270,11 @@ const DevicePage = () => {
           data={listDevices || []}
         />
       </Card>
+      <AppHistory
+        data={logWarehouseDevice}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal
         show={openAddKey}
         onHide={() => setOpenAddKey(false)}

@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { Fragment, useDeferredValue, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -17,7 +11,7 @@ import {
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { useNavigate } from "react-router-dom";
-import { TProduct } from "../../../assets/types";
+import { GroupCode, TProduct } from "../../../assets/types";
 
 import { BASE_PORT } from "../../../constants";
 import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
@@ -26,17 +20,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
 import AppConfirm from "../../../components/AppConfirm";
+import AppHistory from "../../../components/AppHistory";
+import { useLogProductQuery } from "../../../redux/api/log/log.api";
 
-const PRODUCT_FILTERS = [
-  {
-    key: "description",
-    label: "Tên sản phẩm",
-  },
-  {
-    key: "category_name",
-    label: "Nhóm sản phẩm",
-  },
-];
 const PRODUCT_TYPE = [
   {
     key: -1,
@@ -67,10 +53,18 @@ function ProductWarehousePage() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [changeType, setChangeType] = useState<number>(-1); // true: thùng, false: gói
+  const [openedHistory, setOpenHistory] = useState(false);
   const deferSearchValue = useDeferredValue(search);
 
   const navigate = useNavigate();
-
+  const { data: logProductWarehouse } = useLogProductQuery(
+    {
+      group: GroupCode.PRODUCTS_PRODUCTION,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const { data: products, isLoading: isLoadingProduct } =
     useGetListProductsQuery(null, {
       refetchOnMountOrArgChange: true,
@@ -208,125 +202,146 @@ function ProductWarehousePage() {
                       </Button>
                     </AppConfirm>
                   ) : null}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin sản phẩm"
-            isLoading={isLoadingProduct}
-            isChange={changeType}
-            maxPage={filterProducts.length}
-            headers={[
-              {
-                key: "image_url",
-                label: "Hình ảnh",
-                render: (value) => (
-                  <td>
-                    <img
-                      src={
-                        `${BASE_PORT}/${value.code}.jpg` ||
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
-                      }
-                      className="img object-fit-cover"
-                      style={{
-                        height: 100,
-                        width: "auto",
-                      }}
-                    />
-                  </td>
-                ),
-              },
-              {
-                key: "name_display_root",
-                label: "Mã sản phẩm",
-                render: (value) => <td>{value.name_display_root}</td>,
-              },
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin sản phẩm"
+          isLoading={isLoadingProduct}
+          isChange={changeType}
+          maxPage={filterProducts.length}
+          headers={[
+            {
+              key: "image_url",
+              label: "Hình ảnh",
+              render: (value) => (
+                <td>
+                  <img
+                    src={
+                      `${BASE_PORT}/${value.code}.jpg` ||
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
+                    }
+                    className="img object-fit-cover"
+                    style={{
+                      height: 100,
+                      width: "auto",
+                    }}
+                  />
+                </td>
+              ),
+            },
+            {
+              key: "name_display_root",
+              label: "Mã sản phẩm",
+              render: (value) => <td>{value.name_display_root}</td>,
+            },
 
-              {
-                key: "description",
-                label: "Tên sản phẩm",
-                render: (value) => <td>{value.description}</td>,
-              },
+            {
+              key: "description",
+              label: "Tên sản phẩm",
+              render: (value) => <td>{value.description}</td>,
+            },
 
-              {
-                key: "brand_name",
-                label: "Tên thương hiệu",
-                render: (value: TProduct) => <td>{value?.brand_name}</td>,
-              },
-              {
-                key: "category_name",
-                label: "Nhóm sản phẩm",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.category_name}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "point",
-                label: "Số điểm",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {fNumber(value.point ?? 0)}
-                    </span>
-                  </td>
-                ),
-              },
+            {
+              key: "brand_name",
+              label: "Tên thương hiệu",
+              render: (value: TProduct) => <td>{value?.brand_name}</td>,
+            },
+            {
+              key: "category_name",
+              label: "Nhóm sản phẩm",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.category_name}</span>
+                </td>
+              ),
+            },
+            {
+              key: "point",
+              label: "Số điểm",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">
+                    {fNumber(value.point ?? 0)}
+                  </span>
+                </td>
+              ),
+            },
 
-              {
-                key: "pack_configuration",
-                label: "Quy cách đóng gói",
-                render: (value) => <td>{value.pack_configuration}</td>,
-              },
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => navigate(`edit/${value.code}`)}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
-              {
-                key: "time_created",
-                label: "Thời gian tạo",
-                render: (value) => (
-                  <td>
-                    {value.time_created
-                      ? format(value.time_created, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-              {
-                key: "time_updated",
-                label: "Thời gian cập nhật",
-                render: (value) => (
-                  <td>
-                    {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-            ]}
-            data={filterProducts || []}
-          />
-        </Card>
-      </Col>
+            {
+              key: "pack_configuration",
+              label: "Quy cách đóng gói",
+              render: (value) => <td>{value.pack_configuration}</td>,
+            },
+            {
+              key: "",
+              label: "Chức năng",
+              render: (value) => (
+                <td>
+                  <button
+                    className="btn btn-icon btn-sm btn-primary-ghost"
+                    onClick={() => navigate(`edit/${value.code}`)}
+                  >
+                    <i className="ti ti-edit"></i>
+                  </button>
+                </td>
+              ),
+            },
+            {
+              key: "time_created",
+              label: "Thời gian tạo",
+              render: (value) => (
+                <td>
+                  {value.time_created
+                    ? format(value.time_created, "dd/MM/yyyy HH:mm:ss")
+                    : ""}
+                </td>
+              ),
+            },
+            {
+              key: "time_updated",
+              label: "Thời gian cập nhật",
+              render: (value) => (
+                <td>
+                  {value.time_updated
+                    ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
+                    : ""}
+                </td>
+              ),
+            },
+          ]}
+          data={filterProducts || []}
+        />
+      </Card>
+      <AppHistory
+        data={logProductWarehouse || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
     </Fragment>
   );
 }

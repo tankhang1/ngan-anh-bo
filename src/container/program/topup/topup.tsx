@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TProgramTopup } from "../../../assets/types";
+import { GroupCode, TProgramTopup } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
@@ -23,13 +23,9 @@ import { format } from "date-fns";
 import { fNumber } from "../../../hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import AppHistory from "../../../components/AppHistory";
+import { useLogProgramQuery } from "../../../redux/api/log/log.api";
 
-const TOPUP_FILTERS = [
-  {
-    key: "name",
-    label: "Tên chương trình",
-  },
-];
 const STATUS_FILTERS = [
   {
     key: 0,
@@ -56,6 +52,15 @@ function TopupProgram() {
   const [status, setStatus] = useState(1);
   const [listTopups, setListTopups] = useState<TProgramTopup[]>([]);
   const [page, setPage] = useState(1);
+  const [openedHistory, setOpenHistory] = useState(false);
+  const { data: logProgramTopup } = useLogProgramQuery(
+    {
+      group: GroupCode.PROGRAMS_TOPUP,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const { data: counterProgramTopup } = useGetCounterProgramTopupByStatusQuery(
     {
       status: status,
@@ -178,188 +183,209 @@ function TopupProgram() {
                       </Button>
                     </OverlayTrigger>
                   ) : null}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin chương trình tích điểm"
-            isLoading={isLoadingTopup}
-            setExternalPage={setPage}
-            maxPage={counterProgramTopup}
-            isChange={status}
-            headers={[
-              {
-                key: "id",
-                label: "ID",
-                render: (value: TProgramTopup) => (
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin chương trình tích điểm"
+          isLoading={isLoadingTopup}
+          setExternalPage={setPage}
+          maxPage={counterProgramTopup}
+          isChange={status}
+          headers={[
+            {
+              key: "id",
+              label: "ID",
+              render: (value: TProgramTopup) => (
+                <td>
+                  <AppId id={value.id} />
+                </td>
+              ),
+            },
+            {
+              key: "name",
+              label: "Tên chương trình",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.name}</span>
+                </td>
+              ),
+            },
+            {
+              key: "time_start",
+              label: "Ngày bắt đầu",
+              render: (value) => <td>{value.time_start}</td>,
+            },
+            {
+              key: "time_end",
+              label: "Ngày kết thúc",
+              render: (value) => <td>{value.time_end}</td>,
+            },
+            {
+              key: "price",
+              label: "Số tiền",
+              render: (value) => <td>{fNumber(value.price * 1000)}</td>,
+            },
+            {
+              key: "status",
+              label: "Trạng thái",
+              render: (value) => {
+                const tmp = MAP_PROGRAM_STATUS.get(value.status);
+                return (
                   <td>
-                    <AppId id={value.id} />
+                    <Badge bg={tmp?.color} className="rounded-pill">
+                      {tmp?.label}
+                    </Badge>
                   </td>
-                ),
+                );
               },
-              {
-                key: "name",
-                label: "Tên chương trình",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.name}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "time_start",
-                label: "Ngày bắt đầu",
-                render: (value) => <td>{value.time_start}</td>,
-              },
-              {
-                key: "time_end",
-                label: "Ngày kết thúc",
-                render: (value) => <td>{value.time_end}</td>,
-              },
-              {
-                key: "price",
-                label: "Số tiền",
-                render: (value) => <td>{fNumber(value.price * 1000)}</td>,
-              },
-              {
-                key: "status",
-                label: "Trạng thái",
-                render: (value) => {
-                  const tmp = MAP_PROGRAM_STATUS.get(value.status);
-                  return (
-                    <td>
-                      <Badge bg={tmp?.color} className="rounded-pill">
-                        {tmp?.label}
-                      </Badge>
-                    </td>
-                  );
-                },
-              },
-              {
-                key: "products",
-                label: "Sản phẩm áp dụng",
-                render: (value) => {
-                  const products = value.products?.split(",");
-                  return (
-                    <td>
-                      <span className="d-flex gap-1 flex-wrap">
-                        {products.length > 5
-                          ? products.slice(0, 5).map((item, index) => (
-                              <Badge
-                                bg="outline-success"
-                                className="round-pill"
-                                key={index}
-                              >
-                                {item}
-                              </Badge>
-                            ))
-                          : products.map((item, index) => (
-                              <Badge
-                                bg="outline-success"
-                                className="round-pill"
-                                key={index}
-                              >
-                                {item}
-                              </Badge>
-                            ))}
-                        {products.length > 5 && (
-                          <Badge
-                            bg="outline-success"
-                            className="round-pill"
-                            key={"..."}
-                          >
-                            ...
-                          </Badge>
-                        )}
-                      </span>
-                    </td>
-                  );
-                },
-              },
-
-              {
-                key: "objectives",
-                label: "Nhóm khách hàng",
-                render: (value) => (
+            },
+            {
+              key: "products",
+              label: "Sản phẩm áp dụng",
+              render: (value) => {
+                const products = value.products?.split(",");
+                return (
                   <td>
                     <span className="d-flex gap-1 flex-wrap">
-                      {value.objectives?.split(",").map((item, index) => (
+                      {products.length > 5
+                        ? products.slice(0, 5).map((item, index) => (
+                            <Badge
+                              bg="outline-success"
+                              className="round-pill"
+                              key={index}
+                            >
+                              {item}
+                            </Badge>
+                          ))
+                        : products.map((item, index) => (
+                            <Badge
+                              bg="outline-success"
+                              className="round-pill"
+                              key={index}
+                            >
+                              {item}
+                            </Badge>
+                          ))}
+                      {products.length > 5 && (
                         <Badge
                           bg="outline-success"
                           className="round-pill"
-                          key={index}
+                          key={"..."}
                         >
-                          {item}
+                          ...
                         </Badge>
-                      ))}
+                      )}
                     </span>
                   </td>
-                ),
+                );
               },
+            },
 
-              permission.editProgramTopup
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => {
-                      console.log(value);
-                      return (
-                        <td>
-                          <span className="d-flex justify-content-center align-item-center">
-                            <button
-                              className="btn btn-icon btn-sm btn-primary-ghost"
-                              onClick={() =>
-                                navigate(
-                                  `ce/${false}/${value.uuid}_${status}_${
-                                    page - 1
-                                  }`
-                                )
-                              }
-                              disabled={value.status === 2}
-                            >
-                              <i className="ti ti-edit"></i>
-                            </button>
-                          </span>
-                        </td>
-                      );
-                    },
-                  }
-                : undefined,
+            {
+              key: "objectives",
+              label: "Nhóm khách hàng",
+              render: (value) => (
+                <td>
+                  <span className="d-flex gap-1 flex-wrap">
+                    {value.objectives?.split(",").map((item, index) => (
+                      <Badge
+                        bg="outline-success"
+                        className="round-pill"
+                        key={index}
+                      >
+                        {item}
+                      </Badge>
+                    ))}
+                  </span>
+                </td>
+              ),
+            },
 
-              {
-                key: "time_create",
-                label: "Thời gian tạo",
-                render: (value) => (
-                  <td>
-                    {value.time_create
-                      ? format(value.time_create, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-              {
-                key: "time_updated",
-                label: "Thời gian cập nhật",
-                render: (value) => (
-                  <td>
-                    {value.time_updated
-                      ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
-                      : ""}
-                  </td>
-                ),
-              },
-            ]}
-            data={programTopups || []}
-          />
-        </Card>
-      </Col>
+            permission.editProgramTopup
+              ? {
+                  key: "",
+                  label: "Chức năng",
+                  render: (value) => {
+                    console.log(value);
+                    return (
+                      <td>
+                        <span className="d-flex justify-content-center align-item-center">
+                          <button
+                            className="btn btn-icon btn-sm btn-primary-ghost"
+                            onClick={() =>
+                              navigate(
+                                `ce/${false}/${value.uuid}_${status}_${
+                                  page - 1
+                                }`
+                              )
+                            }
+                            disabled={value.status === 2}
+                          >
+                            <i className="ti ti-edit"></i>
+                          </button>
+                        </span>
+                      </td>
+                    );
+                  },
+                }
+              : undefined,
+
+            {
+              key: "time_create",
+              label: "Thời gian tạo",
+              render: (value) => (
+                <td>
+                  {value.time_create
+                    ? format(value.time_create, "dd/MM/yyyy HH:mm:ss")
+                    : ""}
+                </td>
+              ),
+            },
+            {
+              key: "time_updated",
+              label: "Thời gian cập nhật",
+              render: (value) => (
+                <td>
+                  {value.time_updated
+                    ? format(value.time_updated, "dd/MM/yyyy HH:mm:ss")
+                    : ""}
+                </td>
+              ),
+            },
+          ]}
+          data={programTopups || []}
+        />
+      </Card>
+      <AppHistory
+        data={logProgramTopup || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
     </Fragment>
   );
 }

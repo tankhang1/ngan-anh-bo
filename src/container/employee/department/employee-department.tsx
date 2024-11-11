@@ -11,7 +11,11 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TEmployeeDepartment, TEmployeeRole } from "../../../assets/types";
+import {
+  GroupCode,
+  TEmployeeDepartment,
+  TEmployeeRole,
+} from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 import { useGetListEmployeeDepartmentQuery } from "../../../redux/api/manage/manage.api";
 import { Formik } from "formik";
@@ -24,6 +28,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import departmentSchema from "../../../schema/department.schema";
 import AppWarning from "../../../components/AppWarning";
+import AppHistory from "../../../components/AppHistory";
+import { useLogAccountQuery } from "../../../redux/api/log/log.api";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -44,6 +50,15 @@ function EmployeeDepartment() {
     useUpdateEmployeeDepartmentMutation();
   const [createDepartment, { isLoading: isLoadingCreate }] =
     useCreateEmployeeDepartmentMutation();
+  const [openedHistory, setOpenHistory] = useState(false);
+  const { data: logEmployeeDepartment } = useLogAccountQuery(
+    {
+      group: GroupCode.EMPLOYEES_DEPARTMENT,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const toast = useContext(ToastContext);
 
   const {
@@ -184,84 +199,105 @@ function EmployeeDepartment() {
                       </Button>
                     </OverlayTrigger>
                   ) : null}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Vai trof"
-            isLoading={isLoadingDepartment}
-            headers={[
-              {
-                key: "id",
-                label: "ID",
-                render: (value: TEmployeeDepartment) => (
-                  <td>
-                    <AppId id={value.id ?? ""} />
-                  </td>
-                ),
-              },
-              {
-                key: "code",
-                label: "Mã phòng ban",
-                render: (value: TEmployeeDepartment) => (
-                  <td>
-                    <span className="fw-semibold">{value.code}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "name",
-                label: "Tên phòng ban",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.name}</span>
-                  </td>
-                ),
-              },
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Vai trof"
+          isLoading={isLoadingDepartment}
+          headers={[
+            {
+              key: "id",
+              label: "ID",
+              render: (value: TEmployeeDepartment) => (
+                <td>
+                  <AppId id={value.id ?? ""} />
+                </td>
+              ),
+            },
+            {
+              key: "code",
+              label: "Mã phòng ban",
+              render: (value: TEmployeeDepartment) => (
+                <td>
+                  <span className="fw-semibold">{value.code}</span>
+                </td>
+              ),
+            },
+            {
+              key: "name",
+              label: "Tên phòng ban",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.name}</span>
+                </td>
+              ),
+            },
 
-              {
-                key: "note",
-                label: "Chú thích",
-                render: (value) => <td>{value.note}</td>,
-              },
-              {
-                key: "",
-                label: "Chức năng",
-                render: (value) => (
-                  <td>
-                    <button
-                      className="btn btn-icon btn-sm btn-primary-ghost"
-                      onClick={() => {
-                        setOpenCEModal(true);
-                        setModalInfo(value);
-                        setIsCreate(false);
-                      }}
-                    >
-                      <i className="ti ti-edit"></i>
-                    </button>
-                  </td>
-                ),
-              },
-            ]}
-            data={departments || []}
-            filters={[
-              {
-                key: "id",
-                label: "Tất cả",
-                value: "ALL",
-              },
-            ]}
-            searchByExternal={searchBy}
-          />
-        </Card>
-      </Col>
+            {
+              key: "note",
+              label: "Chú thích",
+              render: (value) => <td>{value.note}</td>,
+            },
+            {
+              key: "",
+              label: "Chức năng",
+              render: (value) => (
+                <td>
+                  <button
+                    className="btn btn-icon btn-sm btn-primary-ghost"
+                    onClick={() => {
+                      setOpenCEModal(true);
+                      setModalInfo(value);
+                      setIsCreate(false);
+                    }}
+                  >
+                    <i className="ti ti-edit"></i>
+                  </button>
+                </td>
+              ),
+            },
+          ]}
+          data={departments || []}
+          filters={[
+            {
+              key: "id",
+              label: "Tất cả",
+              value: "ALL",
+            },
+          ]}
+          searchByExternal={searchBy}
+        />
+      </Card>
+      <AppHistory
+        data={logEmployeeDepartment || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal show={openCEModal} onHide={onModalClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>

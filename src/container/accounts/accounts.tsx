@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../components/common/table/table";
-import { TAccount } from "../../assets/types";
+import { GroupCode, TAccount } from "../../assets/types";
 
 import {
   useDeleteAccountMutation,
@@ -34,6 +34,9 @@ import accountSchema from "../../schema/accounts.schema";
 import AppWarning from "../../components/AppWarning";
 import AppSelect from "../../components/AppSelect";
 import accountUpdateSchema from "../../schema/accounts.update.schema";
+import { useLogAccountQuery } from "../../redux/api/log/log.api";
+import AppLog from "../../components/AppLog";
+import AppHistory from "../../components/AppHistory";
 
 const ACCOUNT_FILTERS = [
   {
@@ -60,7 +63,7 @@ function Accounts() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState(ACCOUNT_FILTERS[0].key);
+  const [openedHistory, setOpenHistory] = useState(false);
   const deferSearchValue = useDeferredValue(search);
   const [openAddNewAccount, setOpenAddNewAccount] = useState(false);
   const [openUpdateAccount, setOpenUpdateAccount] = useState(false);
@@ -78,6 +81,14 @@ function Accounts() {
   const { data: employees } = useGetListEmployeeQuery();
   const { data: roles } = useGetAccountRoleListQuery();
   const { data: rolesPermission } = useGetRolePermissionListQuery();
+  const { data: logAccount } = useLogAccountQuery(
+    {
+      group: GroupCode.ACCOUNTS,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   const filterPermission = (role?: string) => {
     if (!roles) return [];
@@ -226,6 +237,24 @@ function Accounts() {
                       </Button>
                     </OverlayTrigger>
                   ) : null}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                   {/* {permission.exportAccount ? (
                     <OverlayTrigger
                       placement="top"
@@ -251,117 +280,120 @@ function Accounts() {
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin tài khoản"
-            isLoading={isLoadingAccount}
-            maxPage={accounts?.length}
-            headers={[
-              {
-                key: "role_list",
-                label: "Vai trò",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {
-                        (value.role_list
-                          ? MapAccountLabel.get(value.role_list as any)
-                          : "") as any
-                      }
-                    </span>
-                  </td>
-                ),
-              },
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin tài khoản"
+          isLoading={isLoadingAccount}
+          maxPage={accounts?.length}
+          headers={[
+            {
+              key: "role_list",
+              label: "Vai trò",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">
+                    {
+                      (value.role_list
+                        ? MapAccountLabel.get(value.role_list as any)
+                        : "") as any
+                    }
+                  </span>
+                </td>
+              ),
+            },
 
-              {
-                key: "staff_code",
-                label: "Mã nhân viên",
-                render: (value: TAccount) => <td>{value.staff_code}</td>,
-              },
-              {
-                key: "name",
-                label: "Tên nhân sự",
-                render: (value: TAccount) => <td>{value.name}</td>,
-              },
-              {
-                key: "username",
-                label: "Tên tài khoản",
-                render: (value: TAccount) => <td>{value.username}</td>,
-              },
-              {
-                key: "email",
-                label: "Email",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.email}</span>
-                  </td>
-                ),
-              },
-              {
-                key: "phone",
-                label: "Số điện thoại",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">{value.phone}</span>
-                  </td>
-                ),
-              },
+            {
+              key: "staff_code",
+              label: "Mã nhân viên",
+              render: (value: TAccount) => <td>{value.staff_code}</td>,
+            },
+            {
+              key: "name",
+              label: "Tên nhân sự",
+              render: (value: TAccount) => <td>{value.name}</td>,
+            },
+            {
+              key: "username",
+              label: "Tên tài khoản",
+              render: (value: TAccount) => <td>{value.username}</td>,
+            },
+            {
+              key: "email",
+              label: "Email",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.email}</span>
+                </td>
+              ),
+            },
+            {
+              key: "phone",
+              label: "Số điện thoại",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">{value.phone}</span>
+                </td>
+              ),
+            },
 
-              {
-                key: "created",
-                label: "Thời gian tạo",
-                render: (value) => (
-                  <td>
-                    <span className="fw-semibold">
-                      {value?.created
-                        ? format(value.created, "dd/MM/yyyy HH:mm:ss")
-                        : ""}
-                    </span>
-                  </td>
-                ),
-              },
+            {
+              key: "created",
+              label: "Thời gian tạo",
+              render: (value) => (
+                <td>
+                  <span className="fw-semibold">
+                    {value?.created
+                      ? format(value.created, "dd/MM/yyyy HH:mm:ss")
+                      : ""}
+                  </span>
+                </td>
+              ),
+            },
 
-              permission.deleteAccount
-                ? {
-                    key: "",
-                    label: "Chức năng",
-                    render: (value) => (
-                      <td className="d-flex gap-2 justify-content-center align-item-center">
-                        <button
-                          className="btn btn-icon btn-sm btn-primary-ghost"
-                          onClick={() => {
-                            setOpenUpdateAccount(true);
-                            setAccountInfo(value);
-                          }}
-                        >
-                          <i className="ti ti-edit"></i>
-                        </button>
-                        <button
-                          className="btn btn-icon btn-sm btn-danger-ghost"
-                          onClick={() => {
-                            setUsername(value.username || null);
-                          }}
-                        >
-                          <i className="ti ti-trash"></i>
-                        </button>
-                      </td>
-                    ),
-                  }
-                : undefined,
-            ]}
-            data={
-              accounts?.filter(
-                (account) =>
-                  !(account.role_list as string)?.includes("ROLE_WAREHOUSE_APP")
-              ) || []
-            }
-            // searchByExternal={searchBy}
-          />
-        </Card>
-      </Col>
+            permission.deleteAccount
+              ? {
+                  key: "",
+                  label: "Chức năng",
+                  render: (value) => (
+                    <td className="d-flex gap-2 justify-content-center align-item-center">
+                      <button
+                        className="btn btn-icon btn-sm btn-primary-ghost"
+                        onClick={() => {
+                          setOpenUpdateAccount(true);
+                          setAccountInfo(value);
+                        }}
+                      >
+                        <i className="ti ti-edit"></i>
+                      </button>
+                      <button
+                        className="btn btn-icon btn-sm btn-danger-ghost"
+                        onClick={() => {
+                          setUsername(value.username || null);
+                        }}
+                      >
+                        <i className="ti ti-trash"></i>
+                      </button>
+                    </td>
+                  ),
+                }
+              : undefined,
+          ]}
+          data={
+            accounts?.filter(
+              (account) =>
+                !(account.role_list as string)?.includes("ROLE_WAREHOUSE_APP")
+            ) || []
+          }
+          // searchByExternal={searchBy}
+        />
+      </Card>
+      <AppHistory
+        data={logAccount || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal
         show={username !== null}
         onHide={() => setUsername(null)}

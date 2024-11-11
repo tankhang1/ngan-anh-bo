@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { TGroupCustomer } from "../../../assets/types";
+import { GroupCode, TGroupCustomer } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
 
 import { Formik } from "formik";
@@ -21,14 +21,24 @@ import { ToastContext } from "../../../components/AppToast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import AppWarning from "../../../components/AppWarning";
+import AppHistory from "../../../components/AppHistory";
+import { useLogCustomerQuery } from "../../../redux/api/log/log.api";
 
 function SettingGroupCustomer() {
   const { permission } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
   const deferSearchValue = useDeferredValue(search);
+  const [openedHistory, setOpenHistory] = useState(false);
   const [openAddPopup, setOpenAddPopup] = useState<TGroupCustomer | null>(null);
-
+  const { data: logCustomerGroup } = useLogCustomerQuery(
+    {
+      group: GroupCode.CUSTOMERS_GROUP,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const {
     data: groups,
     isLoading: isLoadingGroup,
@@ -102,76 +112,97 @@ function SettingGroupCustomer() {
                       </Button>
                     </OverlayTrigger>
                   )}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip className="tooltip">Lịch sử thay đổi</Tooltip>
+                    }
+                  >
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      onClick={() => setOpenHistory(true)}
+                    >
+                      <i className="ti ti-history"></i>
+                    </Button>
+                  </OverlayTrigger>
                 </div>
               </div>
             </div>
           </Card.Body>
         </Card>
       </Col>
-      <Col xl={12}>
-        <Card className="custom-card">
-          <AppTable
-            isHeader={false}
-            externalSearch={deferSearchValue}
-            title="Thông tin chương trình tích điểm"
-            isLoading={isLoadingGroup}
-            maxPage={groups?.length}
-            headers={[
-              {
-                key: "id",
-                label: "ID",
-                render: (value: TGroupCustomer) => (
-                  <td>
-                    <AppId id={value.id ?? ""} />
-                  </td>
-                ),
-              },
-              {
-                key: "symbol",
-                label: "Mã",
-                render: (value: TGroupCustomer) => <td>{value.symbol}</td>,
-              },
-              {
-                key: "prefix",
-                label: "Tên tiền tố",
-                render: (value: TGroupCustomer) => (
-                  <td>{value.prefix?.toUpperCase()}</td>
-                ),
-              },
-              {
-                key: "name",
-                label: "Tên nhóm khách hàng",
-                render: (value: TGroupCustomer) => <td>{value.name}</td>,
-              },
+      <Card className="custom-card">
+        <AppTable
+          isHeader={false}
+          externalSearch={deferSearchValue}
+          title="Thông tin chương trình tích điểm"
+          isLoading={isLoadingGroup}
+          maxPage={groups?.length}
+          headers={[
+            {
+              key: "id",
+              label: "ID",
+              render: (value: TGroupCustomer) => (
+                <td>
+                  <AppId id={value.id ?? ""} />
+                </td>
+              ),
+            },
+            {
+              key: "symbol",
+              label: "Mã",
+              render: (value: TGroupCustomer) => <td>{value.symbol}</td>,
+            },
+            {
+              key: "prefix",
+              label: "Tên tiền tố",
+              render: (value: TGroupCustomer) => (
+                <td>{value.prefix?.toUpperCase()}</td>
+              ),
+            },
+            {
+              key: "name",
+              label: "Tên nhóm khách hàng",
+              render: (value: TGroupCustomer) => <td>{value.name}</td>,
+            },
 
-              // permission.editSettingGroupCustomer
-              //   ? {
-              //       key: "",
-              //       label: "Chức năng",
-              //       render: (value) => {
-              //         console.log(value);
-              //         return (
-              //           <td>
-              //             <span className="d-flex justify-content-center align-item-center">
-              //               <button
-              //                 className="btn btn-icon btn-sm btn-primary-ghost"
-              //                 onClick={() => {
-              //                   setOpenAddPopup(value);
-              //                 }}
-              //               >
-              //                 <i className="ti ti-edit"></i>
-              //               </button>
-              //             </span>
-              //           </td>
-              //         );
-              //       },
-              //     }
-              //   : undefined,
-            ]}
-            data={groups || []}
-          />
-        </Card>
-      </Col>
+            // permission.editSettingGroupCustomer
+            //   ? {
+            //       key: "",
+            //       label: "Chức năng",
+            //       render: (value) => {
+            //         console.log(value);
+            //         return (
+            //           <td>
+            //             <span className="d-flex justify-content-center align-item-center">
+            //               <button
+            //                 className="btn btn-icon btn-sm btn-primary-ghost"
+            //                 onClick={() => {
+            //                   setOpenAddPopup(value);
+            //                 }}
+            //               >
+            //                 <i className="ti ti-edit"></i>
+            //               </button>
+            //             </span>
+            //           </td>
+            //         );
+            //       },
+            //     }
+            //   : undefined,
+          ]}
+          data={groups || []}
+        />
+      </Card>
+      <AppHistory
+        data={logCustomerGroup || []}
+        opened={openedHistory}
+        onClose={setOpenHistory}
+      />
       <Modal
         show={openAddPopup !== null}
         onHide={() => setOpenAddPopup(null)}
