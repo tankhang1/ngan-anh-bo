@@ -257,7 +257,35 @@ export type TProgramTopup = {
   goods_type: string;
   time_updated?: number;
 };
-
+export type TPresentType = "FARMER" | "RETAILER";
+export type TPresent = {
+  id: number;
+  gift: string;
+  gift_name: string;
+  time_end: number;
+  time_start: number;
+  province_code: string;
+  limits: number;
+  percent: number;
+  product_code: string;
+  image_gift: string;
+  type: TPresentType;
+};
+export type TProgramChance = {
+  id: number;
+  uuid: string;
+  name: string;
+  time_end: string;
+  time_start: string;
+  time_start_number: number;
+  time_end_number: number;
+  products: string;
+  goods_type: string;
+  image: string;
+  leaflet: string;
+  note: string;
+  status: number;
+};
 export type TTopupCreateForm = {
   name: string;
   products: string | string[];

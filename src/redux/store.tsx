@@ -18,6 +18,7 @@ import { warehouseApi } from "./api/warehouse/warehouse.api";
 import { excelApi } from "./api/excel/excel.api";
 import { mobiApi } from "./api/mobile/mobi.api";
 import { logApi } from "./api/log/log.api";
+import { programChanceApi } from "./api/program-chance/program-chance.api";
 
 const persistConfig = {
   key: "root",
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   [excelApi.reducerPath]: excelApi.reducer,
   [mobiApi.reducerPath]: mobiApi.reducer,
   [logApi.reducerPath]: logApi.reducer,
+  [programChanceApi.reducerPath]: programChanceApi.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -68,7 +70,8 @@ const store = configureStore({
       .concat(warehouseApi.middleware)
       .concat(excelApi.middleware)
       .concat(mobiApi.middleware)
-      .concat(logApi.middleware),
+      .concat(logApi.middleware)
+      .concat(programChanceApi.middleware),
 });
 
 export default store;

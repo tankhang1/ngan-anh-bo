@@ -7,13 +7,14 @@ import {
   TTopupTableDashboard,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import store from "../../store";
 
 export const reportApi = createApi({
   reducerPath: "reportApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_PORT}`,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem(LOCAL_KEY.TOKEN);
+      const token = store.getState().auth.token;
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }

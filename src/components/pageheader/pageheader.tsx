@@ -10,7 +10,7 @@ const MapLabel = new Map([
   ["product", "Thông tin sản phẩm"],
   ["point", "Quản lý chương trình tích điểm"],
   ["topup", "Quản lý chương trình topup"],
-  ["chance", "Quản lý chương trình may rủi"],
+  ["chance", "Quản lý chương trình ngẫu nhiên"],
   ["report", "Báo cáo"],
   ["iQr", "iQr"],
   ["program-point", "Báo cáo chương trình tích điểm"],
@@ -74,7 +74,7 @@ const Pageheader = () => {
       if (trimmedPathname.includes("verify-customer"))
         return MapLabel.get("verify-customer");
     if (trimmedPathname.includes("device")) return MapLabel.get("device");
-
+    if (trimmedPathname.includes("chance")) return MapLabel.get("chance");
     if (trimmedPathname.includes("ce")) return MapLabel.get("ce");
     return MapLabel.get(item) ?? item.charAt(0).toUpperCase() + item.slice(1);
   });

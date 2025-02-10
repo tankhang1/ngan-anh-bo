@@ -38,6 +38,7 @@ type TAppTable<T> = {
   maxPage?: number;
   setExternalPage?: (page: number) => void;
   isChange?: boolean | number | string;
+  headerRightSection?: React.ReactNode;
 };
 const PAGE_SIZE = 10;
 const AppTable = <T extends DataItem>({
@@ -52,6 +53,7 @@ const AppTable = <T extends DataItem>({
   maxPage,
   setExternalPage,
   isChange,
+  headerRightSection,
 }: TAppTable<T>) => {
   const isSmallScreen = useMediaQuery("(max-width:425px)");
   const [page, setPage] = useState(1);
@@ -156,6 +158,7 @@ const AppTable = <T extends DataItem>({
                 </Dropdown.Menu>
               </Dropdown>
             )}
+            {headerRightSection && headerRightSection}
           </div>
         </Card.Header>
       )}

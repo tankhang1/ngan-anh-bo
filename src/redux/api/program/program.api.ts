@@ -1,20 +1,15 @@
 import { BASE_PORT, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
-import {
-  BaseQuery,
-  TProgramPoint,
-  TProgramPointDetail,
-  TProgramTopup,
-  TProgramTopupDetail,
-} from "../../../assets/types";
+import { BaseQuery, TProgramPoint, TProgramTopup } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
+import store from "../../store";
 
 export const programApi = createApi({
   reducerPath: "programApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_PORT}/api`,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem(LOCAL_KEY.TOKEN);
+      const token = store.getState().auth.token;
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }

@@ -43,6 +43,7 @@ const Home = () => {
     })
       .unwrap()
       .then((value) => {
+        
         dispatch(
           updateAccountInfo({
             token: value.token,

@@ -363,7 +363,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "May rủi",
+        title: "Ngẫu nhiên",
         key: MENU_KEY.PROGRAM_CHANCE,
       },
     ],
@@ -610,7 +610,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Chương trình may rủi",
+        title: "Chương trình ngẫu nhiên",
         key: MENU_KEY.REPORTS_CHANCE,
       },
       {

@@ -76,6 +76,7 @@ import DevicePage from "./container/settings/device/index.tsx";
 import WarehouseListOrder from "./container/warehouse/order/warehouseListOrder.tsx";
 import WarehouseInventory from "./container/warehouse/inventory.tsx";
 import LogCustomerPage from "./container/customer/log-customer/index.tsx";
+import ChanceProgram from "./container/program/chance/chance.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -240,6 +241,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<PointProgram />}
               />
               <Route
+                path={`${import.meta.env.BASE_URL}program/chance`}
+                element={<ChanceProgram />}
+              />
+
+              <Route
                 path={`${import.meta.env.BASE_URL}product/search-product`}
                 element={<SearchProductCode />}
               />
@@ -352,6 +358,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}setting/indication`}
                 element={<SettingIndicationPage />}
               />
+
               <Route
                 path={`${import.meta.env.BASE_URL}setting/device`}
                 element={<DevicePage />}
