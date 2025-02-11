@@ -24,6 +24,15 @@ export const mediaApi = createApi({
         body: body,
       }),
     }),
+    uploadProgramFile: builder.mutation<string, { id: string; body: FormData }>(
+      {
+        query: ({ id, body }) => ({
+          url: `/upload-files/program/${id}`,
+          method: HTTPS_METHOD.POST,
+          body: body,
+        }),
+      }
+    ),
     getDistrict: builder.query<
       { label: string; value: string }[],
       { p: string }
@@ -81,6 +90,7 @@ export const mediaApi = createApi({
 });
 
 export const {
+  useUploadProgramFileMutation,
   useUploadFileMutation,
   useUploadStaffFileMutation,
   useGetDistrictQuery,

@@ -29,7 +29,7 @@ import {
 import AppTable from "../../../components/common/table/table";
 import {
   useGetListProvinceQuery,
-  useUploadFileMutation,
+  useUploadProgramFileMutation,
 } from "../../../redux/api/media/media.api";
 import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
 import { Divider } from "@mui/material";
@@ -57,7 +57,7 @@ function ChanceProgram() {
   const [openPolicyForm, setOpenPolicyForm] = useState(false);
   const [openProducts, setOpenProducts] = useState(false);
   const [uploadImage, { isLoading: isLoadingUploadFile }] =
-    useUploadFileMutation();
+    useUploadProgramFileMutation();
   const [present, setPresent] = useState<TPresent>();
   const { data: programFarmer } = useGetProgramFarmerQuery(undefined, {
     skip: activeTab === "RETAILER",
@@ -154,8 +154,12 @@ function ChanceProgram() {
     if (activeTab === "FARMER") {
       await updateProgramFarmer(values)
         .unwrap()
-        .then(() => {
-          toast.showToast("Cập nhật thông tin chương trình thành công");
+        .then((value) => {
+          if (value.status === 0) {
+            toast.showToast("Cập nhật thông tin chương trình thành công");
+          } else {
+            toast.showToast(value.message);
+          }
           setOpenProgramInfoForm(false);
           setOpenPolicyForm(false);
 
@@ -168,8 +172,12 @@ function ChanceProgram() {
     } else {
       await updateProgramRetailer(values)
         .unwrap()
-        .then(() => {
-          toast.showToast("Cập nhật thông tin chương trình thành công");
+        .then((value) => {
+          if (value.status === 0) {
+            toast.showToast("Cập nhật thông tin chương trình thành công");
+          } else {
+            toast.showToast(value.message);
+          }
           setOpenProgramInfoForm(false);
           setOpenPolicyForm(false);
 
@@ -187,25 +195,55 @@ function ChanceProgram() {
     console.log(formData);
     try {
       await uploadImage({
-        id: "1212",
+        id: activeTab,
         body: formData,
-      })
-        .unwrap()
-        .then(() => {
-          onHandleProgramInfoSubmit({ ...programInfo, image: "" } as any);
-        });
+      });
+
+      onHandleProgramInfoSubmit({
+        ...programInfo,
+        image: `${BASE_PORT}/program-image/${activeTab}.jpg`,
+      } as any);
     } catch (error) {
       console.error("Upload failed:", error);
     }
+  };
+  const onHandleUploadProgramPrensentImageSubmit = async (
+    file: File,
+    gift: string
+  ) => {
+    const formData = new FormData();
+    formData.append("files", file);
+    console.log(formData);
+    try {
+      await uploadImage({
+        id: gift,
+        body: formData,
+      });
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
+  };
+  const removeVietnameseTones = (str: string) => {
+    return str
+      .normalize("NFD") // Tách dấu khỏi ký tự
+      .replace(/[\u0300-\u036f]/g, "") // Xóa dấu
+      .replace(/đ/g, "d") // Chuyển đ → d
+      .replace(/Đ/g, "d") // Chuyển Đ → d
+      .toLowerCase() // Viết thường
+      .replace(/\s+/g, ""); // Xóa dấu cách
   };
   const onHandlePresent = async (values: TPresent) => {
     if (activeTab === "FARMER") {
       if (!present) {
         await createProgramPresentFarmer(values)
           .unwrap()
-          .then(() => {
+          .then((value) => {
+            if (value.status === 0) {
+              toast.showToast("Tạo mới quà tặng thành công");
+            } else {
+              toast.showToast(value.message);
+            }
             setOpenProgramPresentForm(false);
-            toast.showToast("Tạo mới quà tặng thành công");
           })
           .catch(() => {
             toast.showToast("Tạo mới quà tặng thất bại");
@@ -216,9 +254,13 @@ function ChanceProgram() {
       } else {
         await updateProgramPresentFarmer(values)
           .unwrap()
-          .then(() => {
+          .then((value) => {
             setOpenProgramPresentForm(false);
-            toast.showToast("Cập nhật quà tặng thành công");
+            if (value.status === 0) {
+              toast.showToast("Cập nhật quà tặng thành công");
+            } else {
+              toast.showToast(value.message);
+            }
           })
           .catch(() => {
             toast.showToast("Cập nhật quà tặng thất bại");
@@ -231,9 +273,13 @@ function ChanceProgram() {
       if (!present) {
         await createProgramPresentRetailer(values)
           .unwrap()
-          .then(() => {
+          .then((value) => {
+            if (value.status === 0) {
+              toast.showToast("Tạo mới quà tặng thành công");
+            } else {
+              toast.showToast(value.message);
+            }
             setOpenProgramPresentForm(false);
-            toast.showToast("Tạo mới quà tặng thành công");
           })
           .catch(() => {
             toast.showToast("Tạo mới quà tặng thất bại");
@@ -242,11 +288,15 @@ function ChanceProgram() {
             setPresent(undefined);
           });
       } else {
-        await updateProgramPresentFarmer(values)
+        await updateProgramPresentRetailer(values)
           .unwrap()
-          .then(() => {
+          .then((value) => {
             setOpenProgramPresentForm(false);
-            toast.showToast("Cập nhật quà tặng thành công");
+            if (value.status === 0) {
+              toast.showToast("Cập nhật quà tặng thành công");
+            } else {
+              toast.showToast(value.message);
+            }
           })
           .catch(() => {
             toast.showToast("Cập nhật quà tặng thất bại");
@@ -327,19 +377,32 @@ function ChanceProgram() {
                 }}
               ></Image>
               <Button
-                className="btn btn-icon position-absolute"
+                className={`btn btn-icon position-absolute ${
+                  isLoadingUploadFile && "btn-loader"
+                }`}
                 style={{ top: 10, right: 10 }}
                 size="sm"
                 onClick={() => document.getElementById("fileInput")?.click()}
               >
-                <i className="ti ti-edit"></i>
+                {isLoadingUploadFile ? (
+                  <span className="loading">
+                    <i className="ri-loader-2-fill fs-19"></i>
+                  </span>
+                ) : (
+                  <i className="ti ti-edit"></i>
+                )}
               </Button>
               <input
                 id="fileInput"
                 type="file"
                 accept="image/*"
                 style={{ display: "none" }}
-                onChange={() => {}}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    onHandleUploadProgramImageSubmit(file);
+                  }
+                }}
               />
             </div>
 
@@ -481,6 +544,8 @@ function ChanceProgram() {
                   Trạng thái:{" "}
                   {programInfo?.status === 1 ? (
                     <Badge bg="success">Đang hoạt động</Badge>
+                  ) : programInfo?.status === 2 ? (
+                    <Badge bg="warning">Hết hạn</Badge>
                   ) : (
                     <Badge bg="danger">Tạm dừng</Badge>
                   )}
@@ -865,7 +930,10 @@ function ChanceProgram() {
                         `${format(e.target.value, "yyyyMMdd")}0000`
                       );
                     }}
-                    value={format(values.time_start, "yyyy-MM-dd")}
+                    value={
+                      values.time_start &&
+                      format(values.time_start, "yyyy-MM-dd")
+                    }
                     min={
                       new Date(new Date().setDate(new Date().getDate() + 2))
                         .toISOString()
@@ -893,8 +961,11 @@ function ChanceProgram() {
                         `${format(e.target.value, "yyyyMMdd")}0000`
                       );
                     }}
-                    value={format(values.time_end, "yyyy-MM-dd")}
+                    value={
+                      values.time_end && format(values.time_end, "yyyy-MM-dd")
+                    }
                     min={
+                      values.time_start &&
                       new Date(values.time_start).toISOString().split("T")[0]
                     }
                   />
@@ -922,21 +993,7 @@ function ChanceProgram() {
                     Thông tin bắt buộc
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="note_validate">
-                  <Form.Label className="text-black">
-                    Hướng dẫn tham gia chương trình
-                  </Form.Label>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="VD: https://"
-                    name="note"
-                  />
 
-                  <Form.Control.Feedback type="invalid">
-                    Thông tin bắt buộc
-                  </Form.Control.Feedback>
-                </Form.Group>
                 <Form.Group controlId="status_validate">
                   <Form.Label className="text-black">
                     Kích hoạt chương trình
@@ -1075,42 +1132,6 @@ function ChanceProgram() {
               <Stack gap={1}>
                 <Form.Group controlId="note_validate">
                   <Form.Label className="text-black">
-                    Hình ảnh <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
-                  <div className=" position-relative">
-                    <Image
-                      src="https://placehold.jp/400x200.png"
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        border: "1px solid #e5e7eb",
-                        borderRadius: "0.5rem",
-                        width: "100%",
-                        backgroundColor: "#f3f4f6",
-                      }}
-                    ></Image>
-                    <Button
-                      className="btn btn-icon position-absolute"
-                      style={{ top: 10, right: 10 }}
-                      size="sm"
-                      onClick={() =>
-                        document.getElementById("fileInput")?.click()
-                      }
-                    >
-                      <i className="ti ti-edit"></i>
-                    </Button>
-                    <input
-                      id="fileInput"
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      onChange={() => {}}
-                    />
-                  </div>
-                </Form.Group>
-                <Form.Group controlId="note_validate">
-                  <Form.Label className="text-black">
                     Mã quà<span style={{ color: "red" }}>*</span>
                   </Form.Label>
                   <Form.Control
@@ -1122,6 +1143,7 @@ function ChanceProgram() {
                     defaultValue={values.gift}
                     isInvalid={touched.gift && !!errors.gift}
                     className="input-placeholder"
+                    disabled
                   />
 
                   <Form.Control.Feedback type="invalid">
@@ -1137,7 +1159,13 @@ function ChanceProgram() {
                     type="text"
                     placeholder="VD: Xe máy Airblack"
                     name="gift_name"
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      setFieldValue("gift_name", e.target.value);
+                      setFieldValue(
+                        "gift",
+                        removeVietnameseTones(e.target.value)
+                      );
+                    }}
                     defaultValue={values.gift_name}
                     isInvalid={touched.gift_name && !!errors.gift_name}
                     className="input-placeholder"
@@ -1147,6 +1175,68 @@ function ChanceProgram() {
                     Thông tin bắt buộc
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group controlId="note_validate">
+                  <Form.Label className="text-black">
+                    Hình ảnh <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <div className=" position-relative">
+                    <Image
+                      src={
+                        values.image_gift || "https://placehold.jp/400x200.png"
+                      }
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "0.5rem",
+                        width: "100%",
+                        height: 250,
+                        backgroundColor: "#f3f4f6",
+                      }}
+                    ></Image>
+                    <Button
+                      className={`btn btn-icon position-absolute ${
+                        isLoadingUploadFile && "btn-loader"
+                      }`}
+                      style={{ top: 10, right: 10 }}
+                      size="sm"
+                      onClick={() =>
+                        document.getElementById("fileInput1")?.click()
+                      }
+                    >
+                      {isLoadingUploadFile ? (
+                        <span className="loading">
+                          <i className="ri-loader-2-fill fs-19"></i>
+                        </span>
+                      ) : (
+                        <i className="ti ti-edit"></i>
+                      )}
+                    </Button>
+                    <input
+                      id="fileInput1"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={async (e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const file = e.target.files[0];
+                          const imageLink =
+                            await onHandleUploadProgramPrensentImageSubmit(
+                              file,
+                              values.gift
+                            );
+                          console.log("image_gift", imageLink);
+                          setFieldValue(
+                            "image_gift",
+                            `${BASE_PORT}/program-image/${values.gift}.jpg`
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                </Form.Group>
+
                 <Form.Group controlId="note_validate">
                   <Form.Label className="text-black">Ngày bắt đầu</Form.Label>
                   <Form.Control
@@ -1307,8 +1397,9 @@ function ChanceProgram() {
                       )
                     }
                     value={listProducts
-                      ?.filter((item) =>
-                        values.product_code.includes(item.code)
+                      ?.filter(
+                        (item) =>
+                          values.product_code?.split(",").includes(item.code) // Ensure proper comparison
                       )
                       .map((item) => ({
                         label: item.description,
@@ -1405,7 +1496,10 @@ function ChanceProgram() {
                       )
                     }
                     value={listProducts
-                      ?.filter((item) => values.products.includes(item.code))
+                      ?.filter(
+                        (item) =>
+                          values.products?.split(",").includes(item.code) // Ensure proper comparison
+                      )
                       .map((item) => ({
                         label: item.description,
                         value: item.code,
