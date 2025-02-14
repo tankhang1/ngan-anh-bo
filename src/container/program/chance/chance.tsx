@@ -1117,6 +1117,7 @@ function ChanceProgram() {
               image_gift: present?.image_gift || "",
               type: activeTab,
               id: present?.id || 0,
+              limit_per_customer: present?.limit_per_customer || 0,
             }}
             enableReinitialize
             onSubmit={onHandlePresent}
@@ -1409,6 +1410,23 @@ function ChanceProgram() {
                   <Form.Control.Feedback type="invalid">
                     Thông tin bắt buộc
                   </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="status_validate">
+                  <Form.Label className="text-black">
+                    Có giới hạn số lần trúng thưởng của khách hàng?
+                  </Form.Label>
+                  <Form.Check
+                    type="switch"
+                    className="form-check-lg form-switch input-placeholder"
+                    required
+                    name="status"
+                    defaultChecked={
+                      values.limit_per_customer === 1 ? true : false
+                    }
+                    onChange={(e) =>
+                      setFieldValue("status", e.target.checked ? 1 : 0)
+                    }
+                  />
                 </Form.Group>
                 <Modal.Footer>
                   <Button

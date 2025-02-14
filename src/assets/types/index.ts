@@ -270,6 +270,7 @@ export type TPresent = {
   product_code: string;
   image_gift: string;
   type: TPresentType;
+  limit_per_customer: number; //0 : giới hạn , 1 : ko giới hạn
 };
 export type TProgramChance = {
   id: number;
