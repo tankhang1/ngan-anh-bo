@@ -161,10 +161,10 @@ function SearchProductCode() {
                           </span>
                         </span>
 
-                        <span className="text-black fs-17 fw-smibold">
+                        {/* <span className="text-black fs-17 fw-smibold">
                           &#x2022; Mã iQr :{" "}
                           <span className="fw-normal">{searchValue}</span>
-                        </span>
+                        </span> */}
 
                         <span className="text-black fs-17 fw-smibold">
                           &#x2022; Nhóm sản phẩm :{" "}
