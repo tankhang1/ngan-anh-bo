@@ -1419,12 +1419,15 @@ function ChanceProgram() {
                     type="switch"
                     className="form-check-lg form-switch input-placeholder"
                     required
-                    name="status"
+                    name="limit_per_customer"
                     defaultChecked={
                       values.limit_per_customer === 1 ? true : false
                     }
                     onChange={(e) =>
-                      setFieldValue("status", e.target.checked ? 1 : 0)
+                      setFieldValue(
+                        "limit_per_customer",
+                        e.target.checked ? 1 : 0
+                      )
                     }
                   />
                 </Form.Group>
