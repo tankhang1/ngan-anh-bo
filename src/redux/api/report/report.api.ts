@@ -2,6 +2,7 @@ import { BASE_PORT, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
 import {
   BaseQuery,
   TPointTableDashboard,
+  TProgramChanceReportRES,
   TProgramPointDetail,
   TProgramTopupDetail,
   TTopupTableDashboard,
@@ -75,6 +76,40 @@ export const reportApi = createApi({
         params: params,
       }),
     }),
+    getReportProgramChanceRetailerCounter: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/program/lucky/retailer/detail/counter",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
+    getReportProgramChanceFarmerCounter: builder.query<number, BaseQuery>({
+      query: (params) => ({
+        url: "/api/program/lucky/farmer/detail/counter",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
+    getReportProgramChanceFarmerReport: builder.query<
+      TProgramChanceReportRES[],
+      BaseQuery
+    >({
+      query: (params) => ({
+        url: "/api/program/lucky/farmer/detail",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
+    getReportProgramChanceRetailerReport: builder.query<
+      TProgramChanceReportRES[],
+      BaseQuery
+    >({
+      query: (params) => ({
+        url: "/api/program/lucky/retailer/detail",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
   }),
 });
 
@@ -85,4 +120,8 @@ export const {
   useGetReportProgramPointDetailCounterQuery,
   useGetReportProgramPointDetailTodayQuery,
   useGetReportProgramTopupDetailCounterQuery,
+  useGetReportProgramChanceFarmerCounterQuery,
+  useGetReportProgramChanceFarmerReportQuery,
+  useGetReportProgramChanceRetailerCounterQuery,
+  useGetReportProgramChanceRetailerReportQuery,
 } = reportApi;

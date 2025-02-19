@@ -99,6 +99,22 @@ export const excelApi = createApi({
       }),
       providesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
+    exportProgramChanceFarmer: builder.mutation<{ data: string }, BaseQuery>({
+      query: (body) => ({
+        url: "/api/program/lucky/farmer/detail/excel",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
+    }),
+    exportProgramChanceRetailer: builder.mutation<{ data: string }, BaseQuery>({
+      query: (body) => ({
+        url: "/api/program/lucky/retailer/detail/excel",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
+    }),
   }),
 });
 export const {
@@ -112,4 +128,6 @@ export const {
   useExportProgramTopupDetailMutation,
   useExportSMSMutation,
   useGetListHistoryExcelQuery,
+  useExportProgramChanceFarmerMutation,
+  useExportProgramChanceRetailerMutation,
 } = excelApi;

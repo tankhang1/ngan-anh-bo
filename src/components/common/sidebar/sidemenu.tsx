@@ -605,7 +605,7 @@ export const MENUITEMS = [
         key: MENU_KEY.REPORTS_TOPUP,
       },
       {
-        path: `${import.meta.env.BASE_URL}report/chance`,
+        path: `${import.meta.env.BASE_URL}report/program-chance`,
         type: "link",
         active: false,
         selected: false,

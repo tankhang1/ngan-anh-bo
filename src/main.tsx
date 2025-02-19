@@ -77,6 +77,7 @@ import WarehouseListOrder from "./container/warehouse/order/warehouseListOrder.t
 import WarehouseInventory from "./container/warehouse/inventory.tsx";
 import LogCustomerPage from "./container/customer/log-customer/index.tsx";
 import ChanceProgram from "./container/program/chance/chance.tsx";
+import ChanceReport from "./container/report/ChanceReport/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -329,6 +330,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}report/program-point`}
                 element={<ProgramReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report/program-chance`}
+                element={<ChanceReport />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}report/program-topup`}

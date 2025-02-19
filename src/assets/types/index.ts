@@ -398,6 +398,31 @@ export type TProgramTopupDetail = {
   time_topup: string; // Consider using `Date` type if you want to handle date objects
   total: number;
 };
+export type TProgramChanceReportRES = {
+  id: number;
+  program_uuid: string;
+  program_name: string;
+  customer_uuid: string;
+  zalo_device_id: string;
+  customer_code: string | null;
+  customer_name: string;
+  province: string;
+  province_name: string | null;
+  area: string | null;
+  phone: string;
+  gift: string;
+  gift_name: string;
+  agent_code: string;
+  agent_name: string;
+  code: string;
+  code_hash: string;
+  product_code: string;
+  product_name: string;
+  time_lucky: string;
+  time_lucky_number: number;
+  status: number;
+  limit_per_customer: number;
+};
 export type TDevice = {
   id: number;
   device_name: string;
