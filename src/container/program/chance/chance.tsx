@@ -33,6 +33,7 @@ import {
 } from "../../../redux/api/media/media.api";
 import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
 import { Divider } from "@mui/material";
+import Chip from "@mui/material/Chip";
 import { BASE_PORT } from "../../../constants";
 import Select from "react-select";
 import Editor from "../../forms/formeditors/formeditordata";
@@ -1151,10 +1152,65 @@ function ChanceProgram() {
                     Thông tin bắt buộc
                   </Form.Control.Feedback>
                 </Form.Group>
+
                 <Form.Group controlId="note_validate">
                   <Form.Label className="text-black">
                     Tên quà<span style={{ color: "red" }}>*</span>
                   </Form.Label>
+                  <Stack
+                    direction="horizontal"
+                    gap={1}
+                    className="mb-2 pb-1 overflow-x-auto"
+                  >
+                    <Chip
+                      label="Topup 10K"
+                      variant="outlined"
+                      onClick={() => {
+                        setFieldValue("gift_name", "Topup 10K");
+                        setFieldValue("gift", "topup-10");
+                      }}
+                    />
+                    <Chip
+                      label="Topup 20K"
+                      variant="outlined"
+                      onClick={() => {
+                        setFieldValue("gift_name", "Topup 20K");
+                        setFieldValue("gift", "topup-20");
+                      }}
+                    />
+                    <Chip
+                      label="Topup 50K"
+                      variant="outlined"
+                      onClick={() => {
+                        setFieldValue("gift_name", "Topup 50K");
+                        setFieldValue("gift", "topup-50");
+                      }}
+                    />
+                    <Chip
+                      label="Topup 100K"
+                      variant="outlined"
+                      onClick={() => {
+                        setFieldValue("gift_name", "Topup 100K");
+                        setFieldValue("gift", "topup-100");
+                      }}
+                    />
+                    <Chip
+                      label="Topup 200K"
+                      variant="outlined"
+                      onClick={() => {
+                        setFieldValue("gift_name", "Topup 200K");
+                        setFieldValue("gift", "topup-200");
+                      }}
+                    />
+                    <Chip
+                      label="Topup 500K"
+                      variant="outlined"
+                      onClick={() => {
+                        setFieldValue("gift_name", "Topup 500K");
+                        setFieldValue("gift", "topup-500");
+                      }}
+                    />
+                  </Stack>
                   <Form.Control
                     required
                     type="text"
