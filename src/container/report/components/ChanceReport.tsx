@@ -17,9 +17,11 @@ import {
 } from "../../../redux/api/excel/excel.api";
 import { ToastContext } from "../../../components/AppToast";
 import AppConfirm from "../../../components/AppConfirm";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 function ChanceReport() {
   const toast = useContext(ToastContext);
-
+  const { username } = useSelector((state: RootState) => state.auth);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const [rangDate, setRangeDate] = useState<{ st: number; ed: number }>({
     st: +(format(subDays(new Date(), 10), "yyyyMMdd") + "0000"),
@@ -66,7 +68,6 @@ function ChanceReport() {
       refetchOnMountOrArgChange: true,
     }
   );
-
   const mapProgramFarmer = useMemo(() => {
     const timeLucky = lodash.groupBy(
       programChanceFarmers?.map((item) => ({
@@ -100,6 +101,7 @@ function ChanceReport() {
       ...newRangeDate,
       st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
       ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
+      u: username,
     })
       .unwrap()
       .then(() => {
@@ -113,6 +115,7 @@ function ChanceReport() {
       ...newRangeDate,
       st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
       ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
+      u: username,
     })
       .unwrap()
       .then(() => {
