@@ -867,7 +867,7 @@ function ChanceProgram() {
                   <Form.Control
                     required
                     type="text"
-                    placeholder="VD: Chương trình ngẫu nhiên"
+                    placeholder="VD: Chương trình may mắn"
                     name="name"
                     onChange={handleChange}
                     defaultValue={values.name}

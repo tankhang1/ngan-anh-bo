@@ -78,6 +78,7 @@ import WarehouseInventory from "./container/warehouse/inventory.tsx";
 import LogCustomerPage from "./container/customer/log-customer/index.tsx";
 import ChanceProgram from "./container/program/chance/chance.tsx";
 import ChanceReport from "./container/report/ChanceReport/index.tsx";
+import ChanceToday from "./container/operator/chance-today/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -271,6 +272,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}operator/iqr-today`}
                 element={<IQRToday />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/search-chance-today`}
+                element={<ChanceToday />}
               />
               <Route
                 path={`${

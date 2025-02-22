@@ -176,12 +176,12 @@ export const MENUITEMS = [
       //   key: MENU_KEY.OPERATORS_CUSTOMER_SMS_6088,
       // },
       {
-        path: `${import.meta.env.BASE_URL}operator/topup/list`,
+        path: `${import.meta.env.BASE_URL}operator/search-chance-today`,
         type: "link",
         active: false,
         selected: false,
         dirchange: false,
-        title: "Quà tặng",
+        title: "May mắn",
         key: MENU_KEY.OPERATORS_GIFT_TODAY, // Chưa phát triển
       },
       {
@@ -363,7 +363,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Ngẫu nhiên",
+        title: "May mắn",
         key: MENU_KEY.PROGRAM_CHANCE,
       },
     ],
@@ -610,7 +610,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "Chương trình ngẫu nhiên",
+        title: "Chương trình may mắn",
         key: MENU_KEY.REPORTS_CHANCE,
       },
       {

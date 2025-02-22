@@ -110,10 +110,19 @@ export const reportApi = createApi({
         params: params,
       }),
     }),
+    getReportProgramChanceToday: builder.query<TProgramChanceReportRES[], void>(
+      {
+        query: () => ({
+          url: "/api/program/lucky/detail/today",
+          method: HTTPS_METHOD.GET,
+        }),
+      }
+    ),
   }),
 });
 
 export const {
+  useGetReportProgramChanceTodayQuery,
   useGetReportProgramTopupDetailByTimeQuery,
   useGetReportProgramTopupDetailTodayQuery,
   useGetReportProgramPointDetailByTimeQuery,

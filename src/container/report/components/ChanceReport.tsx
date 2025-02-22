@@ -125,7 +125,7 @@ function ChanceReport() {
     <Stack>
       <Card className="custom-card">
         <Card.Header>
-          <Card.Title>Chương trình ngẫu nhiên</Card.Title>
+          <Card.Title>Chương trình may mắn</Card.Title>
           <div className="d-flex   align-items-center gap-2">
             <div className="form-group">
               <InputGroup className="">
