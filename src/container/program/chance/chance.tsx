@@ -1468,9 +1468,7 @@ function ChanceProgram() {
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="status_validate">
-                  <Form.Label className="text-black">
-                    Có giới hạn số lần trúng thưởng của khách hàng?
-                  </Form.Label>
+                  <Form.Label className="text-black">Giải đặc biệt</Form.Label>
                   <Form.Check
                     type="switch"
                     className="form-check-lg form-switch input-placeholder"
