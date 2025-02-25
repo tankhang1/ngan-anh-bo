@@ -1166,10 +1166,16 @@ function ChanceProgram() {
                         values.giftType !== "other" &&
                         event.target.value.startsWith(values.giftType)
                       ) {
-                        setFieldValue("gift", event.target.value);
+                        setFieldValue(
+                          "gift",
+                          removeVietnameseTones(event.target.value)
+                        );
                       }
                       if (values.giftType === "other") {
-                        setFieldValue("gift", event.target.value);
+                        setFieldValue(
+                          "gift",
+                          removeVietnameseTones(event.target.value)
+                        );
                       }
                     }}
                     value={values.gift}
