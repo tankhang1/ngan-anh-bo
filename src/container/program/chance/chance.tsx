@@ -1119,24 +1119,24 @@ function ChanceProgram() {
               id: present?.id || 0,
               limit_per_customer: present?.limit_per_customer || 0,
               giftType:
-                present?.gift.startsWith("topup-10") ||
-                present?.gift.startsWith("topup-20") ||
-                present?.gift.startsWith("topup-50") ||
-                present?.gift.startsWith("topup-100") ||
-                present?.gift.startsWith("topup-200") ||
-                present?.gift.startsWith("topup-500")
-                  ? present?.gift.startsWith("topup-10")
-                    ? "topup-10"
-                    : present?.gift.startsWith("topup-20")
-                    ? "topup-20"
-                    : present?.gift.startsWith("topup-50")
-                    ? "topup-50"
-                    : present?.gift.startsWith("topup-100")
-                    ? "topup-100"
-                    : present?.gift.startsWith("topup-200")
-                    ? "topup-200"
-                    : present?.gift.startsWith("topup-500")
-                    ? "topup-500"
+                present?.gift.startsWith("topup-10-") ||
+                present?.gift.startsWith("topup-20-") ||
+                present?.gift.startsWith("topup-50-") ||
+                present?.gift.startsWith("topup-100-") ||
+                present?.gift.startsWith("topup-200-") ||
+                present?.gift.startsWith("topup-500-")
+                  ? present?.gift.startsWith("topup-10-")
+                    ? "topup-10-"
+                    : present?.gift.startsWith("topup-20-")
+                    ? "topup-20-"
+                    : present?.gift.startsWith("topup-50-")
+                    ? "topup-50-"
+                    : present?.gift.startsWith("topup-100-")
+                    ? "topup-100-"
+                    : present?.gift.startsWith("topup-200-")
+                    ? "topup-200-"
+                    : present?.gift.startsWith("topup-500-")
+                    ? "topup-500-"
                     : "other"
                   : "other",
             }}
@@ -1214,57 +1214,63 @@ function ChanceProgram() {
                     <Chip
                       label="Topup 10K"
                       variant={
-                        values.giftType === "topup-10" ? "filled" : "outlined"
+                        values.giftType === "topup-10-" ? "filled" : "outlined"
                       }
                       onClick={() => {
-                        setFieldValue("giftType", "topup-10");
+                        setFieldValue("giftType", "topup-10-");
                         setFieldValue("gift_name", "Topup 10K");
-                        setFieldValue("gift", "topup-10");
+                        setFieldValue("gift", "topup-10-");
                       }}
                       color={
-                        values.giftType === "topup-10" ? "secondary" : "default"
+                        values.giftType === "topup-10-"
+                          ? "secondary"
+                          : "default"
                       }
                     />
                     <Chip
                       label="Topup 20K"
                       variant={
-                        values.giftType === "topup-20" ? "filled" : "outlined"
+                        values.giftType === "topup-20-" ? "filled" : "outlined"
                       }
                       onClick={() => {
-                        setFieldValue("giftType", "topup-20");
+                        setFieldValue("giftType", "topup-20-");
                         setFieldValue("gift_name", "Topup 20K");
-                        setFieldValue("gift", "topup-20");
+                        setFieldValue("gift", "topup-20-");
                       }}
                       color={
-                        values.giftType === "topup-20" ? "secondary" : "default"
+                        values.giftType === "topup-20-"
+                          ? "secondary"
+                          : "default"
                       }
                     />
                     <Chip
                       label="Topup 50K"
                       variant={
-                        values.giftType === "topup-50" ? "filled" : "outlined"
+                        values.giftType === "topup-50-" ? "filled" : "outlined"
                       }
                       onClick={() => {
-                        setFieldValue("giftType", "topup-50");
+                        setFieldValue("giftType", "topup-50-");
                         setFieldValue("gift_name", "Topup 50K");
-                        setFieldValue("gift", "topup-50");
+                        setFieldValue("gift", "topup-50-");
                       }}
                       color={
-                        values.giftType === "topup-50" ? "secondary" : "default"
+                        values.giftType === "topup-50-"
+                          ? "secondary"
+                          : "default"
                       }
                     />
                     <Chip
                       label="Topup 100K"
                       variant={
-                        values.giftType === "topup-100" ? "filled" : "outlined"
+                        values.giftType === "topup-100-" ? "filled" : "outlined"
                       }
                       onClick={() => {
-                        setFieldValue("giftType", "topup-100");
+                        setFieldValue("giftType", "topup-100-");
                         setFieldValue("gift_name", "Topup 100K");
-                        setFieldValue("gift", "topup-100");
+                        setFieldValue("gift", "topup-100-");
                       }}
                       color={
-                        values.giftType === "topup-100"
+                        values.giftType === "topup-100-"
                           ? "secondary"
                           : "default"
                       }
@@ -1272,15 +1278,15 @@ function ChanceProgram() {
                     <Chip
                       label="Topup 200K"
                       variant={
-                        values.giftType === "topup-200" ? "filled" : "outlined"
+                        values.giftType === "topup-200-" ? "filled" : "outlined"
                       }
                       onClick={() => {
-                        setFieldValue("giftType", "topup-200");
+                        setFieldValue("giftType", "topup-200-");
                         setFieldValue("gift_name", "Topup 200K");
-                        setFieldValue("gift", "topup-200");
+                        setFieldValue("gift", "topup-200-");
                       }}
                       color={
-                        values.giftType === "topup-200"
+                        values.giftType === "topup-200-"
                           ? "secondary"
                           : "default"
                       }
@@ -1288,15 +1294,15 @@ function ChanceProgram() {
                     <Chip
                       label="Topup 500K"
                       variant={
-                        values.giftType === "topup-500" ? "filled" : "outlined"
+                        values.giftType === "topup-500-" ? "filled" : "outlined"
                       }
                       onClick={() => {
-                        setFieldValue("giftType", "topup-500");
+                        setFieldValue("giftType", "topup-500-");
                         setFieldValue("gift_name", "Topup 500K");
-                        setFieldValue("gift", "topup-500");
+                        setFieldValue("gift", "topup-500-");
                       }}
                       color={
-                        values.giftType === "topup-500"
+                        values.giftType === "topup-500-"
                           ? "secondary"
                           : "default"
                       }
@@ -1310,12 +1316,12 @@ function ChanceProgram() {
                     onChange={(e) => {
                       setFieldValue("gift_name", e.target.value);
                       if (
-                        values?.giftType !== "topup-10" &&
-                        values?.giftType !== "topup-20" &&
-                        values?.giftType !== "topup-50" &&
-                        values?.giftType !== "topup-100" &&
-                        values?.giftType !== "topup-200" &&
-                        values?.giftType !== "topup-500"
+                        values?.giftType !== "topup-10-" &&
+                        values?.giftType !== "topup-20-" &&
+                        values?.giftType !== "topup-50-" &&
+                        values?.giftType !== "topup-100-" &&
+                        values?.giftType !== "topup-200-" &&
+                        values?.giftType !== "topup-500-"
                       ) {
                         setFieldValue(
                           "gift",
