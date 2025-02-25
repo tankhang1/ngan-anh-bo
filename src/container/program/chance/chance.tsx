@@ -1119,13 +1119,25 @@ function ChanceProgram() {
               id: present?.id || 0,
               limit_per_customer: present?.limit_per_customer || 0,
               giftType:
-                present?.gift === "topup-10" ||
-                present?.gift === "topup-20" ||
-                present?.gift === "topup-50" ||
-                present?.gift === "topup-100" ||
-                present?.gift === "topup-200" ||
-                present?.gift === "topup-500"
-                  ? present?.gift
+                present?.gift.startsWith("topup-10") ||
+                present?.gift.startsWith("topup-20") ||
+                present?.gift.startsWith("topup-50") ||
+                present?.gift.startsWith("topup-100") ||
+                present?.gift.startsWith("topup-200") ||
+                present?.gift.startsWith("topup-500")
+                  ? present?.gift.startsWith("topup-10")
+                    ? "topup-10"
+                    : present?.gift.startsWith("topup-20")
+                    ? "topup-20"
+                    : present?.gift.startsWith("topup-50")
+                    ? "topup-50"
+                    : present?.gift.startsWith("topup-100")
+                    ? "topup-100"
+                    : present?.gift.startsWith("topup-200")
+                    ? "topup-200"
+                    : present?.gift.startsWith("topup-500")
+                    ? "topup-500"
+                    : "other"
                   : "other",
             }}
             enableReinitialize
@@ -1149,11 +1161,20 @@ function ChanceProgram() {
                     type="text"
                     placeholder="VD: xemayairblack"
                     name="gift"
-                    onChange={handleChange}
+                    onChange={(event) => {
+                      if (
+                        values.giftType !== "other" &&
+                        event.target.value.startsWith(values.giftType)
+                      ) {
+                        setFieldValue("gift", event.target.value);
+                      }
+                      if (values.giftType === "other") {
+                        setFieldValue("gift", event.target.value);
+                      }
+                    }}
                     value={values.gift}
                     isInvalid={touched.gift && !!errors.gift}
                     className="input-placeholder"
-                    disabled={values.giftType !== "other"}
                   />
 
                   <Form.Control.Feedback type="invalid">
