@@ -50,7 +50,6 @@ const TypeBinExport = new Map([
 ]);
 function ChanceProgram() {
   const toast = useContext(ToastContext);
-
   const [openedHistory, setOpenHistory] = useState(false);
   const [activeTab, setActiveTab] = useState<TPresentType>("FARMER");
   const [openProgramInfoForm, setOpenProgramInfoForm] = useState(false);
@@ -1119,6 +1118,15 @@ function ChanceProgram() {
               type: activeTab,
               id: present?.id || 0,
               limit_per_customer: present?.limit_per_customer || 0,
+              giftType:
+                present?.gift === "topup-10" ||
+                present?.gift === "topup-20" ||
+                present?.gift === "topup-50" ||
+                present?.gift === "topup-100" ||
+                present?.gift === "topup-200" ||
+                present?.gift === "topup-500"
+                  ? present?.gift
+                  : "other",
             }}
             enableReinitialize
             onSubmit={onHandlePresent}
@@ -1142,10 +1150,10 @@ function ChanceProgram() {
                     placeholder="VD: xemayairblack"
                     name="gift"
                     onChange={handleChange}
-                    defaultValue={values.gift}
+                    value={values.gift}
                     isInvalid={touched.gift && !!errors.gift}
                     className="input-placeholder"
-                    disabled
+                    disabled={values.giftType !== "other"}
                   />
 
                   <Form.Control.Feedback type="invalid">
@@ -1163,52 +1171,108 @@ function ChanceProgram() {
                     className="mb-2 pb-1 overflow-x-auto"
                   >
                     <Chip
-                      label="Topup 10K"
-                      variant="outlined"
+                      label="Khác"
+                      variant={
+                        values.giftType === "other" ? "filled" : "outlined"
+                      }
                       onClick={() => {
+                        setFieldValue("giftType", "other");
+                        setFieldValue("gift_name", "");
+                        setFieldValue("gift", "");
+                      }}
+                      color={
+                        values.giftType === "other" ? "secondary" : "default"
+                      }
+                    />
+                    <Chip
+                      label="Topup 10K"
+                      variant={
+                        values.giftType === "topup-10" ? "filled" : "outlined"
+                      }
+                      onClick={() => {
+                        setFieldValue("giftType", "topup-10");
                         setFieldValue("gift_name", "Topup 10K");
                         setFieldValue("gift", "topup-10");
                       }}
+                      color={
+                        values.giftType === "topup-10" ? "secondary" : "default"
+                      }
                     />
                     <Chip
                       label="Topup 20K"
-                      variant="outlined"
+                      variant={
+                        values.giftType === "topup-20" ? "filled" : "outlined"
+                      }
                       onClick={() => {
+                        setFieldValue("giftType", "topup-20");
                         setFieldValue("gift_name", "Topup 20K");
                         setFieldValue("gift", "topup-20");
                       }}
+                      color={
+                        values.giftType === "topup-20" ? "secondary" : "default"
+                      }
                     />
                     <Chip
                       label="Topup 50K"
-                      variant="outlined"
+                      variant={
+                        values.giftType === "topup-50" ? "filled" : "outlined"
+                      }
                       onClick={() => {
+                        setFieldValue("giftType", "topup-50");
                         setFieldValue("gift_name", "Topup 50K");
                         setFieldValue("gift", "topup-50");
                       }}
+                      color={
+                        values.giftType === "topup-50" ? "secondary" : "default"
+                      }
                     />
                     <Chip
                       label="Topup 100K"
-                      variant="outlined"
+                      variant={
+                        values.giftType === "topup-100" ? "filled" : "outlined"
+                      }
                       onClick={() => {
+                        setFieldValue("giftType", "topup-100");
                         setFieldValue("gift_name", "Topup 100K");
                         setFieldValue("gift", "topup-100");
                       }}
+                      color={
+                        values.giftType === "topup-100"
+                          ? "secondary"
+                          : "default"
+                      }
                     />
                     <Chip
                       label="Topup 200K"
-                      variant="outlined"
+                      variant={
+                        values.giftType === "topup-200" ? "filled" : "outlined"
+                      }
                       onClick={() => {
+                        setFieldValue("giftType", "topup-200");
                         setFieldValue("gift_name", "Topup 200K");
                         setFieldValue("gift", "topup-200");
                       }}
+                      color={
+                        values.giftType === "topup-200"
+                          ? "secondary"
+                          : "default"
+                      }
                     />
                     <Chip
                       label="Topup 500K"
-                      variant="outlined"
+                      variant={
+                        values.giftType === "topup-500" ? "filled" : "outlined"
+                      }
                       onClick={() => {
+                        setFieldValue("giftType", "topup-500");
                         setFieldValue("gift_name", "Topup 500K");
                         setFieldValue("gift", "topup-500");
                       }}
+                      color={
+                        values.giftType === "topup-500"
+                          ? "secondary"
+                          : "default"
+                      }
                     />
                   </Stack>
                   <Form.Control
@@ -1218,12 +1282,21 @@ function ChanceProgram() {
                     name="gift_name"
                     onChange={(e) => {
                       setFieldValue("gift_name", e.target.value);
-                      setFieldValue(
-                        "gift",
-                        removeVietnameseTones(e.target.value)
-                      );
+                      if (
+                        values?.giftType !== "topup-10" &&
+                        values?.giftType !== "topup-20" &&
+                        values?.giftType !== "topup-50" &&
+                        values?.giftType !== "topup-100" &&
+                        values?.giftType !== "topup-200" &&
+                        values?.giftType !== "topup-500"
+                      ) {
+                        setFieldValue(
+                          "gift",
+                          removeVietnameseTones(e.target.value)
+                        );
+                      }
                     }}
-                    defaultValue={values.gift_name}
+                    value={values.gift_name}
                     isInvalid={touched.gift_name && !!errors.gift_name}
                     className="input-placeholder"
                   />
@@ -1362,7 +1435,9 @@ function ChanceProgram() {
                     placeholder="VD: 10"
                     name="percent"
                     onChange={handleChange}
-                    defaultValue={values.percent}
+                    value={values.percent}
+                    min={0}
+                    max={100}
                     isInvalid={touched.percent && !!errors.percent}
                     className="input-placeholder"
                   />
@@ -1380,8 +1455,9 @@ function ChanceProgram() {
                     type="number"
                     placeholder="VD: 5"
                     name="limits"
+                    min={0}
                     onChange={handleChange}
-                    defaultValue={values.limits}
+                    value={values.limits}
                     isInvalid={touched.limits && !!errors.limits}
                     className="input-placeholder"
                   />
@@ -1474,9 +1550,7 @@ function ChanceProgram() {
                     className="form-check-lg form-switch input-placeholder"
                     required
                     name="limit_per_customer"
-                    defaultChecked={
-                      values.limit_per_customer === 1 ? true : false
-                    }
+                    checked={values.limit_per_customer === 1 ? true : false}
                     onChange={(e) =>
                       setFieldValue(
                         "limit_per_customer",
