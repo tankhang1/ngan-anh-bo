@@ -21,9 +21,9 @@ import { fDate } from "../../../hooks";
 import Loading from "../../../assets/images/apps/loading.gif";
 const TypeBinExport = new Map([
   ["SALE", "Hàng hóa"],
-  ["MARKETING", "Khuyến mãi"],
+  ["MARKETING", "Hàng quảng bá"],
   ["BORROW", "Hàng mượn"],
-  ["PROMOTION", "Hàng quảng bá"],
+  ["PROMOTION", "Hàng khuyến mãi"],
 ]);
 function SearchProductCode() {
   const [searchValue, setSearchValue] = useState("");

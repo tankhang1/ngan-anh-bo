@@ -44,9 +44,9 @@ import { fDate } from "../../../hooks";
 
 const TypeBinExport = new Map([
   ["SALE", "Hàng hóa"],
-  ["MARKETING", "Khuyến mãi"],
+  ["MARKETING", "Hàng quảng bá"],
   ["BORROW", "Hàng mượn"],
-  ["PROMOTION", "Hàng quảng bá"],
+  ["PROMOTION", "Hàng khuyến mãi"],
 ]);
 function ChanceProgram() {
   const toast = useContext(ToastContext);
@@ -885,9 +885,9 @@ function ChanceProgram() {
                     name="goods_type"
                     options={[
                       { value: "SALE", label: "Hàng hóa" },
-                      { value: "MARKETING", label: "Khuyến mãi" },
+                      { value: "MARKETING", label: "Hàng quảng bá" },
                       { value: "BORROW", label: "Hàng mượn" },
-                      { value: "PROMOTION", label: "Hàng quảng bá" },
+                      { value: "PROMOTION", label: "Hàng khuyến mãi" },
                     ]}
                     className="basic-multi-select custom-multi input-placeholder"
                     id="choices-multiple-default"

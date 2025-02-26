@@ -58,7 +58,7 @@ const TypeBinExport: TSearchItem[] = [
     value: "SALE",
   },
   {
-    label: "Khuyến mãi",
+    label: "Hàng quảng bá",
     value: "MARKETING",
   },
   {
@@ -66,7 +66,7 @@ const TypeBinExport: TSearchItem[] = [
     value: "BORROW",
   },
   {
-    label: "Hàng quảng bá",
+    label: "Hàng khuyến mãi",
     value: "PROMOTION",
   },
 ];
