@@ -271,6 +271,7 @@ export type TPresent = {
   image_gift: string;
   type: TPresentType;
   limit_per_customer: number; //0 : giới hạn , 1 : ko giới hạn
+  counter: number;
 };
 export type TProgramChance = {
   id: number;

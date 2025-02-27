@@ -690,6 +690,15 @@ function ChanceProgram() {
                     ),
                   },
                   {
+                    key: "counter",
+                    label: "Số lượng đã trúng",
+                    render: (value) => (
+                      <td>
+                        <span className="fw-semibold">{value.counter}</span>
+                      </td>
+                    ),
+                  },
+                  {
                     key: "province_code",
                     label: "Tỉnh áp dụng",
                     render: (value) => (
