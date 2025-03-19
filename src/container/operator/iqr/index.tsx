@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -13,8 +13,11 @@ import {
   useGetBinPackageTodayQuery,
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const AGENT_FILTERS = [
   {
@@ -29,6 +32,9 @@ const AGENT_FILTERS = [
 
 function IQRToday() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(AGENT_FILTERS[0].key);
 
@@ -59,9 +65,30 @@ function IQRToday() {
   //     refetchOnMountOrArgChange: true,
   //   }
   // );
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data: binPacket, isLoading: isLoadingBinPacket } =
     useGetBinPackageTodayQuery();
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
 
   return (
     <Fragment>

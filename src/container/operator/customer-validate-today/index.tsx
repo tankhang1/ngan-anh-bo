@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
@@ -9,22 +9,19 @@ import {
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { MapCustomerType } from "../../../constants";
-
-const AGENT_FILTERS = [
-  {
-    key: "customer_name",
-    label: "Tên khách hàng",
-  },
-  {
-    key: "phone",
-    label: "Số điện thoại",
-  },
-];
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 function CustomerValidateToday() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
 
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
@@ -48,7 +45,26 @@ function CustomerValidateToday() {
         refetchOnMountOrArgChange: true,
       }
     );
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

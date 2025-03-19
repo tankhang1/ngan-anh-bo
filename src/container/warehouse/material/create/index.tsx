@@ -1,8 +1,8 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Card, Col, Form, Stack } from "react-bootstrap";
 import AppWarning from "../../../../components/AppWarning";
 import { useCreateIngredientMutation } from "../../../../redux/api/product/product.api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as formik from "formik";
 import { TIngredient } from "../../../../assets/types";
 import {
@@ -14,8 +14,14 @@ import {
 import { COUNTRIES } from "../../../../constants";
 import { ToastContext } from "../../../../components/AppToast";
 import createIngredientSchema from "../../../../schema/createIngredient.schema";
+import { useCheckTokenExpiredMutation } from "../../../../redux/api/other/other.api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
 
 const CreateMaterialWarehouse = () => {
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const [createIngredient, { isLoading: isLoadingCreate }] =
     useCreateIngredientMutation();
   const navigate = useNavigate();
@@ -25,6 +31,7 @@ const CreateMaterialWarehouse = () => {
   const { data: listBrand } = useGetListBrandQuery();
   const { data: listIndication } = useGetListIndicationQuery();
   const { data: listMaterial } = useGetListMaterialQuery();
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const onHandleCreateIngredient = async (
     values: Omit<
@@ -47,6 +54,26 @@ const CreateMaterialWarehouse = () => {
         } else toast.showToast("Thêm mới nguyên liệu thất bại");
       });
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Formik

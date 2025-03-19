@@ -1,24 +1,31 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import AppWarning from "../../../../components/AppWarning";
 import {
   useGetListIngredientsQuery,
   useImportIngredientPackingMutation,
 } from "../../../../redux/api/product/product.api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as formik from "formik";
 import { TIngredientPacking } from "../../../../assets/types";
 import { COUNTRIES } from "../../../../constants";
 import { ToastContext } from "../../../../components/AppToast";
 import { format } from "date-fns";
 import fillIngredientSchema from "../../../../schema/fillIngredientPacking.schema";
+import { useCheckTokenExpiredMutation } from "../../../../redux/api/other/other.api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store";
 
 const FillMaterialWarehouse = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const [importIngredientPacking, { isLoading: isLoadingCreate }] =
     useImportIngredientPackingMutation();
-  const navigate = useNavigate();
   const toast = useContext(ToastContext);
   const { Formik } = formik;
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data: listIngredient } = useGetListIngredientsQuery();
   const onHandleCreateIngredient = async (
@@ -43,6 +50,27 @@ const FillMaterialWarehouse = () => {
         } else toast.showToast("Thêm mới nguyên vật liệu thất bại");
       });
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Formik

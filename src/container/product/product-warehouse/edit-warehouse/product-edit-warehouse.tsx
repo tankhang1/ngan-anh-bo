@@ -1,4 +1,10 @@
-import React, { Fragment, useContext, useMemo, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Card,
   Col,
@@ -17,7 +23,7 @@ import {
   COUNTRIES,
   ProductTypeEnum,
 } from "../../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -41,6 +47,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
 import AppSelect from "../../../../components/AppSelect";
+import { useCheckTokenExpiredMutation } from "../../../../redux/api/other/other.api";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -49,14 +56,14 @@ registerPlugin(
 );
 
 function ProductEditWarehouse() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const { id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const [files1, setFiles1] = useState<FilePondFile[] | any>([]);
   const toast = useContext(ToastContext);
   const { Formik } = formik;
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { data: product } = useGetListProductsQuery(null, {
     selectFromResult: ({ data }) => ({
       data: data?.find((item) => item.code === id),
@@ -71,6 +78,7 @@ function ProductEditWarehouse() {
   const { data: ingredients } = useGetListIngredientsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const [updateProduct, { isLoading: isLoadingUpdate }] =
     useUpdateProductByWarehouseMutation();
@@ -102,6 +110,26 @@ function ProductEditWarehouse() {
         });
     }
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
 
   return (
     <Fragment>

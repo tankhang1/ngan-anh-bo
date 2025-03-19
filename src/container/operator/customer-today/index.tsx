@@ -3,13 +3,16 @@ import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
   useGetListGroupObjectiveQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const AGENT_FILTERS = [
   {
@@ -27,6 +30,10 @@ const AGENT_FILTERS = [
 ];
 
 function CustomerToday() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
@@ -44,6 +51,8 @@ function CustomerToday() {
       setCustomerType(type);
     }
   };
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
@@ -69,7 +78,26 @@ function CustomerToday() {
         skip: customerType ? false : true,
       }
     );
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   useEffect(() => {
     if (groupObjectives) {
       setCustomerType(groupObjectives?.[0].symbol);

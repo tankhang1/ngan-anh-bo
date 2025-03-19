@@ -9,7 +9,7 @@ import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   useGetListEmployeeQuery,
   useGetListGroupObjectiveQuery,
@@ -25,6 +25,7 @@ import { format } from "date-fns";
 import { fDate, fParseNumber } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
 import {
+  useCheckTokenExpiredMutation,
   useUpdateCustomerMutation,
   useVerifyCustomerMutation,
 } from "../../../../redux/api/other/other.api";
@@ -38,13 +39,14 @@ import {
 } from "../../../../redux/api/info/info.api";
 import AppSelect from "../../../../components/AppSelect";
 function VerifyCustomer() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { token } = useSelector((state: RootState) => state.auth);
   const { customer_uuid } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
   const navigate = useNavigate();
+  const location = useLocation();
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
@@ -56,6 +58,8 @@ function VerifyCustomer() {
       refetchOnMountOrArgChange: true,
     }
   );
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const [verifyCustomer, { isLoading: isLoadingVerify }] =
     useVerifyCustomerMutation();
   const [updateCustomer, { isLoading: isLoadingUpdate }] =
@@ -143,6 +147,27 @@ function VerifyCustomer() {
         console.log("create agent fail", e.message);
       });
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
   }, [customer]);

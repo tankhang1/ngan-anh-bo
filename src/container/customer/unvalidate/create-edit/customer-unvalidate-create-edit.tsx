@@ -3,7 +3,7 @@ import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   useGetListCustomerQuery,
   useGetListEmployeeQuery,
@@ -20,6 +20,7 @@ import { format } from "date-fns";
 import { fDate, fParseNumber } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
 import {
+  useCheckTokenExpiredMutation,
   useCreateUpdateCustomerMutation,
   useGetNewUUIDQuery,
   useUpdateCustomerMutation,
@@ -33,7 +34,7 @@ import AppSelect from "../../../../components/AppSelect";
 import { useGetCustomerByCodeQuery } from "../../../../redux/api/info/info.api";
 
 function CustomerUnValidationCreateEdit() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
@@ -41,6 +42,8 @@ function CustomerUnValidationCreateEdit() {
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
   const navigate = useNavigate();
+  const location = useLocation();
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
@@ -198,11 +201,29 @@ function CustomerUnValidationCreateEdit() {
         });
     }
   };
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
   }, [customer]);
-
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Formik

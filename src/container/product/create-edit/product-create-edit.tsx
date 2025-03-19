@@ -1,10 +1,16 @@
-import React, { Fragment, useContext, useMemo, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 
 import { TProductCreateForm } from "../../../assets/types";
 import { BASE_PORT, ProductTypeEnum } from "../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -27,6 +33,7 @@ import { RootState } from "../../../redux/store";
 import productCreateSchema from "../../../schema/product.create.schema";
 import AppWarning from "../../../components/AppWarning";
 import AppSelect from "../../../components/AppSelect";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -35,17 +42,18 @@ registerPlugin(
 );
 
 function ProductCreate() {
-  const { roles } = useSelector((state: RootState) => state.auth);
+  const { roles, token } = useSelector((state: RootState) => state.auth);
   const { isCreate, id } = useParams();
   const [isEdit, setIsEdit] = useState(false);
   const [files1, setFiles1] = useState<FilePondFile[] | any>([]);
   const toast = useContext(ToastContext);
   const { Formik } = formik;
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { data: binIds } = useGetListBinsIdQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: devices } = useGetListDevicesQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -104,6 +112,26 @@ function ProductCreate() {
     }
   };
 
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Formik

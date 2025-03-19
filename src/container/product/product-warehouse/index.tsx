@@ -1,4 +1,10 @@
-import React, { Fragment, useDeferredValue, useMemo, useState } from "react";
+import React, {
+  Fragment,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -10,7 +16,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GroupCode, TProduct } from "../../../assets/types";
 
 import { BASE_PORT } from "../../../constants";
@@ -22,6 +28,7 @@ import { format } from "date-fns";
 import AppConfirm from "../../../components/AppConfirm";
 import AppHistory from "../../../components/AppHistory";
 import { useLogProductQuery } from "../../../redux/api/log/log.api";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const PRODUCT_TYPE = [
   {
@@ -50,13 +57,15 @@ const PRODUCT_TYPE = [
   },
 ];
 function ProductWarehousePage() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [changeType, setChangeType] = useState<number>(-1); // true: thùng, false: gói
   const [openedHistory, setOpenHistory] = useState(false);
   const deferSearchValue = useDeferredValue(search);
 
+  const location = useLocation();
   const navigate = useNavigate();
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: logProductWarehouse } = useLogProductQuery(
     {
       group: GroupCode.PRODUCTS_PRODUCTION,
@@ -82,6 +91,27 @@ function ProductWarehousePage() {
   const handleExportExcel = () => {
     exportExcelFile(filterProducts, "Thông tin sản phẩm");
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Col xl={12}>

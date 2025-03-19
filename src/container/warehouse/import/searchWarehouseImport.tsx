@@ -3,15 +3,23 @@ import { Button, Card, Col, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { useGetImportByDocumentQuery } from "../../../redux/api/warehouse/warehouse.api";
 import { format } from "date-fns";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 function SearchWarehouseImport() {
   const [searchValue, setSearchValue] = useState("");
   const [isPermitSearch, setIsPermitSearch] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
 
   const onSearch = () => {
     if (!searchValue) return;
     setIsPermitSearch(true);
   };
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data: imports, isLoading: loadingImport } =
     useGetImportByDocumentQuery(
@@ -22,6 +30,27 @@ function SearchWarehouseImport() {
         skip: !isPermitSearch,
       }
     );
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   useEffect(() => {
     setIsPermitSearch(false);
   }, [imports]);

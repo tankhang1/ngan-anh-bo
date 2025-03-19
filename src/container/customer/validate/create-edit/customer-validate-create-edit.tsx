@@ -9,7 +9,7 @@ import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   useGetListCustomerQuery,
   useGetListEmployeeQuery,
@@ -25,6 +25,7 @@ import { format } from "date-fns";
 import { fDate, fParseNumber } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
 import {
+  useCheckTokenExpiredMutation,
   useCreateUpdateCustomerMutation,
   useGetNewUUIDQuery,
   useUpdateCustomerMutation,
@@ -40,14 +41,15 @@ import {
 } from "../../../../redux/api/info/info.api";
 
 function CustomerValidationCreateEdit() {
-  const { permission } = useSelector((state: RootState) => state.auth);
-
+  const { permission, token } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
-  const navigate = useNavigate();
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: newUUID } = useGetNewUUIDQuery(null, {
@@ -78,7 +80,22 @@ function CustomerValidationCreateEdit() {
     }
   );
   console.log(districts);
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value: boolean) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
   const handleSubmitAgent = async (values: TCustomerRes) => {
     if (isCreate === "true") {
       await createCustomer({
@@ -163,6 +180,10 @@ function CustomerValidationCreateEdit() {
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
   }, [customer]);
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]);
   return (
     <Fragment>
       <Formik

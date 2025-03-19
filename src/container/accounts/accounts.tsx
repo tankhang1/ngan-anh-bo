@@ -1,4 +1,10 @@
-import React, { Fragment, useContext, useDeferredValue, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -37,6 +43,8 @@ import accountUpdateSchema from "../../schema/accounts.update.schema";
 import { useLogAccountQuery } from "../../redux/api/log/log.api";
 import AppLog from "../../components/AppLog";
 import AppHistory from "../../components/AppHistory";
+import { useCheckTokenExpiredMutation } from "../../redux/api/other/other.api";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ACCOUNT_FILTERS = [
   {
@@ -60,7 +68,9 @@ const MapAccountLabel = new Map([
   ["[ROLE_DIRECTOR]", "Ban giám đốc"],
 ]);
 function Accounts() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [search, setSearch] = useState("");
   const [openedHistory, setOpenHistory] = useState(false);
@@ -71,6 +81,7 @@ function Accounts() {
   const [username, setUsername] = useState<string | null>(null);
   const [showPW1, setShowPW1] = useState(false);
   const [showPW2, setShowPW2] = useState(false);
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: accounts, isLoading: isLoadingAccount } =
     useGetAllAccountQuery();
   const [deleteAccount, { isLoading: isLoadingDelete }] =
@@ -160,6 +171,26 @@ function Accounts() {
         toast.showToast("Cập nhật tài khoản thất bại");
       });
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

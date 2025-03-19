@@ -1,4 +1,10 @@
-import React, { Fragment, useContext, useDeferredValue, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -20,6 +26,7 @@ import AppId from "../../../components/common/app-id";
 import { useGetListEmployeeDepartmentQuery } from "../../../redux/api/manage/manage.api";
 import { Formik } from "formik";
 import {
+  useCheckTokenExpiredMutation,
   useCreateEmployeeDepartmentMutation,
   useUpdateEmployeeDepartmentMutation,
 } from "../../../redux/api/other/other.api";
@@ -30,6 +37,7 @@ import departmentSchema from "../../../schema/department.schema";
 import AppWarning from "../../../components/AppWarning";
 import AppHistory from "../../../components/AppHistory";
 import { useLogAccountQuery } from "../../../redux/api/log/log.api";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -39,7 +47,9 @@ const EMPLOYEE_ROLE_FILTERS = [
 ];
 
 function EmployeeDepartment() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState(EMPLOYEE_ROLE_FILTERS[0].key);
   const [modalInfo, setModalInfo] = useState<TEmployeeDepartment | null>(null);
@@ -51,6 +61,7 @@ function EmployeeDepartment() {
   const [createDepartment, { isLoading: isLoadingCreate }] =
     useCreateEmployeeDepartmentMutation();
   const [openedHistory, setOpenHistory] = useState(false);
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: logEmployeeDepartment } = useLogAccountQuery(
     {
       group: GroupCode.EMPLOYEES_DEPARTMENT,
@@ -126,6 +137,27 @@ function EmployeeDepartment() {
     setOpenCEModal(false);
     setModalInfo(null);
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Col xl={12}>

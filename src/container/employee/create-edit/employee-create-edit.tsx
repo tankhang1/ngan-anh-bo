@@ -17,7 +17,7 @@ import {
 import * as formik from "formik";
 import { TEmployee } from "../../../assets/types";
 import { BASE_PORT, PROVINCES } from "../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   useGetListEmployeeDepartmentQuery,
   useGetListEmployeeQuery,
@@ -32,6 +32,7 @@ import {
 import { ToastContext } from "../../../components/AppToast";
 import { fDate } from "../../../hooks";
 import {
+  useCheckTokenExpiredMutation,
   useCreateEmployeeMutation,
   useGetNewUUIDQuery,
   useUpdateEmployeeMutation,
@@ -47,7 +48,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
 function EmployeeCreateEdit() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const { isCreate, id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
@@ -55,7 +56,8 @@ function EmployeeCreateEdit() {
 
   const { Formik } = formik;
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: newUUID } = useGetNewUUIDQuery(null, {
     skip: isCreate !== "true",
     refetchOnMountOrArgChange: true,
@@ -189,6 +191,26 @@ function EmployeeCreateEdit() {
           });
     }
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
 
   return (
     <Fragment>

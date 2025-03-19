@@ -13,7 +13,7 @@ import {
 import AppTable from "../../../components/common/table/table";
 import { GroupCode, TProgramTopup } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
 import {
   useGetCounterProgramTopupByStatusQuery,
@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import AppHistory from "../../../components/AppHistory";
 import { useLogProgramQuery } from "../../../redux/api/log/log.api";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const STATUS_FILTERS = [
   {
@@ -45,10 +46,11 @@ const STATUS_FILTERS = [
   },
 ];
 function TopupProgram() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const deferSearchValue = useDeferredValue(search);
   const navigate = useNavigate();
+  const location = useLocation();
   const [status, setStatus] = useState(1);
   const [listTopups, setListTopups] = useState<TProgramTopup[]>([]);
   const [page, setPage] = useState(1);
@@ -81,6 +83,27 @@ function TopupProgram() {
         refetchOnMountOrArgChange: true,
       }
     );
+  const [checkToken] = useCheckTokenExpiredMutation();
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
 
   return (
     <Fragment>

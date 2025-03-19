@@ -1,4 +1,10 @@
-import React, { Fragment, useContext, useDeferredValue, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from "react";
 import {
   Button,
   Card,
@@ -16,6 +22,7 @@ import AppId from "../../../components/common/app-id";
 import { useGetListEmployeeRoleQuery } from "../../../redux/api/manage/manage.api";
 import { Formik } from "formik";
 import {
+  useCheckTokenExpiredMutation,
   useCreateEmployeeRoleMutation,
   useUpdateEmployeeRoleMutation,
 } from "../../../redux/api/other/other.api";
@@ -26,6 +33,7 @@ import roleSchema from "../../../schema/role.schema";
 import AppWarning from "../../../components/AppWarning";
 import AppHistory from "../../../components/AppHistory";
 import { useLogCustomerQuery } from "../../../redux/api/log/log.api";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EMPLOYEE_ROLE_FILTERS = [
   {
@@ -35,7 +43,9 @@ const EMPLOYEE_ROLE_FILTERS = [
 ];
 
 function EmployeeRole() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [search, setSearch] = useState("");
   const [openedHistory, setOpenHistory] = useState(false);
   const [modalInfo, setModalInfo] = useState<TEmployeeRole | null>(null);
@@ -46,6 +56,8 @@ function EmployeeRole() {
     useUpdateEmployeeRoleMutation();
   const [createRole, { isLoading: isLoadingCreate }] =
     useCreateEmployeeRoleMutation();
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const { data: logEmployeeRole } = useLogCustomerQuery(
     {
       group: GroupCode.EMPLOYEES_ROLE,
@@ -120,6 +132,27 @@ function EmployeeRole() {
     setOpenCEModal(false);
     setModalInfo(null);
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Col xl={12}>

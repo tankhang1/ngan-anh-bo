@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import AppTable from "../../components/common/table/table";
 import { GroupCode, TEmployee } from "../../assets/types";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useGetListEmployeeQuery } from "../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { exportExcelFile } from "../../hooks";
@@ -19,9 +19,10 @@ import { RootState } from "../../redux/store";
 import AppConfirm from "../../components/AppConfirm";
 import AppHistory from "../../components/AppHistory";
 import { useLogCustomerQuery } from "../../redux/api/log/log.api";
+import { useCheckTokenExpiredMutation } from "../../redux/api/other/other.api";
 
 function Employee() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const deferSearchValue = useDeferredValue(search);
   const [openedHistory, setOpenHistory] = useState(false);
@@ -35,6 +36,8 @@ function Employee() {
     }
   );
   const navigate = useNavigate();
+  const location = useLocation();
+  const [checkToken] = useCheckTokenExpiredMutation();
   const { data: employees, isLoading: isLoadingEmployee } =
     useGetListEmployeeQuery(null, {
       refetchOnMountOrArgChange: true,
@@ -43,6 +46,26 @@ function Employee() {
   const handleExportExcel = () => {
     if (employees) exportExcelFile(employees, "Danh sách nhân viên");
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

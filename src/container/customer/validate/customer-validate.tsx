@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -12,7 +12,7 @@ import {
 import AppTable from "../../../components/common/table/table";
 import { GroupCode, TCustomerRes } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
@@ -28,15 +28,18 @@ import { ToastContext } from "../../../components/AppToast";
 import AppConfirm from "../../../components/AppConfirm";
 import { useLogCustomerQuery } from "../../../redux/api/log/log.api";
 import AppHistory from "../../../components/AppHistory";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 function CustomerValidation() {
+  const location = useLocation();
   const toast = useContext(ToastContext);
-  const { permission, username } = useSelector(
+  const { permission, username, token } = useSelector(
     (state: RootState) => state.auth
   );
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const [isLoadingExportExcel, setIsLoadingExportExcel] = useState(false);
   const [exportExcel] = useExportCustomerDataMutation();
@@ -89,7 +92,26 @@ function CustomerValidation() {
         skip: customerType ? false : true,
       }
     );
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

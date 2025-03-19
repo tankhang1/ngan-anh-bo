@@ -13,7 +13,7 @@ import {
 import AppTable from "../../../components/common/table/table";
 import { GroupCode, TProgramPoint } from "../../../assets/types";
 import AppId from "../../../components/common/app-id";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MAP_PROGRAM_STATUS } from "../../../constants";
 import {
   useGetCounterProgramPointByStatusQuery,
@@ -24,6 +24,7 @@ import { RootState } from "../../../redux/store";
 import { format } from "date-fns";
 import AppHistory from "../../../components/AppHistory";
 import { useLogProgramQuery } from "../../../redux/api/log/log.api";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const POINT_FILTERS = [
   {
@@ -50,11 +51,12 @@ const STATUS_FILTERS = [
   },
 ];
 function PointProgram() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const deferSearchValue = useDeferredValue(search);
   const [status, setStatus] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
   const [listPoints, setListPoints] = useState<TProgramPoint[]>([]);
   const [page, setPage] = useState(1);
   const [openedHistory, setOpenHistory] = useState(false);
@@ -67,6 +69,8 @@ function PointProgram() {
       skip: !openedHistory,
     }
   );
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const { data: counterProgramPoint } = useGetCounterProgramPointByStatusQuery(
     {
       status: status,
@@ -86,6 +90,26 @@ function PointProgram() {
         refetchOnMountOrArgChange: true,
       }
     );
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
 
   return (
     <Fragment>

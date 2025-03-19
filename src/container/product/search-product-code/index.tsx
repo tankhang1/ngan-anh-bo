@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -19,6 +19,10 @@ import {
 import { BASE_PORT } from "../../../constants";
 import { fDate } from "../../../hooks";
 import Loading from "../../../assets/images/apps/loading.gif";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 const TypeBinExport = new Map([
   ["SALE", "Hàng hóa"],
   ["MARKETING", "Hàng quảng bá"],
@@ -26,6 +30,9 @@ const TypeBinExport = new Map([
   ["PROMOTION", "Hàng khuyến mãi"],
 ]);
 function SearchProductCode() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
   const [searchValue, setSearchValue] = useState("");
   const [isPermitSearch, setIsPermitSearch] = useState(false);
   const { data: binPackage, isFetching: isFetchingBinPackage } =
@@ -63,10 +70,31 @@ function SearchProductCode() {
       skip: !binPackage?.customer_code,
     }
   );
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const onSearch = () => {
     setIsPermitSearch(true);
   };
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

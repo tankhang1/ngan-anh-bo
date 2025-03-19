@@ -29,8 +29,15 @@ import {
   useGetListProgramPointDetailQuery,
   useGetListProgramTopupDetailQuery,
 } from "../../../redux/api/product/product.api";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 
 function SearchCustomer() {
+  const { token } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [searchValue, setSearchValue] = useState("");
   const deferSearchValue = useDeferredValue(searchValue);
   const [isPermitSearch, setIsPermitSearch] = useState(false);
@@ -46,6 +53,7 @@ function SearchCustomer() {
   const [programTopupDetail, setProgramTopupDetail] = useState<
     TProgramTopupZaloDetail[] | null
   >(null);
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const onSearch = () => {
     if (searchValue.length === 0) return;
@@ -122,7 +130,26 @@ function SearchCustomer() {
       })
       .catch(() => {});
   };
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

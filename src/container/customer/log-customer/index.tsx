@@ -1,12 +1,21 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useLogCustomerQuery } from "../../../redux/api/log/log.api";
 import { GroupCode, TActionLog } from "../../../assets/types";
 import { Button, Card, Col, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const LogCustomerPage = () => {
+  const { token } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [search, setSearch] = useState("");
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const { data: logCustomer } = useLogCustomerQuery(
     {
       group: GroupCode.CUSTOMERS,
@@ -15,6 +24,27 @@ const LogCustomerPage = () => {
       refetchOnMountOrArgChange: true,
     }
   );
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Col xl={12}>

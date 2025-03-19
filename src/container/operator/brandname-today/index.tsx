@@ -11,6 +11,10 @@ import {
 import AppTable from "../../../components/common/table/table";
 import { TBrandname } from "../../../assets/types";
 import { useGetListBrandnameTodayQuery } from "../../../redux/api/manage/manage.api";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const AGENT_FILTERS = [
   {
@@ -20,12 +24,36 @@ const AGENT_FILTERS = [
 ];
 
 function BrandnameToday() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
 
   const [page, setPage] = useState(1);
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data: listBrandname, isLoading: isLoadingBrandname } =
     useGetListBrandnameTodayQuery();
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

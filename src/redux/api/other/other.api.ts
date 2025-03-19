@@ -173,6 +173,13 @@ export const otherApi = createApi({
         { type: TagsEnum.EMPLOYEE_DEPARTMENT as const, id: arg.id! },
       ],
     }),
+    checkTokenExpired: builder.mutation<boolean, { token: string }>({
+      query: (body) => ({
+        url: "/check-token-expired",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+    }),
   }),
 });
 export const {
@@ -191,4 +198,5 @@ export const {
   useCreateEmployeeRoleMutation,
   useUpdateEmployeeDepartmentMutation,
   useUpdateEmployeeRoleMutation,
+  useCheckTokenExpiredMutation,
 } = otherApi;

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TProgramTopupDetail } from "../../../assets/types";
@@ -6,6 +6,10 @@ import { TProgramTopupDetail } from "../../../assets/types";
 import { useGetReportProgramTopupDetailTodayQuery } from "../../../redux/api/report/report.api";
 import { fNumber } from "../../../hooks";
 import { format } from "date-fns";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 const TOPUP_FILTERS = [
   {
     key: "phone",
@@ -30,6 +34,10 @@ const TOPUP_FILTERS = [
 ];
 
 function TopupToday() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const [search, setSearch] = useState("");
   const { data: topups, isLoading: isLoadingTopup } =
     useGetReportProgramTopupDetailTodayQuery(undefined, {
@@ -37,6 +45,27 @@ function TopupToday() {
       pollingInterval: 300000,
       refetchOnMountOrArgChange: true,
     });
+  const [checkToken] = useCheckTokenExpiredMutation();
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

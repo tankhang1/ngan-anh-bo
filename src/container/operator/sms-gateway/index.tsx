@@ -16,6 +16,10 @@ import {
   useGetListSMSGatewayQuery,
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const AGENT_FILTERS = [
   {
@@ -33,6 +37,10 @@ const AGENT_FILTERS = [
 ];
 
 function SMSGateway() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
@@ -42,8 +50,30 @@ function SMSGateway() {
     groupObjectives?.[0].symbol || ""
   );
   const [page, setPage] = useState(1);
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data, isLoading: isLoadingSMSGateway } = useGetListSMSGatewayQuery();
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Col xl={12}>

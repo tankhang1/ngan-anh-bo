@@ -2,6 +2,7 @@ import React, {
   Fragment,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -19,13 +20,14 @@ import { Formik } from "formik";
 import { TPointCreateForm } from "../../../../assets/types";
 import Select from "react-select";
 import { BASE_PORT, OBJECTIVES_SELECT, PROVINCES } from "../../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { registerPlugin } from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import { useGetListProductsQuery } from "../../../../redux/api/info/info.api";
 import {
+  useCheckTokenExpiredMutation,
   useCreatePointProgramMutation,
   useGetNewUUIDQuery,
   useUpdatePointProgramMutation,
@@ -42,6 +44,8 @@ import AppWarning from "../../../../components/AppWarning";
 import { Checkbox } from "@mui/material";
 import AppTable from "../../../../components/common/table/table";
 import { E } from "../../../../assets/libs/chart.js/chunks/helpers.segment";
+import { RootState } from "../../../../redux/store";
+import { useSelector } from "react-redux";
 
 registerPlugin(
   FilePondPluginImagePreview,
@@ -73,12 +77,16 @@ const TypeBinExport: TSearchItem[] = [
 function PointCreateEdit() {
   const toast = useContext(ToastContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const { isCreate, id } = useParams();
+  const { token } = useSelector((state: RootState) => state.auth);
   const [isEdit, setIsEdit] = useState(false);
   const [type, setType] = useState<"RETAILER" | "FARMER">("RETAILER");
   const [isCheckedAllBinOrPacket, setIsCheckedAllBinOrPacket] = useState<
     "BIN" | "PACKET" | null
   >(null);
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const { data: products, isLoading: isLoadingProducts } =
     useGetListProductsQuery(null);
   const { data: newUUID } = useGetNewUUIDQuery(null, {
@@ -422,6 +430,27 @@ function PointCreateEdit() {
   };
 
   const onChangeMap = (checkedBin: boolean, checkedPacket: boolean) => {};
+
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Formik

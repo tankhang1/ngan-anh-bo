@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
@@ -10,6 +10,9 @@ import {
 } from "../../../redux/api/manage/manage.api";
 import { format } from "date-fns";
 import { MapCustomerType } from "../../../constants";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const AGENT_FILTERS = [
   {
@@ -23,6 +26,8 @@ const AGENT_FILTERS = [
 ];
 
 function CustomerUnValidateToday() {
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
@@ -34,6 +39,7 @@ function CustomerUnValidateToday() {
   const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onChangeCustomerType = (type: string) => {
     if (type !== customerType) {
@@ -41,6 +47,8 @@ function CustomerUnValidateToday() {
       setCustomerType(type);
     }
   };
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const { data: counterCustomer } = useGetCounterCustomerQuery(
     {
       st: +(format(new Date(), "yyyyMMdd") + "0000"),
@@ -64,7 +72,26 @@ function CustomerUnValidateToday() {
         refetchOnMountOrArgChange: true,
       }
     );
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   useEffect(() => {
     if (groupObjectives) {
       setCustomerType(groupObjectives?.[0].symbol);

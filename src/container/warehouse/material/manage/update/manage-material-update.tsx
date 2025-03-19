@@ -1,8 +1,8 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Card, Col, Form, Stack } from "react-bootstrap";
 import AppWarning from "../../../../../components/AppWarning";
 import { useUpdateIngredientByCodeMutation } from "../../../../../redux/api/product/product.api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import * as formik from "formik";
 import { TIngredient } from "../../../../../assets/types";
 import {
@@ -16,8 +16,12 @@ import { ToastContext } from "../../../../../components/AppToast";
 import createIngredientSchema from "../../../../../schema/createIngredient.schema";
 import { useGetIngredientByCodeQuery } from "../../../../../redux/api/warehouse/warehouse.api";
 import Loading from "../../../../../assets/images/apps/loading.gif";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../../../redux/api/other/other.api";
 const ManageMaterialUpdate = () => {
   const { code } = useParams();
+  const { token } = useSelector((state: RootState) => state.auth);
   const [updateIngredient, { isLoading: isLoadingUpdate }] =
     useUpdateIngredientByCodeMutation();
   const { data: ingredient, isLoading: isLoadingIngredient } =
@@ -31,12 +35,14 @@ const ManageMaterialUpdate = () => {
       }
     );
   const navigate = useNavigate();
+  const location = useLocation();
   const toast = useContext(ToastContext);
   const { Formik } = formik;
   const { data: listFormulation } = useGetListFormulationQuery();
   const { data: listBrand } = useGetListBrandQuery();
   const { data: listIndication } = useGetListIndicationQuery();
   const { data: listMaterial } = useGetListMaterialQuery();
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const onHandleCreateIngredient = async (
     values: Omit<
@@ -55,6 +61,26 @@ const ManageMaterialUpdate = () => {
       });
   };
   console.log(ingredient);
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       {isLoadingIngredient ? (

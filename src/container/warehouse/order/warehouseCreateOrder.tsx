@@ -1,8 +1,14 @@
 import { Formik } from "formik";
-import React, { Fragment, useContext, useMemo, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { ProductTypeEnum, TManufactorOrder } from "../../../assets/types";
 import { Card, Col, Form, InputGroup, Stack } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AppWarning from "../../../components/AppWarning";
 import AppSelect from "../../../components/AppSelect";
 import { useGetListProductsQuery } from "../../../redux/api/info/info.api";
@@ -14,15 +20,24 @@ import {
   useGetListDevicesQuery,
 } from "../../../redux/api/product/product.api";
 import { ToastContext } from "../../../components/AppToast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const WarehouseCreateManufactorOrder = () => {
   const toast = useContext(ToastContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
+
   const { data: products } = useGetListProductsQuery();
   const { data: ingredientPackings } = useGetListIngredientPackingQuery();
   const { data: devices } = useGetListDevicesQuery();
   const [typeExport, setTypeExport] = useState<"BIN" | "PACKET">("BIN");
   const [createProcedureOrder, { isLoading: isLoadingCreate }] =
     useCreateProcedureOrderMutation();
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const filterProduct = useMemo(() => {
     if (typeExport === "BIN")
       return products?.filter(
@@ -50,7 +65,27 @@ const WarehouseCreateManufactorOrder = () => {
       })
       .catch(() => toast.showToast("Tạo lệnh sản xuất thất bại"));
   };
-  const navigate = useNavigate();
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Formik

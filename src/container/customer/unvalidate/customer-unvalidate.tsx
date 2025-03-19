@@ -1,4 +1,4 @@
-import React, { Fragment, useDeferredValue, useState } from "react";
+import React, { Fragment, useDeferredValue, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { GroupCode, TCustomerRes } from "../../../assets/types";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   useGetCounterCustomerQuery,
   useGetListCustomerQuery,
@@ -21,6 +21,7 @@ import { format } from "date-fns";
 import { MapCustomerType } from "../../../constants";
 import { useLogCustomerQuery } from "../../../redux/api/log/log.api";
 import AppHistory from "../../../components/AppHistory";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const CUSTOMER_TYPE = [
   {
@@ -29,13 +30,15 @@ const CUSTOMER_TYPE = [
   },
 ];
 function CustomerUnValidation() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const [search, setSearch] = useState("");
   const deferSearchValue = useDeferredValue(search);
   const [customerType, setCustomerType] = useState(CUSTOMER_TYPE[0].key);
 
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   // const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: counterCustomer } = useGetCounterCustomerQuery(
@@ -58,7 +61,26 @@ function CustomerUnValidation() {
         refetchOnMountOrArgChange: true,
       }
     );
-
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
   return (
     <Fragment>
       <Col xl={12}>

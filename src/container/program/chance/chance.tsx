@@ -1,4 +1,10 @@
-import React, { Fragment, useContext, useMemo, useState } from "react";
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Badge,
   Button,
@@ -41,6 +47,10 @@ import { Formik } from "formik";
 import { format } from "date-fns";
 import { ToastContext } from "../../../components/AppToast";
 import { fDate } from "../../../hooks";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 
 const TypeBinExport = new Map([
   ["SALE", "Hàng hóa"],
@@ -49,6 +59,9 @@ const TypeBinExport = new Map([
   ["PROMOTION", "Hàng khuyến mãi"],
 ]);
 function ChanceProgram() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { token } = useSelector((state: RootState) => state.auth);
   const toast = useContext(ToastContext);
   const [openedHistory, setOpenHistory] = useState(false);
   const [activeTab, setActiveTab] = useState<TPresentType>("FARMER");
@@ -58,6 +71,8 @@ function ChanceProgram() {
   const [openProducts, setOpenProducts] = useState(false);
   const [uploadImage, { isLoading: isLoadingUploadFile }] =
     useUploadProgramFileMutation();
+  const [checkToken] = useCheckTokenExpiredMutation();
+
   const [present, setPresent] = useState<TPresent>();
   const { data: programFarmer } = useGetProgramFarmerQuery(undefined, {
     skip: activeTab === "RETAILER",
@@ -307,6 +322,27 @@ function ChanceProgram() {
       }
     }
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Col xl={12}>
@@ -365,7 +401,10 @@ function ChanceProgram() {
           <div>
             <div className=" position-relative">
               <Image
-                src={programInfo?.image || "https://placehold.jp/400x200.png"}
+                src={
+                  programInfo?.image ||
+                  "https://www.supervanman.ie/wp-content/uploads/2018/01/450x300-Copy-3.png"
+                }
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -616,7 +655,12 @@ function ChanceProgram() {
                     label: "Hình ảnh",
                     render: (value) => (
                       <td>
-                        <Image src={value.image_gift} width={100} height={50} />
+                        <Image
+                          src={value.image_gift}
+                          width={100}
+                          height={50}
+                          className="object-contain"
+                        />
                       </td>
                     ),
                   },
@@ -751,7 +795,7 @@ function ChanceProgram() {
                         <img
                           src={
                             `${BASE_PORT}/${value.code}.jpg` ||
-                            "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png"
+                            "https://www.laminationsonline.com/wp-content/uploads/2019/03/placeholder-400x300.png"
                           }
                           className="img object-fit-cover"
                           style={{
@@ -1354,7 +1398,8 @@ function ChanceProgram() {
                   <div className=" position-relative">
                     <Image
                       src={
-                        values.image_gift || "https://placehold.jp/400x200.png"
+                        values.image_gift ||
+                        "https://www.laminationsonline.com/wp-content/uploads/2019/03/placeholder-400x300.png"
                       }
                       style={{
                         display: "flex",
@@ -1363,7 +1408,8 @@ function ChanceProgram() {
                         border: "1px solid #e5e7eb",
                         borderRadius: "0.5rem",
                         width: "100%",
-                        height: 250,
+                        height: 300,
+                        objectFit: "cover",
                         backgroundColor: "#f3f4f6",
                       }}
                     ></Image>

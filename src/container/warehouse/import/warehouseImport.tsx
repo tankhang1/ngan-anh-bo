@@ -30,6 +30,8 @@ import { RootState } from "../../../redux/store";
 import { useExportWarehouseImportDetailMutation } from "../../../redux/api/excel/excel.api";
 import { ToastContext } from "../../../components/AppToast";
 import AppConfirm from "../../../components/AppConfirm";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 type TSearchItem = {
   label: string;
   value: string;
@@ -52,14 +54,17 @@ type TImportForm = {
 };
 const WarehouseImport = () => {
   const toast = useContext(ToastContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const { permission, username } = useSelector(
+  const { permission, username, token } = useSelector(
     (state: RootState) => state.auth
   );
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState<BaseQuery>();
   const [documentDetail, setDocumentDetail] = useState<string | undefined>();
   const [page, setPage] = useState(1);
+  const [checkToken] = useCheckTokenExpiredMutation();
   const [exportExcel] = useExportWarehouseImportDetailMutation();
   const {
     data: imports,
@@ -226,6 +231,27 @@ const WarehouseImport = () => {
       },
     ]);
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
+
   return (
     <Fragment>
       <Col xl={12}>

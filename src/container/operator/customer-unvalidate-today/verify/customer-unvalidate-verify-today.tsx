@@ -3,7 +3,7 @@ import { Card, Col, Form, Row, Stack } from "react-bootstrap";
 import * as formik from "formik";
 import { TCustomerRes } from "../../../../assets/types";
 import { PROVINCES } from "../../../../constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   useGetListCustomerQuery,
   useGetListEmployeeQuery,
@@ -19,23 +19,29 @@ import { ToastContext } from "../../../../components/AppToast";
 import { format } from "date-fns";
 import { fDate } from "../../../../hooks";
 import { NumericFormat } from "react-number-format";
-import { useVerifyCustomerMutation } from "../../../../redux/api/other/other.api";
+import {
+  useCheckTokenExpiredMutation,
+  useVerifyCustomerMutation,
+} from "../../../../redux/api/other/other.api";
 import customerSchema from "../../../../schema/customers.schema";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store";
 import AppWarning from "../../../../components/AppWarning";
 
 function CustomerUnValidationVerify() {
-  const { permission } = useSelector((state: RootState) => state.auth);
+  const { permission, token } = useSelector((state: RootState) => state.auth);
   const { id } = useParams();
   const toast = useContext(ToastContext);
   const [isEdit, setIsEdit] = useState(false);
   const [provinceId, setProvinceId] = useState(PROVINCES[0].value);
   const { Formik } = formik;
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { data: groupObjectives } = useGetListGroupObjectiveQuery();
   const { data: employees } = useGetListEmployeeQuery();
   const { data: provinces } = useGetListProvinceQuery();
+  const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data: customer } = useGetListCustomerQuery(
     {
@@ -103,6 +109,26 @@ function CustomerUnValidationVerify() {
   const handleSubmitAgent = async (values: TCustomerRes) => {
     onValidateCustomer(values);
   };
+  const onCheckToken = async () => {
+    await checkToken({
+      token: token,
+    })
+      .unwrap()
+      .then((value) => {
+        console.log("value expired", value);
+        if (!value) {
+          return;
+        }
+        navigate("/", { replace: true });
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      });
+  };
+  useEffect(() => {
+    console.log("log");
+    onCheckToken();
+  }, [location.pathname]); // Runs when the route changes
 
   useEffect(() => {
     if (customer?.customer_province) setProvinceId(customer.customer_province);
