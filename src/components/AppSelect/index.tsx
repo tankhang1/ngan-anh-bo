@@ -69,7 +69,11 @@ const AppSelect = ({
   };
 
   useEffect(() => {
-    value && setSearch(data?.find((item) => item.value === value)?.label ?? "");
+    if (value) {
+      setSearch(data?.find((item) => item.value === value)?.label ?? "");
+    } else {
+      setSearch("");
+    }
   }, [value, data]);
 
   useEffect(() => {

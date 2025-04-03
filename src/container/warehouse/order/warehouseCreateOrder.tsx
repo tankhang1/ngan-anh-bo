@@ -48,8 +48,11 @@ const WarehouseCreateManufactorOrder = () => {
         (product) => product?.type === ProductTypeEnum.PACKET
       );
   }, [typeExport, products]);
-
-  const onCreateManufactorOrder = async (values: TManufactorOrder) => {
+  console.log("Log values");
+  const onCreateManufactorOrder = async (
+    values: TManufactorOrder,
+    { resetForm }: any
+  ) => {
     await createProcedureOrder({
       ...values,
       expect_packing_date: values.expect_packing_date
@@ -62,6 +65,7 @@ const WarehouseCreateManufactorOrder = () => {
         console.log("log", value);
         if (value.status === 0) toast.showToast("Tạo lệnh sản xuất thành công");
         else toast.showToast("Tạo lệnh sản xuất thất bại");
+        resetForm();
       })
       .catch(() => toast.showToast("Tạo lệnh sản xuất thất bại"));
   };
@@ -99,7 +103,7 @@ const WarehouseCreateManufactorOrder = () => {
           ingredient_id: null,
           min_bin: null,
         }}
-        onSubmit={onCreateManufactorOrder}
+        onSubmit={(values, actions) => onCreateManufactorOrder(values, actions)}
         enableReinitialize
       >
         {({
@@ -125,7 +129,11 @@ const WarehouseCreateManufactorOrder = () => {
                   Trở lại
                 </button>
 
-                <AppWarning onAccept={() => handleSubmit()}>
+                <AppWarning
+                  onAccept={() => {
+                    handleSubmit();
+                  }}
+                >
                   <button
                     className={`btn btn-purple-light justify-content-center align-items-center ${
                       isLoadingCreate && "btn-loader "
