@@ -183,7 +183,7 @@ function VerifyCustomer() {
           customer_type: customer?.customer_type ?? "",
           name: customer?.name ?? "",
           province: customer?.province ?? "",
-          info_primary: customer?.info_primary ?? 0,
+          info_primary: customer?.info_primary ?? 1,
           phone: customer?.phone ?? "",
           sign_board: customer?.sign_board ?? "",
           customer_address: customer?.customer_address ?? "",

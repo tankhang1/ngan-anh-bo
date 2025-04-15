@@ -461,10 +461,22 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.MATERIAL],
     }),
-    getBinPackageToday: builder.query<TBin[], void>({
+    getBinToday: builder.query<TBin[], void>({
       query: () => ({
         url: "/api/report/iqr/today",
         method: HTTPS_METHOD.GET,
+        params: {
+          t: 1,
+        },
+      }),
+    }),
+    getPackageToday: builder.query<TBin[], void>({
+      query: () => ({
+        url: "/api/report/iqr/today",
+        method: HTTPS_METHOD.GET,
+        params: {
+          t: 0,
+        },
       }),
     }),
     getListBrandnameToday: builder.query<TBrandname[], void>({
@@ -497,6 +509,7 @@ export const {
   useGetListSMSGatewayQuery,
   useGetListSMSGatewayDayByDayQuery,
   useGetListMaterialQuery,
-  useGetBinPackageTodayQuery,
+  useGetBinTodayQuery,
+  useGetPackageTodayQuery,
   useGetListBrandnameTodayQuery,
 } = manageApi;
