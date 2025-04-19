@@ -406,8 +406,11 @@ function CustomerValidationCreateEdit() {
                         name="customer_type"
                         value={values.customer_type}
                         onChange={(e) => {
-                          if (e.target.value === "FARMER")
+                          if (e.target.value !== "FARMER") {
                             setFieldValue("info_primary", 1);
+                          } else {
+                            setFieldValue("info_primary", 0);
+                          }
                           setFieldValue("customer_type", e.target.value);
                         }}
                         isInvalid={
@@ -501,8 +504,7 @@ function CustomerValidationCreateEdit() {
                         required
                         className="form-check-md mb-2 input-placeholder"
                         name="info_primary"
-                        // disabled={isCreate === "false" && isEdit === false}
-                        disabled={true}
+                        disabled={isCreate === "false" && isEdit === false}
                       />
                       <Form.Control.Feedback type="invalid">
                         {errors.info_primary}

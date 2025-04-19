@@ -358,9 +358,14 @@ function VerifyCustomer() {
                         className="form-select input-placeholder"
                         name="customer_type"
                         value={values.customer_type}
-                        onChange={(e) =>
-                          setFieldValue("customer_type", e.target.value)
-                        }
+                        onChange={(e) => {
+                          if (e.target.value !== "FARMER") {
+                            setFieldValue("info_primary", 1);
+                          } else {
+                            setFieldValue("info_primary", 0);
+                          }
+                          setFieldValue("customer_type", e.target.value);
+                        }}
                         isInvalid={
                           touched.customer_type && !!errors.customer_type
                         }

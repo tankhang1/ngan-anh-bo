@@ -448,8 +448,11 @@ function CustomerUnValidationCreateEdit() {
                         name="customer_type"
                         value={values.customer_type}
                         onChange={(e) => {
-                          if (e.target.value === "FARMER")
+                          if (e.target.value !== "FARMER") {
                             setFieldValue("info_primary", 1);
+                          } else {
+                            setFieldValue("info_primary", 0);
+                          }
                           setFieldValue("customer_type", e.target.value);
                         }}
                         isInvalid={
