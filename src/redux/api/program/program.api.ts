@@ -1,5 +1,10 @@
 import { BASE_PORT, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
-import { BaseQuery, TProgramPoint, TProgramTopup } from "../../../assets/types";
+import {
+  BaseQuery,
+  TProgramChanceReportRES,
+  TProgramPoint,
+  TProgramTopup,
+} from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
 import store from "../../store";
@@ -68,6 +73,16 @@ export const programApi = createApi({
             ]
           : [TagsEnum.PROGRAM_TOPUP],
     }),
+    getListProgramChanceDetail: builder.query<
+      TProgramChanceReportRES[],
+      { zalo_user_id: string }
+    >({
+      query: (params) => ({
+        url: "/program/lucky/detail/customer",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
   }),
 });
 
@@ -76,4 +91,5 @@ export const {
   useGetListProgramTopupStatusQuery,
   useGetCounterProgramPointByStatusQuery,
   useGetCounterProgramTopupByStatusQuery,
+  useGetListProgramChanceDetailQuery,
 } = programApi;

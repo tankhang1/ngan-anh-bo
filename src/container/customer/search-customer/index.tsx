@@ -27,7 +27,6 @@ import {
 } from "../../../assets/types";
 import { format } from "date-fns";
 import {
-  useGetListProgramChanceDetailQuery,
   useGetListProgramPointDetailQuery,
   useGetListProgramTopupDetailQuery,
 } from "../../../redux/api/product/product.api";
@@ -35,6 +34,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
+import { useGetListProgramChanceDetailQuery } from "../../../redux/api/program/program.api";
 
 function SearchCustomer() {
   const { token } = useSelector((state: RootState) => state.auth);
