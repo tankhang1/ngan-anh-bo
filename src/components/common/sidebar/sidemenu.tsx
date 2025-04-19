@@ -181,7 +181,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "May mắn",
+        title: "May mắn trúng thưởng",
         key: MENU_KEY.OPERATORS_GIFT_TODAY, // Chưa phát triển
       },
       {
@@ -363,7 +363,7 @@ export const MENUITEMS = [
         active: false,
         selected: false,
         dirchange: false,
-        title: "May mắn",
+        title: "May mắn trúng thưởng",
         key: MENU_KEY.PROGRAM_CHANCE,
       },
     ],

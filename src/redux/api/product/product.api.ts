@@ -9,6 +9,7 @@ import {
   TProgramPointDetail,
   TProgramTopupDetail,
   TManufactorOrder,
+  TProgramChanceReportRES,
 } from "../../../assets/types";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQueryWithReauth from "../../middlewares/baseQueryWithReauth";
@@ -180,6 +181,16 @@ export const productApi = createApi({
         params,
       }),
     }),
+    getListProgramChanceDetail: builder.query<
+      TProgramChanceReportRES[],
+      { zalo_user_id: string }
+    >({
+      query: (params) => ({
+        url: "/api/program/lucky/detail/customer",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+    }),
     createProcedureOrder: builder.mutation<BASE_RES, TManufactorOrder>({
       query: (body) => ({
         url: "/product/procedure-order/import",
@@ -203,4 +214,5 @@ export const {
   useGetListProgramPointDetailQuery,
   useGetListProgramTopupDetailQuery,
   useCreateProcedureOrderMutation,
+  useGetListProgramChanceDetailQuery,
 } = productApi;

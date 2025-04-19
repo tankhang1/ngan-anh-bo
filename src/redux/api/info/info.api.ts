@@ -10,6 +10,7 @@ import {
   BaseQuery,
   TProgramPointZaloDetail,
   TProgramTopupZaloDetail,
+  TProgramChanceReportRES,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";

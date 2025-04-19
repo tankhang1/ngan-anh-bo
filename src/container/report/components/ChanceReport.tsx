@@ -234,7 +234,15 @@ function ChanceReport() {
               </td>
             ),
           },
-
+          {
+            key: "code",
+            label: "Mã iQr",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.code}</span>
+              </td>
+            ),
+          },
           {
             key: "phone",
             label: "Số điện thoại",
@@ -274,7 +282,6 @@ function ChanceReport() {
               </td>
             ),
           },
-
           {
             key: "gift_name",
             label: "Phần thưởng",
@@ -340,7 +347,15 @@ function ChanceReport() {
               </td>
             ),
           },
-
+          {
+            key: "code",
+            label: "Mã iQr",
+            render: (value) => (
+              <td>
+                <span className="fw-semibold">{value.code}</span>
+              </td>
+            ),
+          },
           {
             key: "phone",
             label: "Số điện thoại",
@@ -350,7 +365,6 @@ function ChanceReport() {
               </td>
             ),
           },
-
           {
             key: "customer_name",
             label: "Tên khách hàng",

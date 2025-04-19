@@ -89,7 +89,20 @@ function ChanceToday() {
                   </td>
                 ),
               },
-
+              {
+                key: "code",
+                label: "Mã iQr",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.code}</span>
+                  </td>
+                ),
+              },
+              {
+                key: "product_name",
+                label: "Tên sản phẩm",
+                render: (value) => <td>{value.product_name}</td>,
+              },
               {
                 key: "phone",
                 label: "Số điện thoại",
@@ -144,16 +157,7 @@ function ChanceToday() {
                   </td>
                 ),
               },
-              {
-                key: "product_code",
-                label: "Mã sản phẩm",
-                render: (value) => <td>{value.product_code}</td>,
-              },
-              {
-                key: "product_name",
-                label: "Tên sản phẩm",
-                render: (value) => <td>{value.product_name}</td>,
-              },
+
               {
                 key: "time_lucky",
                 label: "Thời gian trúng thưởng",

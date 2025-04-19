@@ -19,6 +19,7 @@ import {
 import { fDate, fNumber } from "../../../hooks";
 import {
   TCustomerRes,
+  TProgramChanceReportRES,
   TProgramPointDetail,
   TProgramPointZaloDetail,
   TProgramTopupDetail,
@@ -26,6 +27,7 @@ import {
 } from "../../../assets/types";
 import { format } from "date-fns";
 import {
+  useGetListProgramChanceDetailQuery,
   useGetListProgramPointDetailQuery,
   useGetListProgramTopupDetailQuery,
 } from "../../../redux/api/product/product.api";
@@ -42,7 +44,7 @@ function SearchCustomer() {
   const deferSearchValue = useDeferredValue(searchValue);
   const [isPermitSearch, setIsPermitSearch] = useState(false);
   const [tabActive, setTabActive] = useState<
-    "UnRegister" | "Register" | "Point" | "Topup"
+    "UnRegister" | "Register" | "Point" | "Topup" | "Chance"
   >("UnRegister");
   const [page, setPage] = useState(1);
   const [openDetail, setOpenDetail] = useState(false);
@@ -52,6 +54,9 @@ function SearchCustomer() {
   >(null);
   const [programTopupDetail, setProgramTopupDetail] = useState<
     TProgramTopupZaloDetail[] | null
+  >(null);
+  const [programChanceDetail, setProgramChanceDetail] = useState<
+    TProgramChanceReportRES[] | null
   >(null);
   const [checkToken] = useCheckTokenExpiredMutation();
 
@@ -95,6 +100,15 @@ function SearchCustomer() {
       skip: customerInfo?.uuid ? false : true,
     }
   );
+  const { data: programChance } = useGetListProgramChanceDetailQuery(
+    {
+      zalo_user_id: customerInfo?.zalo_user_id!,
+    },
+    {
+      skip: customerInfo?.zalo_user_id ? false : true,
+    }
+  );
+  console.log("customer info", customerInfo);
   const [getProgramPointDetail, { isLoading: isLoadingProgramPoint }] =
     useGetProgramPointDetailMutation();
   const [getProgramTopupDetail, { isLoading: isLoadingProgramTopup }] =
@@ -130,6 +144,7 @@ function SearchCustomer() {
       })
       .catch(() => {});
   };
+
   const onCheckToken = async () => {
     await checkToken({
       token: token,
@@ -350,9 +365,20 @@ function SearchCustomer() {
                     }`}
                     onClick={() => setTabActive("Topup")}
                   >
-                    Quà tặng
+                    Topup
                   </button>
                 )}
+
+                <button
+                  className={`btn ${
+                    tabActive === "Chance"
+                      ? "bg-purple-gradient"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => setTabActive("Chance")}
+                >
+                  May mắn trúng thưởng
+                </button>
               </div>
               <div className="d-flex flex-row justify-content-start px-2 ">
                 {tabActive === "UnRegister" && (
@@ -642,6 +668,120 @@ function SearchCustomer() {
                     </div>
                   </div>
                 )}
+                {tabActive == "Chance" && (
+                  <div className="d-flex flex-column gap-4 w-100">
+                    <div
+                      className="d-flex flex-wrap gap-4 pb-4 overflow-scroll"
+                      style={{ maxHeight: 400 }}
+                    >
+                      <AppTable
+                        title="May mắn trúng thưởng"
+                        maxPage={programChance?.length}
+                        headers={[
+                          {
+                            key: "program_name",
+                            label: "Tên chương trình",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.program_name}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "code",
+                            label: "Mã iQr",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.code}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "phone",
+                            label: "Số điện thoại",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.phone}
+                                </span>
+                              </td>
+                            ),
+                          },
+
+                          {
+                            key: "customer_name",
+                            label: "Tên khách hàng",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.customer_name}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "province_name",
+                            label: "Tỉnh thành",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.province_name ?? "-"}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "area",
+                            label: "Khu vực",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.area ?? "-"}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "gift_name",
+                            label: "Phần thưởng",
+                            render: (value) => <td>{value.gift_name}</td>,
+                          },
+                          {
+                            key: "agent_name",
+                            label: "Tên đại lý",
+                            render: (value) => (
+                              <td>
+                                <span className="fw-semibold">
+                                  {value.agent_name}
+                                </span>
+                              </td>
+                            ),
+                          },
+                          {
+                            key: "product_code",
+                            label: "Mã sản phẩm",
+                            render: (value) => <td>{value.product_code}</td>,
+                          },
+                          {
+                            key: "product_name",
+                            label: "Tên sản phẩm",
+                            render: (value) => <td>{value.product_name}</td>,
+                          },
+                          {
+                            key: "time_lucky",
+                            label: "Thời gian trúng thưởng",
+                            render: (value) => <td>{value.time_lucky}</td>,
+                          },
+                        ]}
+                        data={programChance || []}
+                      />
+                    </div>
+                  </div>
+                )}
                 {tabActive === "Topup" && (
                   <div className="d-flex flex-column gap-4 w-100">
                     <div
@@ -649,7 +789,7 @@ function SearchCustomer() {
                       style={{ maxHeight: 400 }}
                     >
                       <AppTable
-                        title="Danh sách quà tặng"
+                        title="May mắn trúng thưởng"
                         maxPage={programTopup?.data?.length}
                         headers={[
                           {

@@ -641,6 +641,7 @@ export type TCustomerRes = {
   export_address?: string;
   area_size?: number | null; // diện tích đất canh tác
   zalo_device_id: string | null;
+  zalo_user_id: string | null;
   time_updated?: number;
 };
 export type TGroupCustomer = {
