@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Button, Card, Col, Dropdown, Form, InputGroup } from "react-bootstrap";
 import AppTable from "../../../components/common/table/table";
 import { TCustomerRes } from "../../../assets/types";
@@ -13,6 +13,10 @@ import { MapCustomerType } from "../../../constants";
 import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import AppConfirm from "../../../components/AppConfirm";
+import { exportExcelFile } from "../../../hooks";
+import { useExportCustomerDataMutation } from "../../../redux/api/excel/excel.api";
+import { ToastContext } from "../../../components/AppToast";
 
 const AGENT_FILTERS = [
   {
@@ -40,6 +44,7 @@ function CustomerUnValidateToday() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const toast = useContext(ToastContext);
 
   const onChangeCustomerType = (type: string) => {
     if (type !== customerType) {
@@ -47,6 +52,7 @@ function CustomerUnValidateToday() {
       setCustomerType(type);
     }
   };
+  const [exportExcel] = useExportCustomerDataMutation();
   const [checkToken] = useCheckTokenExpiredMutation();
 
   const { data: counterCustomer } = useGetCounterCustomerQuery(
@@ -57,6 +63,8 @@ function CustomerUnValidateToday() {
     },
     {
       refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
     }
   );
   const { data: customers, isLoading: isLoadingCustomer } =
@@ -70,6 +78,8 @@ function CustomerUnValidateToday() {
       },
       {
         refetchOnMountOrArgChange: true,
+        refetchOnFocus: true,
+        refetchOnReconnect: true,
       }
     );
   const onCheckToken = async () => {
@@ -86,6 +96,19 @@ function CustomerUnValidateToday() {
       })
       .catch(() => {
         navigate("/", { replace: true });
+      });
+  };
+  const handleExportExcel = async () => {
+    await exportExcel({
+      st: +(format(new Date(), "yyyyMMdd") + "0000"),
+      ed: +(format(new Date(), "yyyyMMdd") + "2359"),
+      t: "ANONYMOUS",
+    })
+      .unwrap()
+      .then(() => {
+        toast.showToast(
+          "Xuất dữ liệu thành công, vui lòng kiểm tra mục danh sách yêu cầu"
+        );
       });
   };
   useEffect(() => {
@@ -148,6 +171,19 @@ function CustomerUnValidateToday() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown> */}
+                  <AppConfirm onAccept={handleExportExcel}>
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Add Contact"
+                    >
+                      <i className="ti ti-database-export"></i>
+                    </Button>
+                  </AppConfirm>
                 </div>
               </div>
             </div>

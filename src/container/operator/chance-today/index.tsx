@@ -7,6 +7,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useCheckTokenExpiredMutation } from "../../../redux/api/other/other.api";
+import AppConfirm from "../../../components/AppConfirm";
+import { exportExcelFile } from "../../../hooks";
 
 function ChanceToday() {
   const navigate = useNavigate();
@@ -16,7 +18,9 @@ function ChanceToday() {
 
   const { data: listProgramChances, isLoading: isLoadingProgramChance } =
     useGetReportProgramChanceTodayQuery(undefined, {
-      refetchOnMountOrArgChange: false,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+      refetchOnFocus: true,
     });
 
   const [search, setSearch] = useState("");
@@ -35,6 +39,9 @@ function ChanceToday() {
       .catch(() => {
         navigate("/", { replace: true });
       });
+  };
+  const handleExportExcel = () => {
+    exportExcelFile(listProgramChances || [], "Danh sách trúng thưởng");
   };
   useEffect(() => {
     console.log("log");
@@ -68,6 +75,19 @@ function ChanceToday() {
                       <i className="ri-search-line"></i>
                     </Button>
                   </InputGroup>
+                  <AppConfirm onAccept={handleExportExcel}>
+                    <Button
+                      variant=""
+                      aria-label="button"
+                      type="button"
+                      className="btn btn-icon btn-success-light ms-2"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Add Contact"
+                    >
+                      <i className="ti ti-database-export"></i>
+                    </Button>
+                  </AppConfirm>
                 </div>
               </div>
             </div>

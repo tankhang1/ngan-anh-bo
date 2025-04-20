@@ -30,6 +30,8 @@ function CustomerValidateToday() {
     },
     {
       refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
     }
   );
   const { data: customers, isLoading: isLoadingCustomer } =
@@ -43,6 +45,8 @@ function CustomerValidateToday() {
       },
       {
         refetchOnMountOrArgChange: true,
+        refetchOnFocus: true,
+        refetchOnReconnect: true,
       }
     );
   const onCheckToken = async () => {

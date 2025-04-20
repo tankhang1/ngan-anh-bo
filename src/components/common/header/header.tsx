@@ -39,8 +39,11 @@ const Header: FC<HeaderProps> = ({ local_varaiable, ThemeChanger }: any) => {
   const { data: listHistoryFile } = useGetListHistoryExcelQuery(
     { u: username },
     {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
       pollingInterval: 60000,
-      skip: !username,
+      skip: username ? false : true,
     }
   );
   const [startDatei, setStartDatei] = useState(new Date());
