@@ -202,19 +202,19 @@ function IQRToday() {
                 ),
               },
 
-              {
-                key: "customer_code",
-                label: "Trạng thái",
-                render: (value) => (
-                  <td>
-                    {value.customer_code ? (
-                      <Badge bg="success">Đã xác thực</Badge>
-                    ) : (
-                      <Badge bg="warning">Chờ xác thực </Badge>
-                    )}
-                  </td>
-                ),
-              },
+              // {
+              //   key: "customer_code",
+              //   label: "Trạng thái",
+              //   render: (value) => (
+              //     <td>
+              //       {value.customer_code ? (
+              //         <Badge bg="success">Đã xác thực</Badge>
+              //       ) : (
+              //         <Badge bg="warning">Chờ xác thực </Badge>
+              //       )}
+              //     </td>
+              //   ),
+              // },
 
               {
                 key: "",
@@ -361,19 +361,19 @@ function IQRToday() {
                 ),
               },
 
-              {
-                key: "customer_code",
-                label: "Trạng thái",
-                render: (value) => (
-                  <td>
-                    {value.customer_code ? (
-                      <Badge bg="success">Đã xác thực</Badge>
-                    ) : (
-                      <Badge bg="warning">Chờ xác thực </Badge>
-                    )}
-                  </td>
-                ),
-              },
+              // {
+              //   key: "customer_code",
+              //   label: "Trạng thái",
+              //   render: (value) => (
+              //     <td>
+              //       {value.customer_code ? (
+              //         <Badge bg="success">Đã xác thực</Badge>
+              //       ) : (
+              //         <Badge bg="warning">Chờ xác thực </Badge>
+              //       )}
+              //     </td>
+              //   ),
+              // },
 
               {
                 key: "",
