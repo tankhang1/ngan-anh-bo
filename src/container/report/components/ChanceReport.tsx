@@ -287,15 +287,15 @@ function ChanceReport() {
             label: "Phần thưởng",
             render: (value) => <td>{value.gift_name}</td>,
           },
-          {
-            key: "agent_name",
-            label: "Tên đại lý",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.agent_name}</span>
-              </td>
-            ),
-          },
+          // {
+          //   key: "agent_name",
+          //   label: "Tên đại lý",
+          //   render: (value) => (
+          //     <td>
+          //       <span className="fw-semibold">{value.agent_name}</span>
+          //     </td>
+          //   ),
+          // },
           {
             key: "product_code",
             label: "Mã sản phẩm",
@@ -400,15 +400,15 @@ function ChanceReport() {
             label: "Phần thưởng",
             render: (value) => <td>{value.gift_name}</td>,
           },
-          {
-            key: "agent_name",
-            label: "Tên đại lý",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.agent_name}</span>
-              </td>
-            ),
-          },
+          // {
+          //   key: "agent_name",
+          //   label: "Tên đại lý",
+          //   render: (value) => (
+          //     <td>
+          //       <span className="fw-semibold">{value.agent_name}</span>
+          //     </td>
+          //   ),
+          // },
           {
             key: "product_code",
             label: "Mã sản phẩm",

@@ -18,15 +18,15 @@ function TablePoint() {
     <AppTable
       title="Danh sách tích điểm hôm nay"
       headers={[
-        {
-          key: "agent_name",
-          label: "Tên đại lý",
-          render: (value: TProgramPointDetail) => (
-            <td>
-              <span className="fw-semibold">{value.agent_name}</span>
-            </td>
-          ),
-        },
+        // {
+        //   key: "agent_name",
+        //   label: "Tên đại lý",
+        //   render: (value: TProgramPointDetail) => (
+        //     <td>
+        //       <span className="fw-semibold">{value.agent_name}</span>
+        //     </td>
+        //   ),
+        // },
         {
           key: "phone",
           label: "Số điện thoại",

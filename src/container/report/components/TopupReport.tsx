@@ -179,15 +179,15 @@ function TopupReport() {
               </td>
             ),
           },
-          {
-            key: "agent_name",
-            label: "Tên đại lý",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">{value.agent_name}</span>
-              </td>
-            ),
-          },
+          // {
+          //   key: "agent_name",
+          //   label: "Tên đại lý",
+          //   render: (value) => (
+          //     <td>
+          //       <span className="fw-semibold">{value.agent_name}</span>
+          //     </td>
+          //   ),
+          // },
           {
             key: "customer_name",
             label: "Tên khách hàng",
