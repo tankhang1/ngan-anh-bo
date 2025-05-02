@@ -79,6 +79,14 @@ import LogCustomerPage from "./container/customer/log-customer/index.tsx";
 import ChanceProgram from "./container/program/chance/chance.tsx";
 import ChanceReport from "./container/report/ChanceReport/index.tsx";
 import ChanceToday from "./container/operator/chance-today/index.tsx";
+import CustomerUnValidateWeek from "./container/operator-week/customer-unvalidate-week/index.tsx";
+import CustomerValidateWeek from "./container/operator-week/customer-validate-week/index.tsx";
+import IQRWeek from "./container/operator-week/iqr-week/index.tsx";
+import ChanceWeek from "./container/operator-week/chance-week/index.tsx";
+import VerifyCustomerWeek from "./container/operator-week/iqr-week/verify/index.tsx";
+import TopupWeek from "./container/operator-week/topup-week/index.tsx";
+import SMSGatewayWeek from "./container/operator-week/sms-gateway-week/index.tsx";
+import BrandnameWeek from "./container/operator-week/brandname-week/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -251,12 +259,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}product/search-product`}
                 element={<SearchProductCode />}
               />
-              <Route
+              {/**Operate today */}
+              {/* <Route
                 path={`${
                   import.meta.env.BASE_URL
                 }operator/search-customer-unvalidate-today`}
                 element={<CustomerUnValidateToday />}
-              />
+              /> */}
               <Route
                 path={`${
                   import.meta.env.BASE_URL
@@ -299,6 +308,46 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}operator/brandname`}
                 element={<BrandnameToday />}
               />
+              {/**Operate Week */}
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }operator/search-customer-unvalidate-week`}
+                element={<CustomerUnValidateWeek />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }operator/search-customer-validate-week`}
+                element={<CustomerValidateWeek />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/iqr-week`}
+                element={<IQRWeek />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/search-chance-week`}
+                element={<ChanceWeek />}
+              />
+              <Route
+                path={`${
+                  import.meta.env.BASE_URL
+                }operator/verify-customer-week/:customer_uuid`}
+                element={<VerifyCustomerWeek />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/search-topup-week`}
+                element={<TopupWeek />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/sms-gateway-week`}
+                element={<SMSGatewayWeek />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}operator/brandname-week`}
+                element={<BrandnameWeek />}
+              />
+              {/** */}
               <Route
                 path={`${
                   import.meta.env.BASE_URL

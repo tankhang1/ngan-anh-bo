@@ -93,6 +93,13 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.TOPUPS],
     }),
+    getListPackage: builder.query<TBin[], BaseQuery>({
+      query: (params) => ({
+        url: "/api/report/package",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
+    }),
     getPackets: builder.query<
       { qrCode: TPackage[]; sms: TPackage[]; zalo: TPackage[] },
       BaseQuery
@@ -129,6 +136,13 @@ export const manageApi = createApi({
               TagsEnum.PACKETS,
             ]
           : [TagsEnum.PACKETS],
+    }),
+    getListBin: builder.query<TBin[], BaseQuery>({
+      query: (params) => ({
+        url: "/api/report/bin",
+        method: HTTPS_METHOD.GET,
+        params: params,
+      }),
     }),
     getBins: builder.query<
       { qrCode: TBin[]; sms: TBin[]; zalo: TBin[] },
@@ -512,4 +526,6 @@ export const {
   useGetBinTodayQuery,
   useGetPackageTodayQuery,
   useGetListBrandnameTodayQuery,
+  useGetListBinQuery,
+  useGetListPackageQuery,
 } = manageApi;

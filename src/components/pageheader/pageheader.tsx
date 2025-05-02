@@ -34,8 +34,11 @@ const MapLabel = new Map([
   ["customer", "Báo cáo khách hàng"],
   ["search-customer-today", "Khách hàng tham gia trong ngày"],
   ["search-topup-today", "Topup tham gia trong ngày"],
+  ["search-topup-week", "Topup tham gia trong tuần"],
   ["search-customer-unvalidate-today", "Khách hàng chờ xác thực"],
   ["search-customer-validate-today", "Khách hàng xác thực"],
+  ["search-customer-unvalidate-week", "Khách hàng chờ xác thực"],
+  ["search-customer-validate-week", "Khách hàng xác thực"],
   ["info", "Danh sách sản phẩm liên quan tới marketing"],
   ["warehouse", "Danh sách sản phẩm liên quan tới sản xuất"],
   ["create", "Thêm mới sản phẩm"],
@@ -47,8 +50,11 @@ const MapLabel = new Map([
   ["search-customer", "Tra cứu thông tin khách hàng"],
   ["search-product", "Tra cứu thông tin sản phẩm"],
   ["sms-gateway", "SMS Gateway"],
+  ["sms-gateway-week", "SMS Gateway"],
   ["brandname", "SMS Brandname"],
+  ["brandname-week", "SMS Brandname"],
   ["iqr-today", "iQr hôm nay"],
+  ["iqr-week", "iQr trong tuần"],
   ["material-create", "Thêm mới mã vật tư"],
   ["material-fill", "Nhập nguyên vật liệu"],
   ["report-material", "Danh sách vật tư"],
@@ -62,6 +68,7 @@ const MapLabel = new Map([
   ["inventory", "Danh sách tồn kho"],
   ["log", "Lịch sử thay đổi"],
   ["chance-today", "Chương may mắn trúng thưởng trong ngày"],
+  ["chance-week", "Chương may mắn trúng thưởng trong tuần"],
 ]);
 const Pageheader = () => {
   const { pathname } = useLocation();
@@ -77,10 +84,13 @@ const Pageheader = () => {
     if (trimmedPathname.includes("device")) return MapLabel.get("device");
     if (trimmedPathname.includes("search-chance-today"))
       return MapLabel.get("chance-today");
+    if (trimmedPathname.includes("search-chance-week"))
+      return MapLabel.get("chance-week");
     if (trimmedPathname.includes("chance")) return MapLabel.get("chance");
     if (trimmedPathname.includes("ce")) return MapLabel.get("ce");
     if (trimmedPathname.includes("search-chance-today"))
       return MapLabel.get("chance-today");
+
     return MapLabel.get(item) ?? item.charAt(0).toUpperCase() + item.slice(1);
   });
   return (

@@ -205,6 +205,94 @@ export const MENUITEMS = [
     ],
   },
   {
+    title: "Thông tin trong tuần",
+    icon: icon5,
+    badgetxt: "",
+    type: "sub",
+    active: true,
+    selected: false,
+    dirchange: false,
+    key: MENU_KEY.MANAGE_OPERATOR,
+    children: [
+      {
+        path: `${import.meta.env.BASE_URL}operator/iqr-week`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "iQr",
+        key: MENU_KEY.OPERATORS_iQr_TODAY, // Gọi API Report IQR today
+      },
+      {
+        path: `${
+          import.meta.env.BASE_URL
+        }operator/search-customer-unvalidate-week`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Danh sách chờ xác thực",
+        key: MENU_KEY.OPERATORS_CUSTOMER_UNVALIDATE_TODAY, // Gọi API customer list query theo ngày với t = 'ANNOY
+      },
+      {
+        path: `${
+          import.meta.env.BASE_URL
+        }operator/search-customer-validate-week`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Danh sách đã xác thực",
+        key: MENU_KEY.OPERATORS_CUSTOMER_VALIDATE_TODAY, // Gọi API customer list query theo ngày vs status 1
+      },
+      {
+        path: `${import.meta.env.BASE_URL}operator/search-topup-week`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "Topup",
+        key: MENU_KEY.OPERATORS_TOPUP_TODAY, // Gọi API chi tiết topup hôm nay
+      },
+      // {
+      //   path: `${import.meta.env.BASE_URL}operator/customer-sms-6068`,
+      //   type: "link",
+      //   active: false,
+      //   selected: false,
+      //   dirchange: false,
+      //   title: "SMS 6088",
+      //   key: MENU_KEY.OPERATORS_CUSTOMER_SMS_6088,
+      // },
+      {
+        path: `${import.meta.env.BASE_URL}operator/search-chance-week`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "May mắn trúng thưởng",
+        key: MENU_KEY.OPERATORS_GIFT_TODAY, // Chưa phát triển
+      },
+      {
+        path: `${import.meta.env.BASE_URL}operator/sms-gateway-week`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "SMS Gateway",
+        key: MENU_KEY.OPERATORS_SMS_GATEWAY, // Gọi API SMS hôm nay
+      },
+      {
+        path: `${import.meta.env.BASE_URL}operator/brandname-week`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "SMS Brandname",
+        key: MENU_KEY.OPERATORS_SMS_BRANDNAME, // Gọi API Brandname hôm nay
+      },
+    ],
+  },
+  {
     title: "Khách hàng",
     icon: icon4,
     badgetxt: "",
