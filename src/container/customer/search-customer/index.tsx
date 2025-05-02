@@ -233,6 +233,15 @@ function SearchCustomer() {
                   render: ({ name }) => <td>{name}</td>,
                 },
                 {
+                  key: "customer_code",
+                  label: "Mã khách hàng",
+                  render: (value) => (
+                    <td>
+                      <span className="fw-semibold">{value.customer_code}</span>
+                    </td>
+                  ),
+                },
+                {
                   key: "customer_name",
                   label: "Tên xác thực",
                   render: ({ customer_name }) => <td>{customer_name}</td>,

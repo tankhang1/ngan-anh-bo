@@ -179,7 +179,15 @@ function IQRToday() {
                   </td>
                 ),
               },
-
+              {
+                key: "customer_code",
+                label: "Mã khách hàng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.customer_code}</span>
+                  </td>
+                ),
+              },
               {
                 key: "customer_name",
                 label: "Tên khách hàng",
@@ -338,7 +346,15 @@ function IQRToday() {
                   </td>
                 ),
               },
-
+              {
+                key: "customer_code",
+                label: "Mã khách hàng",
+                render: (value) => (
+                  <td>
+                    <span className="fw-semibold">{value.customer_code}</span>
+                  </td>
+                ),
+              },
               {
                 key: "customer_name",
                 label: "Tên khách hàng",
