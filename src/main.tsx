@@ -87,6 +87,7 @@ import VerifyCustomerWeek from "./container/operator-week/iqr-week/verify/index.
 import TopupWeek from "./container/operator-week/topup-week/index.tsx";
 import SMSGatewayWeek from "./container/operator-week/sms-gateway-week/index.tsx";
 import BrandnameWeek from "./container/operator-week/brandname-week/index.tsx";
+import SMSLuckyReport from "./container/report/SMSLuckyReport/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -376,6 +377,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path={`${import.meta.env.BASE_URL}report/sms`}
                 element={<SMSReport />}
+              />
+              <Route
+                path={`${import.meta.env.BASE_URL}report/lucky-sms`}
+                element={<SMSLuckyReport />}
               />
               <Route
                 path={`${import.meta.env.BASE_URL}report/brandname`}

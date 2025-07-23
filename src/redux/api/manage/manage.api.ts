@@ -25,6 +25,7 @@ import {
   TIngredient,
   TMaterial,
   TBrandname,
+  TSMSLucky,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TPermit } from "../../slices/authSlice";
@@ -56,6 +57,7 @@ export const manageApi = createApi({
     TagsEnum.INDICATION,
     TagsEnum.FORMULATION,
     TagsEnum.SMS,
+    TagsEnum.SMS_LUCKY,
     TagsEnum.MATERIAL,
   ],
   endpoints: (builder) => ({
@@ -459,6 +461,23 @@ export const manageApi = createApi({
             ]
           : [TagsEnum.SMS],
     }),
+    getListSMSLuckyDayByDay: builder.query<TSMSLucky[], BaseQuery>({
+      query: (params) => ({
+        url: "/api/program/topup-lucky-sms/detail",
+        method: HTTPS_METHOD.GET,
+        params,
+      }),
+      providesTags: (results) =>
+        results
+          ? [
+              ...results.map(({ id }) => ({
+                type: TagsEnum.SMS_LUCKY as const,
+                id,
+              })),
+              TagsEnum.SMS_LUCKY,
+            ]
+          : [TagsEnum.SMS_LUCKY],
+    }),
     getListMaterial: builder.query<TMaterial[], void>({
       query: () => ({
         url: "/api/product/material/all",
@@ -527,5 +546,6 @@ export const {
   useGetPackageTodayQuery,
   useGetListBrandnameTodayQuery,
   useGetListBinQuery,
+  useGetListSMSLuckyDayByDayQuery,
   useGetListPackageQuery,
 } = manageApi;

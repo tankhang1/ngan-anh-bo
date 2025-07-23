@@ -891,6 +891,21 @@ export type TSMSGateway = {
   code_bin_package_item: number;
   product_name: string;
 };
+export type TSMSLucky = {
+  id: number;
+  phone: string;
+  code: string;
+  code_hash: string;
+  price: number;
+  request_id: string;
+  time: string; // format: YYYYMMDDHHMMSS
+  time_number: number; // format: YYYYMMDDHHMM
+  type: "PROGRAM LUCKY SMS";
+  customer_code: string | null;
+  customer_name: string | null;
+  product_code: string;
+  product_name: string;
+};
 export type TCustomerStaff = {
   id: number;
   code: string;

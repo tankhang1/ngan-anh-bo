@@ -75,6 +75,14 @@ export const excelApi = createApi({
       }),
       invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
     }),
+    exportSMSLucky: builder.mutation<{ data: string }, BaseQuery>({
+      query: (body) => ({
+        url: "/api/program/topup-lucky-sms/detail/excel",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: [TagsEnum.GET_HISTORY_EXCEL],
+    }),
     exportProgramPointDetail: builder.mutation<{ data: string }, BaseQuery>({
       query: (body) => ({
         url: "/api/program/point/detail/excel",
@@ -127,6 +135,7 @@ export const {
   useExportProgramPointDetailMutation,
   useExportProgramTopupDetailMutation,
   useExportSMSMutation,
+  useExportSMSLuckyMutation,
   useGetListHistoryExcelQuery,
   useExportProgramChanceFarmerMutation,
   useExportProgramChanceRetailerMutation,

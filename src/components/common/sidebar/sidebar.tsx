@@ -343,6 +343,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return false;
         case MENU_KEY.REPORTS_SMS:
           return permission.reportSMSGateway;
+        case MENU_KEY.REPORTS_LUCKY_SMS:
+          return permission.reportSMSGateway;
         case MENU_KEY.REPORTS_SMS_BRANDNAME:
           return permission.reportSMSBrandname;
         case MENU_KEY.WAREHOUSES_MATERIAL:

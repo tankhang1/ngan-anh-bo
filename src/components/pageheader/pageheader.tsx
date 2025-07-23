@@ -30,6 +30,7 @@ const MapLabel = new Map([
   ["search-warehouse-export", "Tra cứu phiếu xuất kho"],
   ["search-warehouse-import", "Tra cứu phiếu nhập kho"],
   ["sms", "Báo cáo SMS Gateway"],
+  ["lucky-sms", "Báo cáo May rủi SMS"],
   ["brandname", "Báo cáo SMS Brandname"],
   ["customer", "Báo cáo khách hàng"],
   ["search-customer-today", "Khách hàng tham gia trong ngày"],

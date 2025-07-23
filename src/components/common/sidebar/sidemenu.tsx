@@ -53,6 +53,7 @@ export const MENU_KEY = {
   REPORTS_TOPUP: "REPORTS_TOPUP",
   REPORTS_CHANCE: "REPORTS_CHANCE",
   REPORTS_SMS: "REPORTS_SMS",
+  REPORTS_LUCKY_SMS: "REPORTS_LUCKY_SMS",
   REPORTS_SMS_BRANDNAME: "REPORTS_SMS_BRANDNAME",
   REPORTS_IQR_SKU: "REPORTS_IQR_SKU",
   REPORTS_IQR_BIN: "REPORTS_IQR_BIN",
@@ -702,6 +703,15 @@ export const MENUITEMS = [
         key: MENU_KEY.REPORTS_CHANCE,
       },
       {
+        path: `${import.meta.env.BASE_URL}report/lucky-sms`,
+        type: "link",
+        active: false,
+        selected: false,
+        dirchange: false,
+        title: "May rủi SMS",
+        key: MENU_KEY.REPORTS_LUCKY_SMS,
+      },
+      {
         path: `${import.meta.env.BASE_URL}report/sms`,
         type: "link",
         active: false,
@@ -710,6 +720,7 @@ export const MENUITEMS = [
         title: "SMS Gateway",
         key: MENU_KEY.REPORTS_SMS,
       },
+
       {
         path: `${import.meta.env.BASE_URL}report/brandname`,
         type: "link",
