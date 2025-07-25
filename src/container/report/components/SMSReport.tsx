@@ -266,17 +266,17 @@ function SMSReport() {
               </td>
             ),
           },
-          {
-            key: "customer_district_name",
-            label: "Quận huyện",
-            render: (value) => (
-              <td>
-                <span className="fw-semibold">
-                  {value.customer_district_name}
-                </span>
-              </td>
-            ),
-          },
+          // {
+          //   key: "customer_district_name",
+          //   label: "Quận huyện",
+          //   render: (value) => (
+          //     <td>
+          //       <span className="fw-semibold">
+          //         {value.customer_district_name}
+          //       </span>
+          //     </td>
+          //   ),
+          // },
           {
             key: "customer_area",
             label: "Khu vực",

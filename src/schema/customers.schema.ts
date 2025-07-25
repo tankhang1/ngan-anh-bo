@@ -26,8 +26,6 @@ const customerSchema = Yup.object().shape({
 
   customer_address: Yup.string().nullable(),
 
-  customer_district: Yup.string().required("Quận huyện là bắt buộc"),
-
   province_name: Yup.string().nullable(),
 
   status: Yup.number()

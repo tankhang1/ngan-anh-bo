@@ -149,7 +149,7 @@ function CustomerUnValidationVerifyWeek() {
           phone: customer?.phone ?? "",
           sign_board: customer?.sign_board ?? "",
           customer_address: customer?.customer_address ?? "",
-          customer_district: customer?.customer_district ?? "",
+          // customer_district: customer?.customer_district ?? "",
           province_name: customer?.province_name ?? "",
           status: customer?.status ?? 1,
           time: customer?.time ?? "",
@@ -476,7 +476,7 @@ function CustomerUnValidationVerifyWeek() {
                         {errors.customer_province}
                       </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-2">
+                    {/* <Form.Group className="mb-2">
                       <Form.Label className="text-black">
                         Chọn quận huyện
                       </Form.Label>
@@ -505,7 +505,7 @@ function CustomerUnValidationVerifyWeek() {
                       <Form.Control.Feedback type="invalid">
                         {errors.customer_district}
                       </Form.Control.Feedback>
-                    </Form.Group>
+                    </Form.Group> */}
                     <Form.Group className="mb-2">
                       <Form.Label className="text-black">
                         Nhập địa chỉ chi tiết

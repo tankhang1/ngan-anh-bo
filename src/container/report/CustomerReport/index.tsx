@@ -118,6 +118,7 @@ function CustomerReport() {
         st: +(format(newRangeDate.st, "yyyyMMdd") + "0000"),
         ed: +(format(newRangeDate.ed, "yyyyMMdd") + "2359"),
         u: username,
+        type: "ADMIN",
       })
         .unwrap()
         .then(() => {

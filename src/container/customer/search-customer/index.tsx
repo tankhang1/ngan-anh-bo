@@ -507,14 +507,14 @@ function SearchCustomer() {
                         {customerInfo?.customer_province_name}
                       </p>
                     </div>
-                    <div className="d-flex">
+                    {/* <div className="d-flex">
                       <p className="text-black text-md" style={{ width: 200 }}>
                         Quận huyện:
                       </p>
                       <p className="text-black text-md">
                         {customerInfo?.customer_district_name}
                       </p>
-                    </div>
+                    </div> */}
                     <div className="d-flex">
                       <p className="text-black text-md" style={{ width: 200 }}>
                         Khu vực:
