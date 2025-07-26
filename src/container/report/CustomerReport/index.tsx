@@ -24,10 +24,9 @@ import AppConfirm from "../../../components/AppConfirm";
 
 function CustomerReport() {
   const toast = useContext(ToastContext);
-  const { username } = useSelector((state: RootState) => state.auth);
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const isSmallestScreen = useMediaQuery("(max-width:425px)");
-
+  const { username } = useSelector((state: RootState) => state.auth);
   const { data: groupObjectives } = useGetListGroupObjectiveQuery(undefined, {
     refetchOnMountOrArgChange: false,
   });
@@ -261,22 +260,24 @@ function CustomerReport() {
               value={rangDate.t}
               onChange={(e) => setRangeDate({ ...rangDate, t: e })}
             />
-            <AppConfirm onAccept={handleExportExcel}>
-              <button
-                className={`btn btn-bd-primary ${
-                  isSmallScreen ? "btn-icon" : ""
-                }`}
-              >
-                {isSmallScreen ? (
-                  <i className="ti ti-database-export "></i>
-                ) : (
-                  <div className="d-flex align-items-center gap-1">
+            {username === "suadmin" && (
+              <AppConfirm onAccept={handleExportExcel}>
+                <button
+                  className={`btn btn-bd-primary ${
+                    isSmallScreen ? "btn-icon" : ""
+                  }`}
+                >
+                  {isSmallScreen ? (
                     <i className="ti ti-database-export "></i>
-                    Xuất Excel
-                  </div>
-                )}
-              </button>
-            </AppConfirm>
+                  ) : (
+                    <div className="d-flex align-items-center gap-1">
+                      <i className="ti ti-database-export "></i>
+                      Xuất Excel
+                    </div>
+                  )}
+                </button>
+              </AppConfirm>
+            )}
           </div>
         </Card.Header>
         <Card.Body>
