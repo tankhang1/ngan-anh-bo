@@ -260,7 +260,7 @@ function CustomerReport() {
               value={rangDate.t}
               onChange={(e) => setRangeDate({ ...rangDate, t: e })}
             />
-            {username === "suadmin" && (
+            {(username === "suadmin" || username === "admin") && (
               <AppConfirm onAccept={handleExportExcel}>
                 <button
                   className={`btn btn-bd-primary ${
