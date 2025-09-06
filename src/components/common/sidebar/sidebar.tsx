@@ -293,6 +293,8 @@ const Sidebar: FC<SidebarProps> = ({ local_varaiable, ThemeChanger }: any) => {
           return permission.reportProgramPoint;
         case MENU_KEY.REPORTS_TOPUP:
           return permission.reportProgramTopup;
+        case MENU_KEY.PROGRAM_LANDING_PAGE:
+          return permission.reportProgramTopup;
         case MENU_KEY.REPORTS_CHANCE:
           return permission.reportProgramChance;
         case MENU_KEY.REPORTS_SMS:

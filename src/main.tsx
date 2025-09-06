@@ -88,6 +88,7 @@ import TopupWeek from "./container/operator-week/topup-week/index.tsx";
 import SMSGatewayWeek from "./container/operator-week/sms-gateway-week/index.tsx";
 import BrandnameWeek from "./container/operator-week/brandname-week/index.tsx";
 import SMSLuckyReport from "./container/report/SMSLuckyReport/index.tsx";
+import LandingProgram from "./container/program/landing-page/index.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.Fragment>
@@ -255,7 +256,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 path={`${import.meta.env.BASE_URL}program/chance`}
                 element={<ChanceProgram />}
               />
-
+              <Route
+                path={`${import.meta.env.BASE_URL}program/landing-page`}
+                element={<LandingProgram />}
+              />
               <Route
                 path={`${import.meta.env.BASE_URL}product/search-product`}
                 element={<SearchProductCode />}

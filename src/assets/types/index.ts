@@ -273,6 +273,24 @@ export type TPresent = {
   limit_per_customer: number; //0 : giới hạn , 1 : ko giới hạn
   counter: number;
 };
+export type TPresentLanding = {
+  id: number;
+  gift: string;
+  gift_name: string;
+  time_end: number;
+  time_start: number;
+  limits: number;
+  percent: number;
+  image_gift: string;
+  giftType?:
+    | "other"
+    | "topup-10-"
+    | "topup-20-"
+    | "topup-50-"
+    | "topup-100-"
+    | "topup-200-"
+    | "topup-500-";
+};
 export type TProgramChance = {
   id: number;
   uuid: string;

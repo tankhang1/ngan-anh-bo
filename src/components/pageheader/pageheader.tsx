@@ -15,6 +15,7 @@ const MapLabel = new Map([
   ["iQr", "iQr"],
   ["program-point", "Báo cáo chương trình tích điểm"],
   ["program-topup", "Báo cáo chương trình topup"],
+  ["landing-page", "Landing Page"],
   ["area", "Quản lý vùng"],
   ["group-customer", "Quản lý nhóm khách hàng"],
   ["validate", "Khách hàng đã xác thực"],

@@ -1,5 +1,10 @@
 import { BASE_PORT_8180, HTTPS_METHOD, LOCAL_KEY } from "../../../constants";
-import { BASE_RES, TPresent, TProgramChance } from "../../../assets/types";
+import {
+  BASE_RES,
+  TPresent,
+  TPresentLanding,
+  TProgramChance,
+} from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
 import store from "../../store";
@@ -16,7 +21,11 @@ export const programChanceApi = createApi({
       return;
     },
   }),
-  tagTypes: [TagsEnum.PRESENT, TagsEnum.PROGRAM_CHANCE],
+  tagTypes: [
+    TagsEnum.PRESENT,
+    TagsEnum.PROGRAM_CHANCE,
+    TagsEnum.PROGRAM_LANDING,
+  ],
   endpoints: (builder) => ({
     getListProgramPresentFarmer: builder.query<TPresent[], void>({
       query: () => ({
@@ -128,6 +137,45 @@ export const programChanceApi = createApi({
       }),
       invalidatesTags: () => [{ type: TagsEnum.PRESENT, id: "FARMER" }],
     }),
+    getLuckyPresentLanding: builder.query<TPresentLanding[], void>({
+      query: () => ({
+        url: "/game-landing-page/lucky/present/list",
+        method: HTTPS_METHOD.GET,
+      }),
+      providesTags: () => [
+        { type: TagsEnum.PROGRAM_LANDING, id: "LUCKY_PRESENT" },
+      ],
+    }),
+    createLuckyPresentLanding: builder.mutation<BASE_RES, TPresentLanding>({
+      query: (body) => ({
+        url: "/game-landing-page/lucky/present/create",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: () => [
+        { type: TagsEnum.PROGRAM_LANDING, id: "LUCKY_PRESENT" },
+      ],
+    }),
+    updateLuckyPresentLanding: builder.mutation<BASE_RES, TPresentLanding>({
+      query: (body) => ({
+        url: "/game-landing-page/lucky/present/update",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: () => [
+        { type: TagsEnum.PROGRAM_LANDING, id: "LUCKY_PRESENT" },
+      ],
+    }),
+    deleteLuckyPresentLanding: builder.mutation<BASE_RES, { gift: string }>({
+      query: (body) => ({
+        url: "/game-landing-page/lucky/present/remove",
+        method: HTTPS_METHOD.POST,
+        body,
+      }),
+      invalidatesTags: () => [
+        { type: TagsEnum.PROGRAM_LANDING, id: "LUCKY_PRESENT" },
+      ],
+    }),
   }),
 });
 
@@ -146,4 +194,8 @@ export const {
   useUpdateProgramPresentFarmerMutation,
   useUpdateProgramPresentRetailerMutation,
   useUpdateProgramRetailerMutation,
+  useCreateLuckyPresentLandingMutation,
+  useDeleteLuckyPresentLandingMutation,
+  useGetLuckyPresentLandingQuery,
+  useUpdateLuckyPresentLandingMutation,
 } = programChanceApi;
