@@ -15,6 +15,7 @@ export const mediaApi = createApi({
         url: `/upload-files/product/${id}`,
         method: HTTPS_METHOD.POST,
         body: body,
+        responseHandler: (response) => response.text(),
       }),
     }),
     uploadStaffFile: builder.mutation<string, { id: string; body: FormData }>({
@@ -22,6 +23,7 @@ export const mediaApi = createApi({
         url: `/upload-files/staff/${id}`,
         method: HTTPS_METHOD.POST,
         body: body,
+        responseHandler: (response) => response.text(),
       }),
     }),
     uploadProgramFile: builder.mutation<string, { id: string; body: FormData }>(
@@ -30,9 +32,21 @@ export const mediaApi = createApi({
           url: `/upload-files/program/${id}`,
           method: HTTPS_METHOD.POST,
           body: body,
+          responseHandler: (response) => response.text(),
         }),
       }
     ),
+    uploadLandingProgramFile: builder.mutation<
+      string,
+      { id: string; body: FormData }
+    >({
+      query: ({ id, body }) => ({
+        url: `/upload-files/landingpage/${id}`,
+        method: HTTPS_METHOD.POST,
+        body: body,
+        responseHandler: (response) => response.text(),
+      }),
+    }),
     getDistrict: builder.query<
       { label: string; value: string }[],
       { p: string }
@@ -90,6 +104,7 @@ export const mediaApi = createApi({
 });
 
 export const {
+  useUploadLandingProgramFileMutation,
   useUploadProgramFileMutation,
   useUploadFileMutation,
   useUploadStaffFileMutation,

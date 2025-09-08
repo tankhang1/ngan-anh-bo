@@ -4,6 +4,7 @@ import {
   TProgramChanceReportRES,
   TProgramPoint,
   TProgramTopup,
+  TUserLuckyPresent,
 } from "../../../assets/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TagsEnum } from "../tags.enum.api";
@@ -83,6 +84,12 @@ export const programApi = createApi({
         params,
       }),
     }),
+    getListUserLuckyPresent: builder.query<TUserLuckyPresent[], void>({
+      query: () => ({
+        url: "/program/landingpage",
+        method: HTTPS_METHOD.GET,
+      }),
+    }),
   }),
 });
 
@@ -92,4 +99,5 @@ export const {
   useGetCounterProgramPointByStatusQuery,
   useGetCounterProgramTopupByStatusQuery,
   useGetListProgramChanceDetailQuery,
+  useGetListUserLuckyPresentQuery,
 } = programApi;

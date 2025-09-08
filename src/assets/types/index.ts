@@ -442,6 +442,21 @@ export type TProgramChanceReportRES = {
   status: number;
   limit_per_customer: number;
 };
+export type TUserLuckyPresent = {
+  id: number;
+  phone: string;
+  name: string;
+  award: string;
+  award_name: string;
+  code: string;
+  phone_main: string;
+  product: any;
+  time_join: string;
+  time_confirm: any;
+  time_join_number: number;
+  time_confirm_number: number;
+  status: number;
+};
 export type TDevice = {
   id: number;
   device_name: string;
