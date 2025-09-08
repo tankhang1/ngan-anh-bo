@@ -50,19 +50,18 @@ function LandingProgram() {
   const [openProgramPresentForm, setOpenProgramPresentForm] = useState(false);
 
   // API hooks
-  const { data: listPresent } = useGetLuckyPresentLandingQuery(undefined, {
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true,
-  });
-  const { data: listUserLuckyPresent } = useGetListUserLuckyPresentQuery(
-    undefined,
-    {
+  const { data: listPresent, isLoading: isLoadingPresent } =
+    useGetLuckyPresentLandingQuery(undefined, {
       refetchOnFocus: true,
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
-    }
-  );
+    });
+  const { data: listUserLuckyPresent, isLoading: isLoadingUserLucky } =
+    useGetListUserLuckyPresentQuery(undefined, {
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    });
 
   const [uploadImage, { isLoading: isLoadingUploadFile }] =
     useUploadLandingProgramFileMutation();
@@ -71,7 +70,8 @@ function LandingProgram() {
     useCreateLuckyPresentLandingMutation();
   const [updateLanding, { isLoading: isLoadingUpdateLanding }] =
     useUpdateLuckyPresentLandingMutation();
-  const [removeLanding] = useDeleteLuckyPresentLandingMutation();
+  const [removeLanding, { isLoading: isLoadingRemoveLanding }] =
+    useDeleteLuckyPresentLandingMutation();
 
   const [checkToken] = useCheckTokenExpiredMutation();
 
@@ -110,7 +110,7 @@ function LandingProgram() {
       const formData = new FormData();
       formData.append("files", file);
       await uploadImage({ id: gift, body: formData }).unwrap();
-      return `${BASE_PORT}/program-image/${gift}.jpg`;
+      return `${BASE_PORT}/landingpage/${gift}.jpg`;
     } catch (e) {
       console.error(e);
       toast?.showToast?.("Upload hình ảnh thất bại");
@@ -164,6 +164,7 @@ function LandingProgram() {
             <Col lg={6} md={12}>
               <AppTable
                 isHeader={true}
+                isLoading={isLoadingUserLucky}
                 title="Danh sách người chơi"
                 headers={[
                   {
@@ -221,6 +222,12 @@ function LandingProgram() {
               <AppTable
                 title="Cơ cấu giải"
                 isHeader={true}
+                isLoading={
+                  isLoadingPresent ||
+                  isLoadingRemoveLanding ||
+                  isLoadingCreateLanding ||
+                  isLoadingUpdateLanding
+                }
                 headerRightSection={
                   <Button
                     size="sm"
