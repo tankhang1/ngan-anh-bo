@@ -120,6 +120,26 @@ function LandingProgram() {
 
   // Submit handler (create/update by presence of id)
   const onHandlePresent = async (values: TPresentLanding) => {
+    if (!values.gift || !values.gift_name || !values.image_gift) {
+      toast?.showToast?.("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+    if (values.percent < 0 || values.percent > 100) {
+      toast?.showToast?.("Tỉ lệ phần trăm không hợp lệ");
+      return;
+    }
+    if (values.limits < 0) {
+      toast?.showToast?.("Số lượng không hợp lệ");
+      return;
+    }
+    if (
+      values.time_start &&
+      values.time_end &&
+      values.time_start > values.time_end
+    ) {
+      toast?.showToast?.("Ngày kết thúc không được trước ngày bắt đầu");
+      return;
+    }
     try {
       if (values.id) {
         await updateLanding(values).unwrap();
