@@ -272,8 +272,8 @@ function LandingProgram() {
                       <td>
                         <Dropdown>
                           <Dropdown.Toggle
-                            variant="light"
-                            className="btn btn-sm"
+                            variant="transparent"
+                            className="btn btn-icon no-caret"
                           >
                             <i className="ti ti-dots-vertical"></i>
                           </Dropdown.Toggle>
