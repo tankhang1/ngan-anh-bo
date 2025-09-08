@@ -498,7 +498,9 @@ function LandingProgram() {
                 </Form.Group>
 
                 <Form.Group>
-                  <Form.Label className="text-black">Ngày bắt đầu</Form.Label>
+                  <Form.Label className="text-black">
+                    Ngày bắt đầu <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
                   <Form.Control
                     required
                     type="date"
@@ -523,7 +525,9 @@ function LandingProgram() {
                 </Form.Group>
 
                 <Form.Group>
-                  <Form.Label className="text-black">Ngày kết thúc</Form.Label>
+                  <Form.Label className="text-black">
+                    Ngày kết thúc <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
                   <Form.Control
                     required
                     type="date"
